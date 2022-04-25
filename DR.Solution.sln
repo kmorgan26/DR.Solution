@@ -5,11 +5,11 @@ VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{EDF18E69-F7D6-46CE-8401-5D31DB51A01B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DRApplication.Server", "DRApplication\Server\DRApplication.Server.csproj", "{3E3C33F1-0B63-4FB9-BD9B-0B2B01F9B599}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DRApplication.Server", "DRApplication\Server\DRApplication.Server.csproj", "{3E3C33F1-0B63-4FB9-BD9B-0B2B01F9B599}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DRApplication.Client", "DRApplication\Client\DRApplication.Client.csproj", "{C2185C0C-EC90-40C2-8AD5-13070EED9123}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DRApplication.Client", "DRApplication\Client\DRApplication.Client.csproj", "{C2185C0C-EC90-40C2-8AD5-13070EED9123}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DRApplication.Shared", "DRApplication\Shared\DRApplication.Shared.csproj", "{4ABCE366-AFAD-4CA1-B29C-E261AAC14B7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DRApplication.Shared", "DRApplication\Shared\DRApplication.Shared.csproj", "{4ABCE366-AFAD-4CA1-B29C-E261AAC14B7A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

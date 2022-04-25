@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using DRApplication.Shared.Models;
+using DRApplication.Shared.Models.DeviceModels;
+using DRApplication.Shared.Models.ClosureModels;
+using DRApplication.Shared.Models.ConfigurationModels;
+using DRApplication.Shared.Models.TestingModels;
+using DRApplication.Shared.Models.IssueModels;
 
 namespace DRApplication.Shared.Models
 {
@@ -30,7 +35,6 @@ namespace DRApplication.Shared.Models
         public virtual DbSet<DrType> DrTypes { get; set; } = null!;
         public virtual DbSet<Drrb> Drrbs { get; set; } = null!;
         public virtual DbSet<DrrbIssue> DrrbIssues { get; set; } = null!;
-        public virtual DbSet<GetConfigByLoadId> GetConfigByLoadIds { get; set; } = null!;
         public virtual DbSet<GrfrHistory> GrfrHistories { get; set; } = null!;
         public virtual DbSet<GrfrPlan> GrfrPlans { get; set; } = null!;
         public virtual DbSet<HardwareConfig> HardwareConfigs { get; set; } = null!;
@@ -220,21 +224,6 @@ namespace DRApplication.Shared.Models
                     .HasForeignKey(d => d.IssueId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_DrrbIssues_Issues");
-            });
-
-            modelBuilder.Entity<GetConfigByLoadId>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToView("GetConfigByLoadId");
-
-                entity.Property(e => e.Name)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Version)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<GrfrHistory>(entity =>

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DRApplication.Shared.Models.DeviceModels;
+using DRApplication.Shared.Models.IssueModels;
+using System;
 using System.Collections.Generic;
 
 namespace DRApplication.Shared.Models
