@@ -57,7 +57,7 @@ namespace DRApplication.Client.Services
                     return new List<TEntity>();
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return new List<TEntity>();
             }
