@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using DRApplication.Client.ViewModels.ConfigurationViewModels;
+using DRApplication.Shared.Models.ConfigurationModels;
 
 namespace DRApplication.Client.Services
 {
@@ -22,6 +24,8 @@ namespace DRApplication.Client.Services
     {
         public MappingProfile()
         {
+            CreateMap<HardwareConfigVm, HardwareConfig>().ReverseMap();
+
             //CreateMap<EditTrackingVm, Tracking>().ReverseMap();
             
 

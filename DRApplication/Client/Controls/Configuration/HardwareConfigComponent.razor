@@ -1,0 +1,39 @@
+﻿@using DRApplication.Client.Services
+@using DRApplication.Client.ViewModels.ConfigurationViewModels
+@inject HardwareConfigManager manager
+
+<div class="row mb-4">
+    <div class="col col-md-6 col-sm-12">
+        <a href="/hardwareconfig/create" class="btn btn-sm btn-success">NEW</a>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Config Name</th>
+            <th scope="col">Device Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var config in _hardwareConfigVms)
+        {
+            <tr>
+                <td>@config.Id</td>
+                <td>@config.Name</td>
+                <td>@config.DeviceTypeId</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    List<HardwareConfigVm> _hardwareConfigVms = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var items = await manager.GetAllAsync();
+        _hardwareConfigVms = Mapping.Mapper.Map<List<HardwareConfigVm>>(items);
+    }
+}
