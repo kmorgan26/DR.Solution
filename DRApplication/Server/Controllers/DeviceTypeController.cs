@@ -1,35 +1,37 @@
 ﻿using DRApplication.Server.Data;
 using DRApplication.Shared.Models;
-using DRApplication.Shared.Models.ConfigurationModels;
+using DRApplication.Shared.Models.DeviceModels;
 using DRApplication.Shared.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace DRApplication.Server.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class HardwareConfigController : ControllerBase
+    public class DeviceTypeController : ControllerBase
     {
-        RepositoryEF<HardwareConfig, FSTSSDatabaseContext> _manager;
+        RepositoryEF<DeviceType, FSTSSDatabaseContext> _manager;
 
-        public HardwareConfigController(RepositoryEF<HardwareConfig, FSTSSDatabaseContext> manager)
+        public DeviceTypeController(RepositoryEF<DeviceType, FSTSSDatabaseContext> manager)
         {
             _manager = manager;
         }
 
-        // GET: api/<HardwareConfigController>
+        // GET: api/<DeviceTypeController>
         [HttpGet]
         public async Task<IActionResult> GetAsync()
         {
             try
             {
                 var result = await _manager.dbSet
-                    .Include(i => i.DeviceType)
+                    .Include(i => i.Maintainer)
                     .AsNoTracking()
                     .ToListAsync();
 
-                return Ok(new PagedResponse<HardwareConfig>(result)
+                return Ok(new PagedResponse<DeviceType>(result)
                 {
                     Success = true,
                     Data = result
@@ -42,9 +44,9 @@ namespace DRApplication.Server.Controllers
             }
         }
 
-        // GET api/<HardwareConfigController>/5
+        // GET api/<DeviceTypeController>/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetByHardwareConfigId(int id)
+        public async Task<IActionResult> GetByMaintainerId(int id)
         {
             try
             {
@@ -54,7 +56,7 @@ namespace DRApplication.Server.Controllers
 
                 if (result != null)
                 {
-                    return Ok(new Response<HardwareConfig>()
+                    return Ok(new Response<DeviceType>()
                     {
                         Success = true,
                         Data = result
@@ -62,10 +64,10 @@ namespace DRApplication.Server.Controllers
                 }
                 else
                 {
-                    return Ok(new Response<HardwareConfig>()
+                    return Ok(new Response<DeviceType>()
                     {
                         Success = false,
-                        ErrorMessage = new List<string>() { "HardwareConfig Not Found" },
+                        ErrorMessage = new List<string>() { "Device Type Not Found" },
                         Data = null
                     });
                 }
@@ -77,19 +79,20 @@ namespace DRApplication.Server.Controllers
             }
         }
 
+        // POST api/<DeviceTypeController>
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] HardwareConfig item)
+        public async Task<IActionResult> PostAsync([FromBody] DeviceType deviceType)
         {
             try
             {
-                await _manager.AddAsync(item);
+                await _manager.AddAsync(deviceType);
                 var result = await _manager.dbSet
-                    .Where(i => i.Id == item.Id)
+                    .Where(i => i.Id == deviceType.Id)
                     .FirstOrDefaultAsync();
 
                 if (result != null)
                 {
-                    return Ok(new Response<HardwareConfig>()
+                    return Ok(new Response<DeviceType>()
                     {
                         Success = true,
                         Data = result
@@ -97,10 +100,10 @@ namespace DRApplication.Server.Controllers
                 }
                 else
                 {
-                    return Ok(new Response<HardwareConfig>()
+                    return Ok(new Response<DeviceType>()
                     {
                         Success = false,
-                        ErrorMessage = new List<string>() { "Could not find the Hardware Config After Adding it. " },
+                        ErrorMessage = new List<string>() { "Could not find the Device Type After Adding it. " },
                         Data = null
                     });
                 }
@@ -112,20 +115,21 @@ namespace DRApplication.Server.Controllers
             }
         }
 
+        // PUT api/<DeviceTypeController>/5
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] HardwareConfig hardwareConfig)
+        public async Task<IActionResult> Update([FromBody] DeviceType deviceType)
         {
             try
             {
-                await _manager.UpdateAsync(hardwareConfig);
+                await _manager.UpdateAsync(deviceType);
 
                 var result = await _manager.dbSet
-                    .Where(i => i.Id == hardwareConfig.Id)
+                    .Where(i => i.Id == deviceType.Id)
                     .FirstOrDefaultAsync();
 
                 if (result != null)
                 {
-                    return Ok(new Response<HardwareConfig>()
+                    return Ok(new Response<DeviceType>()
                     {
                         Success = true,
                         Data = result
@@ -133,10 +137,10 @@ namespace DRApplication.Server.Controllers
                 }
                 else
                 {
-                    return Ok(new Response<HardwareConfig>()
+                    return Ok(new Response<DeviceType>()
                     {
                         Success = false,
-                        ErrorMessage = new List<string>() { "Could not find the Poc after updating it" },
+                        ErrorMessage = new List<string>() { "Could not find the Device Type after updating it" },
                         Data = null
                     });
                 }

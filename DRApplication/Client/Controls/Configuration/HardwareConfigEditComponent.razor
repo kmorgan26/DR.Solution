@@ -1,0 +1,45 @@
+﻿@inject HardwareConfigManager manager
+@inject NavigationManager navigation
+
+<div class="row">
+    <div class="col-md-6 col-sm-12">
+        @if (@HardwareConfigVm != null)
+        {
+            <EditForm Model="@HardwareConfigVm" OnValidSubmit="@UpdateHarwareConfig">
+
+                <label for="Name">Name</label>
+                <InputText class="form-control" @bind-Value="HardwareConfigVm.Name" />
+
+                <label for="deviceType">Name</label>
+                <InputText id="deviceType" class="form-control" @bind-Value="HardwareConfigVm.DeviceType" />
+
+                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Update</MudButton>
+                <MudButton Link="/hardwareconfig" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
+                
+            </EditForm>
+        }
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public int HardwareConfigId { get; set; }
+
+    public HardwareConfigVm HardwareConfigVm { get; set; } = new();
+
+    protected async Task UpdateHarwareConfig()
+    {
+        var hardwareConfig = Mapping.Mapper.Map<HardwareConfig>(HardwareConfigVm);
+        await manager.UpdateAsync(hardwareConfig);
+        navigation.NavigateTo("/hardwareconfigs");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var hardwareConfig = await manager.GetByIdAsync(HardwareConfigId);
+        HardwareConfigVm = Mapping.Mapper.Map<HardwareConfigVm>(hardwareConfig);
+    }
+    
+
+}

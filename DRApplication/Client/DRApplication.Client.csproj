@@ -21,4 +21,8 @@
 		<ProjectReference Include="..\Shared\DRApplication.Shared.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="ViewModels\Device\" />
+	</ItemGroup>
+
 </Project>
