@@ -24,7 +24,10 @@ namespace DRApplication.Server.Controllers
         {
             try
             {
-                var result = await _manager.GetAllAsync();
+                var result = await _manager.dbSet
+                    .Include(i => i.DeviceType)
+                    .AsNoTracking()
+                    .ToListAsync();
 
                 return Ok(new PagedResponse<HardwareConfig>(result)
                 {
