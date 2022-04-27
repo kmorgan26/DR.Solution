@@ -24,7 +24,9 @@ namespace DRApplication.Client.Services
     {
         public MappingProfile()
         {
-            CreateMap<HardwareConfigVm, HardwareConfig>().ReverseMap();
+            CreateMap<HardwareConfig, HardwareConfigVm>()
+                .ForMember(dest => dest.DeviceType,
+                    opts => opts.MapFrom(src => src.DeviceType.Name));
 
             //CreateMap<EditTrackingVm, Tracking>().ReverseMap();
             

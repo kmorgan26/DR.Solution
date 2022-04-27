@@ -3,10 +3,11 @@ using DRApplication.Shared.Models;
 using DRApplication.Shared.Models.ConfigurationModels;
 using DRApplication.Shared.Responses;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DRApplication.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class HardwareConfigController : ControllerBase
     {

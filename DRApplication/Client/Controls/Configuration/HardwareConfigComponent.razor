@@ -15,9 +15,9 @@
         <MudTh></MudTh>
     </HeaderContent>
     <RowTemplate>
-        <MudTd DataLabel="Thread">@context</MudTd>
+        <MudTd DataLabel="Thread">@context.Id</MudTd>
         <MudTd DataLabel="Thread">@context.Name</MudTd>
-        <MudTd DataLabel="Thread">@context.DeviceTypeId</MudTd>
+        <MudTd DataLabel="Thread">@context.DeviceType</MudTd>
         <MudTd DataLable="SELECT">
             <a href="/hardwareconfig/edit/@context.Id" role="button">
                 <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>    
