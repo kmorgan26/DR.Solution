@@ -6,7 +6,7 @@ namespace DRApplication.Client.Services.Configuration
     {
         HttpClient http;
 
-        public HardwareConfigManager(HttpClient _http) : base(_http, "hardwareconfig", "Id")
+        public HardwareConfigManager(HttpClient _http) : base(_http, "HardwareConfig", "Id")
         {
             http = _http;
         }

@@ -69,13 +69,13 @@ namespace DRApplication.Shared.Models
         public virtual DbSet<UserLog> UserLogs { get; set; } = null!;
         public virtual DbSet<VersionsLoad> VersionsLoads { get; set; } = null!;
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Server=F5010-9Y7HZH3-L;Database=FSTSSDatabase;Trusted_Connection=True;");
-            }
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    if (!optionsBuilder.IsConfigured)
+        //    {
+        //        optionsBuilder.UseSqlServer("Server=F5010-9Y7HZH3-L;Database=FSTSSDatabase;Trusted_Connection=True;");
+        //    }
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
