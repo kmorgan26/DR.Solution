@@ -9,22 +9,22 @@ namespace DRApplication.Client.Services
 {
     public class ApiRepository<TEntity> : IAsyncRepository<TEntity> where TEntity : class
     {
-        private readonly HttpClient http;
-        private string controllerName;
-        private string primaryKeyName;
+        private readonly HttpClient _http;
+        private readonly string _controllerName;
+        private readonly string _primaryKeyName;
 
-        public ApiRepository(HttpClient _http, string _controllerName, string _primaryKeyName)
+        public ApiRepository(HttpClient http, string controllerName, string primaryKeyName)
         {
-            http = _http;
-            controllerName = _controllerName;
-            primaryKeyName = _primaryKeyName;
+            _http = http;
+            _controllerName = controllerName;
+            _primaryKeyName = primaryKeyName;
         }
 
         public async Task<IEnumerable<TEntity>> GetAllAsync(PaginationFilter? paginationFilter = null)
         {
             try
             {
-                var result = await http.GetAsync(controllerName);
+                var result = await _http.GetAsync(_controllerName);
                 result.EnsureSuccessStatusCode();
                 
                 string responseBody = await result.Content.ReadAsStringAsync();
@@ -68,8 +68,8 @@ namespace DRApplication.Client.Services
             try
             {
                 var arg = WebUtility.HtmlEncode(id.ToString());
-                var url = controllerName + "/" + arg;
-                var result = await http.GetAsync(url);
+                var url = _controllerName + "/" + arg;
+                var result = await _http.GetAsync(url);
                 result.EnsureSuccessStatusCode();
                 string responseBody = await result.Content.ReadAsStringAsync();
                 var response = JsonConvert.DeserializeObject<Response<TEntity>>(responseBody);
@@ -89,7 +89,7 @@ namespace DRApplication.Client.Services
         {
             try
             {
-                var result = await http.PostAsJsonAsync(controllerName, entity);
+                var result = await _http.PostAsJsonAsync(_controllerName, entity);
                 result.EnsureSuccessStatusCode();
                 string responseBody = await result.Content.ReadAsStringAsync();
                 var response = JsonConvert.DeserializeObject<Response<TEntity>>(responseBody);
@@ -109,7 +109,7 @@ namespace DRApplication.Client.Services
         {
             try
             {
-                var result = await http.PutAsJsonAsync(controllerName, entityToUpdate);
+                var result = await _http.PutAsJsonAsync(_controllerName, entityToUpdate);
                 result.EnsureSuccessStatusCode();
                 string responseBody = await result.Content.ReadAsStringAsync();
                 var response = JsonConvert.DeserializeObject<Response<TEntity>>(responseBody);
@@ -129,12 +129,12 @@ namespace DRApplication.Client.Services
             try
             {
                     var value = entityToDelete.GetType()
-                    .GetProperty(primaryKeyName)
+                    .GetProperty(_primaryKeyName)
                     .GetValue(entityToDelete, null)
                     .ToString();
                     var arg = WebUtility.HtmlEncode(value);
-                    var url = controllerName + "/" + arg;
-                    var result = await http.DeleteAsync(url);
+                    var url = _controllerName + "/" + arg;
+                    var result = await _http.DeleteAsync(url);
                     result.EnsureSuccessStatusCode();
                     return true;
             }
@@ -148,8 +148,8 @@ namespace DRApplication.Client.Services
         {
             try
             {
-                var url = controllerName + "/" + WebUtility.HtmlEncode(id.ToString());
-                var result = await http.DeleteAsync(url);
+                var url = _controllerName + "/" + WebUtility.HtmlEncode(id.ToString());
+                var result = await _http.DeleteAsync(url);
                 result.EnsureSuccessStatusCode();
                 return true;
             }

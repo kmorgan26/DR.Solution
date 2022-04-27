@@ -2,30 +2,29 @@
 
 <div class="row mb-4">
     <div class="col col-md-6 col-sm-12">
-        <a href="/hardwareconfig/create" class="btn btn-sm btn-success">NEW</a>
+        <MudButton Size="Size.Small" Variant="Variant.Filled" Color="Color.Success" Link="/hardwareconfig/create">New</MudButton>
     </div>
 </div>
 
 
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Config Name</th>
-            <th scope="col">Device Type</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var config in _hardwareConfigVms)
-        {
-            <tr>
-                <td>@config.Id</td>
-                <td>@config.Name</td>
-                <td>@config.DeviceTypeId</td>
-            </tr>
-        }
-    </tbody>
-</table>
+<MudTable Items="@_hardwareConfigVms" Hover="true" Striped="true" Dense="true">
+    <HeaderContent>
+        <MudTh>ID</MudTh>
+        <MudTh>Config</MudTh>
+        <MudTh>Device Type</MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Thread">@context</MudTd>
+        <MudTd DataLabel="Thread">@context.Name</MudTd>
+        <MudTd DataLabel="Thread">@context.DeviceTypeId</MudTd>
+        <MudTd DataLable="SELECT">
+            <a href="/hardwareconfig/edit/@context.Id" role="button">
+                <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>    
+            </a>
+        </MudTd>
+    </RowTemplate>
+</MudTable>
 
 @code {
     List<HardwareConfigVm> _hardwareConfigVms = new();
