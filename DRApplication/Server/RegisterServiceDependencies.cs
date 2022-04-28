@@ -1,6 +1,7 @@
 ﻿using DRApplication.Server.Data;
 using DRApplication.Shared.Models;
 using DRApplication.Shared.Models.ConfigurationModels;
+using DRApplication.Shared.Models.DeviceModels;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
@@ -23,6 +24,8 @@ namespace DRApplication.Server
             });
 
             builder.Services.AddTransient<RepositoryEF<HardwareConfig, FSTSSDatabaseContext>>();
+            builder.Services.AddTransient<RepositoryEF<DeviceType, FSTSSDatabaseContext>>();
+            builder.Services.AddTransient<RepositoryEF<Device, FSTSSDatabaseContext>>();
 
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddControllers()

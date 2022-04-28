@@ -1,6 +1,10 @@
 ﻿using AutoMapper;
 using DRApplication.Client.ViewModels.ConfigurationViewModels;
+using DRApplication.Client.ViewModels.DeviceTypeViewModels;
+using DRApplication.Client.ViewModels.DeviceViewModels;
+using DRApplication.Client.ViewModels.Shared;
 using DRApplication.Shared.Models.ConfigurationModels;
+using DRApplication.Shared.Models.DeviceModels;
 
 namespace DRApplication.Client.Services
 {
@@ -28,8 +32,19 @@ namespace DRApplication.Client.Services
                 .ForMember(dest => dest.DeviceType,
                     opts => opts.MapFrom(src => src.DeviceType.Name));
 
+            CreateMap<DeviceType, DeviceTypeVm>()
+                .ForMember(dest => dest.Maintainer,
+                    opts => opts.MapFrom(src => src.Maintainer.Name));
+
+            CreateMap<Device, DeviceVm>()
+                .ForMember(dest => dest.DeviceType,
+                    opts => opts.MapFrom(src => src.DeviceType.Name));
+
+            CreateMap<DeviceType, GenericListVm>().ReverseMap();
+
+
             //CreateMap<EditTrackingVm, Tracking>().ReverseMap();
-            
+
 
             //CreateMap<Tracking, TrackingVm>()
             //    .ForMember(dest => dest.Status,

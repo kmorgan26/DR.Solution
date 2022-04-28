@@ -3,8 +3,8 @@
     public class DeviceVm
     {
         public int Id { get; set; }
-        public string Name { get; set; } = null!;
-        public int DeviceType { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string DeviceType { get; set; } = string.Empty;
         public bool IsActive { get; set; }
 
     }
