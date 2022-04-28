@@ -28,10 +28,12 @@ namespace DRApplication.Client.Services
     {
         public MappingProfile()
         {
+            CreateMap<HardwareConfig, HardwareConfigEditVm>().ReverseMap();
             CreateMap<HardwareConfig, HardwareConfigVm>()
                 .ForMember(dest => dest.DeviceType,
                     opts => opts.MapFrom(src => src.DeviceType.Name));
 
+            CreateMap<DeviceType, DeviceTypeEditVm>().ReverseMap();
             CreateMap<DeviceType, DeviceTypeVm>()
                 .ForMember(dest => dest.Maintainer,
                     opts => opts.MapFrom(src => src.Maintainer.Name));
@@ -42,7 +44,7 @@ namespace DRApplication.Client.Services
 
             CreateMap<DeviceType, GenericListVm>().ReverseMap();
 
-            CreateMap<HardwareConfig, HardwareConfigEditVm>().ReverseMap();
+            
 
             //CreateMap<EditTrackingVm, Tracking>().ReverseMap();
 
