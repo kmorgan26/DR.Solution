@@ -3,14 +3,14 @@
 
 <div class="row">
     <div class="col-md-6 col-sm-12">
-        @if (@HardwareConfigVm != null)
+        @if (@HardwareConfigEditVm != null)
         {
-            <EditForm Model="@HardwareConfigVm" OnValidSubmit="@UpdateHarwareConfig">
+            <EditForm Model="@HardwareConfigEditVm" OnValidSubmit="@UpdateHarwareConfig">
 
                 <label for="Name">Hardware Configuration</label>
-                <InputText class="form-control" @bind-Value="HardwareConfigVm.Name" />
-                
-                <DeviceTypeSelectComponent DeviceTypeIdChange="UpdateDeviceType"></DeviceTypeSelectComponent>
+                <InputText class="form-control" @bind-Value="HardwareConfigEditVm.Name" />
+
+                <DeviceTypeSelectComponent DeviceTypeIdChange="UpdateDeviceType" SelectedDeviceTypeId="@HardwareConfigEditVm.DeviceTypeId"></DeviceTypeSelectComponent>
 
                 <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Update</MudButton>
                 <MudButton Link="/hardwareconfig" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
@@ -25,31 +25,22 @@
     [Parameter]
     public int HardwareConfigId { get; set; }
 
-    [CascadingParameter]
-    public AppStateComponent? AppStateComponent { get; set; }
-
-    public HardwareConfigVm HardwareConfigVm { get; set; } = new();
+    public HardwareConfigEditVm HardwareConfigEditVm { get; set; } = new();
 
     void UpdateDeviceType(int? id)
     {
-        if (AppStateComponent is not null)
-        {
-            AppStateComponent.DeviceTypeId = Convert.ToInt32(id);
-        }
+        HardwareConfigEditVm.DeviceTypeId = Convert.ToInt32(id);
     }
     protected async Task UpdateHarwareConfig()
     {
-        var hardwareConfig = Mapping.Mapper.Map<HardwareConfig>(HardwareConfigVm);
+        var hardwareConfig = Mapping.Mapper.Map<HardwareConfig>(HardwareConfigEditVm);
         await manager.UpdateAsync(hardwareConfig);
         navigation.NavigateTo("/hardwareconfigs");
     }
 
     protected override async Task OnInitializedAsync()
     {
-        if (AppStateComponent is not null)
-        {
-            var hardwareConfig = await manager.GetByIdAsync(HardwareConfigId);
-            HardwareConfigVm = Mapping.Mapper.Map<HardwareConfigVm>(hardwareConfig);
-        }
+        var hardwareConfig = await manager.GetByIdAsync(HardwareConfigId);
+        HardwareConfigEditVm = Mapping.Mapper.Map<HardwareConfigEditVm>(hardwareConfig);
     }
 }

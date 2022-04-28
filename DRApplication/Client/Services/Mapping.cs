@@ -42,6 +42,7 @@ namespace DRApplication.Client.Services
 
             CreateMap<DeviceType, GenericListVm>().ReverseMap();
 
+            CreateMap<HardwareConfig, HardwareConfigEditVm>().ReverseMap();
 
             //CreateMap<EditTrackingVm, Tracking>().ReverseMap();
 
