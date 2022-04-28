@@ -12,10 +12,11 @@
 
                 <label for="deviceType">Name</label>
                 <InputText id="deviceType" class="form-control" @bind-Value="HardwareConfigVm.DeviceType" />
+                @*<DeviceTypeSelectComponent DeviceTypeIdChange="UpdateDeviceType"></DeviceTypeSelectComponent>*@
 
                 <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Update</MudButton>
                 <MudButton Link="/hardwareconfig" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
-                
+
             </EditForm>
         }
     </div>
@@ -26,8 +27,18 @@
     [Parameter]
     public int HardwareConfigId { get; set; }
 
+    [CascadingParameter]
+    public AppStateComponent? AppStateComponent { get; set; }
+
     public HardwareConfigVm HardwareConfigVm { get; set; } = new();
 
+    void UpdateDeviceType(int? id)
+    {
+        if (AppStateComponent is not null)
+        {
+            AppStateComponent.DeviceTypeId = Convert.ToInt32(id);
+        }
+    }
     protected async Task UpdateHarwareConfig()
     {
         var hardwareConfig = Mapping.Mapper.Map<HardwareConfig>(HardwareConfigVm);
@@ -37,9 +48,10 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var hardwareConfig = await manager.GetByIdAsync(HardwareConfigId);
-        HardwareConfigVm = Mapping.Mapper.Map<HardwareConfigVm>(hardwareConfig);
+        if (AppStateComponent is not null)
+        {
+            var hardwareConfig = await manager.GetByIdAsync(HardwareConfigId);
+            HardwareConfigVm = Mapping.Mapper.Map<HardwareConfigVm>(hardwareConfig);
+        }
     }
-    
-
 }

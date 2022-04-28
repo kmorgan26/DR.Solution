@@ -8,4 +8,37 @@
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
+    private int? deviceTypeId;
+    public int? DeviceTypeId
+    {
+        get
+        {
+            return deviceTypeId;
+        }
+        set
+        {
+            deviceTypeId = value;
+            StateHasChanged();
+        }
+    }
+
+    private bool? isSet;
+    public bool? IsSet
+    {
+        get
+        {
+            return isSet;
+        }
+        set
+        {
+            isSet = value;
+            StateHasChanged();
+        }
+    }
+
+    public void AppStateReset()
+    {
+        this.IsSet = false;
+        StateHasChanged();
+    }
 }
