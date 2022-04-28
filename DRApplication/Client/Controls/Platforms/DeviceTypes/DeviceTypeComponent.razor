@@ -1,0 +1,38 @@
+﻿@inject DeviceTypeManager manager
+
+<div class="row mb-4">
+    <div class="col col-md-6 col-sm-12">
+        <MudButton Size="Size.Small" Variant="Variant.Filled" Color="Color.Success" Link="/devicetype/create">New</MudButton>
+    </div>
+</div>
+
+<MudTable Items="@_deviceTypeVms" Hover="true" Striped="true" Dense="true">
+    <HeaderContent>
+        <MudTh>ID</MudTh>
+        <MudTh>Device Type</MudTh>
+        <MudTh>Maintainer</MudTh>
+        <MudTh>IsActive?</MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Thread">@context.Id</MudTd>
+        <MudTd DataLabel="Thread">@context.Name</MudTd>
+        <MudTd DataLabel="Thread">@context.Maintainer</MudTd>
+        <MudTd DataLabel="Thread">@context.IsActive</MudTd>
+        <MudTd DataLable="SELECT">
+            <a href="/devicetype/edit/@context.Id" role="button">
+                <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>    
+            </a>
+        </MudTd>
+    </RowTemplate>
+</MudTable>
+
+@code {
+    List<DeviceTypeVm> _deviceTypeVms = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var items = await manager.GetAllAsync();
+        _deviceTypeVms = Mapping.Mapper.Map<List<DeviceTypeVm>>(items);
+    }
+}

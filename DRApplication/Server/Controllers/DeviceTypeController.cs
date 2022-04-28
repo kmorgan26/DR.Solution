@@ -5,8 +5,6 @@ using DRApplication.Shared.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace DRApplication.Server.Controllers
 {
     [Route("[controller]")]
@@ -20,7 +18,7 @@ namespace DRApplication.Server.Controllers
             _manager = manager;
         }
 
-        // GET: api/<DeviceTypeController>
+        // GET: /<DeviceTypeController>
         [HttpGet]
         public async Task<IActionResult> GetAsync()
         {
@@ -44,7 +42,7 @@ namespace DRApplication.Server.Controllers
             }
         }
 
-        // GET api/<DeviceTypeController>/5
+        // GET /<DeviceTypeController>/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByMaintainerId(int id)
         {
@@ -79,7 +77,7 @@ namespace DRApplication.Server.Controllers
             }
         }
 
-        // POST api/<DeviceTypeController>
+        // POST /<DeviceTypeController>
         [HttpPost]
         public async Task<IActionResult> PostAsync([FromBody] DeviceType deviceType)
         {
@@ -115,7 +113,7 @@ namespace DRApplication.Server.Controllers
             }
         }
 
-        // PUT api/<DeviceTypeController>/5
+        // PUT /<DeviceTypeController>/5
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] DeviceType deviceType)
         {
@@ -152,7 +150,7 @@ namespace DRApplication.Server.Controllers
             }
         }
 
-        // DELETE api/<DeviceTypeController>/5
+        // DELETE /<DeviceTypeController>/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(int id)
         {

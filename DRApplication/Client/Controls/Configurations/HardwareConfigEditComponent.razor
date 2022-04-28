@@ -7,12 +7,10 @@
         {
             <EditForm Model="@HardwareConfigVm" OnValidSubmit="@UpdateHarwareConfig">
 
-                <label for="Name">Name</label>
+                <label for="Name">Hardware Configuration</label>
                 <InputText class="form-control" @bind-Value="HardwareConfigVm.Name" />
-
-                <label for="deviceType">Name</label>
-                <InputText id="deviceType" class="form-control" @bind-Value="HardwareConfigVm.DeviceType" />
-                @*<DeviceTypeSelectComponent DeviceTypeIdChange="UpdateDeviceType"></DeviceTypeSelectComponent>*@
+                
+                <DeviceTypeSelectComponent DeviceTypeIdChange="UpdateDeviceType"></DeviceTypeSelectComponent>
 
                 <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Update</MudButton>
                 <MudButton Link="/hardwareconfig" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>

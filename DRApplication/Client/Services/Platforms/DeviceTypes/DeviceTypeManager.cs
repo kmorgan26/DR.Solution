@@ -1,6 +1,6 @@
 ﻿using DRApplication.Shared.Models.DeviceModels;
 
-namespace DRApplication.Client.Services.Device
+namespace DRApplication.Client.Services.Platforms.DeviceTypes
 {
     public class DeviceTypeManager: ApiRepository<DeviceType>
     {

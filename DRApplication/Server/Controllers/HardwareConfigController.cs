@@ -18,7 +18,7 @@ namespace DRApplication.Server.Controllers
             _manager = manager;
         }
 
-        // GET: api/<HardwareConfigController>
+        // GET: /<HardwareConfigController>
         [HttpGet]
         public async Task<IActionResult> GetAsync()
         {
@@ -42,7 +42,7 @@ namespace DRApplication.Server.Controllers
             }
         }
 
-        // GET api/<HardwareConfigController>/5
+        // GET /<HardwareConfigController>/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByHardwareConfigId(int id)
         {
@@ -50,6 +50,7 @@ namespace DRApplication.Server.Controllers
             {
                 var result = await _manager.dbSet
                     .Where(x => x.Id == id)
+                    .Include(i => i.DeviceType)
                     .FirstOrDefaultAsync();
 
                 if (result != null)
