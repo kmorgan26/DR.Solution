@@ -4,11 +4,11 @@ namespace DRApplication.Client.Services.Configurations
 {
     public class HardwareConfigManager : ApiRepository<HardwareConfig>
     {
-        private readonly HttpClient http;
+        private readonly HttpClient _http;
 
-        public HardwareConfigManager(HttpClient _http) : base(_http, "hardwareconfig", "Id")
+        public HardwareConfigManager(HttpClient http) : base(http, "hardwareconfig", "Id")
         {
-            http = _http;
+            _http = http;
         }
     }
 }

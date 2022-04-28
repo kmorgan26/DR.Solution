@@ -22,9 +22,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Pages\Platforms\Devices\" />
 	  <Folder Include="Pages\Platforms\Maintainers\" />
-	  <Folder Include="ViewModels\Device\" />
 	</ItemGroup>
 
 </Project>
