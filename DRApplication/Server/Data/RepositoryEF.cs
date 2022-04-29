@@ -1,6 +1,5 @@
 ﻿using DRApplication.Shared.Filters;
 using DRApplication.Shared.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace DRApplication.Server.Data
 {
@@ -8,23 +7,23 @@ namespace DRApplication.Server.Data
         where TEntity : class
         where TDataContext : DbContext
     {
-        protected readonly TDataContext context;
+        protected readonly TDataContext _context;
         internal DbSet<TEntity> dbSet;
 
         public RepositoryEF(TDataContext dataContext)
         {
-            context = dataContext;
-            context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
-            dbSet = context.Set<TEntity>();
+            _context = dataContext;
+            _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+            dbSet = _context.Set<TEntity>();
         }
         public virtual async Task<bool> DeleteAsync(TEntity entityToDelete)
         {
-            if (context.Entry(entityToDelete).State == EntityState.Detached)
+            if (_context.Entry(entityToDelete).State == EntityState.Detached)
             {
                 dbSet.Attach(entityToDelete);
             }
             dbSet.Remove(entityToDelete);
-            return await context.SaveChangesAsync() >= 1;
+            return await _context.SaveChangesAsync() >= 1;
         }
         public virtual async Task<bool> DeleteAsync(object id)
         {
@@ -52,16 +51,16 @@ namespace DRApplication.Server.Data
         public virtual async Task<TEntity> AddAsync(TEntity entity)
         {
             await dbSet.AddAsync(entity);
-            await context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
             return entity;
         }
 
         public virtual async Task<TEntity> UpdateAsync(TEntity entityToUpdate)
         {
-            var dbset = context.Set<TEntity>();
+            var dbset = _context.Set<TEntity>();
             dbset.Attach(entityToUpdate);
-            context.Entry(entityToUpdate).State = EntityState.Modified;
-            await context.SaveChangesAsync();
+            _context.Entry(entityToUpdate).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
             return entityToUpdate;
         }
 

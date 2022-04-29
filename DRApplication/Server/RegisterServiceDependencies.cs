@@ -3,7 +3,6 @@ using DRApplication.Shared.Models;
 using DRApplication.Shared.Models.ConfigurationModels;
 using DRApplication.Shared.Models.DeviceModels;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
 namespace DRApplication.Server
@@ -22,6 +21,8 @@ namespace DRApplication.Server
                 o.MultipartBodyLengthLimit = int.MaxValue;
                 o.MemoryBufferThreshold = int.MaxValue;
             });
+
+            builder.Services.AddTransient<EFRepository<Maintainer, FSTSSDatabaseContext>>();
 
             builder.Services.AddTransient<RepositoryEF<HardwareConfig, FSTSSDatabaseContext>>();
             builder.Services.AddTransient<RepositoryEF<DeviceType, FSTSSDatabaseContext>>();

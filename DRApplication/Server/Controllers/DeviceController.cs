@@ -1,10 +1,8 @@
 ﻿using DRApplication.Server.Data;
 using DRApplication.Shared.Models;
-using DRApplication.Shared.Models.ConfigurationModels;
 using DRApplication.Shared.Models.DeviceModels;
 using DRApplication.Shared.Responses;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace DRApplication.Server.Controllers
 {

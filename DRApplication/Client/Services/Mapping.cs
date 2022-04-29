@@ -2,6 +2,7 @@
 using DRApplication.Client.ViewModels.ConfigurationViewModels;
 using DRApplication.Client.ViewModels.DeviceTypeViewModels;
 using DRApplication.Client.ViewModels.DeviceViewModels;
+using DRApplication.Client.ViewModels.MaintainerViewModels;
 using DRApplication.Client.ViewModels.Shared;
 using DRApplication.Shared.Models.ConfigurationModels;
 using DRApplication.Shared.Models.DeviceModels;
@@ -33,6 +34,7 @@ namespace DRApplication.Client.Services
                 .ForMember(dest => dest.DeviceType,
                     opts => opts.MapFrom(src => src.DeviceType.Name));
 
+            CreateMap<DeviceType, GenericListVm>().ReverseMap();
             CreateMap<DeviceType, DeviceTypeEditVm>().ReverseMap();
             CreateMap<DeviceType, DeviceTypeVm>()
                 .ForMember(dest => dest.Maintainer,
@@ -43,7 +45,7 @@ namespace DRApplication.Client.Services
                 .ForMember(dest => dest.DeviceType,
                     opts => opts.MapFrom(src => src.DeviceType.Name));
 
-            CreateMap<DeviceType, GenericListVm>().ReverseMap();
+            CreateMap<Maintainer, MaintainerVm>().ReverseMap();
 
             
 

@@ -3,6 +3,7 @@ using DRApplication.Client;
 using DRApplication.Client.Services.Configurations;
 using DRApplication.Client.Services.Platforms.Devices;
 using DRApplication.Client.Services.Platforms.DeviceTypes;
+using DRApplication.Client.Services.Platforms.Maintainers;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
@@ -22,6 +23,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddScoped<HardwareConfigManager>();
 builder.Services.AddScoped<DeviceTypeManager>();
 builder.Services.AddScoped<DeviceManager>();
+builder.Services.AddScoped<MaintainerManager>();
 
 builder.Services.AddBlazoredLocalStorage();
 
