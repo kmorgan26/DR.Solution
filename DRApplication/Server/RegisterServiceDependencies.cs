@@ -25,7 +25,7 @@ namespace DRApplication.Server
             builder.Services.AddTransient<EFRepository<Maintainer, FSTSSDatabaseContext>>();
 
             builder.Services.AddTransient<RepositoryEF<HardwareConfig, FSTSSDatabaseContext>>();
-            builder.Services.AddTransient<RepositoryEF<DeviceType, FSTSSDatabaseContext>>();
+            builder.Services.AddTransient<EFRepository<DeviceType, FSTSSDatabaseContext>>();
             builder.Services.AddTransient<RepositoryEF<Device, FSTSSDatabaseContext>>();
 
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

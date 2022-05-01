@@ -11,9 +11,9 @@ namespace DRApplication.Server.Controllers
     [ApiController]
     public class DeviceTypeController : ControllerBase
     {
-        RepositoryEF<DeviceType, FSTSSDatabaseContext> _manager;
+        EFRepository<DeviceType, FSTSSDatabaseContext> _manager;
 
-        public DeviceTypeController(RepositoryEF<DeviceType, FSTSSDatabaseContext> manager)
+        public DeviceTypeController(EFRepository<DeviceType, FSTSSDatabaseContext> manager)
         {
             _manager = manager;
         }
@@ -25,7 +25,7 @@ namespace DRApplication.Server.Controllers
             try
             {
                 var result = await _manager.dbSet
-                    .Include(i => i.Maintainer)
+                    //.Include(i => i.Maintainer)
                     .AsNoTracking()
                     .ToListAsync();
 
@@ -38,6 +38,26 @@ namespace DRApplication.Server.Controllers
             catch (Exception)
             {
                 //TODO: Log Exception
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPost("getwithfilter")]
+        public async Task<ActionResult<APIListOfEntityResponse<DeviceType>>> GetWithFilter([FromBody] QueryFilter<DeviceType> Filter)
+        {
+            try
+            {
+                var result = await _manager.GetAsync(Filter);
+                return Ok(new APIListOfEntityResponse<DeviceType>()
+                {
+                    Success = true,
+                    Data = result.ToList()
+                });
+            }
+            catch (Exception ex)
+            {
+                // log exception here
+                var msg = ex.Message;
                 return StatusCode(500);
             }
         }
@@ -83,7 +103,7 @@ namespace DRApplication.Server.Controllers
         {
             try
             {
-                await _manager.AddAsync(deviceType);
+                await _manager.InsertAsync(deviceType);
                 var result = await _manager.dbSet
                     .Where(i => i.Id == deviceType.Id)
                     .FirstOrDefaultAsync();
