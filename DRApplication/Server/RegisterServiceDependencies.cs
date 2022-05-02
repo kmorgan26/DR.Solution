@@ -25,9 +25,14 @@ namespace DRApplication.Server
             builder.Services.AddTransient(s => new DapperRepository<Maintainer>(
                 builder.Configuration.GetConnectionString("DRConnectionString")));
 
-            builder.Services.AddTransient<RepositoryEF<HardwareConfig, FSTSSDatabaseContext>>();
-            builder.Services.AddTransient<EFRepository<DeviceType, FSTSSDatabaseContext>>();
-            builder.Services.AddTransient<RepositoryEF<Device, FSTSSDatabaseContext>>();
+            builder.Services.AddTransient(s => new DapperRepository<HardwareConfig>(
+                builder.Configuration.GetConnectionString("DRConnectionString")));
+
+            builder.Services.AddTransient(s => new DapperRepository<DeviceType>(
+                builder.Configuration.GetConnectionString("DRConnectionString")));
+
+            builder.Services.AddTransient(s => new DapperRepository<Device>(
+                builder.Configuration.GetConnectionString("DRConnectionString")));
 
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddControllers()
