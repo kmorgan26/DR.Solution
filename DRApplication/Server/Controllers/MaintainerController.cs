@@ -1,7 +1,7 @@
 ﻿using DRApplication.Server.Data;
-using DRApplication.Shared.Models;
+using DRApplication.Shared.Filters;
 using DRApplication.Shared.Models.DeviceModels;
-using Microsoft.AspNetCore.Http;
+using DRApplication.Shared.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DRApplication.Server.Controllers
@@ -10,28 +10,30 @@ namespace DRApplication.Server.Controllers
     [ApiController]
     public class MaintainerController : ControllerBase
     {
-        EFRepository<Maintainer, FSTSSDatabaseContext> _maintainerManager;
+        DapperRepository<Maintainer> _manager;
 
-        public MaintainerController(EFRepository<Maintainer, FSTSSDatabaseContext> maintainerManager)
+        public MaintainerController(DapperRepository<Maintainer> manager)
         {
-            _maintainerManager = maintainerManager;
+            _manager = manager;
         }
+
         [HttpGet]
         public async Task<ActionResult<APIListOfEntityResponse<Maintainer>>> Get()
         {
             try
             {
-                var result = await _maintainerManager.GetAllAsync();
+                var result = await _manager.GetAllAsync();
                 return Ok(new APIListOfEntityResponse<Maintainer>()
                 {
                     Success = true,
                     Data = result
                 });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                // log exception here
+                Console.WriteLine(ex.Message);
                 return StatusCode(500);
-                throw;
             }
         }
 
@@ -40,7 +42,7 @@ namespace DRApplication.Server.Controllers
         {
             try
             {
-                var result = await _maintainerManager.GetAsync(Filter);
+                var result = await _manager.GetAsync(Filter);
                 return Ok(new APIListOfEntityResponse<Maintainer>()
                 {
                     Success = true,
@@ -50,17 +52,18 @@ namespace DRApplication.Server.Controllers
             catch (Exception ex)
             {
                 // log exception here
-                var msg = ex.Message;
+                Console.WriteLine(ex.Message);
                 return StatusCode(500);
             }
         }
+
 
         [HttpGet("{Id}")]
         public async Task<ActionResult<APIEntityResponse<Maintainer>>> GetById(int Id)
         {
             try
             {
-                var result = await _maintainerManager.GetByIdAsync(Id);
+                var result = await _manager.GetByIdAsync(Id);
                 if (result != null)
                 {
                     return Ok(new APIEntityResponse<Maintainer>()
@@ -74,25 +77,27 @@ namespace DRApplication.Server.Controllers
                     return Ok(new APIEntityResponse<Maintainer>()
                     {
                         Success = false,
-                        ErrorMessages = new List<string>() { "Maintainer Not Found" },
-                        Data = null
+                        ErrorMessages = new List<string>() { "Customer Not Found" },
+                        Data = new Maintainer() { Id = 0 }
                     });
                 }
             }
             catch (Exception ex)
             {
                 // log exception here
+                Console.WriteLine(ex.Message);
                 return StatusCode(500);
             }
         }
 
         [HttpPost]
-        public async Task<ActionResult<APIEntityResponse<Maintainer>>> Insert([FromBody] Maintainer maintainer)
+        public async Task<ActionResult<APIEntityResponse<Maintainer>>> Insert([FromBody] Maintainer Maintainer)
         {
             try
             {
-                maintainer.Id = 0; // Make sure you do this!
-                var result = await _maintainerManager.InsertAsync(maintainer);
+                Maintainer.Id = 0; // Make sure you do this!
+                var result = await _manager.InsertAsync(Maintainer);
+
                 if (result != null)
                 {
                     return Ok(new APIEntityResponse<Maintainer>()
@@ -106,25 +111,25 @@ namespace DRApplication.Server.Controllers
                     return Ok(new APIEntityResponse<Maintainer>()
                     {
                         Success = false,
-                        ErrorMessages = new List<string>(){ "Could not find maintainer after adding it." },
-                        Data = null
+                        ErrorMessages = new List<string>() { "Could not find Device Type after adding it." },
+                        Data = new Maintainer() { Id = 0 }
                     });
                 }
             }
             catch (Exception ex)
             {
                 // log exception here
+                Console.WriteLine(ex.Message);
                 return StatusCode(500);
             }
         }
 
         [HttpPut]
-        public async Task<ActionResult<APIEntityResponse<Maintainer>>>
-         Update([FromBody] Maintainer maintainer)
+        public async Task<ActionResult<APIEntityResponse<Maintainer>>> Update([FromBody] Maintainer Maintainer)
         {
             try
             {
-                var result = await _maintainerManager.UpdateAsync(maintainer);
+                var result = await _manager.UpdateAsync(Maintainer);
                 if (result != null)
                 {
                     return Ok(new APIEntityResponse<Maintainer>()
@@ -138,14 +143,15 @@ namespace DRApplication.Server.Controllers
                     return Ok(new APIEntityResponse<Maintainer>()
                     {
                         Success = false,
-                        ErrorMessages = new List<string>(){ "Could not find maintainer after updating it." },
-                        Data = null
+                        ErrorMessages = new List<string>() { "Could not find customer after updating it." },
+                        Data = new Maintainer() { Id = 0 }
                     });
                 }
             }
             catch (Exception ex)
             {
                 // log exception here
+                Console.WriteLine(ex.Message);
                 return StatusCode(500);
             }
         }
@@ -155,7 +161,7 @@ namespace DRApplication.Server.Controllers
         {
             try
             {
-                return await _maintainerManager.DeleteByIdAsync(Id);
+                return await _manager.DeleteByIdAsync(Id);
             }
             catch (Exception ex)
             {
@@ -164,21 +170,5 @@ namespace DRApplication.Server.Controllers
                 return StatusCode(500);
             }
         }
-
-        [HttpGet("deleteall")]
-        public async Task<ActionResult> DeleteAll()
-        {
-            try
-            {
-                await _maintainerManager.DeleteAllAsync();
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                // log exception here
-                return StatusCode(500);
-            }
-        }
-
     }
 }

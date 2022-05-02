@@ -1,4 +1,7 @@
-﻿namespace DRApplication.Server.Data
+﻿using DRApplication.Shared.Filters;
+using DRApplication.Shared.Interfaces;
+
+namespace DRApplication.Server.Data
 {
     public class EFRepository<TEntity, TDataContext> : IRepository<TEntity>
         where TEntity : class

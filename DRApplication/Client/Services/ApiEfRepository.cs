@@ -1,6 +1,8 @@
 ﻿namespace DRApplication.Client.Services
 {
-    using AvnRepository;
+    using DRApplication.Shared.Filters;
+    using DRApplication.Shared.Interfaces;
+    using DRApplication.Shared.Responses;
     using Newtonsoft.Json;
     using System.Linq.Expressions;
     using System.Net;
@@ -10,6 +12,7 @@
     /// Reusable API Repository base class that provides access to CRUD APIs
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
+    /// 
     public class ApiEfRepository<TEntity> : IRepository<TEntity>
       where TEntity : class
     {

@@ -1,5 +1,8 @@
 ﻿using Dapper;
 using Dapper.Contrib.Extensions;
+using DRApplication.Shared.Enums;
+using DRApplication.Shared.Filters;
+using DRApplication.Shared.Interfaces;
 using System.Data;
 using System.Data.SqlClient;
 

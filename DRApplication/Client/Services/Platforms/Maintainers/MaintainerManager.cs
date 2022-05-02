@@ -1,5 +1,4 @@
-﻿using AvnRepository;
-using DRApplication.Shared.Models.DeviceModels;
+﻿using DRApplication.Shared.Models.DeviceModels;
 
 namespace DRApplication.Client.Services.Platforms.Maintainers
 {
