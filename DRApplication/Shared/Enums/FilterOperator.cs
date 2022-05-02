@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DRApplication.Shared.Enums
 {
-    public enum FilterOperator
+    public enum FilterQueryOperator
     {
         Equals,
         NotEquals,

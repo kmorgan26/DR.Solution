@@ -1,10 +1,12 @@
-﻿using DRApplication.Shared.Models.ConfigurationModels;
+﻿using Dapper.Contrib.Extensions;
+using DRApplication.Shared.Models.ConfigurationModels;
 using DRApplication.Shared.Models.TestingModels;
 using System;
 using System.Collections.Generic;
 
 namespace DRApplication.Shared.Models.DeviceModels
 {
+    [Table("DeviceTypes")]
     public partial class DeviceType
     {
         public DeviceType()
@@ -15,7 +17,7 @@ namespace DRApplication.Shared.Models.DeviceModels
             RctdLots = new HashSet<RctdLot>();
             SsrdTasks = new HashSet<SsrdTask>();
         }
-
+        [Key]
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public int MaintainerId { get; set; }

@@ -11,7 +11,7 @@ namespace DRApplication.Shared.Filters
     {
         public string Name { get; set; } = "";
         public string Value { get; set; } = "";
-        public FilterOperator Operator { get; set; }
+        public FilterQueryOperator Operator { get; set; }
         public bool CaseSensitive { get; set; } = false;
     }
 }

@@ -55,27 +55,27 @@ namespace DRApplication.Shared.Filters
                     if (filterProperty.CaseSensitive == false)
                         value = value.ToLower();
 
-                    if (filterProperty.Operator == FilterOperator.Equals)
+                    if (filterProperty.Operator == FilterQueryOperator.Equals)
                         if (filterProperty.CaseSensitive == false)
                             expression = s => s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString().ToLower() == value;
                         else
                             expression = s => s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString() == value;
-                    else if (filterProperty.Operator == FilterOperator.NotEquals)
+                    else if (filterProperty.Operator == FilterQueryOperator.NotEquals)
                         if (filterProperty.CaseSensitive == false)
                             expression = s => s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString().ToLower() != value;
                         else
                             expression = s => s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString() != value;
-                    else if (filterProperty.Operator == FilterOperator.StartsWith)
+                    else if (filterProperty.Operator == FilterQueryOperator.StartsWith)
                         if (filterProperty.CaseSensitive == false)
                             expression = s => s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString().ToLower().StartsWith(value);
                         else
                             expression = s => s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString().StartsWith(value);
-                    else if (filterProperty.Operator == FilterOperator.EndsWith)
+                    else if (filterProperty.Operator == FilterQueryOperator.EndsWith)
                         if (filterProperty.CaseSensitive == false)
                             expression = s => s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString().ToLower().EndsWith(value);
                         else
                             expression = s => s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString().EndsWith(value);
-                    else if (filterProperty.Operator == FilterOperator.Contains)
+                    else if (filterProperty.Operator == FilterQueryOperator.Contains)
                         if (filterProperty.CaseSensitive == false)
                             expression = s => s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString().ToLower().Contains(value);
                         else
@@ -86,17 +86,17 @@ namespace DRApplication.Shared.Filters
                 {
                     int value = Convert.ToInt16(filterProperty.Value);
 
-                    if (filterProperty.Operator == FilterOperator.Equals)
+                    if (filterProperty.Operator == FilterQueryOperator.Equals)
                         expression = s => Convert.ToInt16(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) == value;
-                    else if (filterProperty.Operator == FilterOperator.NotEquals)
+                    else if (filterProperty.Operator == FilterQueryOperator.NotEquals)
                         expression = s => Convert.ToInt16(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) != value;
-                    else if (filterProperty.Operator == FilterOperator.LessThan)
+                    else if (filterProperty.Operator == FilterQueryOperator.LessThan)
                         expression = s => Convert.ToInt16(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) < value;
-                    else if (filterProperty.Operator == FilterOperator.GreaterThan)
+                    else if (filterProperty.Operator == FilterQueryOperator.GreaterThan)
                         expression = s => Convert.ToInt16(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) > value;
-                    else if (filterProperty.Operator == FilterOperator.LessThanOrEqual)
+                    else if (filterProperty.Operator == FilterQueryOperator.LessThanOrEqual)
                         expression = s => Convert.ToInt16(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) <= value;
-                    else if (filterProperty.Operator == FilterOperator.GreaterThanOrEqual)
+                    else if (filterProperty.Operator == FilterQueryOperator.GreaterThanOrEqual)
                         expression = s => Convert.ToInt16(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) >= value;
                 }
                 // Int32
@@ -104,17 +104,17 @@ namespace DRApplication.Shared.Filters
                 {
                     int value = Convert.ToInt32(filterProperty.Value);
 
-                    if (filterProperty.Operator == FilterOperator.Equals)
+                    if (filterProperty.Operator == FilterQueryOperator.Equals)
                         expression = s => Convert.ToInt32(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) == value;
-                    else if (filterProperty.Operator == FilterOperator.NotEquals)
+                    else if (filterProperty.Operator == FilterQueryOperator.NotEquals)
                         expression = s => Convert.ToInt32(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) != value;
-                    else if (filterProperty.Operator == FilterOperator.LessThan)
+                    else if (filterProperty.Operator == FilterQueryOperator.LessThan)
                         expression = s => Convert.ToInt32(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) < value;
-                    else if (filterProperty.Operator == FilterOperator.GreaterThan)
+                    else if (filterProperty.Operator == FilterQueryOperator.GreaterThan)
                         expression = s => Convert.ToInt32(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) > value;
-                    else if (filterProperty.Operator == FilterOperator.LessThanOrEqual)
+                    else if (filterProperty.Operator == FilterQueryOperator.LessThanOrEqual)
                         expression = s => Convert.ToInt32(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) <= value;
-                    else if (filterProperty.Operator == FilterOperator.GreaterThanOrEqual)
+                    else if (filterProperty.Operator == FilterQueryOperator.GreaterThanOrEqual)
                         expression = s => Convert.ToInt32(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) >= value;
                 }
                 // Int64
@@ -122,17 +122,17 @@ namespace DRApplication.Shared.Filters
                 {
                     Int64 value = Convert.ToInt64(filterProperty.Value);
 
-                    if (filterProperty.Operator == FilterOperator.Equals)
+                    if (filterProperty.Operator == FilterQueryOperator.Equals)
                         expression = s => Convert.ToInt64(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) == value;
-                    else if (filterProperty.Operator == FilterOperator.NotEquals)
+                    else if (filterProperty.Operator == FilterQueryOperator.NotEquals)
                         expression = s => Convert.ToInt64(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) != value;
-                    else if (filterProperty.Operator == FilterOperator.LessThan)
+                    else if (filterProperty.Operator == FilterQueryOperator.LessThan)
                         expression = s => Convert.ToInt64(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) < value;
-                    else if (filterProperty.Operator == FilterOperator.GreaterThan)
+                    else if (filterProperty.Operator == FilterQueryOperator.GreaterThan)
                         expression = s => Convert.ToInt64(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) > value;
-                    else if (filterProperty.Operator == FilterOperator.LessThanOrEqual)
+                    else if (filterProperty.Operator == FilterQueryOperator.LessThanOrEqual)
                         expression = s => Convert.ToInt64(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) <= value;
-                    else if (filterProperty.Operator == FilterOperator.GreaterThanOrEqual)
+                    else if (filterProperty.Operator == FilterQueryOperator.GreaterThanOrEqual)
                         expression = s => Convert.ToInt64(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) >= value;
                 }
                 // UInt16
@@ -140,17 +140,17 @@ namespace DRApplication.Shared.Filters
                 {
                     UInt16 value = Convert.ToUInt16(filterProperty.Value);
 
-                    if (filterProperty.Operator == FilterOperator.Equals)
+                    if (filterProperty.Operator == FilterQueryOperator.Equals)
                         expression = s => Convert.ToUInt16(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) == value;
-                    else if (filterProperty.Operator == FilterOperator.NotEquals)
+                    else if (filterProperty.Operator == FilterQueryOperator.NotEquals)
                         expression = s => Convert.ToUInt16(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) != value;
-                    else if (filterProperty.Operator == FilterOperator.LessThan)
+                    else if (filterProperty.Operator == FilterQueryOperator.LessThan)
                         expression = s => Convert.ToUInt16(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) < value;
-                    else if (filterProperty.Operator == FilterOperator.GreaterThan)
+                    else if (filterProperty.Operator == FilterQueryOperator.GreaterThan)
                         expression = s => Convert.ToUInt16(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) > value;
-                    else if (filterProperty.Operator == FilterOperator.LessThanOrEqual)
+                    else if (filterProperty.Operator == FilterQueryOperator.LessThanOrEqual)
                         expression = s => Convert.ToUInt16(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) <= value;
-                    else if (filterProperty.Operator == FilterOperator.GreaterThanOrEqual)
+                    else if (filterProperty.Operator == FilterQueryOperator.GreaterThanOrEqual)
                         expression = s => Convert.ToUInt16(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) >= value;
                 }
                 // UInt32
@@ -158,17 +158,17 @@ namespace DRApplication.Shared.Filters
                 {
                     UInt32 value = Convert.ToUInt32(filterProperty.Value);
 
-                    if (filterProperty.Operator == FilterOperator.Equals)
+                    if (filterProperty.Operator == FilterQueryOperator.Equals)
                         expression = s => Convert.ToUInt32(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) == value;
-                    else if (filterProperty.Operator == FilterOperator.NotEquals)
+                    else if (filterProperty.Operator == FilterQueryOperator.NotEquals)
                         expression = s => Convert.ToUInt32(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) != value;
-                    else if (filterProperty.Operator == FilterOperator.LessThan)
+                    else if (filterProperty.Operator == FilterQueryOperator.LessThan)
                         expression = s => Convert.ToUInt32(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) < value;
-                    else if (filterProperty.Operator == FilterOperator.GreaterThan)
+                    else if (filterProperty.Operator == FilterQueryOperator.GreaterThan)
                         expression = s => Convert.ToUInt32(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) > value;
-                    else if (filterProperty.Operator == FilterOperator.LessThanOrEqual)
+                    else if (filterProperty.Operator == FilterQueryOperator.LessThanOrEqual)
                         expression = s => Convert.ToUInt32(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) <= value;
-                    else if (filterProperty.Operator == FilterOperator.GreaterThanOrEqual)
+                    else if (filterProperty.Operator == FilterQueryOperator.GreaterThanOrEqual)
                         expression = s => Convert.ToUInt32(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) >= value;
                 }
                 // UInt64
@@ -176,17 +176,17 @@ namespace DRApplication.Shared.Filters
                 {
                     UInt64 value = Convert.ToUInt64(filterProperty.Value);
 
-                    if (filterProperty.Operator == FilterOperator.Equals)
+                    if (filterProperty.Operator == FilterQueryOperator.Equals)
                         expression = s => Convert.ToUInt64(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) == value;
-                    else if (filterProperty.Operator == FilterOperator.NotEquals)
+                    else if (filterProperty.Operator == FilterQueryOperator.NotEquals)
                         expression = s => Convert.ToUInt64(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) != value;
-                    else if (filterProperty.Operator == FilterOperator.LessThan)
+                    else if (filterProperty.Operator == FilterQueryOperator.LessThan)
                         expression = s => Convert.ToUInt64(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) < value;
-                    else if (filterProperty.Operator == FilterOperator.GreaterThan)
+                    else if (filterProperty.Operator == FilterQueryOperator.GreaterThan)
                         expression = s => Convert.ToUInt64(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) > value;
-                    else if (filterProperty.Operator == FilterOperator.LessThanOrEqual)
+                    else if (filterProperty.Operator == FilterQueryOperator.LessThanOrEqual)
                         expression = s => Convert.ToUInt64(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) <= value;
-                    else if (filterProperty.Operator == FilterOperator.GreaterThanOrEqual)
+                    else if (filterProperty.Operator == FilterQueryOperator.GreaterThanOrEqual)
                         expression = s => Convert.ToUInt64(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) >= value;
                 }
                 // DateTime
@@ -194,17 +194,17 @@ namespace DRApplication.Shared.Filters
                 {
                     DateTime value = DateTime.Parse(filterProperty.Value);
 
-                    if (filterProperty.Operator == FilterOperator.Equals)
+                    if (filterProperty.Operator == FilterQueryOperator.Equals)
                         expression = s => DateTime.Parse(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) == value;
-                    else if (filterProperty.Operator == FilterOperator.NotEquals)
+                    else if (filterProperty.Operator == FilterQueryOperator.NotEquals)
                         expression = s => DateTime.Parse(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) != value;
-                    else if (filterProperty.Operator == FilterOperator.LessThan)
+                    else if (filterProperty.Operator == FilterQueryOperator.LessThan)
                         expression = s => DateTime.Parse(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) < value;
-                    else if (filterProperty.Operator == FilterOperator.GreaterThan)
+                    else if (filterProperty.Operator == FilterQueryOperator.GreaterThan)
                         expression = s => DateTime.Parse(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) > value;
-                    else if (filterProperty.Operator == FilterOperator.LessThanOrEqual)
+                    else if (filterProperty.Operator == FilterQueryOperator.LessThanOrEqual)
                         expression = s => DateTime.Parse(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) <= value;
-                    else if (filterProperty.Operator == FilterOperator.GreaterThanOrEqual)
+                    else if (filterProperty.Operator == FilterQueryOperator.GreaterThanOrEqual)
                         expression = s => DateTime.Parse(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) >= value;
                 }
                 // decimal
@@ -212,17 +212,17 @@ namespace DRApplication.Shared.Filters
                 {
                     decimal value = Convert.ToDecimal(filterProperty.Value);
 
-                    if (filterProperty.Operator == FilterOperator.Equals)
+                    if (filterProperty.Operator == FilterQueryOperator.Equals)
                         expression = s => Convert.ToDecimal(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) == value;
-                    else if (filterProperty.Operator == FilterOperator.NotEquals)
+                    else if (filterProperty.Operator == FilterQueryOperator.NotEquals)
                         expression = s => Convert.ToDecimal(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) != value;
-                    else if (filterProperty.Operator == FilterOperator.LessThan)
+                    else if (filterProperty.Operator == FilterQueryOperator.LessThan)
                         expression = s => Convert.ToDecimal(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) < value;
-                    else if (filterProperty.Operator == FilterOperator.GreaterThan)
+                    else if (filterProperty.Operator == FilterQueryOperator.GreaterThan)
                         expression = s => Convert.ToDecimal(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) > value;
-                    else if (filterProperty.Operator == FilterOperator.LessThanOrEqual)
+                    else if (filterProperty.Operator == FilterQueryOperator.LessThanOrEqual)
                         expression = s => Convert.ToDecimal(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) <= value;
-                    else if (filterProperty.Operator == FilterOperator.GreaterThanOrEqual)
+                    else if (filterProperty.Operator == FilterQueryOperator.GreaterThanOrEqual)
                         expression = s => Convert.ToDecimal(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) >= value;
                 }
                 // Single
@@ -230,17 +230,17 @@ namespace DRApplication.Shared.Filters
                 {
                     Single value = Convert.ToSingle(filterProperty.Value);
 
-                    if (filterProperty.Operator == FilterOperator.Equals)
+                    if (filterProperty.Operator == FilterQueryOperator.Equals)
                         expression = s => Convert.ToSingle(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) == value;
-                    else if (filterProperty.Operator == FilterOperator.NotEquals)
+                    else if (filterProperty.Operator == FilterQueryOperator.NotEquals)
                         expression = s => Convert.ToSingle(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) != value;
-                    else if (filterProperty.Operator == FilterOperator.LessThan)
+                    else if (filterProperty.Operator == FilterQueryOperator.LessThan)
                         expression = s => Convert.ToSingle(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) < value;
-                    else if (filterProperty.Operator == FilterOperator.GreaterThan)
+                    else if (filterProperty.Operator == FilterQueryOperator.GreaterThan)
                         expression = s => Convert.ToSingle(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) > value;
-                    else if (filterProperty.Operator == FilterOperator.LessThanOrEqual)
+                    else if (filterProperty.Operator == FilterQueryOperator.LessThanOrEqual)
                         expression = s => Convert.ToSingle(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) <= value;
-                    else if (filterProperty.Operator == FilterOperator.GreaterThanOrEqual)
+                    else if (filterProperty.Operator == FilterQueryOperator.GreaterThanOrEqual)
                         expression = s => Convert.ToSingle(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) >= value;
                 }
                 // Double
@@ -248,17 +248,17 @@ namespace DRApplication.Shared.Filters
                 {
                     Double value = Convert.ToDouble(filterProperty.Value);
 
-                    if (filterProperty.Operator == FilterOperator.Equals)
+                    if (filterProperty.Operator == FilterQueryOperator.Equals)
                         expression = s => Convert.ToDouble(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) == value;
-                    else if (filterProperty.Operator == FilterOperator.NotEquals)
+                    else if (filterProperty.Operator == FilterQueryOperator.NotEquals)
                         expression = s => Convert.ToDouble(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) != value;
-                    else if (filterProperty.Operator == FilterOperator.LessThan)
+                    else if (filterProperty.Operator == FilterQueryOperator.LessThan)
                         expression = s => Convert.ToDouble(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) < value;
-                    else if (filterProperty.Operator == FilterOperator.GreaterThan)
+                    else if (filterProperty.Operator == FilterQueryOperator.GreaterThan)
                         expression = s => Convert.ToDouble(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) > value;
-                    else if (filterProperty.Operator == FilterOperator.LessThanOrEqual)
+                    else if (filterProperty.Operator == FilterQueryOperator.LessThanOrEqual)
                         expression = s => Convert.ToDouble(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) <= value;
-                    else if (filterProperty.Operator == FilterOperator.GreaterThanOrEqual)
+                    else if (filterProperty.Operator == FilterQueryOperator.GreaterThanOrEqual)
                         expression = s => Convert.ToDouble(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) >= value;
                 }
                 // Boolean
@@ -266,9 +266,9 @@ namespace DRApplication.Shared.Filters
                 {
                     bool value = Convert.ToBoolean(filterProperty.Value);
 
-                    if (filterProperty.Operator == FilterOperator.Equals)
+                    if (filterProperty.Operator == FilterQueryOperator.Equals)
                         expression = s => Convert.ToBoolean(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) == value;
-                    else if (filterProperty.Operator == FilterOperator.NotEquals)
+                    else if (filterProperty.Operator == FilterQueryOperator.NotEquals)
                         expression = s => Convert.ToBoolean(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) != value;
                 }
                 // Byte
@@ -276,17 +276,17 @@ namespace DRApplication.Shared.Filters
                 {
                     Byte value = Convert.ToByte(filterProperty.Value);
 
-                    if (filterProperty.Operator == FilterOperator.Equals)
+                    if (filterProperty.Operator == FilterQueryOperator.Equals)
                         expression = s => Convert.ToByte(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) == value;
-                    else if (filterProperty.Operator == FilterOperator.NotEquals)
+                    else if (filterProperty.Operator == FilterQueryOperator.NotEquals)
                         expression = s => Convert.ToByte(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) != value;
-                    else if (filterProperty.Operator == FilterOperator.LessThan)
+                    else if (filterProperty.Operator == FilterQueryOperator.LessThan)
                         expression = s => Convert.ToByte(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) < value;
-                    else if (filterProperty.Operator == FilterOperator.GreaterThan)
+                    else if (filterProperty.Operator == FilterQueryOperator.GreaterThan)
                         expression = s => Convert.ToByte(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) > value;
-                    else if (filterProperty.Operator == FilterOperator.LessThanOrEqual)
+                    else if (filterProperty.Operator == FilterQueryOperator.LessThanOrEqual)
                         expression = s => Convert.ToByte(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) <= value;
-                    else if (filterProperty.Operator == FilterOperator.GreaterThanOrEqual)
+                    else if (filterProperty.Operator == FilterQueryOperator.GreaterThanOrEqual)
                         expression = s => Convert.ToByte(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) >= value;
                 }
                 // Char
@@ -294,17 +294,17 @@ namespace DRApplication.Shared.Filters
                 {
                     Char value = Convert.ToChar(filterProperty.Value);
 
-                    if (filterProperty.Operator == FilterOperator.Equals)
+                    if (filterProperty.Operator == FilterQueryOperator.Equals)
                         expression = s => Convert.ToChar(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) == value;
-                    else if (filterProperty.Operator == FilterOperator.NotEquals)
+                    else if (filterProperty.Operator == FilterQueryOperator.NotEquals)
                         expression = s => Convert.ToChar(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) != value;
-                    else if (filterProperty.Operator == FilterOperator.LessThan)
+                    else if (filterProperty.Operator == FilterQueryOperator.LessThan)
                         expression = s => Convert.ToChar(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) < value;
-                    else if (filterProperty.Operator == FilterOperator.GreaterThan)
+                    else if (filterProperty.Operator == FilterQueryOperator.GreaterThan)
                         expression = s => Convert.ToChar(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) > value;
-                    else if (filterProperty.Operator == FilterOperator.LessThanOrEqual)
+                    else if (filterProperty.Operator == FilterQueryOperator.LessThanOrEqual)
                         expression = s => Convert.ToChar(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) <= value;
-                    else if (filterProperty.Operator == FilterOperator.GreaterThanOrEqual)
+                    else if (filterProperty.Operator == FilterQueryOperator.GreaterThanOrEqual)
                         expression = s => Convert.ToChar(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) >= value;
                 }
                 // Add expression creation code for other data types here.

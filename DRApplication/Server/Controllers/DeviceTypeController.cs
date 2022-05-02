@@ -38,8 +38,7 @@ namespace DRApplication.Server.Controllers
         }
 
         [HttpPost("getwithfilter")]
-        public async Task<ActionResult<APIListOfEntityResponse<DeviceType>>>
-            GetWithFilter([FromBody] QueryFilter<DeviceType> Filter)
+        public async Task<ActionResult<APIListOfEntityResponse<DeviceType>>> GetWithFilter([FromBody] QueryFilter<DeviceType> Filter)
         {
             try
             {

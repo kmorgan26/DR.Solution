@@ -57,14 +57,13 @@ namespace DRApplication.Server.Data
             {
                 try
                 {
-                    // let's try this
                     var dictionary = new Dictionary<string, object>();
                     foreach (var column in Filter.FilterProperties)
                     {
                         dictionary.Add(column.Name, column.Value);
                     }
                     var parameters = new DynamicParameters(dictionary);
-                    var sql = "select "; // * from products where ProductId = @ProductId";
+                    var sql = "SELECT "; // * from products where ProductId = @ProductId";
                     if (Filter.IncludePropertyNames.Count > 0)
                     {
                         foreach (var propertyName in Filter.IncludePropertyNames)
@@ -88,31 +87,31 @@ namespace DRApplication.Server.Data
                         {
                             switch (Filter.FilterProperties[count].Operator)
                             {
-                                case FilterOperator.Equals:
+                                case FilterQueryOperator.Equals:
                                     sql += $"{key} = @{key} ";
                                     break;
-                                case FilterOperator.NotEquals:
+                                case FilterQueryOperator.NotEquals:
                                     sql += $"{key} <> @{key} ";
                                     break;
-                                case FilterOperator.StartsWith:
+                                case FilterQueryOperator.StartsWith:
                                     sql += $"{key} like @{key} + '%' ";
                                     break;
-                                case FilterOperator.EndsWith:
+                                case FilterQueryOperator.EndsWith:
                                     sql += $"{key} like '%' + @{key} ";
                                     break;
-                                case FilterOperator.Contains:
+                                case FilterQueryOperator.Contains:
                                     sql += $"{key} like '%' + @{key} + '%' ";
                                     break;
-                                case FilterOperator.LessThan:
+                                case FilterQueryOperator.LessThan:
                                     sql += $"{key} < @{key} ";
                                     break;
-                                case FilterOperator.LessThanOrEqual:
+                                case FilterQueryOperator.LessThanOrEqual:
                                     sql += $"{key} =< @{key} ";
                                     break;
-                                case FilterOperator.GreaterThan:
+                                case FilterQueryOperator.GreaterThan:
                                     sql += $"{key} > @{key} ";
                                     break;
-                                case FilterOperator.GreaterThanOrEqual:
+                                case FilterQueryOperator.GreaterThanOrEqual:
                                     sql += $"{key} >= @{key} ";
                                     break;
                             }
@@ -143,6 +142,7 @@ namespace DRApplication.Server.Data
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine(ex.Message);
                     return (IEnumerable<TEntity>)new List<TEntity>();
                 }
             }
