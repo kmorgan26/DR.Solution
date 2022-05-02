@@ -22,7 +22,8 @@ namespace DRApplication.Server
                 o.MemoryBufferThreshold = int.MaxValue;
             });
 
-            builder.Services.AddTransient<EFRepository<Maintainer, FSTSSDatabaseContext>>();
+            builder.Services.AddTransient(s => new DapperRepository<Maintainer>(
+                builder.Configuration.GetConnectionString("DRConnectionString")));
 
             builder.Services.AddTransient<RepositoryEF<HardwareConfig, FSTSSDatabaseContext>>();
             builder.Services.AddTransient<EFRepository<DeviceType, FSTSSDatabaseContext>>();

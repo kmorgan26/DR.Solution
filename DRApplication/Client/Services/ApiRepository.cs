@@ -7,7 +7,7 @@ using System.Net.Http.Json;
 
 namespace DRApplication.Client.Services
 {
-    public class ApiRepository<TEntity> : IAsyncRepository<TEntity> where TEntity : class
+    public class ApiRepository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         private readonly HttpClient _http;
         private readonly string _controllerName;
@@ -19,47 +19,46 @@ namespace DRApplication.Client.Services
             _controllerName = controllerName;
             _primaryKeyName = primaryKeyName;
         }
-
-        public async Task<IEnumerable<TEntity>> GetAllAsync(PaginationFilter? paginationFilter = null)
+        public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             try
             {
                 var result = await _http.GetAsync(_controllerName);
                 result.EnsureSuccessStatusCode();
-                
                 string responseBody = await result.Content.ReadAsStringAsync();
+                var response = JsonConvert.DeserializeObject<APIListOfEntityResponse<TEntity>>(responseBody);
 
-                if (paginationFilter == null)
-                {
-                    var response = JsonConvert.DeserializeObject<PagedResponse<TEntity>>(responseBody);
-                    
-                    if (paginationFilter == null)
-                    {
-                        if (response is not null && response.Data is not null && response.Success)
-                            return response.Data.ToList();
-                        else
-                            return new List<TEntity>();
-                    }
-                }
-                
-                var skip = (paginationFilter.PageNumber -1 ) * paginationFilter.PageSize;
-
-                var filtered = responseBody
-                    .Take(paginationFilter.PageSize)
-                    .Skip(skip)
-                    .ToList();
-
-                var pagedResponse = JsonConvert.DeserializeObject<PagedResponse<TEntity>>(responseBody);
-
-                if (pagedResponse is not null && pagedResponse.Data is not null)
-                    return pagedResponse.Data.ToList();
+                if (response is not null && response.Success)
+                    return response.Data;
                 else
                     return new List<TEntity>();
-
             }
-            catch
+            catch (Exception ex)
             {
-                return new List<TEntity>();
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
+        public async Task<IEnumerable<TEntity>> GetAsync(QueryFilter<TEntity> Expression)
+        {
+            try
+            {
+                string url = $"{_controllerName}/getwithfilter";
+                var result = await _http.PostAsJsonAsync(url, Expression);
+                result.EnsureSuccessStatusCode();
+                string responseBody = await result.Content.ReadAsStringAsync();
+                var response = JsonConvert.DeserializeObject<APIListOfEntityResponse<TEntity>>(responseBody);
+
+                if (response is not null && response.Success)
+                    return response.Data;
+                else
+                    return new List<TEntity>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
             }
         }
 
@@ -72,35 +71,37 @@ namespace DRApplication.Client.Services
                 var result = await _http.GetAsync(url);
                 result.EnsureSuccessStatusCode();
                 string responseBody = await result.Content.ReadAsStringAsync();
-                var response = JsonConvert.DeserializeObject<Response<TEntity>>(responseBody);
-                
-                if (response is not null && response.Data is not null && response.Success)
+                var response = JsonConvert.DeserializeObject<APIEntityResponse<TEntity>>(responseBody);
+
+                if (response is not null && response.Success)
                     return response.Data;
                 else
                     return null;
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return null;
             }
         }
 
-        public async Task<TEntity> AddAsync(TEntity entity)
+        public async Task<TEntity> InsertAsync(TEntity entity)
         {
             try
             {
                 var result = await _http.PostAsJsonAsync(_controllerName, entity);
                 result.EnsureSuccessStatusCode();
                 string responseBody = await result.Content.ReadAsStringAsync();
-                var response = JsonConvert.DeserializeObject<Response<TEntity>>(responseBody);
+                var response = JsonConvert.DeserializeObject<APIEntityResponse<TEntity>>(responseBody);
 
-                if ( response is not null && response.Data is not null && response.Success)
+                if (response is not null && response.Success)
                     return response.Data;
                 else
                     return null;
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return null;
             }
         }
@@ -112,14 +113,16 @@ namespace DRApplication.Client.Services
                 var result = await _http.PutAsJsonAsync(_controllerName, entityToUpdate);
                 result.EnsureSuccessStatusCode();
                 string responseBody = await result.Content.ReadAsStringAsync();
-                var response = JsonConvert.DeserializeObject<Response<TEntity>>(responseBody);
-                if ( response is not null && response.Data is not null && response.Success)
+                var response = JsonConvert.DeserializeObject<APIEntityResponse<TEntity>>(responseBody);
+
+                if (response is not null && response.Success)
                     return response.Data;
                 else
                     return null;
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return null;
             }
         }
@@ -128,23 +131,25 @@ namespace DRApplication.Client.Services
         {
             try
             {
-                    var value = entityToDelete.GetType()
-                    .GetProperty(_primaryKeyName)
-                    .GetValue(entityToDelete, null)
-                    .ToString();
-                    var arg = WebUtility.HtmlEncode(value);
-                    var url = _controllerName + "/" + arg;
-                    var result = await _http.DeleteAsync(url);
-                    result.EnsureSuccessStatusCode();
-                    return true;
+                var value = entityToDelete.GetType()
+                   .GetProperty(_primaryKeyName)
+                   .GetValue(entityToDelete, null)
+                   .ToString();
+
+                var arg = WebUtility.HtmlEncode(value);
+                var url = _controllerName + "/" + arg;
+                var result = await _http.DeleteAsync(url);
+                result.EnsureSuccessStatusCode();
+                return true;
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return false;
             }
         }
 
-        public async Task<bool> DeleteAsync(object id)
+        public async Task<bool> DeleteByIdAsync(object id)
         {
             try
             {
@@ -153,21 +158,18 @@ namespace DRApplication.Client.Services
                 result.EnsureSuccessStatusCode();
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return false;
             }
-            
         }
 
-        public Task<IReadOnlyList<TEntity>> GetPagedReponseAsync(int page, int size)
+        public Task DeleteAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<IReadOnlyList<TEntity>> ListAllAsync()
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

@@ -2,7 +2,7 @@
 
 namespace DRApplication.Client.Services.Platforms.Maintainers
 {
-    public class MaintainerManager : ApiEfRepository<Maintainer>
+    public class MaintainerManager : ApiRepository<Maintainer>
     {
         HttpClient _http;
         static string controllerName = "maintainer";
