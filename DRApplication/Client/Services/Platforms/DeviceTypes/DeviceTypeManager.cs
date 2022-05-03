@@ -1,4 +1,5 @@
-﻿using DRApplication.Shared.Models.DeviceModels;
+﻿using DRApplication.Client.ViewModels.DeviceTypeViewModels;
+using DRApplication.Shared.Models.DeviceModels;
 
 namespace DRApplication.Client.Services.Platforms.DeviceTypes
 {

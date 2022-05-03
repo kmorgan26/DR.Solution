@@ -1,5 +1,5 @@
-﻿
-@inject DeviceTypeManager manager
+﻿@inject DeviceTypeManager manager
+@inject MaintainerManager maintainer_manager
 
 <div class="row mb-4">
     <div class="col col-md-6 col-sm-12">
@@ -17,7 +17,7 @@
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Thread">@context.Id</MudTd>
-        <MudTd DataLabel="Thread">@context.Name</MudTd>
+        <MudTd DataLabel="Thread">@context.DeviceType</MudTd>
         <MudTd DataLabel="Thread">@context.Maintainer</MudTd>
         <MudTd DataLabel="Thread">@context.IsActive</MudTd>
         <MudTd DataLable="SELECT">
@@ -30,14 +30,14 @@
 
 @code {
     List<DeviceTypeVm> _deviceTypeVms = new();
+    List<MaintainerVm> _maintainerVms = new();
 
     protected override async Task OnInitializedAsync()
     {
-        var expression = new QueryFilter<DeviceType>();
-        expression.FilterProperties.Add(new FilterProperty { Name = "Name", Value = "H", CaseSensitive = false, Operator = FilterQueryOperator.Contains });
+        var deviceTypes = await manager.GetAllAsync();
+        var maintainers = await maintainer_manager.GetAllAsync();
 
-        var items = await manager.GetAsync(expression);
-
-        _deviceTypeVms = Mapping.Mapper.Map<List<DeviceTypeVm>>(items);
+        _maintainerVms = Mapping.Mapper.Map<List<MaintainerVm>>(deviceTypes);
+        _deviceTypeVms = Mapping.Mapper.Map<List<DeviceTypeVm>>(deviceTypes);
     }
 }

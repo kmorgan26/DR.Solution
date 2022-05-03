@@ -20,6 +20,11 @@ namespace DRApplication.Shared.Filters
         public List<FilterProperty> FilterProperties { get; set; } = new List<FilterProperty>();
 
         /// <summary>
+        /// Defines a list of table joins to be used to get related table columns
+        /// </summary>
+        public List<TableJoin> TableJoins { get; set; } = new List<TableJoin>();
+
+        /// <summary>
         /// Specify the property to ORDER BY, if any 
         /// </summary>
         public string OrderByPropertyName { get; set; } = "";

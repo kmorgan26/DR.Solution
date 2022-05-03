@@ -19,7 +19,7 @@ namespace DRApplication.Shared.Helpers
                 case "SimStatuses":
                     return "SimStatuses";
                 default:
-                    return $"{className}s";
+                    return $"{className}s p";
             }
         }
     }
