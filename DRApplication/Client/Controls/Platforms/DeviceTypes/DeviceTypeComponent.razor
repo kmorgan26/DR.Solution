@@ -17,7 +17,7 @@
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Thread">@context.Id</MudTd>
-        <MudTd DataLabel="Thread">@context.DeviceType</MudTd>
+        <MudTd DataLabel="Thread">@context.Name</MudTd>
         <MudTd DataLabel="Thread">@context.Maintainer</MudTd>
         <MudTd DataLabel="Thread">@context.IsActive</MudTd>
         <MudTd DataLable="SELECT">
@@ -37,7 +37,7 @@
         var deviceTypes = await manager.GetAllAsync();
         var maintainers = await maintainer_manager.GetAllAsync();
 
-        _maintainerVms = Mapping.Mapper.Map<List<MaintainerVm>>(deviceTypes);
+        _maintainerVms = Mapping.Mapper.Map<List<MaintainerVm>>(maintainers);
         _deviceTypeVms = Mapping.Mapper.Map<List<DeviceTypeVm>>(deviceTypes);
     }
 }
