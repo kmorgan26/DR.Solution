@@ -2,6 +2,7 @@
 using Dapper.Contrib.Extensions;
 using DRApplication.Shared.Enums;
 using DRApplication.Shared.Filters;
+using DRApplication.Shared.Helpers;
 using DRApplication.Shared.Interfaces;
 using System.Data;
 using System.Data.SqlClient;
@@ -22,7 +23,7 @@ namespace DRApplication.Server.Data
         {
             _sqlConnectionString = sqlConnectionString;
             entityType = typeof(TEntity);
-            entityName = entityType.Name;
+            entityName = GetTableName.GetTableNameFromClass(entityType.Name);
 
             var props = entityType.GetProperties().Where(
                 prop => Attribute.IsDefined(prop,
