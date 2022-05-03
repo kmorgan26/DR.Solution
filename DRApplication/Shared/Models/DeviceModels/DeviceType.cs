@@ -9,14 +9,14 @@ namespace DRApplication.Shared.Models.DeviceModels
     [Table("DeviceTypes")]
     public partial class DeviceType
     {
-        public DeviceType()
-        {
-            Devices = new HashSet<Device>();
-            Drrbs = new HashSet<Drrb>();
-            HardwareConfigs = new HashSet<HardwareConfig>();
-            RctdLots = new HashSet<RctdLot>();
-            SsrdTasks = new HashSet<SsrdTask>();
-        }
+        //public DeviceType()
+        //{
+        //    Devices = new HashSet<Device>();
+        //    Drrbs = new HashSet<Drrb>();
+        //    HardwareConfigs = new HashSet<HardwareConfig>();
+        //    RctdLots = new HashSet<RctdLot>();
+        //    SsrdTasks = new HashSet<SsrdTask>();
+        //}
         [Key]
         public int Id { get; set; }
         public string Name { get; set; } = null!;

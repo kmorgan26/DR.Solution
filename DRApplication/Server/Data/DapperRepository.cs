@@ -161,9 +161,6 @@ namespace DRApplication.Server.Data
             using (IDbConnection db = new SqlConnection(_sqlConnectionString))
             {
                 db.Open();
-                //string sql = $"select * from {entityName}";
-                //IEnumerable<TEntity> result = await db.QueryAsync<TEntity>(sql);
-                //return result;
                 return await db.GetAllAsync<TEntity>();
             }
         }
@@ -227,8 +224,6 @@ namespace DRApplication.Server.Data
                 db.Open();
                 try
                 {
-                    //string sql = DapperSqlHelper.GetDapperUpdateStatement(entity, entityName, primaryKeyName);
-                    //await db.ExecuteAsync(sql, entity);
                     await db.UpdateAsync<TEntity>(entity);
                     return entity;
                 }
@@ -242,11 +237,8 @@ namespace DRApplication.Server.Data
         {
             using (IDbConnection db = new SqlConnection(_sqlConnectionString))
             {
-                //string sql = $"delete from {entityName} where {primaryKeyName}" +
-                //    $" = @{primaryKeyName}";
                 try
                 {
-                    //await db.ExecuteAsync(sql, entityToDelete);
                     await db.DeleteAsync<TEntity>(entityToDelete);
                     return true;
                 }
