@@ -8,6 +8,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Filters\**" />
+	  <Content Remove="Filters\**" />
+	  <EmbeddedResource Remove="Filters\**" />
+	  <None Remove="Filters\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="LinqKit.Microsoft.EntityFrameworkCore" Version="6.1.2" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.4" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.4" />
@@ -28,10 +35,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Client\DRApplication.Client.csproj" />
 		<ProjectReference Include="..\Shared\DRApplication.Shared.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Filters\" />
 	</ItemGroup>
 
 

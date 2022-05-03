@@ -11,11 +11,6 @@ namespace DRApplication.Server
     {
         public static WebApplicationBuilder RegisterServices(this WebApplicationBuilder builder)
         {
-            builder.Services.AddDbContextFactory<FSTSSDatabaseContext>(
-                options =>
-                    options.UseSqlServer(builder.Configuration.GetConnectionString("DRConnectionString")));
-
-
             builder.Services.Configure<FormOptions>(o => {
                 o.ValueLengthLimit = int.MaxValue;
                 o.MultipartBodyLengthLimit = int.MaxValue;
