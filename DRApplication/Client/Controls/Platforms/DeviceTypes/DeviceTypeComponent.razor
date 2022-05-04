@@ -1,4 +1,5 @@
-﻿@inject DeviceTypeManager manager
+﻿
+@inject DeviceTypeManager manager
 @inject MaintainerManager maintainer_manager
 
 <div class="row mb-4">
@@ -18,7 +19,7 @@
     <RowTemplate>
         <MudTd DataLabel="Thread">@context.Id</MudTd>
         <MudTd DataLabel="Thread">@context.Name</MudTd>
-        <MudTd DataLabel="Thread">@context.Maintainer</MudTd>
+        <MudTd DataLabel="Thread">@context.MaintainerName</MudTd>
         <MudTd DataLabel="Thread">@context.IsActive</MudTd>
         <MudTd DataLable="SELECT">
             <a href="/devicetype/edit/@context.Id" role="button">
@@ -29,15 +30,26 @@
 </MudTable>
 
 @code {
-    List<DeviceTypeVm> _deviceTypeVms = new();
+
+    IEnumerable<DeviceTypeVm> _deviceTypeVms;
+
     List<MaintainerVm> _maintainerVms = new();
+    MappingHelper _mappingHelper = new();
 
     protected override async Task OnInitializedAsync()
     {
         var deviceTypes = await manager.GetAllAsync();
         var maintainers = await maintainer_manager.GetAllAsync();
 
-        _maintainerVms = Mapping.Mapper.Map<List<MaintainerVm>>(maintainers);
-        _deviceTypeVms = Mapping.Mapper.Map<List<DeviceTypeVm>>(deviceTypes);
+        _mappingHelper.PrimaryEntities = deviceTypes;
+        _mappingHelper.ForeignColumnName = "MaintainerName";
+        _mappingHelper.ForeignKeyName = "MaintainerId";
+        _mappingHelper.ForeignEntities = maintainers;
+        _mappingHelper.VMList = new List<DeviceTypeVm>();
+
+        var fkMapper = new ForeignKeyMapper<DeviceType>(_mappingHelper);
+
+        _deviceTypeVms = fkMapper.GetMappedClass().Cast<DeviceTypeVm>().ToList();
+
     }
 }

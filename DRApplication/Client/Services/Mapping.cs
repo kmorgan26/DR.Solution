@@ -36,9 +36,9 @@ namespace DRApplication.Client.Services
 
             CreateMap<DeviceType, GenericListVm>().ReverseMap();
             CreateMap<DeviceType, DeviceTypeEditVm>().ReverseMap();
-            CreateMap<DeviceType, DeviceTypeVm>()
-                .ForMember(dest => dest.Maintainer,
-                    opts => opts.MapFrom(src => src.Maintainer.Name));
+
+            CreateMap<DeviceType, DeviceTypeVm>().IncludeMembers(dest => dest.Maintainer, opts => opts.Maintainer.Name);
+            CreateMap<Maintainer, DeviceTypeVm>(MemberList.None);
 
             CreateMap<Device, DeviceEditVm>().ReverseMap();
             CreateMap<Device, DeviceVm>()
@@ -46,23 +46,7 @@ namespace DRApplication.Client.Services
                     opts => opts.MapFrom(src => src.DeviceType.Name));
 
             CreateMap<Maintainer, MaintainerVm>().ReverseMap();
-
             
-
-            //CreateMap<EditTrackingVm, Tracking>().ReverseMap();
-
-
-            //CreateMap<Tracking, TrackingVm>()
-            //    .ForMember(dest => dest.Status,
-            //        opts => opts.MapFrom(src => src.Status!.Name))
-            //    .ForMember(dest => dest.ToFrom,
-            //        opts => opts.MapFrom(src => src.ToFrom!.Name))
-            //    .ForMember(dest => dest.CorrespondenceType,
-            //        opts => opts.MapFrom(src => src.CorrespondenceType!.Name))
-            //    .ForMember(dest => dest.Topic,
-            //        opts => opts.MapFrom(src => src.Thread!.Name))
-            //    .ForMember(dest => dest.Poc,
-            //        opts => opts.MapFrom(src => src.Poc!.Name));
         }
     }
 }

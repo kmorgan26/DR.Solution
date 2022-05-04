@@ -3,7 +3,6 @@ using DRApplication.Shared.Models.ConfigurationModels;
 using DRApplication.Shared.Models.TestingModels;
 using System;
 using System.Collections.Generic;
-
 namespace DRApplication.Shared.Models.DeviceModels
 {
     [Table("DeviceTypes")]
@@ -19,6 +18,7 @@ namespace DRApplication.Shared.Models.DeviceModels
         //}
         [Key]
         public int Id { get; set; }
+
         public string Name { get; set; } = null!;
         public int MaintainerId { get; set; }
         public bool IsActive { get; set; }
