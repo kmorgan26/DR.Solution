@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DRApplication.Client.Pages.Configurations.HardwareSystems;
 using DRApplication.Client.ViewModels.ConfigurationViewModels;
 using DRApplication.Client.ViewModels.ConfigurationViewModels.HardwareSystems;
 using DRApplication.Client.ViewModels.ConfigurationViewModels.HardwareVersions;
@@ -32,6 +33,7 @@ namespace DRApplication.Client.Services
         public MappingProfile()
         {
             CreateMap<HardwareSystem, HardwareSystemVm>().ReverseMap();
+            CreateMap<HardwareSystem, HarwareSystemInsertVm>().ReverseMap();
 
             CreateMap<HardwareVersion, HardwareVersionVm>().ReverseMap();
 

@@ -1,0 +1,31 @@
+﻿@inject HardwareSystemManager manager
+@inject NavigationManager navigation
+
+<h3>Add New Hardware System</h3>
+<div class="row">
+    <div class="col-md-6 col-sm-12">
+        @if (@_harwareSystemInsertVm != null)
+        {
+            <EditForm Model="@_harwareSystemInsertVm" OnValidSubmit="@InsertHardwareSystem">
+
+                <label for="Name">Hardware System</label>
+                <InputText class="form-control" @bind-Value="_harwareSystemInsertVm.Name" />
+
+                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Insert</MudButton>
+                <MudButton Link="/hardwaresystem" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
+
+            </EditForm>
+        }
+    </div>
+</div>
+
+@code {
+    private HarwareSystemInsertVm _harwareSystemInsertVm { get; set; } = new();
+
+    private async Task InsertHardwareSystem()
+    {
+        var hardwareSystem = Mapping.Mapper.Map<HardwareSystem>(_harwareSystemInsertVm);
+        await manager.InsertAsync(hardwareSystem);
+        navigation.NavigateTo("/hardwaresystem");
+    }
+}
