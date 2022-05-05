@@ -46,6 +46,7 @@ namespace DRApplication.Client.Services
 
             CreateMap<Maintainer, GenericListVm>();
             CreateMap<Maintainer, MaintainerVm>().ReverseMap();
+            CreateMap<Maintainer, MaintainerEditVm>().ReverseMap();
 
         }
     }
