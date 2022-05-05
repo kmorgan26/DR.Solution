@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace DRApplication.Shared.Models.ConfigurationModels
 {
-    [Table("HardwareConfigs")]
+    [Table("HardwareSystems")]
     public partial class HardwareSystem
     {
         [Key]

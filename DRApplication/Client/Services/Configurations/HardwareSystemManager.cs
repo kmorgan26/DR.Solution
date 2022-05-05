@@ -2,7 +2,7 @@
 
 namespace DRApplication.Client.Services.Configurations
 {
-    public class HardwareSystemManager : ApiRepository<HardwareConfig>
+    public class HardwareSystemManager : ApiRepository<HardwareSystem>
     {
         private readonly HttpClient _http;
 

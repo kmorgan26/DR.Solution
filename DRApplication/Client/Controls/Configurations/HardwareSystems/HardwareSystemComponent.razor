@@ -1,0 +1,35 @@
+﻿@inject HardwareSystemManager manager
+
+<div class="row mb-4">
+    <div class="col col-md-6 col-sm-12">
+        <MudButton Size="Size.Small" Variant="Variant.Filled" Color="Color.Success" Link="/hardwaresystem/create">New</MudButton>
+    </div>
+</div>
+
+<MudTable Items="@_hardwareSystemVms" Hover="true" Striped="true" Dense="true">
+    <HeaderContent>
+        <MudTh>ID</MudTh>
+        <MudTh>Name</MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Thread">@context.Id</MudTd>
+        <MudTd DataLabel="Thread">@context.Name</MudTd>
+        <MudTd DataLable="SELECT">
+            <a href="/hardwaresystem/edit/@context.Id" role="button">
+                <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>    
+            </a>
+        </MudTd>
+    </RowTemplate>
+</MudTable>
+
+@code {
+
+    List<HardwareSystemVm> _hardwareSystemVms = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var items = await manager.GetAllAsync();
+        _hardwareSystemVms = Mapping.Mapper.Map<List<HardwareSystem>>(items);
+    }
+}
