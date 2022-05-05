@@ -41,7 +41,7 @@ namespace DRApplication.Client.Services
 
             CreateMap<Device, DeviceEditVm>().ReverseMap();
             CreateMap<Device, DeviceVm>()
-                .ForMember(dest => dest.DeviceType,
+                .ForMember(dest => dest.DeviceTypeName,
                     opts => opts.MapFrom(src => src.DeviceType.Name));
 
             CreateMap<Maintainer, MaintainerVm>().ReverseMap();
