@@ -2,7 +2,7 @@
 @inject NavigationManager navigation
 
 <div class="form-group">
-    <label>Maintainers</label>
+    <label>Maintainer</label>
     <InputSelect ValueExpression="@(()=> SelectedMaintainerId)" id="deviceTypeSelect" DisplayName="Device Type" class="form-control" Value="SelectedMaintainerId"
                  ValueChanged="@((int? value) => ChangeMainatiner(value))">
         <option value=0>------</option>
