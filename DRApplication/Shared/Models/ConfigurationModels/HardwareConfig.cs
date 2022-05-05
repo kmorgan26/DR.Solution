@@ -1,11 +1,9 @@
 ﻿using DRApplication.Shared.Models.DeviceModels;
-using System;
-using System.Collections.Generic;
 using Dapper.Contrib.Extensions;
 
 namespace DRApplication.Shared.Models.ConfigurationModels
 {
-    [Table("HardwareConfig")]
+    [Table("HardwareConfigs")]
     public partial class HardwareConfig
     {
         public HardwareConfig()

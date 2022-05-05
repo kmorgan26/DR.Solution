@@ -31,7 +31,7 @@ namespace DRApplication.Client.Services
         {
             CreateMap<HardwareConfig, HardwareConfigEditVm>().ReverseMap();
             CreateMap<HardwareConfig, HardwareConfigVm>()
-                .ForMember(dest => dest.DeviceType,
+                .ForMember(dest => dest.DeviceTypeName,
                     opts => opts.MapFrom(src => src.DeviceType.Name));
 
             CreateMap<DeviceType, GenericListVm>().ReverseMap();
