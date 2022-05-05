@@ -1,0 +1,42 @@
+﻿@inject MaintainerManager manager
+@inject NavigationManager navigation
+
+<div class="row">
+    <div class="col-md-6 col-sm-12">
+        @if (@MaintainerEditVm != null)
+        {
+            <EditForm Model="@MaintainerEditVm" OnValidSubmit="@UpdateMaintainer">
+
+                <div class="form-group">
+                    <label for="Name">Maintainer</label>
+                    <InputText class="form-control" @bind-Value="MaintainerEditVm.Name" />
+                </div>
+
+                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Update</MudButton>
+                <MudButton Link="/maintainers" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
+
+            </EditForm>
+        }
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public int MaintainerId { get; set; }
+
+    public MaintainerEditVm MaintainerEditVm { get; set; } = new();
+
+    protected async Task UpdateMaintainer()
+    {
+        var maintainer = Mapping.Mapper.Map<Maintainer>(MaintainerEditVm);
+        await manager.UpdateAsync(maintainer);
+        navigation.NavigateTo("/maintainers");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var maintainers = await manager.GetByIdAsync(MaintainerId);
+        MaintainerEditVm = Mapping.Mapper.Map<MaintainerEditVm>(maintainers);
+    }
+}

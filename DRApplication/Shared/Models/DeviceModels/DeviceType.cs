@@ -23,11 +23,11 @@ namespace DRApplication.Shared.Models.DeviceModels
         public int MaintainerId { get; set; }
         public bool IsActive { get; set; }
 
-        public virtual Maintainer Maintainer { get; set; } = null!;
-        public virtual ICollection<Device> Devices { get; set; }
-        public virtual ICollection<Drrb> Drrbs { get; set; }
-        public virtual ICollection<HardwareConfig> HardwareConfigs { get; set; }
-        public virtual ICollection<RctdLot> RctdLots { get; set; }
-        public virtual ICollection<SsrdTask> SsrdTasks { get; set; }
+        //public virtual Maintainer Maintainer { get; set; } = null!;
+        //public virtual ICollection<Device> Devices { get; set; }
+        //public virtual ICollection<Drrb> Drrbs { get; set; }
+        //public virtual ICollection<HardwareConfig> HardwareConfigs { get; set; }
+        //public virtual ICollection<RctdLot> RctdLots { get; set; }
+        //public virtual ICollection<SsrdTask> SsrdTasks { get; set; }
     }
 }
