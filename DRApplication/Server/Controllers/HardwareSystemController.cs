@@ -8,22 +8,22 @@ namespace DRApplication.Server.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class HardwareConfigController : ControllerBase
+    public class HardwareSystemController : ControllerBase
     {
-        DapperRepository<HardwareConfig> _manager;
+        DapperRepository<HardwareSystem> _manager;
 
-        public HardwareConfigController(DapperRepository<HardwareConfig> manager)
+        public HardwareSystemController(DapperRepository<HardwareSystem> manager)
         {
             _manager = manager;
         }
 
         [HttpGet]
-        public async Task<ActionResult<APIListOfEntityResponse<HardwareConfig>>> Get()
+        public async Task<ActionResult<APIListOfEntityResponse<HardwareSystem>>> Get()
         {
             try
             {
                 var result = await _manager.GetAllAsync();
-                return Ok(new APIListOfEntityResponse<HardwareConfig>()
+                return Ok(new APIListOfEntityResponse<HardwareSystem>()
                 {
                     Success = true,
                     Data = result
@@ -38,12 +38,12 @@ namespace DRApplication.Server.Controllers
         }
 
         [HttpPost("getwithfilter")]
-        public async Task<ActionResult<APIListOfEntityResponse<HardwareConfig>>> GetWithFilter([FromBody] QueryFilter<HardwareConfig> Filter)
+        public async Task<ActionResult<APIListOfEntityResponse<HardwareSystem>>> GetWithFilter([FromBody] QueryFilter<HardwareSystem> Filter)
         {
             try
             {
                 var result = await _manager.GetAsync(Filter);
-                return Ok(new APIListOfEntityResponse<HardwareConfig>()
+                return Ok(new APIListOfEntityResponse<HardwareSystem>()
                 {
                     Success = true,
                     Data = result.ToList()
@@ -59,14 +59,14 @@ namespace DRApplication.Server.Controllers
 
 
         [HttpGet("{Id}")]
-        public async Task<ActionResult<APIEntityResponse<HardwareConfig>>> GetById(int Id)
+        public async Task<ActionResult<APIEntityResponse<HardwareSystem>>> GetById(int Id)
         {
             try
             {
                 var result = await _manager.GetByIdAsync(Id);
                 if (result != null)
                 {
-                    return Ok(new APIEntityResponse<HardwareConfig>()
+                    return Ok(new APIEntityResponse<HardwareSystem>()
                     {
                         Success = true,
                         Data = result
@@ -74,11 +74,11 @@ namespace DRApplication.Server.Controllers
                 }
                 else
                 {
-                    return Ok(new APIEntityResponse<HardwareConfig>()
+                    return Ok(new APIEntityResponse<HardwareSystem>()
                     {
                         Success = false,
-                        ErrorMessages = new List<string>() { "HardwareConfig Not Found" },
-                        Data = new HardwareConfig() { Id = 0 }
+                        ErrorMessages = new List<string>() { "Hardware System Not Found" },
+                        Data = new HardwareSystem() { Id = 0 }
                     });
                 }
             }
@@ -91,16 +91,16 @@ namespace DRApplication.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<APIEntityResponse<HardwareConfig>>> Insert([FromBody] HardwareConfig HardwareConfig)
+        public async Task<ActionResult<APIEntityResponse<HardwareSystem>>> Insert([FromBody] HardwareSystem HardwareSystem)
         {
             try
             {
-                HardwareConfig.Id = 0; // Make sure you do this!
-                var result = await _manager.InsertAsync(HardwareConfig);
+                HardwareSystem.Id = 0; // Make sure you do this!
+                var result = await _manager.InsertAsync(HardwareSystem);
 
                 if (result != null)
                 {
-                    return Ok(new APIEntityResponse<HardwareConfig>()
+                    return Ok(new APIEntityResponse<HardwareSystem>()
                     {
                         Success = true,
                         Data = result
@@ -108,11 +108,11 @@ namespace DRApplication.Server.Controllers
                 }
                 else
                 {
-                    return Ok(new APIEntityResponse<HardwareConfig>()
+                    return Ok(new APIEntityResponse<HardwareSystem>()
                     {
                         Success = false,
-                        ErrorMessages = new List<string>() { "Could not find Hardware Config after adding it." },
-                        Data = new HardwareConfig() { Id = 0 }
+                        ErrorMessages = new List<string>() { "Could not find Hardware System after adding it." },
+                        Data = new HardwareSystem() { Id = 0 }
                     });
                 }
             }
@@ -125,14 +125,14 @@ namespace DRApplication.Server.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<APIEntityResponse<HardwareConfig>>> Update([FromBody] HardwareConfig HardwareConfig)
+        public async Task<ActionResult<APIEntityResponse<HardwareSystem>>> Update([FromBody] HardwareSystem HardwareSystem)
         {
             try
             {
-                var result = await _manager.UpdateAsync(HardwareConfig);
+                var result = await _manager.UpdateAsync(HardwareSystem);
                 if (result != null)
                 {
-                    return Ok(new APIEntityResponse<HardwareConfig>()
+                    return Ok(new APIEntityResponse<HardwareSystem>()
                     {
                         Success = true,
                         Data = result
@@ -140,11 +140,11 @@ namespace DRApplication.Server.Controllers
                 }
                 else
                 {
-                    return Ok(new APIEntityResponse<HardwareConfig>()
+                    return Ok(new APIEntityResponse<HardwareSystem>()
                     {
                         Success = false,
-                        ErrorMessages = new List<string>() { "Could not find Hardware Config after updating it." },
-                        Data = new HardwareConfig() { Id = 0 }
+                        ErrorMessages = new List<string>() { "Could not find Hardware System after updating it." },
+                        Data = new HardwareSystem() { Id = 0 }
                     });
                 }
             }
