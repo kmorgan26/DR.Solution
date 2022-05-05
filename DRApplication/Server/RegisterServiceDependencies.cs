@@ -11,22 +11,29 @@ namespace DRApplication.Server
     {
         public static WebApplicationBuilder RegisterServices(this WebApplicationBuilder builder)
         {
-            builder.Services.AddDbContextFactory<FSTSSDatabaseContext>(
-                options =>
-                    options.UseSqlServer(builder.Configuration.GetConnectionString("DRConnectionString")));
-
-
             builder.Services.Configure<FormOptions>(o => {
                 o.ValueLengthLimit = int.MaxValue;
                 o.MultipartBodyLengthLimit = int.MaxValue;
                 o.MemoryBufferThreshold = int.MaxValue;
             });
 
-            builder.Services.AddTransient<EFRepository<Maintainer, FSTSSDatabaseContext>>();
+            builder.Services.AddTransient(s => new DapperRepository<Maintainer>(
+                builder.Configuration.GetConnectionString("DRConnectionString")));
 
-            builder.Services.AddTransient<RepositoryEF<HardwareConfig, FSTSSDatabaseContext>>();
-            builder.Services.AddTransient<EFRepository<DeviceType, FSTSSDatabaseContext>>();
-            builder.Services.AddTransient<RepositoryEF<Device, FSTSSDatabaseContext>>();
+            builder.Services.AddTransient(s => new DapperRepository<HardwareConfig>(
+                builder.Configuration.GetConnectionString("DRConnectionString")));
+
+            builder.Services.AddTransient(s => new DapperRepository<HardwareSystem>(
+                builder.Configuration.GetConnectionString("DRConnectionString")));
+
+            builder.Services.AddTransient(s => new DapperRepository<HardwareVersion>(
+               builder.Configuration.GetConnectionString("DRConnectionString")));
+
+            builder.Services.AddTransient(s => new DapperRepository<DeviceType>(
+                builder.Configuration.GetConnectionString("DRConnectionString")));
+
+            builder.Services.AddTransient(s => new DapperRepository<Device>(
+                builder.Configuration.GetConnectionString("DRConnectionString")));
 
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddControllers()

@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>DRApplication.Database</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{91c83824-79b8-4058-be35-e05e07ee13ee}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>DRApplication.Database</RootNamespace>
+    <AssemblyName>DRApplication.Database</AssemblyName>
+    <ModelCollation>1033,CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <DefaultCollation>SQL_Latin1_General_CP1_CI_AS</DefaultCollation>
+    <DefaultFilegroup>PRIMARY</DefaultFilegroup>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="dbo\Views\" />
+    <Folder Include="Security\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\ManModules.sql" />
+    <Build Include="dbo\Tables\RctdLots.sql" />
+    <Build Include="dbo\Tables\Drrbs.sql" />
+    <Build Include="dbo\Tables\DrrbIssues.sql" />
+    <Build Include="dbo\Tables\DrTypes.sql" />
+    <Build Include="dbo\Tables\Drs.sql" />
+    <Build Include="dbo\Tables\Devices.sql" />
+    <Build Include="dbo\Tables\GrfrHistories.sql" />
+    <Build Include="dbo\Tables\GrfrPlans.sql" />
+    <Build Include="dbo\Tables\IssuesKeywords.sql" />
+    <Build Include="dbo\Tables\IssueConfigurations.sql" />
+    <Build Include="dbo\Tables\Issues.sql" />
+    <Build Include="dbo\Tables\Keywords.sql" />
+    <Build Include="dbo\Tables\IssueSsrdTasks.sql" />
+    <Build Include="dbo\Tables\__EFMigrationsHistory.sql" />
+    <Build Include="dbo\Tables\Maintainers.sql" />
+    <Build Include="dbo\Tables\LoadsDevices.sql" />
+    <Build Include="dbo\Tables\MaintIssues.sql" />
+    <Build Include="dbo\Tables\DeviceDiscovered.sql" />
+    <Build Include="dbo\Tables\RctdConfigurations.sql" />
+    <Build Include="dbo\Tables\ResearchInfos.sql" />
+    <Build Include="dbo\Tables\Loads.sql" />
+    <Build Include="dbo\Tables\IssueObserved.sql" />
+    <Build Include="dbo\Tables\Comments.sql" />
+    <Build Include="dbo\Tables\VersionsLoads.sql" />
+    <Build Include="dbo\Tables\Baselines.sql" />
+    <Build Include="dbo\Tables\SimStatusTypes.sql" />
+    <Build Include="dbo\Tables\IssuesDevices.sql" />
+    <Build Include="dbo\Tables\CorrectiveActions.sql" />
+    <Build Include="dbo\Tables\SsrdTasks.sql" />
+    <Build Include="dbo\Tables\SimStatuses.sql" />
+    <Build Include="dbo\Tables\TestEventDrs.sql" />
+    <Build Include="dbo\Tables\TestEventIssues.sql" />
+    <Build Include="dbo\Tables\SoftwareSystems.sql" />
+    <Build Include="dbo\Tables\SoftwareVersions.sql" />
+    <Build Include="dbo\Tables\HardwareConfigs.sql" />
+    <Build Include="dbo\Tables\TestEvents.sql" />
+    <Build Include="dbo\Tables\UserLogs.sql" />
+    <Build Include="dbo\Tables\HardwareSystems.sql" />
+    <Build Include="dbo\Tables\StatusChanges.sql" />
+    <Build Include="dbo\Tables\HardwareVersions.sql" />
+    <Build Include="dbo\Tables\HardwareVersionsConfigs.sql" />
+    <Build Include="dbo\Tables\LoadsTestEvents.sql" />
+    <Build Include="dbo\Tables\DocumentLinks.sql" />
+    <Build Include="dbo\Tables\DeviceTypes.sql" />
+    <Build Include="dbo\Tables\DrDissents.sql" />
+    <Build Include="dbo\Tables\DrDuplicates.sql" />
+    <Build Include="Security\IIS APPPOOL_DefaultAppPool.sql" />
+    <Build Include="Security\RoleMemberships.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="DRApplication.Database.refactorlog" />
+  </ItemGroup>
+</Project>

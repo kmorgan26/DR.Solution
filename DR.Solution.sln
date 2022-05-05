@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DRApplication.Client", "DRA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DRApplication.Shared", "DRApplication\Shared\DRApplication.Shared.csproj", "{4ABCE366-AFAD-4CA1-B29C-E261AAC14B7A}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "DRApplication.Database", "DRApplication.Database\DRApplication.Database.sqlproj", "{91C83824-79B8-4058-BE35-E05E07EE13EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,12 @@ Global
 		{4ABCE366-AFAD-4CA1-B29C-E261AAC14B7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4ABCE366-AFAD-4CA1-B29C-E261AAC14B7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4ABCE366-AFAD-4CA1-B29C-E261AAC14B7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91C83824-79B8-4058-BE35-E05E07EE13EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91C83824-79B8-4058-BE35-E05E07EE13EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91C83824-79B8-4058-BE35-E05E07EE13EE}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{91C83824-79B8-4058-BE35-E05E07EE13EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91C83824-79B8-4058-BE35-E05E07EE13EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91C83824-79B8-4058-BE35-E05E07EE13EE}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -37,6 +45,7 @@ Global
 		{3E3C33F1-0B63-4FB9-BD9B-0B2B01F9B599} = {EDF18E69-F7D6-46CE-8401-5D31DB51A01B}
 		{C2185C0C-EC90-40C2-8AD5-13070EED9123} = {EDF18E69-F7D6-46CE-8401-5D31DB51A01B}
 		{4ABCE366-AFAD-4CA1-B29C-E261AAC14B7A} = {EDF18E69-F7D6-46CE-8401-5D31DB51A01B}
+		{91C83824-79B8-4058-BE35-E05E07EE13EE} = {EDF18E69-F7D6-46CE-8401-5D31DB51A01B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FCF784AF-89E8-4414-AF73-706B47AF63EB}

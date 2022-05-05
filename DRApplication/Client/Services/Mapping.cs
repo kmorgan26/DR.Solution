@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
+using DRApplication.Client.Pages.Configurations.HardwareSystems;
 using DRApplication.Client.ViewModels.ConfigurationViewModels;
+using DRApplication.Client.ViewModels.ConfigurationViewModels.HardwareSystems;
+using DRApplication.Client.ViewModels.ConfigurationViewModels.HardwareVersions;
 using DRApplication.Client.ViewModels.DeviceTypeViewModels;
 using DRApplication.Client.ViewModels.DeviceViewModels;
 using DRApplication.Client.ViewModels.MaintainerViewModels;
@@ -29,40 +32,26 @@ namespace DRApplication.Client.Services
     {
         public MappingProfile()
         {
+            CreateMap<HardwareSystem, HardwareSystemVm>().ReverseMap();
+            CreateMap<HardwareSystem, HarwareSystemInsertVm>().ReverseMap();
+
+            CreateMap<HardwareVersion, HardwareVersionVm>().ReverseMap();
+
             CreateMap<HardwareConfig, HardwareConfigEditVm>().ReverseMap();
-            CreateMap<HardwareConfig, HardwareConfigVm>()
-                .ForMember(dest => dest.DeviceType,
-                    opts => opts.MapFrom(src => src.DeviceType.Name));
+            CreateMap<HardwareConfig, HardwareConfigVm>().ReverseMap();
 
             CreateMap<DeviceType, GenericListVm>().ReverseMap();
             CreateMap<DeviceType, DeviceTypeEditVm>().ReverseMap();
-            CreateMap<DeviceType, DeviceTypeVm>()
-                .ForMember(dest => dest.Maintainer,
-                    opts => opts.MapFrom(src => src.Maintainer.Name));
+
+            CreateMap<DeviceType, DeviceTypeVm>().ReverseMap();
 
             CreateMap<Device, DeviceEditVm>().ReverseMap();
-            CreateMap<Device, DeviceVm>()
-                .ForMember(dest => dest.DeviceType,
-                    opts => opts.MapFrom(src => src.DeviceType.Name));
+            CreateMap<Device, DeviceVm>().ReverseMap();
 
+            CreateMap<Maintainer, GenericListVm>();
             CreateMap<Maintainer, MaintainerVm>().ReverseMap();
+            CreateMap<Maintainer, MaintainerEditVm>().ReverseMap();
 
-            
-
-            //CreateMap<EditTrackingVm, Tracking>().ReverseMap();
-
-
-            //CreateMap<Tracking, TrackingVm>()
-            //    .ForMember(dest => dest.Status,
-            //        opts => opts.MapFrom(src => src.Status!.Name))
-            //    .ForMember(dest => dest.ToFrom,
-            //        opts => opts.MapFrom(src => src.ToFrom!.Name))
-            //    .ForMember(dest => dest.CorrespondenceType,
-            //        opts => opts.MapFrom(src => src.CorrespondenceType!.Name))
-            //    .ForMember(dest => dest.Topic,
-            //        opts => opts.MapFrom(src => src.Thread!.Name))
-            //    .ForMember(dest => dest.Poc,
-            //        opts => opts.MapFrom(src => src.Poc!.Name));
         }
     }
 }

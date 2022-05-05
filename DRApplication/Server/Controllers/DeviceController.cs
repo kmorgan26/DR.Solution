@@ -1,5 +1,5 @@
 ﻿using DRApplication.Server.Data;
-using DRApplication.Shared.Models;
+using DRApplication.Shared.Filters;
 using DRApplication.Shared.Models.DeviceModels;
 using DRApplication.Shared.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -10,51 +10,63 @@ namespace DRApplication.Server.Controllers
     [ApiController]
     public class DeviceController : ControllerBase
     {
-        RepositoryEF<Device, FSTSSDatabaseContext> _manager;
+        DapperRepository<Device> _manager;
 
-        public DeviceController(RepositoryEF<Device, FSTSSDatabaseContext> manager)
+        public DeviceController(DapperRepository<Device> manager)
         {
             _manager = manager;
         }
 
-        // GET: /<DeviceController>
         [HttpGet]
-        public async Task<IActionResult> GetAsync()
+        public async Task<ActionResult<APIListOfEntityResponse<Device>>> Get()
         {
             try
             {
-                var result = await _manager.dbSet
-                    .Include(i => i.DeviceType)
-                    .AsNoTracking()
-                    .ToListAsync();
-
-                return Ok(new PagedResponse<Device>(result)
+                var result = await _manager.GetAllAsync();
+                return Ok(new APIListOfEntityResponse<Device>()
                 {
                     Success = true,
                     Data = result
                 });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: Log Exception
+                // log exception here
+                Console.WriteLine(ex.Message);
                 return StatusCode(500);
             }
         }
 
-        // GET /<DeviceController>/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetByDeviceId(int id)
+        [HttpPost("getwithfilter")]
+        public async Task<ActionResult<APIListOfEntityResponse<Device>>> GetWithFilter([FromBody] QueryFilter<Device> Filter)
         {
             try
             {
-                var result = await _manager.dbSet
-                    .Where(x => x.Id == id)
-                    .Include(i => i.DeviceType)
-                    .FirstOrDefaultAsync();
+                var result = await _manager.GetAsync(Filter);
+                return Ok(new APIListOfEntityResponse<Device>()
+                {
+                    Success = true,
+                    Data = result.ToList()
+                });
+            }
+            catch (Exception ex)
+            {
+                // log exception here
+                Console.WriteLine(ex.Message);
+                return StatusCode(500);
+            }
+        }
 
+
+        [HttpGet("{Id}")]
+        public async Task<ActionResult<APIEntityResponse<Device>>> GetById(int Id)
+        {
+            try
+            {
+                var result = await _manager.GetByIdAsync(Id);
                 if (result != null)
                 {
-                    return Ok(new Response<Device>()
+                    return Ok(new APIEntityResponse<Device>()
                     {
                         Success = true,
                         Data = result
@@ -62,34 +74,33 @@ namespace DRApplication.Server.Controllers
                 }
                 else
                 {
-                    return Ok(new Response<Device>()
+                    return Ok(new APIEntityResponse<Device>()
                     {
                         Success = false,
-                        ErrorMessage = new List<string>() { "Device Not Found" },
-                        Data = null
+                        ErrorMessages = new List<string>() { "Customer Not Found" },
+                        Data = new Device() { Id = 0 }
                     });
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: Log the exception
+                // log exception here
+                Console.WriteLine(ex.Message);
                 return StatusCode(500);
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] Device item)
+        public async Task<ActionResult<APIEntityResponse<Device>>> Insert([FromBody] Device Device)
         {
             try
             {
-                await _manager.AddAsync(item);
-                var result = await _manager.dbSet
-                    .Where(i => i.Id == item.Id)
-                    .FirstOrDefaultAsync();
+                Device.Id = 0; // Make sure you do this!
+                var result = await _manager.InsertAsync(Device);
 
                 if (result != null)
                 {
-                    return Ok(new Response<Device>()
+                    return Ok(new APIEntityResponse<Device>()
                     {
                         Success = true,
                         Data = result
@@ -97,35 +108,31 @@ namespace DRApplication.Server.Controllers
                 }
                 else
                 {
-                    return Ok(new Response<Device>()
+                    return Ok(new APIEntityResponse<Device>()
                     {
                         Success = false,
-                        ErrorMessage = new List<string>() { "Could not find the Device After Adding it. " },
-                        Data = null
+                        ErrorMessages = new List<string>() { "Could not find Device Type after adding it." },
+                        Data = new Device() { Id = 0 }
                     });
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: Log the exception
+                // log exception here
+                Console.WriteLine(ex.Message);
                 return StatusCode(500);
             }
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] Device device)
+        public async Task<ActionResult<APIEntityResponse<Device>>> Update([FromBody] Device Device)
         {
             try
             {
-                await _manager.UpdateAsync(device);
-
-                var result = await _manager.dbSet
-                    .Where(i => i.Id == device.Id)
-                    .FirstOrDefaultAsync();
-
+                var result = await _manager.UpdateAsync(Device);
                 if (result != null)
                 {
-                    return Ok(new Response<Device>()
+                    return Ok(new APIEntityResponse<Device>()
                     {
                         Success = true,
                         Data = result
@@ -133,48 +140,34 @@ namespace DRApplication.Server.Controllers
                 }
                 else
                 {
-                    return Ok(new Response<Device>()
+                    return Ok(new APIEntityResponse<Device>()
                     {
                         Success = false,
-                        ErrorMessage = new List<string>() { "Could not find the Device after updating it" },
-                        Data = null
+                        ErrorMessages = new List<string>() { "Could not find customer after updating it." },
+                        Data = new Device() { Id = 0 }
                     });
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // TODO: Log it
+                // log exception here
+                Console.WriteLine(ex.Message);
                 return StatusCode(500);
             }
         }
 
-        // DELETE api/<DeviceController>/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        [HttpDelete("{Id}")]
+        public async Task<ActionResult<bool>> Delete(int Id)
         {
             try
             {
-                var list = await _manager.dbSet
-                    .Where(i => i.Id == id)
-                    .ToListAsync();
-
-                if (list != null)
-                {
-                    var item = list.First();
-                    var success = await _manager.DeleteAsync(item);
-                    if (success)
-                        return NoContent();
-                    else
-                        return StatusCode(500);
-                }
-                else
-                    return StatusCode(500);
+                return await _manager.DeleteByIdAsync(Id);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // TODO: Log it
+                // log exception here
+                var msg = ex.Message;
                 return StatusCode(500);
-                throw;
             }
         }
     }

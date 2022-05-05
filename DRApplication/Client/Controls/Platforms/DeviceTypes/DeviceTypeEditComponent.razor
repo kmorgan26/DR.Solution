@@ -1,0 +1,53 @@
+﻿@inject DeviceTypeManager manager
+@inject NavigationManager navigation
+
+<div class="row">
+    <div class="col-md-6 col-sm-12">
+        @if (@DeviceTypeEditVm != null)
+        {
+            <EditForm Model="@DeviceTypeEditVm" OnValidSubmit="@UpdateDeviceType">
+
+                <div class="form-group">
+                    <label for="Name">Device Type</label>
+                    <InputText class="form-control" @bind-Value="DeviceTypeEditVm.Name" />
+                </div>
+
+                <MaintainerSelectComponent MaintainerIdChange="UpdateMaintainer" SelectedMaintainerId="@DeviceTypeEditVm.MaintainerId"></MaintainerSelectComponent>
+
+                <div class="form-group">
+                    <label for="isactive">Active?</label>
+                    <InputCheckbox id="isactive" @bind-Value="DeviceTypeEditVm.IsActive" />
+                </div>
+
+                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Update</MudButton>
+                <MudButton Link="/deviceTypes" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
+
+            </EditForm>
+        }
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public int DeviceTypeId { get; set; }
+
+    public DeviceTypeEditVm DeviceTypeEditVm { get; set; } = new();
+
+    void UpdateMaintainer(int? id)
+    {
+        DeviceTypeEditVm.MaintainerId = Convert.ToInt32(id);
+    }
+    protected async Task UpdateDeviceType()
+    {
+        var deviceType = Mapping.Mapper.Map<DeviceType>(DeviceTypeEditVm);
+        await manager.UpdateAsync(deviceType);
+        navigation.NavigateTo("/deviceTypes");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var deviceTypes = await manager.GetByIdAsync(DeviceTypeId);
+        DeviceTypeEditVm = Mapping.Mapper.Map<DeviceTypeEditVm>(deviceTypes);
+    }
+}

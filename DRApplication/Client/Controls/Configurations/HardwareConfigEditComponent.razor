@@ -35,7 +35,7 @@
     {
         var hardwareConfig = Mapping.Mapper.Map<HardwareConfig>(HardwareConfigEditVm);
         await manager.UpdateAsync(hardwareConfig);
-        navigation.NavigateTo("/hardwareconfigs");
+        navigation.NavigateTo("/hardwareconfig");
     }
 
     protected override async Task OnInitializedAsync()

@@ -20,10 +20,15 @@ builder.Services.AddSingleton(new HttpClient
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
 builder.Services.AddScoped<HardwareConfigManager>();
+builder.Services.AddScoped<HardwareSystemManager>();
+builder.Services.AddScoped<HardwareVersionManager>();
+
+builder.Services.AddScoped<MaintainerManager>();
 builder.Services.AddScoped<DeviceTypeManager>();
 builder.Services.AddScoped<DeviceManager>();
-builder.Services.AddScoped<MaintainerManager>();
 
 builder.Services.AddBlazoredLocalStorage();
 

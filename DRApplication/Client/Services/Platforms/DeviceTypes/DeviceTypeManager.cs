@@ -2,7 +2,7 @@
 
 namespace DRApplication.Client.Services.Platforms.DeviceTypes
 {
-    public class DeviceTypeManager: ApiEfRepository<DeviceType>
+    public class DeviceTypeManager: ApiRepository<DeviceType>
     {
         private readonly HttpClient _http;
         static string controllerName = "devicetype";

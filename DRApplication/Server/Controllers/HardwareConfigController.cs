@@ -1,9 +1,8 @@
 ﻿using DRApplication.Server.Data;
-using DRApplication.Shared.Models;
+using DRApplication.Shared.Filters;
 using DRApplication.Shared.Models.ConfigurationModels;
 using DRApplication.Shared.Responses;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace DRApplication.Server.Controllers
 {
@@ -11,51 +10,63 @@ namespace DRApplication.Server.Controllers
     [ApiController]
     public class HardwareConfigController : ControllerBase
     {
-        RepositoryEF<HardwareConfig, FSTSSDatabaseContext> _manager;
+        DapperRepository<HardwareConfig> _manager;
 
-        public HardwareConfigController(RepositoryEF<HardwareConfig, FSTSSDatabaseContext> manager)
+        public HardwareConfigController(DapperRepository<HardwareConfig> manager)
         {
             _manager = manager;
         }
 
-        // GET: /<HardwareConfigController>
         [HttpGet]
-        public async Task<IActionResult> GetAsync()
+        public async Task<ActionResult<APIListOfEntityResponse<HardwareConfig>>> Get()
         {
             try
             {
-                var result = await _manager.dbSet
-                    .Include(i => i.DeviceType)
-                    .AsNoTracking()
-                    .ToListAsync();
-
-                return Ok(new PagedResponse<HardwareConfig>(result)
+                var result = await _manager.GetAllAsync();
+                return Ok(new APIListOfEntityResponse<HardwareConfig>()
                 {
                     Success = true,
                     Data = result
                 });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: Log Exception
+                // log exception here
+                Console.WriteLine(ex.Message);
                 return StatusCode(500);
             }
         }
 
-        // GET /<HardwareConfigController>/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetByHardwareConfigId(int id)
+        [HttpPost("getwithfilter")]
+        public async Task<ActionResult<APIListOfEntityResponse<HardwareConfig>>> GetWithFilter([FromBody] QueryFilter<HardwareConfig> Filter)
         {
             try
             {
-                var result = await _manager.dbSet
-                    .Where(x => x.Id == id)
-                    .Include(i => i.DeviceType)
-                    .FirstOrDefaultAsync();
+                var result = await _manager.GetAsync(Filter);
+                return Ok(new APIListOfEntityResponse<HardwareConfig>()
+                {
+                    Success = true,
+                    Data = result.ToList()
+                });
+            }
+            catch (Exception ex)
+            {
+                // log exception here
+                Console.WriteLine(ex.Message);
+                return StatusCode(500);
+            }
+        }
 
+
+        [HttpGet("{Id}")]
+        public async Task<ActionResult<APIEntityResponse<HardwareConfig>>> GetById(int Id)
+        {
+            try
+            {
+                var result = await _manager.GetByIdAsync(Id);
                 if (result != null)
                 {
-                    return Ok(new Response<HardwareConfig>()
+                    return Ok(new APIEntityResponse<HardwareConfig>()
                     {
                         Success = true,
                         Data = result
@@ -63,34 +74,33 @@ namespace DRApplication.Server.Controllers
                 }
                 else
                 {
-                    return Ok(new Response<HardwareConfig>()
+                    return Ok(new APIEntityResponse<HardwareConfig>()
                     {
                         Success = false,
-                        ErrorMessage = new List<string>() { "HardwareConfig Not Found" },
-                        Data = null
+                        ErrorMessages = new List<string>() { "HardwareConfig Not Found" },
+                        Data = new HardwareConfig() { Id = 0 }
                     });
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: Log the exception
+                // log exception here
+                Console.WriteLine(ex.Message);
                 return StatusCode(500);
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] HardwareConfig item)
+        public async Task<ActionResult<APIEntityResponse<HardwareConfig>>> Insert([FromBody] HardwareConfig HardwareConfig)
         {
             try
             {
-                await _manager.AddAsync(item);
-                var result = await _manager.dbSet
-                    .Where(i => i.Id == item.Id)
-                    .FirstOrDefaultAsync();
+                HardwareConfig.Id = 0; // Make sure you do this!
+                var result = await _manager.InsertAsync(HardwareConfig);
 
                 if (result != null)
                 {
-                    return Ok(new Response<HardwareConfig>()
+                    return Ok(new APIEntityResponse<HardwareConfig>()
                     {
                         Success = true,
                         Data = result
@@ -98,35 +108,31 @@ namespace DRApplication.Server.Controllers
                 }
                 else
                 {
-                    return Ok(new Response<HardwareConfig>()
+                    return Ok(new APIEntityResponse<HardwareConfig>()
                     {
                         Success = false,
-                        ErrorMessage = new List<string>() { "Could not find the Hardware Config After Adding it. " },
-                        Data = null
+                        ErrorMessages = new List<string>() { "Could not find Hardware Config after adding it." },
+                        Data = new HardwareConfig() { Id = 0 }
                     });
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: Log the exception
+                // log exception here
+                Console.WriteLine(ex.Message);
                 return StatusCode(500);
             }
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] HardwareConfig hardwareConfig)
+        public async Task<ActionResult<APIEntityResponse<HardwareConfig>>> Update([FromBody] HardwareConfig HardwareConfig)
         {
             try
             {
-                await _manager.UpdateAsync(hardwareConfig);
-
-                var result = await _manager.dbSet
-                    .Where(i => i.Id == hardwareConfig.Id)
-                    .FirstOrDefaultAsync();
-
+                var result = await _manager.UpdateAsync(HardwareConfig);
                 if (result != null)
                 {
-                    return Ok(new Response<HardwareConfig>()
+                    return Ok(new APIEntityResponse<HardwareConfig>()
                     {
                         Success = true,
                         Data = result
@@ -134,48 +140,34 @@ namespace DRApplication.Server.Controllers
                 }
                 else
                 {
-                    return Ok(new Response<HardwareConfig>()
+                    return Ok(new APIEntityResponse<HardwareConfig>()
                     {
                         Success = false,
-                        ErrorMessage = new List<string>() { "Could not find the Poc after updating it" },
-                        Data = null
+                        ErrorMessages = new List<string>() { "Could not find Hardware Config after updating it." },
+                        Data = new HardwareConfig() { Id = 0 }
                     });
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // TODO: Log it
+                // log exception here
+                Console.WriteLine(ex.Message);
                 return StatusCode(500);
             }
         }
 
-        // DELETE api/<DeviceTypeController>/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        [HttpDelete("{Id}")]
+        public async Task<ActionResult<bool>> Delete(int Id)
         {
             try
             {
-                var list = await _manager.dbSet
-                    .Where(i => i.Id == id)
-                    .ToListAsync();
-
-                if (list != null)
-                {
-                    var item = list.First();
-                    var success = await _manager.DeleteAsync(item);
-                    if (success)
-                        return NoContent();
-                    else
-                        return StatusCode(500);
-                }
-                else
-                    return StatusCode(500);
+                return await _manager.DeleteByIdAsync(Id);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // TODO: Log it
+                // log exception here
+                var msg = ex.Message;
                 return StatusCode(500);
-                throw;
             }
         }
     }

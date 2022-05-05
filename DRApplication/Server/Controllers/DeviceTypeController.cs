@@ -1,9 +1,8 @@
 ﻿using DRApplication.Server.Data;
-using DRApplication.Shared.Models;
+using DRApplication.Shared.Filters;
 using DRApplication.Shared.Models.DeviceModels;
 using DRApplication.Shared.Responses;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace DRApplication.Server.Controllers
 {
@@ -11,33 +10,29 @@ namespace DRApplication.Server.Controllers
     [ApiController]
     public class DeviceTypeController : ControllerBase
     {
-        EFRepository<DeviceType, FSTSSDatabaseContext> _manager;
+        DapperRepository<DeviceType> _manager;
 
-        public DeviceTypeController(EFRepository<DeviceType, FSTSSDatabaseContext> manager)
+        public DeviceTypeController(DapperRepository<DeviceType> manager)
         {
             _manager = manager;
         }
 
-        // GET: /<DeviceTypeController>
         [HttpGet]
-        public async Task<IActionResult> GetAsync()
+        public async Task<ActionResult<APIListOfEntityResponse<DeviceType>>> Get()
         {
             try
             {
-                var result = await _manager.dbSet
-                    //.Include(i => i.Maintainer)
-                    .AsNoTracking()
-                    .ToListAsync();
-
-                return Ok(new PagedResponse<DeviceType>(result)
+                var result = await _manager.GetAllAsync();
+                return Ok(new APIListOfEntityResponse<DeviceType>()
                 {
                     Success = true,
                     Data = result
                 });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: Log Exception
+                // log exception here
+                Console.WriteLine(ex.Message);
                 return StatusCode(500);
             }
         }
@@ -57,146 +52,122 @@ namespace DRApplication.Server.Controllers
             catch (Exception ex)
             {
                 // log exception here
+                Console.WriteLine(ex.Message);
+                return StatusCode(500);
+            }
+        }
+
+
+        [HttpGet("{Id}")]
+        public async Task<ActionResult<APIEntityResponse<DeviceType>>> GetById(int Id)
+        {
+            try
+            {
+                var result = await _manager.GetByIdAsync(Id);
+                if (result != null)
+                {
+                    return Ok(new APIEntityResponse<DeviceType>()
+                    {
+                        Success = true,
+                        Data = result
+                    });
+                }
+                else
+                {
+                    return Ok(new APIEntityResponse<DeviceType>()
+                    {
+                        Success = false,
+                        ErrorMessages = new List<string>() { "Customer Not Found" },
+                        Data = new DeviceType() { Id = 0 }
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                // log exception here
+                Console.WriteLine(ex.Message);
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<APIEntityResponse<DeviceType>>> Insert([FromBody] DeviceType DeviceType)
+        {
+            try
+            {
+                DeviceType.Id = 0; // Make sure you do this!
+                var result = await _manager.InsertAsync(DeviceType);
+
+                if (result != null)
+                {
+                    return Ok(new APIEntityResponse<DeviceType>()
+                    {
+                        Success = true,
+                        Data = result
+                    });
+                }
+                else
+                {
+                    return Ok(new APIEntityResponse<DeviceType>()
+                    {
+                        Success = false,
+                        ErrorMessages = new List<string>(){ "Could not find Device Type after adding it." },
+                        Data = new DeviceType() { Id = 0 }
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                // log exception here
+                Console.WriteLine(ex.Message);
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<APIEntityResponse<DeviceType>>> Update([FromBody] DeviceType DeviceType)
+        {
+            try
+            {
+                var result = await _manager.UpdateAsync(DeviceType);
+                if (result != null)
+                {
+                    return Ok(new APIEntityResponse<DeviceType>()
+                    {
+                        Success = true,
+                        Data = result
+                    });
+                }
+                else
+                {
+                    return Ok(new APIEntityResponse<DeviceType>()
+                    {
+                        Success = false,
+                        ErrorMessages = new List<string>(){ "Could not find customer after updating it." },
+                        Data = new DeviceType() { Id= 0 }
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                // log exception here
+                Console.WriteLine(ex.Message);
+                return StatusCode(500);
+            }
+        }
+
+        [HttpDelete("{Id}")]
+        public async Task<ActionResult<bool>> Delete(int Id)
+        {
+            try
+            {
+                return await _manager.DeleteByIdAsync(Id);
+            }
+            catch (Exception ex)
+            {
+                // log exception here
                 var msg = ex.Message;
                 return StatusCode(500);
-            }
-        }
-
-        // GET /<DeviceTypeController>/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetByMaintainerId(int id)
-        {
-            try
-            {
-                var result = await _manager.dbSet
-                    .Where(x => x.Id == id)
-                    .FirstOrDefaultAsync();
-
-                if (result != null)
-                {
-                    return Ok(new Response<DeviceType>()
-                    {
-                        Success = true,
-                        Data = result
-                    });
-                }
-                else
-                {
-                    return Ok(new Response<DeviceType>()
-                    {
-                        Success = false,
-                        ErrorMessage = new List<string>() { "Device Type Not Found" },
-                        Data = null
-                    });
-                }
-            }
-            catch (Exception)
-            {
-                //TODO: Log the exception
-                return StatusCode(500);
-            }
-        }
-
-        // POST /<DeviceTypeController>
-        [HttpPost]
-        public async Task<IActionResult> PostAsync([FromBody] DeviceType deviceType)
-        {
-            try
-            {
-                await _manager.InsertAsync(deviceType);
-                var result = await _manager.dbSet
-                    .Where(i => i.Id == deviceType.Id)
-                    .FirstOrDefaultAsync();
-
-                if (result != null)
-                {
-                    return Ok(new Response<DeviceType>()
-                    {
-                        Success = true,
-                        Data = result
-                    });
-                }
-                else
-                {
-                    return Ok(new Response<DeviceType>()
-                    {
-                        Success = false,
-                        ErrorMessage = new List<string>() { "Could not find the Device Type After Adding it. " },
-                        Data = null
-                    });
-                }
-            }
-            catch (Exception)
-            {
-                //TODO: Log the exception
-                return StatusCode(500);
-            }
-        }
-
-        // PUT /<DeviceTypeController>/5
-        [HttpPut]
-        public async Task<IActionResult> Update([FromBody] DeviceType deviceType)
-        {
-            try
-            {
-                await _manager.UpdateAsync(deviceType);
-
-                var result = await _manager.dbSet
-                    .Where(i => i.Id == deviceType.Id)
-                    .FirstOrDefaultAsync();
-
-                if (result != null)
-                {
-                    return Ok(new Response<DeviceType>()
-                    {
-                        Success = true,
-                        Data = result
-                    });
-                }
-                else
-                {
-                    return Ok(new Response<DeviceType>()
-                    {
-                        Success = false,
-                        ErrorMessage = new List<string>() { "Could not find the Device Type after updating it" },
-                        Data = null
-                    });
-                }
-            }
-            catch (Exception)
-            {
-                // TODO: Log it
-                return StatusCode(500);
-            }
-        }
-
-        // DELETE /<DeviceTypeController>/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(int id)
-        {
-            try
-            {
-                var list = await _manager.dbSet
-                    .Where(i => i.Id == id)
-                    .ToListAsync();
-
-                if (list != null)
-                {
-                    var item = list.First();
-                    var success = await _manager.DeleteAsync(item);
-                    if (success)
-                        return NoContent();
-                    else
-                        return StatusCode(500);
-                }
-                else
-                    return StatusCode(500);
-            }
-            catch (Exception)
-            {
-                // TODO: Log it
-                return StatusCode(500);
-                throw;
             }
         }
     }
