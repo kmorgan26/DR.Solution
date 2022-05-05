@@ -1,18 +1,15 @@
-﻿using System;
+﻿using Dapper.Contrib.Extensions;
+using System;
 using System.Collections.Generic;
 
 namespace DRApplication.Shared.Models.ConfigurationModels
 {
+    [Table("HardwareConfigs")]
     public partial class HardwareSystem
     {
-        public HardwareSystem()
-        {
-            HardwareVersions = new HashSet<HardwareVersion>();
-        }
-
+        [Key]
         public int Id { get; set; }
         public string Name { get; set; } = null!;
 
-        public virtual ICollection<HardwareVersion> HardwareVersions { get; set; }
     }
 }
