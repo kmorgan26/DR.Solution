@@ -24,9 +24,11 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 
 builder.Services.AddScoped<HardwareConfigManager>();
 builder.Services.AddScoped<HardwareSystemManager>();
+builder.Services.AddScoped<HardwareVersionManager>();
+
+builder.Services.AddScoped<MaintainerManager>();
 builder.Services.AddScoped<DeviceTypeManager>();
 builder.Services.AddScoped<DeviceManager>();
-builder.Services.AddScoped<MaintainerManager>();
 
 builder.Services.AddBlazoredLocalStorage();
 
