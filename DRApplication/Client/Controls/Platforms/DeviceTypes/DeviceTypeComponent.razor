@@ -19,7 +19,7 @@
     <RowTemplate>
         <MudTd DataLabel="Thread">@context.Id</MudTd>
         <MudTd DataLabel="Thread">@context.Name</MudTd>
-        <MudTd DataLabel="Thread">@context.MaintainerName</MudTd>
+        <MudTd DataLabel="Thread">@context.Name</MudTd>
         <MudTd DataLabel="Thread">@context.IsActive</MudTd>
         <MudTd DataLable="SELECT">
             <a href="/devicetype/edit/@context.Id" role="button">
@@ -42,7 +42,7 @@
         var maintainers = await maintainer_manager.GetAllAsync();
 
         _mappingHelper.PrimaryEntities = deviceTypes;
-        _mappingHelper.ForeignColumnName = "MaintainerName";
+        _mappingHelper.ForeignColumnName = "Name";
         _mappingHelper.ForeignKeyName = "MaintainerId";
         _mappingHelper.ForeignEntities = maintainers;
         _mappingHelper.VMList = new List<DeviceTypeVm>();
