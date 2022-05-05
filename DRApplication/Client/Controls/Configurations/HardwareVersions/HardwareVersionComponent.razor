@@ -1,0 +1,54 @@
+﻿@inject HardwareVersionManager manager
+@inject HardwareSystemManager hardwareSystemManager
+
+<div class="row mb-4">
+    <div class="col col-md-6 col-sm-12">
+        <MudButton Size="Size.Small" Variant="Variant.Filled" Color="Color.Success" Link="/hardwareversion/create">New</MudButton>
+    </div>
+</div>
+
+<MudTable Items="@_hardwareVersionVms" Hover="true" Striped="true" Dense="true">
+    <HeaderContent>
+        <MudTh>ID</MudTh>
+        <MudTh>Name</MudTh>
+        <MudTh>Hardware System</MudTh>
+        <MudTh>Version Date</MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd DataLabel="Version">@context.HardwareSystemName</MudTd>
+        <MudTd DataLabel="Date">@context.VersionDate</MudTd>
+        <MudTd DataLabel="SELECT">
+            <a href="/hardwareversion/edit/@context.Id" role="button">
+                <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>    
+            </a>
+        </MudTd>
+        
+    </RowTemplate>
+</MudTable>
+
+@code {
+
+    IEnumerable<HardwareVersionVm> _hardwareVersionVms;
+
+    List<HardwareSystemVm> _hardwareSystemVm = new();
+    MappingHelper _mappingHelper = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var items = await manager.GetAllAsync();
+        var hardwareSystems = await hardwareSystemManager.GetAllAsync();
+
+        _mappingHelper.PrimaryEntities = items;
+        _mappingHelper.ForeignEntities = hardwareSystems;
+        _mappingHelper.ForeignColumnName = "HardwareSystemName";
+        _mappingHelper.ForeignKeyName = "HardwareSystemId";
+        _mappingHelper.VMList = new List<HardwareVersionVm>();
+
+        var fkMapper = new ForeignKeyMapper<HardwareVersion>(_mappingHelper);
+
+        _hardwareVersionVms = fkMapper.GetMappedClass().Cast<HardwareVersionVm>().ToList();
+    }
+}

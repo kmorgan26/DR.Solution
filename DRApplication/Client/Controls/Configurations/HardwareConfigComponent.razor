@@ -18,7 +18,7 @@
         <MudTd DataLabel="Thread">@context.Id</MudTd>
         <MudTd DataLabel="Thread">@context.Name</MudTd>
         <MudTd DataLabel="Thread">@context.DeviceTypeName</MudTd>
-        <MudTd DataLable="SELECT">
+        <MudTd DataLabel="SELECT">
             <a href="/hardwareconfig/edit/@context.Id" role="button">
                 <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>    
             </a>
@@ -40,12 +40,11 @@
 
         _mappingHelper.PrimaryEntities = items;
         _mappingHelper.ForeignEntities = deviceTypes;
-        _mappingHelper.ForeignColumnName = "DeviceTypeName";
-        _mappingHelper.ForeignKeyName = "DeviceTypeId";
+        _mappingHelper.ForeignColumnName = "HardwareSystemName";
+        _mappingHelper.ForeignKeyName = "HardwareSystemId";
         _mappingHelper.VMList = new List<HardwareConfigVm>();
 
         var fkMapper = new ForeignKeyMapper<HardwareConfig>(_mappingHelper);
-
         _hardwareConfigVms = fkMapper.GetMappedClass().Cast<HardwareConfigVm>().ToList();
     }
 }

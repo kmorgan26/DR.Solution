@@ -1,10 +1,16 @@
-﻿namespace DRApplication.Client.ViewModels.ConfigurationViewModels.HardwareVersions
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DRApplication.Client.ViewModels.ConfigurationViewModels.HardwareVersions
 {
     public class HardwareVersionVm
     {
         public int Id { get; set; }
+        
         public string Name { get; set; } = string.Empty;
-        public int HardwareSystemId { get; set; }
+        
+        [Display(Name = "Hardware Version")]
+        public string HardwareSystemName { get; set; }
+        
         public DateTime VersionDate { get; set; }
 
     }
