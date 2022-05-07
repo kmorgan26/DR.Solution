@@ -4,7 +4,7 @@
 <div class="form-group">
     <label>Maintainer</label>
     <InputSelect ValueExpression="@(()=> SelectedMaintainerId)" id="deviceTypeSelect" DisplayName="Device Type" class="form-control" Value="SelectedMaintainerId"
-                 ValueChanged="@((int? value) => ChangeMainatiner(value))">
+                 ValueChanged="@((int? value) => ChangeMaintainer(value))">
         <option value=0>------</option>
         @foreach (var item in _maintainerVms)
         {
@@ -26,7 +26,7 @@
 
     private List<GenericListVm> _maintainerVms = new();
 
-    private async Task ChangeMainatiner(int? value)
+    private async Task ChangeMaintainer(int? value)
     {
         if (AppStateComponent is not null)
         {
