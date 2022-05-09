@@ -1,6 +1,4 @@
-﻿
-@inject DeviceTypeManager manager
-@inject MaintainerManager maintainer_manager
+﻿@inject DeviceTypeManager manager
 
 <div class="row mb-4">
     <div class="col col-md-6 col-sm-12">
@@ -19,7 +17,9 @@
     <RowTemplate>
         <MudTd DataLabel="Thread">@context.Id</MudTd>
         <MudTd DataLabel="Thread">@context.Name</MudTd>
-        <MudTd DataLabel="Thread">@context.MaintainerName</MudTd>
+        <MudTd DataLabel="Thread">
+            <MaintainerLabelComponent MaintainerId=@context.MaintainerId />
+        </MudTd>
         <MudTd DataLabel="Thread">@context.IsActive</MudTd>
         <MudTd DataLabel="SELECT">
             <a href="/devicetype/edit/@context.Id" role="button">
@@ -39,17 +39,6 @@
     protected override async Task OnInitializedAsync()
     {
         var deviceTypes = await manager.GetAllAsync();
-        var maintainers = await maintainer_manager.GetAllAsync();
-
-        _mappingHelper.PrimaryEntities = deviceTypes;
-        _mappingHelper.ForeignColumnName = "MaintainerName";
-        _mappingHelper.ForeignKeyName = "MaintainerId";
-        _mappingHelper.ForeignEntities = maintainers;
-        _mappingHelper.VMList = new List<DeviceTypeVm>();
-
-        var fkMapper = new ForeignKeyMapper<DeviceType>(_mappingHelper);
-
-        _deviceTypeVms = fkMapper.GetMappedClass().Cast<DeviceTypeVm>().ToList();
-
+        _deviceTypeVms = Mapping.Mapper.Map<List<DeviceTypeVm>>(deviceTypes);
     }
 }

@@ -8,8 +8,7 @@ namespace DRApplication.Client.ViewModels.DeviceTypeViewModels
         
         public string Name { get; set; } = string.Empty;
         
-        [Display(Name="Maintainer")]
-        public string MaintainerName { get; set; } = string.Empty;
+        public int MaintainerId { get; set; }
         
         public bool IsActive { get; set; }
     }
