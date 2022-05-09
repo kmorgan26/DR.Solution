@@ -9,6 +9,7 @@ using DRApplication.Client.ViewModels.Shared;
 using DRApplication.Shared.Models.ConfigurationModels;
 using DRApplication.Shared.Models.DeviceModels;
 using DRApplication.Client.ViewModels.ConfigurationViewModels.HardwareVersionsConfigs;
+using DRApplication.Client.ViewModels.ConfigurationViewModels.SoftwareSystems;
 
 namespace DRApplication.Client.Services
 {
@@ -50,6 +51,12 @@ namespace DRApplication.Client.Services
             CreateMap<HardwareVersionsConfig, HardwareVersionsConfigVm>().ReverseMap();
             CreateMap<HardwareVersionsConfig, HardwareVersionsConfigInsertVm>().ReverseMap();
             CreateMap<HardwareVersionsConfig, HardwareVersionsConfigEditVm>().ReverseMap();
+
+            CreateMap<SoftwareSystem, SoftwareSystemVm>().ReverseMap();
+            CreateMap<SoftwareSystem, SoftwareSystemInsertVm>().ReverseMap();
+            CreateMap<SoftwareSystem, SoftwareSystemEditVm>().ReverseMap();
+            CreateMap<SoftwareSystem, GenericListVm>().ReverseMap();
+
 
             CreateMap<DeviceType, GenericListVm>().ReverseMap();
             CreateMap<DeviceType, DeviceTypeEditVm>().ReverseMap();

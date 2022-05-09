@@ -27,6 +27,8 @@ builder.Services.AddScoped<HardwareSystemManager>();
 builder.Services.AddScoped<HardwareVersionManager>();
 builder.Services.AddScoped<HardwareVersionsConfigManager>();
 
+builder.Services.AddScoped<SoftwareSystemManager>();
+
 builder.Services.AddScoped<MaintainerManager>();
 builder.Services.AddScoped<DeviceTypeManager>();
 builder.Services.AddScoped<DeviceManager>();

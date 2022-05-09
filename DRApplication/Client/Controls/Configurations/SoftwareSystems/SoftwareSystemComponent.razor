@@ -1,0 +1,39 @@
+﻿@inject SoftwareSystemManager manager
+
+<div class="row mb-4">
+    <div class="col col-md-6 col-sm-12">
+        <MudButton Size="Size.Small" Variant="Variant.Filled" Color="Color.Success" Link="/softwaresystem/create">New</MudButton>
+    </div>
+</div>
+
+<MudTable Items="@_softwareSystemVms" Hover="true" Striped="true" Dense="true">
+    <HeaderContent>
+        <MudTh>ID</MudTh>
+        <MudTh>Name</MudTh>
+        <MudTh>Hardware Config</MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd DataLabel="Config">
+            <HardwareConfigLabel HardwareConfigId=@context.HardwareConfigId />
+        </MudTd>
+        <MudTd DataLabel="SELECT">
+            <a href="/softwaresystem/edit/@context.Id" role="button">
+                <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>    
+            </a>
+        </MudTd>
+    </RowTemplate>
+</MudTable>
+
+@code {
+
+    List<SoftwareSystemVm> _softwareSystemVms = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var items = await manager.GetAllAsync();
+        _softwareSystemVms = Mapping.Mapper.Map<List<SoftwareSystemVm>>(items);
+    }
+}

@@ -50,6 +50,19 @@
         }
     }
 
+    private int? softwareSystemId;
+    public int? SoftwareSystemId
+    {
+        get
+        {
+            return softwareSystemId;
+        }
+        set
+        {
+            softwareSystemId = value;
+            StateHasChanged();
+        }
+    }
 
     private int? deviceTypeId;
     public int? DeviceTypeId

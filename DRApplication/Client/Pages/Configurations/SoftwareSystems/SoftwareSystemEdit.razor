@@ -1,0 +1,10 @@
+﻿@page "/softwaresystem/edit/{softwareSystemId:int}"
+
+<SoftwareSystemEditComponent SoftwareSystemId=@SoftwareSystemId />
+
+@code {
+
+    [Parameter]
+    public int SoftwareSystemId { get; set; }
+
+}

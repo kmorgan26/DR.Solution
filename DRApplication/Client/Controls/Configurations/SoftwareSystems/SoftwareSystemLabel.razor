@@ -1,0 +1,17 @@
+﻿@inject SoftwareSystemManager manager
+
+@_softwareSystemName
+
+@code {
+
+    [Parameter]
+    public int SoftwareSystemId { get; set; }
+
+    string _softwareSystemName { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var softwareSystems = await manager.GetByIdAsync(SoftwareSystemId);
+        _softwareSystemName = softwareSystems.Name;
+    }
+}

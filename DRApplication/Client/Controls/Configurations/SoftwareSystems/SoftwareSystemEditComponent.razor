@@ -1,0 +1,48 @@
+﻿@inject SoftwareSystemManager manager
+@inject NavigationManager navigation
+
+<div class="row">
+    <div class="col-md-6 col-sm-12">
+        @if (_softwareSystemEditVm != null)
+        {
+            <EditForm Model="@_softwareSystemEditVm" OnValidSubmit="@UpdateSoftwareSystem">
+
+                <label for="Name">Software System</label>
+                <InputText class="form-control" @bind-Value="_softwareSystemEditVm.Name" />
+
+                <HardwareConfigSelect HardwareConfigIdChange="UpdateConfig" SelectedHardwareConfigId="@_softwareSystemEditVm.HardwareConfigId"></HardwareConfigSelect>
+
+
+                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Update</MudButton>
+                <MudButton Link="/softwaresystem" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
+
+            </EditForm>
+        }
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public int SoftwareSystemId { get; set; }
+
+    private SoftwareSystemEditVm _softwareSystemEditVm { get; set; } = new();
+    
+    void UpdateConfig(int? id)
+    {
+        _softwareSystemEditVm.HardwareConfigId = Convert.ToInt32(id);
+    }
+
+    protected async Task UpdateSoftwareSystem()
+    {
+        var softwareSystem = Mapping.Mapper.Map<SoftwareSystem>(_softwareSystemEditVm);
+        await manager.UpdateAsync(softwareSystem);
+        navigation.NavigateTo("/softwaresystem");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var softwareSystem = await manager.GetByIdAsync(SoftwareSystemId);
+        _softwareSystemEditVm = Mapping.Mapper.Map<SoftwareSystemEditVm>(softwareSystem);
+    }
+}
