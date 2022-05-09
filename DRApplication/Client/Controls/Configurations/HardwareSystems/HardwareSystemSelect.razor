@@ -1,0 +1,59 @@
+﻿@inject HardwareSystemManager manager
+@inject NavigationManager navigation
+
+<div class="form-group">
+    <label>Hardware System</label>
+    <InputSelect ValueExpression="@(()=> SelectedHardwareSystemId)" id="hardwareSystemSelect" DisplayName="Hardware System" class="form-control" Value="SelectedHardwareSystemId"
+                 ValueChanged="@((int? value) => ChangeHardwareSystem(value))">
+        <option value=0>------</option>
+        @foreach (var item in _hardwareSystemVms)
+        {
+            <option value="@item.Id">@item.Name</option>
+        }
+    </InputSelect>
+</div>
+
+@code {
+
+    [Parameter]
+    public EventCallback<int?> HardwareSystemIdChange { get; set; }
+
+    [Parameter]
+    public int? SelectedHardwareSystemId { get; set; }
+
+    [CascadingParameter]
+    public AppStateComponent? AppStateComponent { get; set; }
+
+    private List<GenericListVm> _hardwareSystemVms = new();
+
+    private async Task ChangeHardwareSystem(int? value)
+    {
+        if (AppStateComponent is not null)
+        {
+            SelectedHardwareSystemId = Convert.ToInt32(value);
+            AppStateComponent.AppStateReset();
+            await HardwareSystemIdChange.InvokeAsync(SelectedHardwareSystemId);
+        }
+
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var hardwareSystems = await manager.GetAllAsync();
+        _hardwareSystemVms = Mapping.Mapper.Map<List<GenericListVm>>(hardwareSystems);
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        try
+        {
+            if (AppStateComponent is not null && AppStateComponent.HardwareSystemId is not null)
+            {
+                await Task.Delay(0);
+                SelectedHardwareSystemId = AppStateComponent.HardwareSystemId != null ? AppStateComponent.HardwareSystemId : 0;
+            }
+        }
+        catch { }
+    }
+
+}

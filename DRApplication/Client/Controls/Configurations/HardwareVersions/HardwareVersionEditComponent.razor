@@ -1,0 +1,49 @@
+﻿@inject HardwareVersionManager manager
+@inject NavigationManager navigation
+
+<div class="row">
+    <div class="col-md-6 col-sm-12">
+        @if (@HardwareVersionEditVm != null)
+        {
+            <EditForm Model="@HardwareVersionEditVm" OnValidSubmit="@UpdateHardwareVersion">
+
+                <label for="Name">Hardware Version</label>
+                <InputText class="form-control" @bind-Value="HardwareVersionEditVm.Name" />
+
+                <HardwareSystemSelect HardwareSystemIdChange="UpdateHardwareSystem" SelectedHardwareSystemId="@HardwareVersionEditVm.HardwareSystemId"></HardwareSystemSelect>
+
+                <label for="Name">Version Date</label>
+                <InputDate class="form-control" @bind-Value="HardwareVersionEditVm.VersionDate" />
+
+                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Update</MudButton>
+                <MudButton Link="/hardwareconfig" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
+
+            </EditForm>
+        }
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public int HardwareVersionId { get; set; }
+
+    public HardwareVersionEditVm HardwareVersionEditVm { get; set; } = new();
+
+    void UpdateHardwareSystem(int? id)
+    {
+        HardwareVersionEditVm.HardwareSystemId = Convert.ToInt32(id);
+    }
+    protected async Task UpdateHardwareVersion()
+    {
+        var hardwareVersion = Mapping.Mapper.Map<HardwareVersion>(HardwareVersionEditVm);
+        await manager.UpdateAsync(hardwareVersion);
+        navigation.NavigateTo("/hardwareversion");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var hardwareVersion = await manager.GetByIdAsync(HardwareVersionId);
+        HardwareVersionEditVm = Mapping.Mapper.Map<HardwareVersionEditVm>(hardwareVersion);
+    }
+}

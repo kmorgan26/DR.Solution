@@ -1,0 +1,10 @@
+﻿@page "/hardwareversion/edit/{HardwareVersionId:int}"
+
+<HardwareVersionEditComponent HardwareVersionId=@HardwareVersionId />
+
+@code {
+
+    [Parameter]
+    public int HardwareVersionId { get; set; }
+
+}
