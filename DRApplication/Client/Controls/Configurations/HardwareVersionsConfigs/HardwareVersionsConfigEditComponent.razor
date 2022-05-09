@@ -1,5 +1,51 @@
-﻿<h3>HardwareVersionsConfigEditComponent</h3>
+﻿@inject HardwareVersionsConfigManager manager
+@inject NavigationManager navigation
+
+<div class="row">
+    <div class="col-md-6 col-sm-12">
+        @if (@HardwareVersionsConfigEditVm != null)
+        {
+            <EditForm Model="@HardwareVersionsConfigEditVm" OnValidSubmit="@UpdateHardwareVersionsConfig">
+
+                <HardwareVersionSelect HardwareVersionIdChange="UpdateHardwareVersion" SelectedHardwareVersionId=HardwareVersionsConfigEditVm.HardwareVersionId />
+
+                <HardwareConfigSelect HardwareConfigIdChange="UpdateHardwareConfig" SelectedHardwareConfigId=HardwareVersionsConfigEditVm.HardwareConfigId />
+
+                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Update</MudButton>
+                <MudButton Link="/hardwareconfig" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
+
+            </EditForm>
+        }
+    </div>
+</div>
 
 @code {
 
+    [Parameter]
+    public int HardwareVersionsConfigId { get; set; }
+
+    public HardwareVersionsConfigEditVm HardwareVersionsConfigEditVm { get; set; } = new();
+
+    void UpdateHardwareVersion(int? id)
+    {
+        HardwareVersionsConfigEditVm.HardwareVersionId = Convert.ToInt32(id);
+    }
+
+    void UpdateHardwareConfig(int? id)
+    {
+        HardwareVersionsConfigEditVm.HardwareConfigId = Convert.ToInt32(id);
+    }
+
+    protected async Task UpdateHardwareVersionsConfig()
+    {
+        var hardwareVersion = Mapping.Mapper.Map<HardwareVersionsConfig>(HardwareVersionsConfigEditVm);
+        await manager.UpdateAsync(hardwareVersion);
+        navigation.NavigateTo("/hardwareversionsconfig");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var hardwareVersion = await manager.GetByIdAsync(HardwareVersionsConfigId);
+        HardwareVersionsConfigEditVm = Mapping.Mapper.Map<HardwareVersionsConfigEditVm>(hardwareVersion);
+    }
 }
