@@ -1,0 +1,40 @@
+﻿@inject HardwareSystemManager manager
+@inject NavigationManager navigation
+
+<div class="row">
+    <div class="col-md-6 col-sm-12">
+        @if (@HardwareSystemEditVm != null)
+        {
+            <EditForm Model="@HardwareSystemEditVm" OnValidSubmit="@UpdateHardwareSystem">
+
+                <label for="Name">Hardware System</label>
+                <InputText class="form-control" @bind-Value="HardwareSystemEditVm.Name" />
+
+                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Update</MudButton>
+                <MudButton Link="/hardwaresystem" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
+
+            </EditForm>
+        }
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public int HardwareSystemId { get; set; }
+
+    public HardwareSystemEditVm HardwareSystemEditVm { get; set; } = new();
+    
+    protected async Task UpdateHardwareSystem()
+    {
+        var hardwareSystem = Mapping.Mapper.Map<HardwareSystem>(HardwareSystemEditVm);
+        await manager.UpdateAsync(hardwareSystem);
+        navigation.NavigateTo("/hardwaresystem");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var hardwareSystem = await manager.GetByIdAsync(HardwareSystemId);
+        HardwareSystemEditVm = Mapping.Mapper.Map<HardwareSystemEditVm>(hardwareSystem);
+    }
+}

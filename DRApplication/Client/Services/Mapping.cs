@@ -32,7 +32,8 @@ namespace DRApplication.Client.Services
         public MappingProfile()
         {
             CreateMap<HardwareSystem, HardwareSystemVm>().ReverseMap();
-            CreateMap<HardwareSystem, HarwareSystemInsertVm>().ReverseMap();
+            CreateMap<HardwareSystem, HardwareSystemInsertVm>().ReverseMap();
+            CreateMap<HardwareSystem, HardwareSystemEditVm>().ReverseMap();
 
             CreateMap<HardwareVersion, HardwareVersionVm>().ReverseMap();
 

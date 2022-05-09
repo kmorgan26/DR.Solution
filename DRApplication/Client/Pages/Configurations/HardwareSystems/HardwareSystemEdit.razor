@@ -1,5 +1,10 @@
 ﻿@page "/hardwaresystem/edit/{HardwareSystemId:int}"
 
+<HardwareSystemEditComponent HardwareSystemId=@HardwareSystemId />
+
 @code {
+
+    [Parameter]
+    public int HardwareSystemId { get; set; }
 
 }
