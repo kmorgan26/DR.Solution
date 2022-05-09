@@ -1,0 +1,33 @@
+﻿@inject HardwareVersionsConfigManager manager
+@inject NavigationManager navigation
+
+<h3>Add New Hardware Version/Config</h3>
+<div class="row">
+    <div class="col-md-6 col-sm-12">
+        @if (@_hardwareVersionsConfigInsertVm != null)
+        {
+            <EditForm Model="@_hardwareVersionsConfigInsertVm" OnValidSubmit="@InsertHardwareVersionConfig">
+
+                <label for="Name">Hardware </label>
+
+
+
+
+                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Insert</MudButton>
+                <MudButton Link="/hardwareversionsconfig" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
+
+            </EditForm>
+        }
+    </div>
+</div>
+
+@code {
+    private HardwareVersionsConfigVm _hardwareVersionsConfigInsertVm { get; set; } = new();
+
+    private async Task InsertHardwareVersionConfig()
+    {
+        var hardwareVersionConfig = Mapping.Mapper.Map<HardwareVersionsConfig>(_hardwareVersionsConfigInsertVm);
+        await manager.InsertAsync(hardwareVersionConfig);
+        navigation.NavigateTo("/hardwareversionsconfig");
+    }
+}
