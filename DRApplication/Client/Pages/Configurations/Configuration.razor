@@ -1,21 +1,10 @@
 ﻿@page "/configuration"
 
-<h3 class="mb-3">Configuration Page</h3>
+<h3 class="mb-5">Configuration Page</h3>
 
-<div class="container">
-  <div class="row">
-    <div class="col">
-      <a class="nav-link" href="/hardwareconfig">Hardware Configurations</a>
-    </div>
-    <div class="col">
-      <a class="nav-link" href="/hardwaresystem">Hardware Systems</a>
-    </div>
-    <div class="col">
-      <a class="nav-link" href="/hardwareversion">Hardware Versions</a>
-    </div>
-  </div>
-</div>
+<ul class="list-group list-group-horizontal">
+  <li class="list-group-item list-group-item-primary flex-fill m-3"><a class="nav-link" href="/hardwaresystem">Hardware Systems</a></li>
+  <li class="list-group-item list-group-item-primary flex-fill m-3"><a class="nav-link" href="/hardwareversion">Hardware Versions</a></li>
+  <li class="list-group-item list-group-item-primary flex-fill m-3"><a class="nav-link" href="/hardwareconfig">Hardware Configurations</a></li>
 
-@code {
-
-}
+</ul>

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DRApplication.Client.ViewModels.ConfigurationViewModels.HardwareConfigs;
 using DRApplication.Client.ViewModels.ConfigurationViewModels.HardwareSystems;
+using DRApplication.Client.ViewModels.ConfigurationViewModels.HardwareVersionConfig;
 using DRApplication.Client.ViewModels.ConfigurationViewModels.HardwareVersions;
 using DRApplication.Client.ViewModels.DeviceTypeViewModels;
 using DRApplication.Client.ViewModels.DeviceViewModels;
@@ -41,6 +42,8 @@ namespace DRApplication.Client.Services
 
             CreateMap<HardwareConfig, HardwareConfigEditVm>().ReverseMap();
             CreateMap<HardwareConfig, HardwareConfigVm>().ReverseMap();
+
+            CreateMap<HardwareVersionsConfig, HardwareVersionsConfigVm>().ReverseMap();
 
             CreateMap<DeviceType, GenericListVm>().ReverseMap();
             CreateMap<DeviceType, DeviceTypeEditVm>().ReverseMap();
