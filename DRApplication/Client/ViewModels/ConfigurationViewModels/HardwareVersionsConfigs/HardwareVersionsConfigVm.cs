@@ -1,4 +1,4 @@
-﻿namespace DRApplication.Client.ViewModels.ConfigurationViewModels.HardwareVersionConfig
+﻿namespace DRApplication.Client.ViewModels.ConfigurationViewModels.HardwareVersionsConfigs
 {
     public class HardwareVersionsConfigVm
     {

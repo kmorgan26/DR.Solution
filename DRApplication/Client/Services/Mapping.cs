@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using DRApplication.Client.ViewModels.ConfigurationViewModels.HardwareConfigs;
 using DRApplication.Client.ViewModels.ConfigurationViewModels.HardwareSystems;
-using DRApplication.Client.ViewModels.ConfigurationViewModels.HardwareVersionConfig;
 using DRApplication.Client.ViewModels.ConfigurationViewModels.HardwareVersions;
 using DRApplication.Client.ViewModels.DeviceTypeViewModels;
 using DRApplication.Client.ViewModels.DeviceViewModels;
@@ -9,6 +8,7 @@ using DRApplication.Client.ViewModels.MaintainerViewModels;
 using DRApplication.Client.ViewModels.Shared;
 using DRApplication.Shared.Models.ConfigurationModels;
 using DRApplication.Shared.Models.DeviceModels;
+using DRApplication.Client.ViewModels.ConfigurationViewModels.HardwareVersionsConfigs;
 
 namespace DRApplication.Client.Services
 {
