@@ -8,8 +8,9 @@
         {
             <EditForm Model="@_hardwareVersionsConfigInsertVm" OnValidSubmit="@InsertHardwareVersionConfig">
 
-                <HardwareVersionSelect SelectedHardwareVersionId="@_hardwareVersionsConfigInsertVm.HardwareVersionId"></HardwareVersionSelect>
+                <HardwareVersionSelect HardwareVersionIdChange="UpdateVersion" SelectedHardwareVersionId="@_hardwareVersionsConfigInsertVm.HardwareVersionId"></HardwareVersionSelect>
 
+                <HardwareConfigSelect HardwareConfigIdChange="UpdateConfig" SelectedHardwareConfigId="@_hardwareVersionsConfigInsertVm.HardwareConfigId"></HardwareConfigSelect>
 
                 <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Insert</MudButton>
                 <MudButton Link="/hardwareversionsconfig" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
@@ -21,6 +22,15 @@
 
 @code {
     private HardwareVersionsConfigVm _hardwareVersionsConfigInsertVm { get; set; } = new();
+
+    void UpdateVersion(int? id)
+    {
+        _hardwareVersionsConfigInsertVm.HardwareVersionId = Convert.ToInt32(id);
+    }
+    void UpdateConfig(int? id)
+    {
+        _hardwareVersionsConfigInsertVm.HardwareConfigId = Convert.ToInt32(id);
+    }
 
     private async Task InsertHardwareVersionConfig()
     {

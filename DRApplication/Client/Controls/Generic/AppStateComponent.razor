@@ -8,6 +8,20 @@
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
+    private int? hardwareConfigId;
+    public int? HardwareConfigId
+    {
+        get
+        {
+            return hardwareConfigId;
+        }
+        set
+        {
+            hardwareConfigId = value;
+            StateHasChanged();
+        }
+    }
+
     private int? hardwareVersionId;
     public int? HardwareVersionId
     {
