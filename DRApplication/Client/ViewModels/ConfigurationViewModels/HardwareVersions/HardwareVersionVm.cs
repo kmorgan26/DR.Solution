@@ -8,8 +8,7 @@ namespace DRApplication.Client.ViewModels.ConfigurationViewModels.HardwareVersio
         
         public string Name { get; set; } = string.Empty;
         
-        [Display(Name = "Hardware Version")]
-        public string HardwareSystemName { get; set; }
+        public int HardwareSystemId { get; set; }
         
         public DateTime VersionDate { get; set; }
 

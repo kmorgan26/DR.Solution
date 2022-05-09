@@ -1,0 +1,17 @@
+﻿@inject HardwareSystemManager manager
+
+@_hardwareSystemName
+
+@code {
+
+    [Parameter]
+    public int HardwareSystemId { get; set; }
+
+    string _hardwareSystemName { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var hardwareSystems = await manager.GetByIdAsync(HardwareSystemId);
+        _hardwareSystemName = hardwareSystems.Name;
+    }
+}
