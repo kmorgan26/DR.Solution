@@ -1,0 +1,38 @@
+﻿@inject HardwareConfigManager manager
+@inject NavigationManager navigation
+
+<h3>Add New Hardware Config</h3>
+<div class="row">
+    <div class="col-md-6 col-sm-12">
+        @if (@_hardwareConfigInsertVm != null)
+        {
+            <EditForm Model="@_hardwareConfigInsertVm" OnValidSubmit="@InsertHardwareConfig">
+
+                <label for="Name">Hardware Config</label>
+                <InputText class="form-control" @bind-Value="_hardwareConfigInsertVm.Name" />
+
+                <DeviceTypeSelectComponent DeviceTypeIdChange="UpdateDeviceType" SelectedDeviceTypeId="@_hardwareConfigInsertVm.DeviceTypeId"></DeviceTypeSelectComponent>
+
+                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Insert</MudButton>
+                <MudButton Link="/hardwareconfig" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
+
+            </EditForm>
+        }
+    </div>
+</div>
+
+@code {
+    private HardwareConfigInsertVm _hardwareConfigInsertVm { get; set; } = new();
+
+    void UpdateDeviceType(int? id)
+    {
+        _hardwareConfigInsertVm.DeviceTypeId = Convert.ToInt32(id);
+    }
+
+    private async Task InsertHardwareConfig()
+    {
+        var hardwareSystem = Mapping.Mapper.Map<HardwareConfig>(_hardwareConfigInsertVm);
+        await manager.InsertAsync(hardwareSystem);
+        navigation.NavigateTo("/hardwareconfig");
+    }
+}

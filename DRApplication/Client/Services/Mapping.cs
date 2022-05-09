@@ -44,6 +44,7 @@ namespace DRApplication.Client.Services
             CreateMap<HardwareConfig, HardwareConfigEditVm>().ReverseMap();
             CreateMap<HardwareConfig, HardwareConfigVm>().ReverseMap();
             CreateMap<HardwareConfig, GenericListVm>().ReverseMap();
+            CreateMap<HardwareConfig, HardwareConfigInsertVm>().ReverseMap();
 
             CreateMap<HardwareVersionsConfig, HardwareVersionsConfigVm>().ReverseMap();
             CreateMap<HardwareVersionsConfig, HardwareVersionsConfigInsertVm>().ReverseMap();
