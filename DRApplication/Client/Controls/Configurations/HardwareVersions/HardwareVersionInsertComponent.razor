@@ -1,0 +1,41 @@
+﻿@inject HardwareVersionManager manager
+@inject NavigationManager navigation
+
+<h3>Add New Hardware Version</h3>
+<div class="row">
+    <div class="col-md-6 col-sm-12">
+        @if (@_hardwareVersionInsertVm != null)
+        {
+            <EditForm Model="@_hardwareVersionInsertVm" OnValidSubmit="@InsertHardwareVersion">
+
+                <label for="Name">Hardware Version</label>
+                <InputText class="form-control" @bind-Value="_hardwareVersionInsertVm.Name" />
+
+                <HardwareSystemSelect SelectedHardwareSystemId="@_hardwareVersionInsertVm.HardwareSystemId" HardwareSystemIdChange="UpdateHardwareSystem" />
+
+                <label for="Name">Version Date</label>
+                <InputDate class="form-control" @bind-Value="_hardwareVersionInsertVm.VersionDate" />
+
+                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Insert</MudButton>
+                <MudButton Link="/hardwareversion" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
+
+            </EditForm>
+        }
+    </div>
+</div>
+
+@code {
+    private HardwareVersionInsertVm _hardwareVersionInsertVm { get; set; } = new();
+
+    void UpdateHardwareSystem(int? id)
+    {
+        _hardwareVersionInsertVm.HardwareSystemId = Convert.ToInt32(id);
+    }
+
+    private async Task InsertHardwareVersion()
+    {
+        var hardwareVersion = Mapping.Mapper.Map<HardwareVersion>(_hardwareVersionInsertVm);
+        await manager.InsertAsync(hardwareVersion);
+        navigation.NavigateTo("/hardwareversion");
+    }
+}

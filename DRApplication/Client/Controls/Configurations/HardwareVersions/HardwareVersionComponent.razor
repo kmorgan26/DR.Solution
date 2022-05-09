@@ -20,7 +20,7 @@
         <MudTd DataLabel="Version">
             <HardwareSystemLabel HardwareSystemId=@context.HardwareSystemId />
         </MudTd>
-        <MudTd DataLabel="Date">@context.VersionDate</MudTd>
+        <MudTd DataLabel="Date">@context.VersionDate.ToShortDateString()</MudTd>
         <MudTd DataLabel="SELECT">
             <a href="/hardwareversion/edit/@context.Id" role="button">
                 <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>    

@@ -14,6 +14,6 @@ namespace DRApplication.Client.ViewModels.ConfigurationViewModels.HardwareVersio
 
         [Required]
         [DataType(DataType.Date)]
-        public DateTime VersionDate { get; set; }
+        public DateTime VersionDate { get; set; } = DateTime.Today;
     }
 }
