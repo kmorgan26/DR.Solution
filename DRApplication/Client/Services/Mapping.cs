@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
-using DRApplication.Client.Pages.Configurations.HardwareSystems;
-using DRApplication.Client.ViewModels.ConfigurationViewModels;
+using DRApplication.Client.ViewModels.ConfigurationViewModels.HardwareConfigs;
 using DRApplication.Client.ViewModels.ConfigurationViewModels.HardwareSystems;
 using DRApplication.Client.ViewModels.ConfigurationViewModels.HardwareVersions;
 using DRApplication.Client.ViewModels.DeviceTypeViewModels;

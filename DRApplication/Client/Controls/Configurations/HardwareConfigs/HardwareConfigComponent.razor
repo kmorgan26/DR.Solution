@@ -1,5 +1,4 @@
 ﻿@inject HardwareConfigManager manager
-@inject DeviceTypeManager deviceTypeManager
 
 <div class="row mb-4">
     <div class="col col-md-6 col-sm-12">
@@ -17,7 +16,9 @@
     <RowTemplate>
         <MudTd DataLabel="Thread">@context.Id</MudTd>
         <MudTd DataLabel="Thread">@context.Name</MudTd>
-        <MudTd DataLabel="Thread">@context.DeviceTypeName</MudTd>
+        <MudTd DataLabel="Thread">
+          <DeviceTypeLabel DeviceTypeId=@context.DeviceTypeId />
+        </MudTd>
         <MudTd DataLabel="SELECT">
             <a href="/hardwareconfig/edit/@context.Id" role="button">
                 <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>    
@@ -30,21 +31,9 @@
 
     IEnumerable<HardwareConfigVm> _hardwareConfigVms;
 
-    List<DeviceTypeVm> _deviceTypeVm = new();
-    MappingHelper _mappingHelper = new();
-
     protected override async Task OnInitializedAsync()
     {
         var items = await manager.GetAllAsync();
-        var deviceTypes = await deviceTypeManager.GetAllAsync();
-
-        _mappingHelper.PrimaryEntities = items;
-        _mappingHelper.ForeignEntities = deviceTypes;
-        _mappingHelper.ForeignColumnName = "HardwareSystemName";
-        _mappingHelper.ForeignKeyName = "HardwareSystemId";
-        _mappingHelper.VMList = new List<HardwareConfigVm>();
-
-        var fkMapper = new ForeignKeyMapper<HardwareConfig>(_mappingHelper);
-        _hardwareConfigVms = fkMapper.GetMappedClass().Cast<HardwareConfigVm>().ToList();
+        _hardwareConfigVms = Mapping.Mapper.Map<List<HardwareConfigVm>>(items);
     }
 }

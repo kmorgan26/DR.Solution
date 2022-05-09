@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DRApplication.Client.ViewModels.ConfigurationViewModels
+namespace DRApplication.Client.ViewModels.ConfigurationViewModels.HardwareConfigs
 {
     public class HardwareConfigEditVm
     {
