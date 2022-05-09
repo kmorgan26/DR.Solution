@@ -8,9 +8,7 @@
         {
             <EditForm Model="@_hardwareVersionsConfigInsertVm" OnValidSubmit="@InsertHardwareVersionConfig">
 
-                <label for="Name">Hardware </label>
-
-
+                <HardwareVersionSelect SelectedHardwareVersionId="@_hardwareVersionsConfigInsertVm.HardwareVersionId"></HardwareVersionSelect>
 
 
                 <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Insert</MudButton>
