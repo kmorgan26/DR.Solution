@@ -23,7 +23,6 @@ namespace DRApplication.Server.Data
         {
             _sqlConnectionString = sqlConnectionString;
             entityType = typeof(TEntity);
-            entityName = GetTableName.GetTableNameFromClass(entityType.Name);
 
             var props = entityType.GetProperties().Where(
                 prop => Attribute.IsDefined(prop,
