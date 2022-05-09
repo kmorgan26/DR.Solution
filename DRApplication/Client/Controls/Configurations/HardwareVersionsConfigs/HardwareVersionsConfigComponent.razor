@@ -16,7 +16,9 @@
     <RowTemplate>
         <MudTd DataLabel="Id">@context.Id</MudTd>
         <MudTd DataLabel="Version">
-
+            <MudTd DataLabel="Thread">
+                <HardwareVersionLabel HardwareVersionId=@context.HardwareVersionId />
+            </MudTd>
         </MudTd>
         <MudTd DataLabel="Config">
 
