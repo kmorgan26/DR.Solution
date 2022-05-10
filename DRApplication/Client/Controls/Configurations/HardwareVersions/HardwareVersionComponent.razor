@@ -30,13 +30,4 @@
     </RowTemplate>
 </MudTable>
 
-@code {
 
-    IEnumerable<HardwareVersionVm> _hardwareVersionVms;
-
-    protected override async Task OnInitializedAsync()
-    {
-        var items = await manager.GetAllAsync();
-        _hardwareVersionVms = Mapping.Mapper.Map<List<HardwareVersionVm>>(items);
-    }
-}

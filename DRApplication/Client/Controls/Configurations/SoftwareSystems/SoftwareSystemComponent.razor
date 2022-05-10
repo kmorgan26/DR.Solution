@@ -28,13 +28,4 @@
     </RowTemplate>
 </MudTable>
 
-@code {
 
-    List<SoftwareSystemVm> _softwareSystemVms = new();
-
-    protected override async Task OnInitializedAsync()
-    {
-        var items = await manager.GetAllAsync();
-        _softwareSystemVms = Mapping.Mapper.Map<List<SoftwareSystemVm>>(items);
-    }
-}

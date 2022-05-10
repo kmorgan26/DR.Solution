@@ -20,33 +20,3 @@
     </div>
 </div>
 
-@code {
-
-    [Parameter]
-    public int HardwareVersionsConfigId { get; set; }
-
-    public HardwareVersionsConfigEditVm HardwareVersionsConfigEditVm { get; set; } = new();
-
-    void UpdateHardwareVersion(int? id)
-    {
-        HardwareVersionsConfigEditVm.HardwareVersionId = Convert.ToInt32(id);
-    }
-
-    void UpdateHardwareConfig(int? id)
-    {
-        HardwareVersionsConfigEditVm.HardwareConfigId = Convert.ToInt32(id);
-    }
-
-    protected async Task UpdateHardwareVersionsConfig()
-    {
-        var hardwareVersion = Mapping.Mapper.Map<HardwareVersionsConfig>(HardwareVersionsConfigEditVm);
-        await manager.UpdateAsync(hardwareVersion);
-        navigation.NavigateTo("/hardwareversionsconfig");
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        var hardwareVersion = await manager.GetByIdAsync(HardwareVersionsConfigId);
-        HardwareVersionsConfigEditVm = Mapping.Mapper.Map<HardwareVersionsConfigEditVm>(hardwareVersion);
-    }
-}
