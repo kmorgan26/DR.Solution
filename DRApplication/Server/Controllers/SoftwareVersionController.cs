@@ -37,7 +37,7 @@ public class SoftwareVersionController : ControllerBase
     }
 
     [HttpPost("getwithfilter")]
-    public async Task<ActionResult<APIListOfEntityResponse<SoftwareVersion>>> GetWithFilter([FromBody] QueryFilter<SoftwareVersion> Filter)
+    public async Task<ActionResult<PagedResponse<SoftwareVersion>>> GetWithFilter([FromBody] QueryFilter<SoftwareVersion> Filter)
     {
         try
         {

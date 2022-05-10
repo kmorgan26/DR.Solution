@@ -37,7 +37,7 @@ public class LoadController : ControllerBase
     }
 
     [HttpPost("getwithfilter")]
-    public async Task<ActionResult<APIListOfEntityResponse<Load>>> GetWithFilter([FromBody] QueryFilter<Load> Filter)
+    public async Task<ActionResult<PagedResponse<Load>>> GetWithFilter([FromBody] QueryFilter<Load> Filter)
     {
         try
         {

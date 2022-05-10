@@ -38,7 +38,7 @@ namespace DRApplication.Server.Controllers
         }
 
         [HttpPost("getwithfilter")]
-        public async Task<ActionResult<APIListOfEntityResponse<HardwareSystem>>> GetWithFilter([FromBody] QueryFilter<HardwareSystem> Filter)
+        public async Task<ActionResult<PagedResponse<HardwareSystem>>> GetWithFilter([FromBody] QueryFilter<HardwareSystem> Filter)
         {
             try
             {

@@ -37,7 +37,7 @@ public class MaintainerController : ControllerBase
     }
 
     [HttpPost("getwithfilter")]
-    public async Task<ActionResult<APIListOfEntityResponse<Maintainer>>> GetWithFilter([FromBody] QueryFilter<Maintainer> Filter)
+    public async Task<ActionResult<PagedResponse<Maintainer>>> GetWithFilter([FromBody] QueryFilter<Maintainer> Filter)
     {
         try
         {
