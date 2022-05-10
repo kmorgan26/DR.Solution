@@ -1,0 +1,31 @@
+﻿@namespace DRApplication.Client.Controls.Configurations
+@inject LoadManager manager
+
+<div class="row mb-4">
+    <div class="col col-md-6 col-sm-12">
+        <MudButton Size="Size.Small" Variant="Variant.Filled" Color="Color.Success" Link="/hardwareconfig/create">New</MudButton>
+    </div>
+</div>
+
+<MudTable Items="@_loadVms" Hover="true" Striped="true" Dense="true">
+    <HeaderContent>
+        <MudTh>ID</MudTh>
+        <MudTh>Name</MudTh>
+        <MudTh>Device Type</MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Thread">@context.Id</MudTd>
+        <MudTd DataLabel="Thread">@context.Name</MudTd>
+        <MudTd DataLabel="Thread">
+            <DeviceTypeLabel DeviceTypeId=@context.DeviceTypeId />
+        </MudTd>
+        <MudTd DataLabel="SELECT">
+            <a href="/load/edit/@context.Id" role="button">
+                <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>    
+            </a>
+        </MudTd>
+    </RowTemplate>
+</MudTable>
+
+

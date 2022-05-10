@@ -1,28 +1,28 @@
 ﻿using DRApplication.Server.Data;
 using DRApplication.Shared.Filters;
-using DRApplication.Shared.Models.DeviceModels;
+using DRApplication.Shared.Models.ConfigurationModels;
 using DRApplication.Shared.Responses;
 using Microsoft.AspNetCore.Mvc;
 namespace DRApplication.Server.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-public class MaintainerController : ControllerBase
+public class LoadController : ControllerBase
 {
-    DapperRepository<Maintainer> _manager;
+    DapperRepository<Load> _manager;
 
-    public MaintainerController(DapperRepository<Maintainer> manager)
+    public LoadController(DapperRepository<Load> manager)
     {
         _manager = manager;
     }
 
     [HttpGet]
-    public async Task<ActionResult<APIListOfEntityResponse<Maintainer>>> Get()
+    public async Task<ActionResult<APIListOfEntityResponse<Load>>> Get()
     {
         try
         {
             var result = await _manager.GetAllAsync();
-            return Ok(new APIListOfEntityResponse<Maintainer>()
+            return Ok(new APIListOfEntityResponse<Load>()
             {
                 Success = true,
                 Data = result
@@ -37,12 +37,12 @@ public class MaintainerController : ControllerBase
     }
 
     [HttpPost("getwithfilter")]
-    public async Task<ActionResult<APIListOfEntityResponse<Maintainer>>> GetWithFilter([FromBody] QueryFilter<Maintainer> Filter)
+    public async Task<ActionResult<APIListOfEntityResponse<Load>>> GetWithFilter([FromBody] QueryFilter<Load> Filter)
     {
         try
         {
             var result = await _manager.GetAsync(Filter);
-            return Ok(new APIListOfEntityResponse<Maintainer>()
+            return Ok(new APIListOfEntityResponse<Load>()
             {
                 Success = true,
                 Data = result.ToList()
@@ -58,14 +58,14 @@ public class MaintainerController : ControllerBase
 
 
     [HttpGet("{Id}")]
-    public async Task<ActionResult<APIEntityResponse<Maintainer>>> GetById(int Id)
+    public async Task<ActionResult<APIEntityResponse<Load>>> GetById(int Id)
     {
         try
         {
             var result = await _manager.GetByIdAsync(Id);
             if (result != null)
             {
-                return Ok(new APIEntityResponse<Maintainer>()
+                return Ok(new APIEntityResponse<Load>()
                 {
                     Success = true,
                     Data = result
@@ -73,11 +73,11 @@ public class MaintainerController : ControllerBase
             }
             else
             {
-                return Ok(new APIEntityResponse<Maintainer>()
+                return Ok(new APIEntityResponse<Load>()
                 {
                     Success = false,
-                    ErrorMessages = new List<string>() { "Customer Not Found" },
-                    Data = new Maintainer() { Id = 0 }
+                    ErrorMessages = new List<string>() { "Load Not Found" },
+                    Data = new Load() { Id = 0 }
                 });
             }
         }
@@ -90,16 +90,16 @@ public class MaintainerController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<APIEntityResponse<Maintainer>>> Insert([FromBody] Maintainer Maintainer)
+    public async Task<ActionResult<APIEntityResponse<Load>>> Insert([FromBody] Load Load)
     {
         try
         {
-            Maintainer.Id = 0; // Make sure you do this!
-            var result = await _manager.InsertAsync(Maintainer);
+            Load.Id = 0; // Make sure you do this!
+            var result = await _manager.InsertAsync(Load);
 
             if (result != null)
             {
-                return Ok(new APIEntityResponse<Maintainer>()
+                return Ok(new APIEntityResponse<Load>()
                 {
                     Success = true,
                     Data = result
@@ -107,11 +107,11 @@ public class MaintainerController : ControllerBase
             }
             else
             {
-                return Ok(new APIEntityResponse<Maintainer>()
+                return Ok(new APIEntityResponse<Load>()
                 {
                     Success = false,
-                    ErrorMessages = new List<string>() { "Could not find Device Type after adding it." },
-                    Data = new Maintainer() { Id = 0 }
+                    ErrorMessages = new List<string>() { "Could not find Load after adding it." },
+                    Data = new Load() { Id = 0 }
                 });
             }
         }
@@ -124,14 +124,14 @@ public class MaintainerController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<ActionResult<APIEntityResponse<Maintainer>>> Update([FromBody] Maintainer Maintainer)
+    public async Task<ActionResult<APIEntityResponse<Load>>> Update([FromBody] Load Load)
     {
         try
         {
-            var result = await _manager.UpdateAsync(Maintainer);
+            var result = await _manager.UpdateAsync(Load);
             if (result != null)
             {
-                return Ok(new APIEntityResponse<Maintainer>()
+                return Ok(new APIEntityResponse<Load>()
                 {
                     Success = true,
                     Data = result
@@ -139,11 +139,11 @@ public class MaintainerController : ControllerBase
             }
             else
             {
-                return Ok(new APIEntityResponse<Maintainer>()
+                return Ok(new APIEntityResponse<Load>()
                 {
                     Success = false,
-                    ErrorMessages = new List<string>() { "Could not find customer after updating it." },
-                    Data = new Maintainer() { Id = 0 }
+                    ErrorMessages = new List<string>() { "Could not find Load after updating it." },
+                    Data = new Load() { Id = 0 }
                 });
             }
         }

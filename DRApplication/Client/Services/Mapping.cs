@@ -56,6 +56,7 @@ namespace DRApplication.Client.Services
             CreateMap<SoftwareVersion, SoftwareVersionEditVm>().ReverseMap();
             CreateMap<SoftwareVersion, GenericListVm>().ReverseMap();
 
+            CreateMap<Load, LoadVm>().ReverseMap();
 
             CreateMap<DeviceType, GenericListVm>().ReverseMap();
             CreateMap<DeviceType, DeviceTypeEditVm>().ReverseMap();

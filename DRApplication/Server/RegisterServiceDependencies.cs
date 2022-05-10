@@ -38,6 +38,9 @@ namespace DRApplication.Server
             builder.Services.AddTransient(s => new DapperRepository<SoftwareVersion>(
                builder.Configuration.GetConnectionString("DRConnectionString")));
 
+            builder.Services.AddTransient(s => new DapperRepository<Load>(
+               builder.Configuration.GetConnectionString("DRConnectionString")));
+
             builder.Services.AddTransient(s => new DapperRepository<DeviceType>(
                 builder.Configuration.GetConnectionString("DRConnectionString")));
 
