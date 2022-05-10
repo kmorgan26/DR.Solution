@@ -1,11 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
-namespace DRApplication.Client.ViewModels.ConfigurationViewModels.HardwareSystems
+namespace DRApplication.Client.ViewModels.Configuration;
+public class HardwareSystemInsertVm
 {
-    public class HardwareSystemInsertVm
-    {
-        [Required]
-        [Range(1, 50, ErrorMessage = "Hardware System Name cannot be more than 50 characters long")]
-        public string Name { get; set; } = string.Empty;
-    }
+    [Required]
+    [Range(1, 50, ErrorMessage = "Hardware System Name cannot be more than 50 characters long")]
+    public string Name { get; set; } = string.Empty;
+
 }

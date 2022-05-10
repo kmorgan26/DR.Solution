@@ -1,9 +1,7 @@
 using Blazored.LocalStorage;
 using DRApplication.Client;
 using DRApplication.Client.Services.Configurations;
-using DRApplication.Client.Services.Platforms.Devices;
-using DRApplication.Client.Services.Platforms.DeviceTypes;
-using DRApplication.Client.Services.Platforms.Maintainers;
+using DRApplication.Client.Services.Platforms;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
