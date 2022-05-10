@@ -4,8 +4,10 @@ using DRApplication.Shared.Enums;
 using DRApplication.Shared.Filters;
 using DRApplication.Shared.Helpers;
 using DRApplication.Shared.Interfaces;
+using DRApplication.Shared.Responses;
 using System.Data;
 using System.Data.SqlClient;
+using System.Text;
 
 namespace DRApplication.Server.Data
 {
@@ -54,98 +56,18 @@ namespace DRApplication.Server.Data
 
         public async Task<IEnumerable<TEntity>> GetAsync(QueryFilter<TEntity> Filter)
         {
+            SqlQueryBuilder<TEntity> sqlQueryBuilder = new SqlQueryBuilder<TEntity>(Filter, entityName);
+
             using (IDbConnection db = new SqlConnection(_sqlConnectionString))
             {
                 try
                 {
-                    var dictionary = new Dictionary<string, object>();
-                    foreach (var column in Filter.FilterProperties)
-                    {
-                        dictionary.Add(column.Name, column.Value);
-                    }
-                    var parameters = new DynamicParameters(dictionary);
-                    var sql = "SELECT "; // * from products where ProductId = @ProductId";
-                    if (Filter.IncludePropertyNames.Count > 0)
-                    {
-                        foreach (var propertyName in Filter.IncludePropertyNames)
-                        {
-                            sql += propertyName;
-                            if (propertyName != Filter.IncludePropertyNames.Last())
-                                sql += ", ";
-                        }
-                    }
-                    else
-                        sql += "* ";
+                    var response = sqlQueryBuilder.GetSqlResponse();
+                    var query = response.QueryToRun;
+                    var parameters = response.DynamicParameters;
 
-                    sql += $"from {entityName} ";
-                    if (dictionary.Count > 0)
-                    {
-                        sql += "where ";
-                        int count = 0;
+                    var result = await db.QueryAsync<TEntity>(query, parameters);
 
-
-                        foreach (var key in dictionary.Keys)
-                        {
-                            switch (Filter.FilterProperties[count].Operator)
-                            {
-                                case FilterQueryOperator.Equals:
-                                    sql += $"{key} = @{key} ";
-                                    break;
-                                case FilterQueryOperator.NotEquals:
-                                    sql += $"{key} <> @{key} ";
-                                    break;
-                                case FilterQueryOperator.StartsWith:
-                                    sql += $"{key} like @{key} + '%' ";
-                                    break;
-                                case FilterQueryOperator.EndsWith:
-                                    sql += $"{key} like '%' + @{key} ";
-                                    break;
-                                case FilterQueryOperator.Contains:
-                                    sql += $"{key} like '%' + @{key} + '%' ";
-                                    break;
-                                case FilterQueryOperator.LessThan:
-                                    sql += $"{key} < @{key} ";
-                                    break;
-                                case FilterQueryOperator.LessThanOrEqual:
-                                    sql += $"{key} =< @{key} ";
-                                    break;
-                                case FilterQueryOperator.GreaterThan:
-                                    sql += $"{key} > @{key} ";
-                                    break;
-                                case FilterQueryOperator.GreaterThanOrEqual:
-                                    sql += $"{key} >= @{key} ";
-                                    break;
-                            }
-
-                            if (Filter.FilterProperties[count].CaseSensitive)
-                            {
-                                sql += "COLLATE Latin1_General_CS_AS ";
-                            }
-
-                            if (key != dictionary.Keys.Last())
-                            {
-                                sql += "and ";
-                            }
-                            count++;
-                        }
-                    }
-                    if (Filter.OrderByPropertyName != "")
-                    {
-                        sql += $"order by {Filter.OrderByPropertyName}";
-                        if (Filter.OrderByDescending)
-                        {
-                            sql += " desc";
-                        }
-                    }
-
-                    if (Filter.PaginationFilter is not null)
-                    {
-                        var offset = Filter.PaginationFilter.PageNumber - 1;
-                        sql += $" OFFSET {offset} ROWS " +
-                            $"FETCH NEXT {Filter.PaginationFilter.PageSize} ROWS ONLY ";
-                    }
-
-                    var result = await db.QueryAsync<TEntity>(sql, parameters);
                     return result;
                 }
                 catch (Exception ex)
@@ -267,5 +189,6 @@ namespace DRApplication.Server.Data
             //too risky for me to implement this one.
             throw new NotImplementedException();
         }
+        
     }
 }
