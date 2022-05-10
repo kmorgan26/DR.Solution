@@ -30,13 +30,4 @@
     </RowTemplate>
 </MudTable>
 
-@code {
 
-    IEnumerable<DeviceVm> _deviceVms;
-
-    protected override async Task OnInitializedAsync()
-    {
-        var devices = await manager.GetAllAsync();
-        _deviceVms = Mapping.Mapper.Map<List<DeviceVm>>(devices);
-    }
-}
