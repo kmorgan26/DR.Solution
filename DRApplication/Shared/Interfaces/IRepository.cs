@@ -11,7 +11,7 @@ namespace DRApplication.Shared.Interfaces
     {
         Task<bool> DeleteAsync(TEntity EntityToDelete);
         Task<bool> DeleteByIdAsync(object Id);
-        Task DeleteAllAsync(); // Be Careful!!!
+        Task DeleteAllAsync(); // Do not implement for now!
         Task<IEnumerable<TEntity>> GetAsync(QueryFilter<TEntity> Filter);
         Task<IEnumerable<TEntity>> GetAllAsync();
         Task<TEntity> GetByIdAsync(object Id);
