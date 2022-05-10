@@ -2,6 +2,7 @@
 using Dapper.Contrib.Extensions;
 using DRApplication.Shared.Enums;
 using DRApplication.Shared.Filters;
+using DRApplication.Shared.Helpers;
 using DRApplication.Shared.Interfaces;
 using System.Data;
 using System.Data.SqlClient;
@@ -22,6 +23,7 @@ namespace DRApplication.Server.Data
         {
             _sqlConnectionString = sqlConnectionString;
             entityType = typeof(TEntity);
+            entityName = GetTableName.GetTableNameFromClass(entityType.Name);
 
             var props = entityType.GetProperties().Where(
                 prop => Attribute.IsDefined(prop,
@@ -134,6 +136,13 @@ namespace DRApplication.Server.Data
                         {
                             sql += " desc";
                         }
+                    }
+
+                    if (Filter.PaginationFilter is not null)
+                    {
+                        var offset = Filter.PaginationFilter.PageNumber - 1;
+                        sql += $" OFFSET {offset} ROWS " +
+                            $"FETCH NEXT {Filter.PaginationFilter.PageSize} ROWS ONLY ";
                     }
 
                     var result = await db.QueryAsync<TEntity>(sql, parameters);

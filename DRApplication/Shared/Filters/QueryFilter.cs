@@ -20,14 +20,16 @@ namespace DRApplication.Shared.Filters
         public List<FilterProperty> FilterProperties { get; set; } = new List<FilterProperty>();
 
         /// <summary>
-        /// Specify the property to ORDER BY, if any 
+        /// Specify the property to ORDER BY. Default is Id
         /// </summary>
-        public string OrderByPropertyName { get; set; } = "";
+        public string OrderByPropertyName { get; set; } = "Id";
 
         /// <summary>
         /// Set to true if you want to order DESCENDING
         /// </summary>
         public bool OrderByDescending { get; set; } = false;
+
+        public PaginationFilter PaginationFilter { get; set; } = new ();
 
         /// <summary>
         /// A custome query that returns a list of entities with the current filter settings.
