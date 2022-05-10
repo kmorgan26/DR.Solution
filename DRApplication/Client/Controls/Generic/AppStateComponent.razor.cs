@@ -67,6 +67,21 @@ namespace DRApplication.Client.Controls.Generic
             }
         }
 
+        private int? softwareVersionId;
+        public int? SoftwareVersionId
+        {
+            get
+            {
+                return softwareVersionId;
+            }
+
+            set
+            {
+                softwareVersionId = value;
+                StateHasChanged();
+            }
+        }
+
         private int? deviceTypeId;
         public int? DeviceTypeId
         {

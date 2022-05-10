@@ -1,0 +1,31 @@
+﻿@namespace DRApplication.Client.Controls.Configurations
+@inject SoftwareVersionManager manager
+
+<div class="row mb-4">
+    <div class="col col-md-6 col-sm-12">
+        <MudButton Size="Size.Small" Variant="Variant.Filled" Color="Color.Success" Link="/softwareversion/create">New</MudButton>
+    </div>
+</div>
+
+<MudTable Items="@_softwareVersionVms" Hover="true" Striped="true" Dense="true">
+    <HeaderContent>
+        <MudTh>ID</MudTh>
+        <MudTh>Name</MudTh>
+        <MudTh>Software System</MudTh>
+        <MudTh>Version Date</MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Name">@context.Name</MudTd>
+        <MudTd DataLabel="Version">
+            <SoftwareSystemLabel SoftwareSystemId=@context.SoftwareSystemId />
+        </MudTd>
+        <MudTd DataLabel="Date">@context.VersionDate.ToShortDateString()</MudTd>
+        <MudTd DataLabel="SELECT">
+            <a href="/softwareversion/edit/@context.Id" role="button">
+                <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>    
+            </a>
+        </MudTd>
+    </RowTemplate>
+</MudTable>

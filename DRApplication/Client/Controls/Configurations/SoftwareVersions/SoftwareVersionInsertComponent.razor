@@ -1,0 +1,26 @@
+﻿@namespace DRApplication.Client.Controls.Configurations
+@inject SoftwareVersionManager manager
+@inject NavigationManager navigation
+
+<h3>Add New Software Version</h3>
+<div class="row">
+    <div class="col-md-6 col-sm-12">
+        @if (@_softwareVersionInsertVm != null)
+        {
+            <EditForm Model="@_softwareVersionInsertVm" OnValidSubmit="@InsertSoftwareVersion">
+
+                <label for="Name">Software Version</label>
+                <InputText class="form-control" @bind-Value="_softwareVersionInsertVm.Name" />
+
+                <SoftwareSystemSelect SelectedSoftwareSystemId="@_softwareVersionInsertVm.SoftwareSystemId" SoftwareSystemIdChange="UpdateSoftwareSystem" />
+
+                <label for="Name">Version Date</label>
+                <InputDate class="form-control" @bind-Value="_softwareVersionInsertVm.VersionDate" />
+
+                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Insert</MudButton>
+                <MudButton Link="/softwareversion" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
+
+            </EditForm>
+        }
+    </div>
+</div>

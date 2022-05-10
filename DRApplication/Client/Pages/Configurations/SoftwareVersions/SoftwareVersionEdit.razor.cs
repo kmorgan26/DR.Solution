@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
 namespace DRApplication.Client.Pages.Configuration;
-public partial class HardwareVersionEdit
+public partial class SoftwareVersionEdit
 {
     [Parameter]
-    public int HardwareVersionId { get; set; }
+    public int SoftwareVersionId { get; set; }
 }

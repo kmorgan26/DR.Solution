@@ -1,0 +1,15 @@
+﻿@namespace DRApplication.Client.Controls.Configurations
+@inject SoftwareVersionManager manager
+@inject NavigationManager navigation
+
+<div class="form-group">
+    <label>Software Version</label>
+    <InputSelect ValueExpression="@(()=> SelectedSoftwareVersionId)" id="softwareVersionSelect" DisplayName="Software Version" class="form-control" Value="SelectedSoftwareVersionId"
+                 ValueChanged="@((int? value) => ChangeSoftwareVersion(value))">
+        <option value=0>------</option>
+        @foreach (var item in _softwareVersionVms)
+        {
+            <option value="@item.Id">@item.Name</option>
+        }
+    </InputSelect>
+</div>
