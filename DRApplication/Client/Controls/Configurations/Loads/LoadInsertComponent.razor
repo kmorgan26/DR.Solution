@@ -1,0 +1,23 @@
+﻿@namespace DRApplication.Client.Controls.Configurations
+@inject LoadManager manager
+@inject NavigationManager navigation
+
+<h3>Add New Test Load</h3>
+<div class="row">
+    <div class="col-md-6 col-sm-12">
+        @if (@_loadInsertVm != null)
+        {
+            <EditForm Model="@_loadInsertVm" OnValidSubmit="@InsertLoad">
+
+                <label for="Name">Test Load Name</label>
+                <InputText class="form-control" @bind-Value="_loadInsertVm.Name" />
+
+                <DeviceTypeSelectComponent DeviceTypeIdChange="UpdateDeviceType" SelectedDeviceTypeId="@_loadInsertVm.DeviceTypeId"></DeviceTypeSelectComponent>
+
+                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Insert</MudButton>
+                <MudButton Link="/load" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
+
+            </EditForm>
+        }
+    </div>
+</div>
