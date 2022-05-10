@@ -3,16 +3,3 @@
 
 @_maintainerName
 
-@code {
-
-    [Parameter]
-    public int MaintainerId { get; set; }
-
-    string _maintainerName { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        var maintainer = await manager.GetByIdAsync(MaintainerId);
-        _maintainerName = maintainer.Name;
-    }
-}

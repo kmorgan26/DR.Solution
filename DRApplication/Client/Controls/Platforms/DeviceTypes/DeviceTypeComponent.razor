@@ -30,16 +30,3 @@
     </RowTemplate>
 </MudTable>
 
-@code {
-
-    IEnumerable<DeviceTypeVm> _deviceTypeVms;
-
-    List<MaintainerVm> _maintainerVms = new();
-    MappingHelper _mappingHelper = new();
-
-    protected override async Task OnInitializedAsync()
-    {
-        var deviceTypes = await manager.GetAllAsync();
-        _deviceTypeVms = Mapping.Mapper.Map<List<DeviceTypeVm>>(deviceTypes);
-    }
-}
