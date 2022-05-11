@@ -7,7 +7,16 @@
     </div>
 </div>
 
-<MudTable Items="@_deviceVms" Hover="true" Striped="true" Dense="true">
+<MudTable @ref="@_table" Items="@_deviceVms"
+          CurrentPage="@_pagedResponse.PageNumber"
+          RowsPerPage="@_pagedResponse.PageSize"
+          Hover="true"
+          Breakpoint="Breakpoint.Sm"
+          Striped="true"
+          Dense="true"
+          Elevation="3"
+          TotalItems = "@_pagedResponse.TotalRecords">
+    
     <HeaderContent>
         <MudTh>ID</MudTh>
         <MudTh>Device</MudTh>
@@ -15,6 +24,7 @@
         <MudTh>IsActive?</MudTh>
         <MudTh></MudTh>
     </HeaderContent>
+
     <RowTemplate>
         <MudTd DataLabel="Thread">@context.Id</MudTd>
         <MudTd DataLabel="Thread">@context.Name</MudTd>
@@ -28,6 +38,17 @@
             </a>
         </MudTd>
     </RowTemplate>
+
+    <PagerContent>
+        <div class="d-flex flex-column align-center">
+            <MudPagination Rectangular="true" SelectedChanged="PageChanged" Color="Color.Primary" Count="_pagedResponse.TotalPages" />
+        </div>
+        <div class="d-flex flex-column align-right">
+            Showing Page @_pagedResponse.PageNumber of @_pagedResponse.TotalPages
+        </div>
+        <div class="d-flex flex-column align-right">
+            Total Records: @_pagedResponse.TotalRecords
+        </div>
+    </PagerContent>
+
 </MudTable>
-
-

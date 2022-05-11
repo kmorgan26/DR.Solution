@@ -37,15 +37,15 @@ public class MaintainerController : ControllerBase
     }
 
     [HttpPost("getwithfilter")]
-    public async Task<ActionResult<APIListOfEntityResponse<Maintainer>>> GetWithFilter([FromBody] QueryFilter<Maintainer> Filter)
+    public async Task<ActionResult<PagedResponse<Maintainer>>> GetWithFilter([FromBody] QueryFilter<Maintainer> Filter)
     {
         try
         {
             var result = await _manager.GetAsync(Filter);
-            return Ok(new APIListOfEntityResponse<Maintainer>()
+            return Ok(new PagedResponse<Maintainer>()
             {
                 Success = true,
-                Data = result.ToList()
+                Data = result.Data
             });
         }
         catch (Exception ex)

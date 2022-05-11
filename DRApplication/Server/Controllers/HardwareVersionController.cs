@@ -38,15 +38,15 @@ namespace DRApplication.Server.Controllers
         }
 
         [HttpPost("getwithfilter")]
-        public async Task<ActionResult<APIListOfEntityResponse<HardwareVersion>>> GetWithFilter([FromBody] QueryFilter<HardwareVersion> Filter)
+        public async Task<ActionResult<PagedResponse<HardwareVersion>>> GetWithFilter([FromBody] QueryFilter<HardwareVersion> Filter)
         {
             try
             {
                 var result = await _manager.GetAsync(Filter);
-                return Ok(new APIListOfEntityResponse<HardwareVersion>()
+                return Ok(new PagedResponse<HardwareVersion>()
                 {
                     Success = true,
-                    Data = result.ToList()
+                    Data = result.Data
                 });
             }
             catch (Exception ex)

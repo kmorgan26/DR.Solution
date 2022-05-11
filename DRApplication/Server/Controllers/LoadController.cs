@@ -37,15 +37,15 @@ public class LoadController : ControllerBase
     }
 
     [HttpPost("getwithfilter")]
-    public async Task<ActionResult<APIListOfEntityResponse<Load>>> GetWithFilter([FromBody] QueryFilter<Load> Filter)
+    public async Task<ActionResult<PagedResponse<Load>>> GetWithFilter([FromBody] QueryFilter<Load> Filter)
     {
         try
         {
             var result = await _manager.GetAsync(Filter);
-            return Ok(new APIListOfEntityResponse<Load>()
+            return Ok(new PagedResponse<Load>()
             {
                 Success = true,
-                Data = result.ToList()
+                Data = result.Data
             });
         }
         catch (Exception ex)

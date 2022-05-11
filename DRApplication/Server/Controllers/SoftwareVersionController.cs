@@ -37,15 +37,15 @@ public class SoftwareVersionController : ControllerBase
     }
 
     [HttpPost("getwithfilter")]
-    public async Task<ActionResult<APIListOfEntityResponse<SoftwareVersion>>> GetWithFilter([FromBody] QueryFilter<SoftwareVersion> Filter)
+    public async Task<ActionResult<PagedResponse<SoftwareVersion>>> GetWithFilter([FromBody] QueryFilter<SoftwareVersion> Filter)
     {
         try
         {
             var result = await _manager.GetAsync(Filter);
-            return Ok(new APIListOfEntityResponse<SoftwareVersion>()
+            return Ok(new PagedResponse<SoftwareVersion>()
             {
                 Success = true,
-                Data = result.ToList()
+                Data = result.Data
             });
         }
         catch (Exception ex)

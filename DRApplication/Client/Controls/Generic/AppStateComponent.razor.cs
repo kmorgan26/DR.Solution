@@ -1,3 +1,5 @@
+using DRApplication.Shared.Filters;
+using DRApplication.Shared.Responses;
 using Microsoft.AspNetCore.Components;
 
 namespace DRApplication.Client.Controls.Generic
@@ -6,6 +8,23 @@ namespace DRApplication.Client.Controls.Generic
     {
         [Parameter]
         public RenderFragment? ChildContent { get; set; }
+
+        private PaginationFilter paginationFilter = new();
+        
+        
+
+        public PaginationFilter PaginationFilter
+        {
+            get
+            {
+                return paginationFilter;
+            }
+            set
+            {
+                paginationFilter = value;
+                StateHasChanged();
+            }
+        }
 
         private int? hardwareConfigId;
         public int? HardwareConfigId

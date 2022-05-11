@@ -1,8 +1,10 @@
 ﻿using Dapper;
 using Dapper.Contrib.Extensions;
-using DRApplication.Shared.Enums;
 using DRApplication.Shared.Filters;
+using DRApplication.Shared.Helpers;
 using DRApplication.Shared.Interfaces;
+using DRApplication.Shared.Responses;
+using DRApplication.Shared.Services;
 using System.Data;
 using System.Data.SqlClient;
 
@@ -22,6 +24,7 @@ namespace DRApplication.Server.Data
         {
             _sqlConnectionString = sqlConnectionString;
             entityType = typeof(TEntity);
+            entityName = GetTableName.GetTableNameFromClass(entityType.Name);
 
             var props = entityType.GetProperties().Where(
                 prop => Attribute.IsDefined(prop,
@@ -50,99 +53,40 @@ namespace DRApplication.Server.Data
             }
         }
 
-        public async Task<IEnumerable<TEntity>> GetAsync(QueryFilter<TEntity> Filter)
+        public async Task<PagedResponse<TEntity>> GetAsync(QueryFilter<TEntity> Filter)
         {
             using (IDbConnection db = new SqlConnection(_sqlConnectionString))
             {
                 try
                 {
-                    var dictionary = new Dictionary<string, object>();
-                    foreach (var column in Filter.FilterProperties)
+                    SqlQueryBuilder<TEntity> sqlQueryBuilder = new SqlQueryBuilder<TEntity>(Filter, entityName);
+
+                    //Get the packet for the main query that will have the data
+                    var sqlPacket = sqlQueryBuilder.GetSqlPacket();
+                    var result = await db.QueryAsync<TEntity>(sqlPacket.SqlQuery, sqlPacket.DynamicParameters);
+
+
+                    //Get the packet for the query with the count
+                    var countQuery = sqlQueryBuilder.GetSqlCountPacket();
+                    int count = await db.ExecuteScalarAsync<int>(countQuery.SqlQuery, countQuery.DynamicParameters);
+
+                    //pack it up in a response
+                    var response = new PagedResponse<TEntity>()
                     {
-                        dictionary.Add(column.Name, column.Value);
-                    }
-                    var parameters = new DynamicParameters(dictionary);
-                    var sql = "SELECT "; // * from products where ProductId = @ProductId";
-                    if (Filter.IncludePropertyNames.Count > 0)
-                    {
-                        foreach (var propertyName in Filter.IncludePropertyNames)
-                        {
-                            sql += propertyName;
-                            if (propertyName != Filter.IncludePropertyNames.Last())
-                                sql += ", ";
-                        }
-                    }
-                    else
-                        sql += "* ";
+                        Data = result,
+                        PageNumber = Filter.PaginationFilter.PageNumber,
+                        PageSize = Filter.PaginationFilter.PageSize,
+                        TotalRecords = count,
+                        TotalPages = (count / Filter.PaginationFilter.PageSize),
+                        Success = true
+                    };
 
-                    sql += $"from {entityName} ";
-                    if (dictionary.Count > 0)
-                    {
-                        sql += "where ";
-                        int count = 0;
-
-
-                        foreach (var key in dictionary.Keys)
-                        {
-                            switch (Filter.FilterProperties[count].Operator)
-                            {
-                                case FilterQueryOperator.Equals:
-                                    sql += $"{key} = @{key} ";
-                                    break;
-                                case FilterQueryOperator.NotEquals:
-                                    sql += $"{key} <> @{key} ";
-                                    break;
-                                case FilterQueryOperator.StartsWith:
-                                    sql += $"{key} like @{key} + '%' ";
-                                    break;
-                                case FilterQueryOperator.EndsWith:
-                                    sql += $"{key} like '%' + @{key} ";
-                                    break;
-                                case FilterQueryOperator.Contains:
-                                    sql += $"{key} like '%' + @{key} + '%' ";
-                                    break;
-                                case FilterQueryOperator.LessThan:
-                                    sql += $"{key} < @{key} ";
-                                    break;
-                                case FilterQueryOperator.LessThanOrEqual:
-                                    sql += $"{key} =< @{key} ";
-                                    break;
-                                case FilterQueryOperator.GreaterThan:
-                                    sql += $"{key} > @{key} ";
-                                    break;
-                                case FilterQueryOperator.GreaterThanOrEqual:
-                                    sql += $"{key} >= @{key} ";
-                                    break;
-                            }
-
-                            if (Filter.FilterProperties[count].CaseSensitive)
-                            {
-                                sql += "COLLATE Latin1_General_CS_AS ";
-                            }
-
-                            if (key != dictionary.Keys.Last())
-                            {
-                                sql += "and ";
-                            }
-                            count++;
-                        }
-                    }
-                    if (Filter.OrderByPropertyName != "")
-                    {
-                        sql += $"order by {Filter.OrderByPropertyName}";
-                        if (Filter.OrderByDescending)
-                        {
-                            sql += " desc";
-                        }
-                    }
-
-                    var result = await db.QueryAsync<TEntity>(sql, parameters);
-                    return result;
+                    return response;
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
-                    return (IEnumerable<TEntity>)new List<TEntity>();
+                    return new PagedResponse<TEntity>();
                 }
             }
         }
@@ -258,5 +202,6 @@ namespace DRApplication.Server.Data
             //too risky for me to implement this one.
             throw new NotImplementedException();
         }
+        
     }
 }

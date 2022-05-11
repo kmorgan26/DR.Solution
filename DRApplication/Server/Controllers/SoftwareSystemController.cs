@@ -38,15 +38,15 @@ namespace DRApplication.Server.Controllers
         }
 
         [HttpPost("getwithfilter")]
-        public async Task<ActionResult<APIListOfEntityResponse<SoftwareSystem>>> GetWithFilter([FromBody] QueryFilter<SoftwareSystem> Filter)
+        public async Task<ActionResult<PagedResponse<SoftwareSystem>>> GetWithFilter([FromBody] QueryFilter<SoftwareSystem> Filter)
         {
             try
             {
                 var result = await _manager.GetAsync(Filter);
-                return Ok(new APIListOfEntityResponse<SoftwareSystem>()
+                return Ok(new PagedResponse<SoftwareSystem>()
                 {
                     Success = true,
-                    Data = result.ToList()
+                    Data = result.Data
                 });
             }
             catch (Exception ex)
