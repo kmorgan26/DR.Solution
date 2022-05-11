@@ -15,7 +15,7 @@ namespace DRApplication.Shared.Responses
             Data = data;
         }
 
-        public IEnumerable<TEntity> Data { get; set; }
+        public IEnumerable<TEntity>? Data { get; set; }
 
         public int TotalPages { get; set; } = 0;
         public int TotalRecords { get; set; } = 0;

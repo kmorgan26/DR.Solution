@@ -4,15 +4,16 @@ using DRApplication.Shared.Filters;
 using DRApplication.Shared.Responses;
 using System.Text;
 
-namespace DRApplication.Shared.Helpers
+namespace DRApplication.Shared.Services
 {
     public class SqlQueryBuilder<TEntity> where TEntity : class
     {
-        private SqlQueryWithDynamicParameters _sqlQueryBuilderResponse { get; set; } = new();
-        private QueryFilter<TEntity> _queryFilter;
-        private string _entityName { get; set; }
-        public Dictionary<string, object> FilterProperties { get; set; } = new();
-        public StringBuilder sb { get; set; } = new();
+        private SqlQueryPacket _sqlQueryBuilderResponse { get; set; } = new();
+        private Dictionary<string, object> _filterProperties { get; set; } = new();
+
+        private QueryFilter<TEntity> _queryFilter = new();
+        private string _entityName;
+        private StringBuilder _sb = new();
 
         public SqlQueryBuilder(QueryFilter<TEntity> filter, string entityName)
         {
@@ -20,10 +21,25 @@ namespace DRApplication.Shared.Helpers
             _entityName = entityName;
         }
 
-        public SqlQueryWithDynamicParameters GetSqlResponse()
+        public SqlQueryPacket GetSqlPacket()
         {
             BuildQuery();
             return _sqlQueryBuilderResponse;
+        }
+        public SqlQueryPacket GetSqlCountPacket()
+        {
+            _sb = new();
+            BuildCountQuery();
+            return _sqlQueryBuilderResponse;
+        }
+        public void BuildCountQuery()
+        {
+            SetFilterProperties();
+            SetCountSelectStatement();
+            SetFromClause();
+            SetWhereClause();
+
+            SetQuery();
         }
         public void BuildQuery()
         {
@@ -40,96 +56,96 @@ namespace DRApplication.Shared.Helpers
         {
             foreach (var column in _queryFilter.FilterProperties)
             {
-                FilterProperties.Add(column.Name, column.Value);
+                _filterProperties.Add(column.Name, column.Value);
             }
-            _sqlQueryBuilderResponse.DynamicParameters = new DynamicParameters(FilterProperties);
+            _sqlQueryBuilderResponse.DynamicParameters = new DynamicParameters(_filterProperties);
         }
         private void SetSelectStatement()
         {
-            sb.AppendLine("SELECT ");
+            _sb.AppendLine("SELECT ");
 
             if (_queryFilter.IncludePropertyNames.Count > 0)
             {
                 foreach (var propertyName in _queryFilter.IncludePropertyNames)
                 {
-                    sb.Append(propertyName);
+                    _sb.Append(propertyName);
                     if (propertyName != _queryFilter.IncludePropertyNames.Last())
                     {
-                        sb.Append(", ");
+                        _sb.Append(", ");
                     }
                 }
             }
             else
             {
-                sb.Append("* ");
+                _sb.Append("* ");
             }
         }
         private void SetFromClause()
         {
-            sb.Append("FROM ");
-            sb.Append(_entityName);
+            _sb.Append("FROM ");
+            _sb.Append(_entityName);
         }
         private void SetWhereClause()
         {
-            if (FilterProperties.Count > 0)
+            if (_filterProperties.Count > 0)
             {
-                sb.Append(" WHERE ");
+                _sb.Append(" WHERE ");
 
                 int count = 0;
 
-                foreach (var key in FilterProperties.Keys)
+                foreach (var key in _filterProperties.Keys)
                 {
-                    sb.Append(key);
+                    _sb.Append(key);
                     switch (_queryFilter.FilterProperties[count].Operator)
                     {
                         case FilterQueryOperator.Equals:
-                            sb.Append(" = @");
-                            sb.Append(key);
+                            _sb.Append(" = @");
+                            _sb.Append(key);
                             break;
                         case FilterQueryOperator.NotEquals:
-                            sb.Append(" <> @");
-                            sb.Append(key);
+                            _sb.Append(" <> @");
+                            _sb.Append(key);
                             break;
                         case FilterQueryOperator.StartsWith:
-                            sb.Append(" like @");
-                            sb.Append(key);
-                            sb.Append(" + '%' ");
+                            _sb.Append(" like @");
+                            _sb.Append(key);
+                            _sb.Append(" + '%' ");
                             break;
                         case FilterQueryOperator.EndsWith:
-                            sb.Append(" like '%' + @");
-                            sb.Append(key);
+                            _sb.Append(" like '%' + @");
+                            _sb.Append(key);
                             break;
                         case FilterQueryOperator.Contains:
-                            sb.Append(" like '%' + @");
-                            sb.Append(key);
-                            sb.Append(" + '%' ");
+                            _sb.Append(" like '%' + @");
+                            _sb.Append(key);
+                            _sb.Append(" + '%' ");
                             break;
                         case FilterQueryOperator.LessThan:
-                            sb.Append(" < @");
-                            sb.Append(key);
+                            _sb.Append(" < @");
+                            _sb.Append(key);
                             break;
                         case FilterQueryOperator.LessThanOrEqual:
-                            sb.Append(" =< @");
-                            sb.Append(key);
+                            _sb.Append(" =< @");
+                            _sb.Append(key);
                             break;
                         case FilterQueryOperator.GreaterThan:
-                            sb.Append(" > @");
-                            sb.Append(key);
+                            _sb.Append(" > @");
+                            _sb.Append(key);
                             break;
                         case FilterQueryOperator.GreaterThanOrEqual:
-                            sb.Append(" >= @");
-                            sb.Append(key);
+                            _sb.Append(" >= @");
+                            _sb.Append(key);
                             break;
                     }
 
                     if (_queryFilter.FilterProperties[count].CaseSensitive)
                     {
-                        sb.Append("COLLATE Latin1_General_CS_AS ");
+                        _sb.Append("COLLATE Latin1_General_CS_AS ");
                     }
 
-                    if (key != FilterProperties.Keys.Last())
+                    if (key != _filterProperties.Keys.Last())
                     {
-                        sb.Append(" AND ");
+                        _sb.Append(" AND ");
                     }
                     count++;
                 }
@@ -139,11 +155,11 @@ namespace DRApplication.Shared.Helpers
         {
             if (_queryFilter.OrderByPropertyName != "")
             {
-                sb.Append(" ORDER BY ");
-                sb.Append(_queryFilter.OrderByPropertyName);
+                _sb.Append(" ORDER BY ");
+                _sb.Append(_queryFilter.OrderByPropertyName);
 
                 if (_queryFilter.OrderByDescending)
-                    sb.Append(" DESC ");
+                    _sb.Append(" DESC ");
             }
         }
         private void SetPagination()
@@ -152,17 +168,21 @@ namespace DRApplication.Shared.Helpers
             {
                 var offset = _queryFilter.PaginationFilter.PageNumber - 1;
 
-                sb.Append(" OFFSET ");
-                sb.Append(offset);
-                sb.Append(" ROWS ");
-                sb.Append(" FETCH NEXT ");
-                sb.Append(_queryFilter.PaginationFilter.PageSize);
-                sb.Append(" ROWS ONLY ");
+                _sb.Append(" OFFSET ");
+                _sb.Append(offset);
+                _sb.Append(" ROWS ");
+                _sb.Append(" FETCH NEXT ");
+                _sb.Append(_queryFilter.PaginationFilter.PageSize);
+                _sb.Append(" ROWS ONLY ");
             }
         }
         private void SetQuery()
         {
-            _sqlQueryBuilderResponse.QueryToRun = sb.ToString();
+            _sqlQueryBuilderResponse.SqlQuery = _sb.ToString();
+        }
+        private void SetCountSelectStatement()
+        {
+            _sb.Append("SELECT COUNT(*) ");
         }
     }
 }
