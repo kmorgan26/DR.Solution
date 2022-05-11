@@ -40,7 +40,15 @@
     </RowTemplate>
 
     <PagerContent>
-        <MudPagination SelectedChanged="PageChanged" Color="Color.Primary" Count="_pagedResponse.TotalPages" />
+        <div class="d-flex flex-column align-center">
+            <MudPagination Rectangular="true" SelectedChanged="PageChanged" Color="Color.Primary" Count="_pagedResponse.TotalPages" />
+        </div>
+        <div class="d-flex flex-column align-right">
+            Showing Page @_pagedResponse.PageNumber of @_pagedResponse.TotalPages
+        </div>
+        <div class="d-flex flex-column align-right">
+            Total Records: @_pagedResponse.TotalRecords
+        </div>
     </PagerContent>
 
 </MudTable>
