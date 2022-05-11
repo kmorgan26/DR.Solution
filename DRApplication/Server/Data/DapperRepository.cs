@@ -1,13 +1,12 @@
 ﻿using Dapper;
 using Dapper.Contrib.Extensions;
-using DRApplication.Shared.Enums;
 using DRApplication.Shared.Filters;
 using DRApplication.Shared.Helpers;
 using DRApplication.Shared.Interfaces;
 using DRApplication.Shared.Responses;
+using DRApplication.Shared.Services;
 using System.Data;
 using System.Data.SqlClient;
-using System.Text;
 
 namespace DRApplication.Server.Data
 {
@@ -54,26 +53,40 @@ namespace DRApplication.Server.Data
             }
         }
 
-        public async Task<IEnumerable<TEntity>> GetAsync(QueryFilter<TEntity> Filter)
+        public async Task<PagedResponse<TEntity>> GetAsync(QueryFilter<TEntity> Filter)
         {
-            SqlQueryBuilder<TEntity> sqlQueryBuilder = new SqlQueryBuilder<TEntity>(Filter, entityName);
-
             using (IDbConnection db = new SqlConnection(_sqlConnectionString))
             {
                 try
                 {
-                    var response = sqlQueryBuilder.GetSqlResponse();
-                    var query = response.QueryToRun;
-                    var parameters = response.DynamicParameters;
+                    SqlQueryBuilder<TEntity> sqlQueryBuilder = new SqlQueryBuilder<TEntity>(Filter, entityName);
 
-                    var result = await db.QueryAsync<TEntity>(query, parameters);
+                    //Get the packet for the main query that will have the data
+                    var sqlPacket = sqlQueryBuilder.GetSqlPacket();
+                    var result = await db.QueryAsync<TEntity>(sqlPacket.SqlQuery, sqlPacket.DynamicParameters);
 
-                    return result;
+
+                    //Get the packet for the query with the count
+                    var countQuery = sqlQueryBuilder.GetSqlCountPacket();
+                    int count = await db.ExecuteScalarAsync<int>(countQuery.SqlQuery, countQuery.DynamicParameters);
+
+                    //pack it up in a response
+                    var response = new PagedResponse<TEntity>()
+                    {
+                        Data = result,
+                        PageNumber = Filter.PaginationFilter.PageNumber,
+                        PageSize = Filter.PaginationFilter.PageSize,
+                        TotalRecords = count,
+                        TotalPages = (count / Filter.PaginationFilter.PageSize),
+                        Success = true
+                    };
+
+                    return response;
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
-                    return (IEnumerable<TEntity>)new List<TEntity>();
+                    return new PagedResponse<TEntity>();
                 }
             }
         }

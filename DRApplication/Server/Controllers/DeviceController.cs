@@ -47,8 +47,13 @@ namespace DRApplication.Server.Controllers
                 var response = new PagedResponse<Device>()
                 {
                     Success = true,
-                    Data = result.ToList(),
-                    TotalRecords = 0
+                    Data = result.Data,
+                    TotalRecords = result.TotalRecords,
+                    PageSize = result.PageSize,
+                    TotalPages = result.TotalPages,
+                    PageNumber = result.PageNumber,
+                    PreviousPage = result.PreviousPage,
+                    NextPage = result.NextPage
                 };
 
                 return Ok(response);

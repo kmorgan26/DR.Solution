@@ -42,10 +42,10 @@ public class LoadController : ControllerBase
         try
         {
             var result = await _manager.GetAsync(Filter);
-            return Ok(new APIListOfEntityResponse<Load>()
+            return Ok(new PagedResponse<Load>()
             {
                 Success = true,
-                Data = result.ToList()
+                Data = result.Data
             });
         }
         catch (Exception ex)

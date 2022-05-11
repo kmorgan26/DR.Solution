@@ -42,10 +42,10 @@ public class SoftwareVersionController : ControllerBase
         try
         {
             var result = await _manager.GetAsync(Filter);
-            return Ok(new APIListOfEntityResponse<SoftwareVersion>()
+            return Ok(new PagedResponse<SoftwareVersion>()
             {
                 Success = true,
-                Data = result.ToList()
+                Data = result.Data
             });
         }
         catch (Exception ex)

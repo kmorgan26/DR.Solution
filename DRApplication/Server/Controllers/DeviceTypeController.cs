@@ -43,10 +43,10 @@ namespace DRApplication.Server.Controllers
             try
             {
                 var result = await _manager.GetAsync(Filter);
-                return Ok(new APIListOfEntityResponse<DeviceType>()
+                return Ok(new PagedResponse<DeviceType>()
                 {
                     Success = true,
-                    Data = result.ToList()
+                    Data = result.Data
                 });
             }
             catch (Exception ex)

@@ -40,7 +40,7 @@ namespace DRApplication.Client.Services
             }
         }
 
-        public async Task<IEnumerable<TEntity>> GetAsync(QueryFilter<TEntity> Expression)
+        public async Task<PagedResponse<TEntity>> GetAsync(QueryFilter<TEntity> Expression)
         {
             try
             {
@@ -48,12 +48,13 @@ namespace DRApplication.Client.Services
                 var result = await _http.PostAsJsonAsync(url, Expression);
                 result.EnsureSuccessStatusCode();
                 string responseBody = await result.Content.ReadAsStringAsync();
-                var response = JsonConvert.DeserializeObject<APIListOfEntityResponse<TEntity>>(responseBody);
+                
+                var response = JsonConvert.DeserializeObject<PagedResponse<TEntity>>(responseBody);
 
                 if (response is not null && response.Success)
-                    return response.Data;
+                    return response;
                 else
-                    return new List<TEntity>();
+                    return new PagedResponse<TEntity>();
             }
             catch (Exception ex)
             {

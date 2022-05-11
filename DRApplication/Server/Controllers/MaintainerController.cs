@@ -42,10 +42,10 @@ public class MaintainerController : ControllerBase
         try
         {
             var result = await _manager.GetAsync(Filter);
-            return Ok(new APIListOfEntityResponse<Maintainer>()
+            return Ok(new PagedResponse<Maintainer>()
             {
                 Success = true,
-                Data = result.ToList()
+                Data = result.Data
             });
         }
         catch (Exception ex)
