@@ -7,7 +7,7 @@
     </div>
 </div>
 
-<MudTable Items="@_deviceVms"
+<MudTable @ref="@_table" Items="@_deviceVms"
           CurrentPage="@_pagedResponse.PageNumber"
           RowsPerPage="@_pagedResponse.PageSize"
           Hover="true"
@@ -40,13 +40,7 @@
     </RowTemplate>
 
     <PagerContent>
-        <PaginationComponent TotalPages="_pagedResponse.TotalPages"
-                             CurrentPage="_pagedResponse.PageNumber"
-                             TotalRecords="_pagedResponse.TotalRecords"
-                             Radius="2" SelectedPage="SelectedPage">
-        </PaginationComponent>
+        <MudPagination SelectedChanged="PageChanged" Color="Color.Primary" Count="_pagedResponse.TotalPages" />
     </PagerContent>
 
 </MudTable>
-
-

@@ -62,7 +62,7 @@ namespace DRApplication.Shared.Services
         }
         private void SetSelectStatement()
         {
-            _sb.AppendLine("SELECT ");
+            _sb.Append("SELECT ");
 
             if (_queryFilter.IncludePropertyNames.Count > 0)
             {
@@ -166,7 +166,7 @@ namespace DRApplication.Shared.Services
         {
             if (_queryFilter.PaginationFilter is not null)
             {
-                var offset = _queryFilter.PaginationFilter.PageNumber - 1;
+                var offset = ( _queryFilter.PaginationFilter.PageNumber * _queryFilter.PaginationFilter.PageSize) - _queryFilter.PaginationFilter.PageSize;
 
                 _sb.Append(" OFFSET ");
                 _sb.Append(offset);
