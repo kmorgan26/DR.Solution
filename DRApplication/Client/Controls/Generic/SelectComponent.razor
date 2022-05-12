@@ -1,0 +1,45 @@
+﻿@typeparam TEntity
+@inherits InputBase<TEntity>
+@namespace DRApplication.Client.Controls.Generic
+
+<InputSelect class="form-control" @bind-Value="HandleChange">
+    @ChildContent
+    @foreach (TEntity c in Data)
+    {
+        <option value="@c">@c</option>
+    }
+</InputSelect>
+
+@code{
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public List<TEntity> Data { get; set; } = new();
+
+    [Parameter]
+    public Func<string, TEntity> Parser { get; set; }
+
+    public string HandleChange
+    {
+        get{ return CurrentValueAsString;}
+
+        set{ CurrentValueAsString = value;}
+    }
+
+    protected override bool TryParseValueFromString(string value, out TEntity result, out string validationErrorMessage)
+    {
+        result = Parser(value);
+        if (value == "Los Angeles" || value == "30")
+        {
+            validationErrorMessage = "Data unaccepted";
+            return false;
+        }
+        else
+        {
+            validationErrorMessage = null;
+            return true;
+        }
+    }
+}
