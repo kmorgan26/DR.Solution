@@ -1,15 +1,16 @@
-﻿using System;
+﻿using Dapper.Contrib.Extensions;
+using System;
 using System.Collections.Generic;
 
 namespace DRApplication.Shared.Models.ConfigurationModels
 {
+    [Table("VersionLoads")]
     public partial class VersionsLoad
     {
+        [Key]
         public int Id { get; set; }
         public int LoadId { get; set; }
         public int SoftwareVersionId { get; set; }
 
-        public virtual Load Load { get; set; } = null!;
-        public virtual SoftwareVersion SoftwareVersion { get; set; } = null!;
     }
 }

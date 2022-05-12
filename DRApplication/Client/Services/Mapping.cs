@@ -60,6 +60,10 @@ namespace DRApplication.Client.Services
             CreateMap<Load, LoadEditVm>().ReverseMap();
             CreateMap<Load, LoadInsertVm>().ReverseMap();
 
+            CreateMap<VersionsLoad, VersionsLoadVm>().ReverseMap();
+            CreateMap<VersionsLoad, VersionsLoadInsertVm>().ReverseMap();
+            CreateMap<VersionsLoad, VersionsLoadEditVm>().ReverseMap();
+
             CreateMap<DeviceType, GenericListVm>().ReverseMap();
             CreateMap<DeviceType, DeviceTypeEditVm>().ReverseMap();
 
