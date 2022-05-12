@@ -6,7 +6,7 @@ namespace DRApplication.Client.Controls.Configurations
 {
     public partial class HardwareVersionsConfigInsertComponent
     {
-        private HardwareVersionsConfigVm _hardwareVersionsConfigInsertVm { get; set; } = new();
+        private HardwareVersionsConfigInsertVm _hardwareVersionsConfigInsertVm { get; set; } = new();
         void UpdateVersion(int? id)
         {
             _hardwareVersionsConfigInsertVm.HardwareVersionId = Convert.ToInt32(id);

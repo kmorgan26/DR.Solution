@@ -26,6 +26,21 @@ namespace DRApplication.Client.Controls.Generic
             }
         }
 
+        private int? loadId;
+        public int? LoadId
+        {
+            get
+            {
+                return loadId;
+            }
+
+            set
+            {
+                loadId = value;
+                StateHasChanged();
+            }
+        }
+
         private int? hardwareConfigId;
         public int? HardwareConfigId
         {

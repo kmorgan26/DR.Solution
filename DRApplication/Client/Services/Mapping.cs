@@ -59,6 +59,7 @@ namespace DRApplication.Client.Services
             CreateMap<Load, LoadVm>().ReverseMap();
             CreateMap<Load, LoadEditVm>().ReverseMap();
             CreateMap<Load, LoadInsertVm>().ReverseMap();
+            CreateMap<Load, GenericListVm>().ReverseMap();
 
             CreateMap<VersionsLoad, VersionsLoadVm>().ReverseMap();
             CreateMap<VersionsLoad, VersionsLoadInsertVm>().ReverseMap();

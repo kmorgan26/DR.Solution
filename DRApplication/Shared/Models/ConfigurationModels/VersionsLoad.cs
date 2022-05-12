@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace DRApplication.Shared.Models.ConfigurationModels
 {
-    [Table("VersionLoads")]
+    [Table("VersionsLoads")]
     public partial class VersionsLoad
     {
         [Key]

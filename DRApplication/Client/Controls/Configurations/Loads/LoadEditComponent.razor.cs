@@ -17,14 +17,14 @@ public partial class LoadEditComponent
 
     protected async Task UpdateHarwareConfig()
     {
-        var hardwareConfig = Mapping.Mapper.Map<Load>(LoadEditVm);
-        await manager.UpdateAsync(hardwareConfig);
+        var load = Mapping.Mapper.Map<Load>(LoadEditVm);
+        await manager.UpdateAsync(load);
         navigation.NavigateTo("/load");
     }
 
     protected override async Task OnInitializedAsync()
     {
-        var hardwareConfig = await manager.GetByIdAsync(LoadId);
-        LoadEditVm = Mapping.Mapper.Map<LoadEditVm>(hardwareConfig);
+        var load = await manager.GetByIdAsync(LoadId);
+        LoadEditVm = Mapping.Mapper.Map<LoadEditVm>(load);
     }
 }

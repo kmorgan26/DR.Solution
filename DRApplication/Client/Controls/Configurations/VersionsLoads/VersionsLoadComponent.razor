@@ -1,0 +1,33 @@
+﻿@namespace DRApplication.Client.Controls.Configurations
+@inject VersionsLoadManager manager
+
+<div class="row mb-4">
+    <div class="col col-md-6 col-sm-12">
+        <MudButton Size="Size.Small" Variant="Variant.Filled" Color="Color.Success" Link="/versionsload/create">New</MudButton>
+    </div>
+</div>
+
+<MudTable Items="@_versionsLoadVms" Hover="true" Striped="true" Dense="true">
+    <HeaderContent>
+        <MudTh>ID</MudTh>
+        <MudTh>Name</MudTh>
+        <MudTh>Software Version</MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Test Load">
+            <LoadLabel LoadId="@context.LoadId" />
+        </MudTd>
+        
+        <MudTd DataLabel="Software Version">
+            <SoftwareVersionLabel SoftwareVersionId="@context.SoftwareVersionId" />
+        </MudTd>
+        
+        <MudTd DataLabel="SELECT">
+            <a href="/versionsload/edit/@context.Id" role="button">
+                <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>    
+            </a>
+        </MudTd>
+    </RowTemplate>
+</MudTable>

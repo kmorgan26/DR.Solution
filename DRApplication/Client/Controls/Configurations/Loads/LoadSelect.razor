@@ -1,0 +1,15 @@
+﻿@namespace DRApplication.Client.Controls.Configurations
+@inject LoadManager manager
+@inject NavigationManager navigation
+
+<div class="form-group">
+    <label>Load</label>
+    <InputSelect ValueExpression="@(()=> SelectedLoadId)" id="loadSelect" DisplayName="Software Version" class="form-control" Value="SelectedLoadId"
+                 ValueChanged="@((int? value) => ChangeLoad(value))">
+        <option value=0>------</option>
+        @foreach (var item in _loadVms)
+        {
+            <option value="@item.Id">@item.Name</option>
+        }
+    </InputSelect>
+</div>
