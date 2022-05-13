@@ -44,8 +44,11 @@
     }
     private string GetMaintainer(int id)
     {
-        var item = _maintainerVms.Where(i => i.Id == id).FirstOrDefault();
-        return item == null ? string.Empty : item.Name;
+        if(_maintainerVms is not null)
+        {
+            var item = _maintainerVms.Where(i => i.Id == id).FirstOrDefault();
+            return item == null ? string.Empty : item.Name;
+        }
+        return string.Empty;
     }
-
 }
