@@ -1,9 +1,56 @@
 ﻿@namespace DRApplication.Client.Pages.Platforms
 @page "/devices"
+@inject DeviceManager _manager
+@inject DeviceTypeManager _deviceTypeManager
 
 <MudText Typo="Typo.h3" Class="mb-4">
     <MudIcon Icon="@Icons.Material.Filled.LocalAirport" Size="Size.Large" Class="m-3" />
-    Devices
+    Device Types
 </MudText>
 
-<DeviceComponent></DeviceComponent>
+<BasicTable Data="_viewModels" TItem="DeviceVm">
+    
+    <BHeaderTemplate>
+        <MudTh>ID</MudTh>
+        <MudTh>Device</MudTh>
+        <MudTh>DeviceType</MudTh>
+        <MudTh>IsActive?</MudTh>
+    </BHeaderTemplate>
+
+    <BRowTemplate>
+        <MudTd DataLabel="Thread">@context.Id</MudTd>
+        <MudTd DataLabel="Thread">@context.Name</MudTd>
+        <MudTd DataLabel="DeviceType">@GetDeviceType(@context.DeviceTypeId)</MudTd>
+        <MudTd DataLabel="IsActive">@context.IsActive</MudTd>
+        <MudTd DataLabel="Edit">
+            <a href="/device/edit/@context.Id" role="button">
+                <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>    
+            </a>
+        </MudTd>
+    </BRowTemplate>
+
+</BasicTable>
+
+@code{
+
+    private IEnumerable<DeviceVm>? _viewModels;
+    private IEnumerable<DeviceTypeVm>? _deviceTypeVms;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var items = await _manager.GetAllAsync();
+        _viewModels = Mapping.Mapper.Map<IEnumerable<DeviceVm>>(items);
+
+        var foreignItems = await _deviceTypeManager.GetAllAsync();
+        _deviceTypeVms = Mapping.Mapper.Map<IEnumerable<DeviceTypeVm>>(foreignItems);
+    }
+    private string GetDeviceType(int id)
+    {
+        if(_deviceTypeVms is not null)
+        {
+            var item = _deviceTypeVms.Where(i => i.Id == id).FirstOrDefault();
+            return item == null ? string.Empty : item.Name;
+        }
+        return string.Empty;
+    }
+}
