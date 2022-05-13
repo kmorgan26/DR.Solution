@@ -1,9 +1,40 @@
 ﻿@page "/platform"
 
-<h3 class="mb-3">Platform Page</h3>
+<MudText Typo="Typo.h3" Class="mb-4">
+    <MudIcon Icon="@Icons.Filled.Warehouse" Size="Size.Large" Class="m-3" />
+    Platform Page
+</MudText>
 
-<ul class="list-group list-group-horizontal">
-  <li class="list-group-item list-group-item-success flex-fill  m-3"><a class="nav-link" href="/devicetypes">Device Types</a></li>
-  <li class="list-group-item list-group-item-success flex-fill  m-3"><a class="nav-link" href="/devices">Devices</a></li>
-  <li class="list-group-item list-group-item-success flex-fill  m-3"><a class="nav-link" href="/maintainers">Maintainers</a></li>
-</ul>
+<MudGrid Spacing="@spacing" Justify="Justify.FlexStart">
+    <MudItem>
+        <MudCard>
+            <MudCardContent>
+                <MudText>
+                    <MudLink Href="/devicetypes">Device Types</MudLink>
+                </MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem>
+        <MudCard>
+            <MudCardContent>
+                <MudText>
+                    <MudLink Href="/devices">Devices</MudLink>
+                </MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem>
+        <MudCard>
+            <MudCardContent>
+                <MudText>
+                    <MudLink Href="/maintainers">Maintainers</MudLink>
+                </MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+@code {
+    public int spacing { get; set; } = 2;
+}
