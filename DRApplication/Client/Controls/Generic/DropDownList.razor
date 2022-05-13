@@ -1,0 +1,15 @@
+﻿@typeparam TItem
+@inherits MudSelect<TItem>
+
+<MudSelect T="TItem" Label="Please Select" Required="true">
+    @SelectItemsTemplate
+</MudSelect>
+
+@code
+{
+    [Parameter]
+    public IEnumerable<TItem>? Data { get; set; }
+
+    [Parameter]
+    public RenderFragment<TItem>? SelectItemsTemplate { get; set; }
+}

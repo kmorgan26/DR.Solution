@@ -1,6 +1,77 @@
 ﻿@namespace DRApplication.Client.Pages.Platforms
+@inject DeviceTypeManager manager
+@inject MaintainerManager maintainerManager
+@inject NavigationManager navigation
+
 @page "/devicetype/edit/{deviceTypeId:int}"
 
-<h3>Device Type Edit</h3>
+<MudText Typo="Typo.h3" Class="mb-4">
+    <MudIcon Icon="@Icons.Material.Filled.LocalAirport" Size="Size.Large" Class="m-3" />
+    Edit Device Type
+</MudText>
 
-<DeviceTypeEditComponent DeviceTypeId=@DeviceTypeId></DeviceTypeEditComponent>
+@if (@DeviceTypeEditVm is not null && _maintainerVms is not null)
+{
+    <EditForm Model="DeviceTypeEditVm" OnValidSubmit="UpdateDeviceType">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <MudCard>
+            <MudCardContent>
+                <MudTextField T="string" @bind-Value="DeviceTypeEditVm.Name" Label="Device Type" Required="true" />
+
+                <MudSelect Label="Maintainer" @bind-Value="DeviceTypeEditVm.MaintainerId" Required="true">
+                    @foreach (var maintainer in _maintainerVms)
+                    {
+                        <MudSelectItem Value="maintainer.Id">@maintainer.Name</MudSelectItem>
+                    }
+                </MudSelect>
+
+                <MudCheckBox T="bool" @bind-Checked="DeviceTypeEditVm.IsActive" Label="Is Active?" Required="true" />
+
+                <MudDivider />
+
+                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Update</MudButton>
+                <MudButton Link="/deviceTypes" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
+
+        </MudCardContent>
+    </MudCard>
+
+
+</EditForm>
+
+
+
+}
+
+@code {
+
+    [Parameter]
+    public int DeviceTypeId { get; set; }
+
+    public DeviceTypeEditVm DeviceTypeEditVm { get; set; } = new();
+
+    private int SelectedMaintainerId;
+
+    private IEnumerable<MaintainerVm>? _maintainerVms;
+
+    void UpdateMaintainer(int? id)
+    {
+        DeviceTypeEditVm.MaintainerId = Convert.ToInt32(id);
+    }
+
+    protected async Task UpdateDeviceType()
+    {
+        var deviceType = Mapping.Mapper.Map<DeviceType>(DeviceTypeEditVm);
+        await manager.UpdateAsync(deviceType);
+        navigation.NavigateTo("/deviceTypes");
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var deviceType = await manager.GetByIdAsync(DeviceTypeId);
+        DeviceTypeEditVm = Mapping.Mapper.Map<DeviceTypeEditVm>(deviceType);
+
+        var maintainers = await maintainerManager.GetAllAsync();
+        _maintainerVms = Mapping.Mapper.Map<IEnumerable<MaintainerVm>>(maintainers);
+    }
+}

@@ -13,14 +13,16 @@
     <BHeaderTemplate>
         <MudTh>ID</MudTh>
         <MudTh>DeviceType</MudTh>
-        <MudTh></MudTh>
+        <MudTh>Maintainer</MudTh>
+        <MudTh>IsActive?</MudTh>
     </BHeaderTemplate>
 
     <BRowTemplate>
         <MudTd DataLabel="Thread">@context.Id</MudTd>
         <MudTd DataLabel="Thread">@context.Name</MudTd>
         <MudTd DataLabel="Maintainer">@GetMaintainer(@context.MaintainerId)</MudTd>
-        <MudTd DataLabel="SELECT">
+        <MudTd DataLabel="IsActive">@context.IsActive</MudTd>
+        <MudTd DataLabel="Edit">
             <a href="/devicetype/edit/@context.Id" role="button">
                 <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>    
             </a>

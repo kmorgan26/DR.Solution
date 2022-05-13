@@ -5,8 +5,8 @@ public class DeviceTypeEditVm
 {
     public int Id { get; set; }
     
-    [Required]
-    [Range(1, 50, ErrorMessage = "Device Type Name cannot be more than 255 characters long")]
+    [Required(ErrorMessage ="You must enter a name for the Device Type. Otherwise, what would we call it?")]
+    [MaxLength(255, ErrorMessage = "Device Type Name cannot be more than 255 characters long")]
     public string Name { get; set; } = null!;
 
     [Required]
