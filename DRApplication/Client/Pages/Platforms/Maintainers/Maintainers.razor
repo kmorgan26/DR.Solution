@@ -1,4 +1,5 @@
 ﻿@namespace DRApplication.Client.Pages.Platforms
+@inject MaintainerManager _manager
 @page "/maintainers"
 
 <MudText Typo="Typo.h3" Class="mb-4">
@@ -6,4 +7,22 @@
     Maintainers
 </MudText>
 
-<MaintainerComponent></MaintainerComponent>
+<BasicTable Data="_maintainerVms" TItem="MaintainerVm">
+    
+    <BHeaderTemplate>
+        <MudTh>ID</MudTh>
+        <MudTh>Maintainer</MudTh>
+        <MudTh></MudTh>
+    </BHeaderTemplate>
+
+    <BRowTemplate>
+        <MudTd DataLabel="Thread">@context.Id</MudTd>
+        <MudTd DataLabel="Thread">@context.Name</MudTd>
+        <MudTd DataLabel="SELECT">
+            <a href="/maintainer/edit/@context.Id" role="button">
+                <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>    
+            </a>
+        </MudTd>
+    </BRowTemplate>
+
+</BasicTable>

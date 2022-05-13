@@ -1,0 +1,28 @@
+﻿@typeparam TItem
+@inherits MudTable<TItem> 
+
+<h3>ListComponent</h3>
+
+
+<MudTable Items="Data" Hover="true" Striped="true" Dense="true">
+    <HeaderContent>
+        @BHeaderTemplate
+    </HeaderContent>
+    <RowTemplate>
+        @BRowTemplate(@context)
+    </RowTemplate>
+</MudTable>
+
+
+@code {
+
+    [Parameter]
+    public IEnumerable<TItem> Data { get; set; }
+
+    [Parameter]
+    public RenderFragment<TItem> BRowTemplate { get; set; }
+
+    [Parameter]
+    public RenderFragment BHeaderTemplate { get; set; }
+
+}
