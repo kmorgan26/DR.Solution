@@ -6,7 +6,7 @@ public class DeviceEditVm
     public int Id { get; set; }
     
     [Required]
-    [Range(1, 50, ErrorMessage = "Device Name cannot be more than 20 characters long")]
+    [MaxLength(20, ErrorMessage = "Device Name cannot be more than 20 characters long")]
     public string Name { get; set; } = null!;
 
     [Required]
