@@ -1,9 +1,51 @@
 ﻿@namespace DRApplication.Client.Pages.Platforms
 @page "/deviceTypes"
+@inject DeviceTypeManager _manager
+@inject MaintainerManager _maintainerManager
 
 <MudText Typo="Typo.h3" Class="mb-4">
     <MudIcon Icon="@Icons.Material.Filled.LocalAirport" Size="Size.Large" Class="m-3" />
     Device Types
 </MudText>
 
-<DeviceTypeComponent></DeviceTypeComponent>
+<BasicTable Data="_viewModels" TItem="DeviceTypeVm">
+    
+    <BHeaderTemplate>
+        <MudTh>ID</MudTh>
+        <MudTh>DeviceType</MudTh>
+        <MudTh></MudTh>
+    </BHeaderTemplate>
+
+    <BRowTemplate>
+        <MudTd DataLabel="Thread">@context.Id</MudTd>
+        <MudTd DataLabel="Thread">@context.Name</MudTd>
+        <MudTd DataLabel="Maintainer">@GetMaintainer(@context.MaintainerId)</MudTd>
+        <MudTd DataLabel="SELECT">
+            <a href="/devicetype/edit/@context.Id" role="button">
+                <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>    
+            </a>
+        </MudTd>
+    </BRowTemplate>
+
+</BasicTable>
+
+@code{
+
+    private IEnumerable<DeviceTypeVm>? _viewModels;
+    private IEnumerable<MaintainerVm>? _maintainerVms;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var items = await _manager.GetAllAsync();
+        _viewModels = Mapping.Mapper.Map<List<DeviceTypeVm>>(items);
+
+        var foreignItems = await _maintainerManager.GetAllAsync();
+        _maintainerVms = Mapping.Mapper.Map<List<MaintainerVm>>(foreignItems);
+    }
+    private string GetMaintainer(int id)
+    {
+        var item = _maintainerVms.Where(i => i.Id == id).FirstOrDefault();
+        return item == null ? string.Empty : item.Name;
+    }
+
+}
