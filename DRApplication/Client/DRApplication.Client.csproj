@@ -26,4 +26,8 @@
 		<ProjectReference Include="..\Shared\DRApplication.Shared.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Controls\Generic\Forms\" />
+	</ItemGroup>
+
 </Project>

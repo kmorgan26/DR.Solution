@@ -1,0 +1,14 @@
+﻿<MudText Typo="Typo.h3" Class="mb-4 pl-10">
+    <MudIcon Icon="@IconPath" Size="Size.Large" Class="m-3" />
+    @TitleText
+</MudText>
+
+@code {
+
+    [Parameter]
+    public string TitleText { get; set; }
+
+    [Parameter]
+    public string IconPath { get; set; }
+
+}
