@@ -1,0 +1,56 @@
+﻿@inherits EditForm
+@typeparam TItem
+@namespace DRApplication.Client.Controls.Generic
+
+<MudGrid>
+        <MudItem xs="12" sm="9" md="6">
+            <MudPaper Class="pa-4">
+                <EditForm Model="@Item" OnValidSubmit="UpdateItem">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <MudPaper Elevation="3">
+                         <MudCard>
+                            <MudCardContent>
+
+                                @FormItems
+
+                                <MudPaper Class="pa-2 ma-2" Elevation="0">
+                                    <SubmitButton ButtonText="Update" />
+                                    <CancelButton Url="/deviceTypes" />
+                                </MudPaper>
+
+                            </MudCardContent>
+                        </MudCard>
+                    </MudPaper>
+                </EditForm>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+
+@code {
+
+    /// <summary>
+    /// The Item to be edited in the form
+    /// </summary>
+    [Parameter]
+    public TItem Item { get; set; }
+
+    [Parameter]
+    public EventCallback<EditContext> OnValidSubmiting { get; set; }
+
+    /// <summary>
+    /// Enter the route to be navigated to upon cancellation (/route) 
+    /// </summary>
+    [Parameter]
+    public string? CancelPath { get; set; }
+
+    [Parameter]
+    public RenderFragment? FormItems { get; set; }
+
+    private async Task UpdateItem(EditContext context)
+    {
+        await OnValidSubmit.InvokeAsync(context);
+    }
+
+
+}
