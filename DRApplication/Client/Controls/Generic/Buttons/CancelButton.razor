@@ -1,10 +1,22 @@
 ﻿@inherits MudButton
 @namespace DRApplication.Client.Controls.Generic
 
-<MudButton Link="@Url" Variant="Variant.Filled" EndIcon="@Icons.Filled.Cancel" IconColor="Color.Inherit" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
+<MudButton 
+    Variant="Variant.Filled" 
+    ButtonType="ButtonType.Button"
+    EndIcon="@Icons.Filled.Cancel" 
+    IconColor="Color.Inherit" 
+    Color="Color.Error" 
+    Size="Size.Small">
+    Link="@Url" 
+    Cancel
+</MudButton>
 
 @code {
 
+    /// <summary>
+    /// Enter the route to be navigated to upon cancellation (/route) 
+    /// </summary>
     [Parameter]
     public string? Url { get; set; }
 
