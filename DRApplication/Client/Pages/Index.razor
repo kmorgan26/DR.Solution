@@ -1,19 +1,2 @@
 ﻿@page "/"
 
-<MudSelect Label="Maintainer" @bind-Value="SelectedValue">
-    @foreach(var m in _maintainerVms)
-    {
-        <MudSelectItem Value="m.Id">@m.Name</MudSelectItem>
-    }
-</MudSelect>
-
-
-@SelectedValue
-
-@code{
-
-    public int SelectedValue { get; set; }
-
-    private IEnumerable<MaintainerVm>? _maintainerVms = 
-        new List<MaintainerVm>() { new MaintainerVm() { Id=1, Name="first"}, new MaintainerVm() {Id=2, Name="second"}};
-}
