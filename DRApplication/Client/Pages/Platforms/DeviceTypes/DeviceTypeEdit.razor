@@ -12,32 +12,46 @@
 
 @if (@DeviceTypeEditVm is not null && _maintainerVms is not null)
 {
- <EditForm Model="DeviceTypeEditVm" OnValidSubmit="UpdateDeviceType">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-        <MudPaper Elevation="3">
-            <MudCard>
-                <MudCardContent>
+    <MudGrid>
+        <MudItem xs="12" sm="9" md="6">
+            <MudPaper Class="pa-4">
+                <EditForm Model="DeviceTypeEditVm" OnValidSubmit="UpdateDeviceType">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                    <MudPaper Elevation="3">
+                         <MudCard>
+                            <MudCardContent>
+                                
+                                <MudPaper Class="pa-2 ma-2" Elevation="0">
+                                    <MudTextField Label="Device Type" @bind-Value="DeviceTypeEditVm.Name" For="@(() => DeviceTypeEditVm.Name)"/>
+                                </MudPaper>
+                                
+                                <MudPaper Class="pa-2 ma-2" Elevation="0">
+                                    <MudSelect Label="Maintainer" @bind-Value="DeviceTypeEditVm.MaintainerId">
+                                        @foreach (var maintainer in _maintainerVms)
+                                        {
+                                            <MudSelectItem Value="maintainer.Id">@maintainer.Name</MudSelectItem>
+                                        }
+                                    </MudSelect>
+                                </MudPaper>
 
-                    <MudTextField T="string" @bind-Value="DeviceTypeEditVm.Name" Label="Device Type" Required="true" />
+                                <MudPaper Class="pa-2 ma-2" Elevation="0">
+                                    <MudCheckBox T="bool" @bind-Checked="DeviceTypeEditVm.IsActive" Label="Is Active?" />
+                                </MudPaper>
 
-                    <MudSelect Label="Maintainer" @bind-Value="DeviceTypeEditVm.MaintainerId" Required="true">
-                        @foreach (var maintainer in _maintainerVms)
-                        {
-                        <MudSelectItem Value="maintainer.Id">@maintainer.Name</MudSelectItem>
-                        }
-                    </MudSelect>
+                                <MudPaper Class="pa-2 ma-2" Elevation="0">
+                                    <SubmitButton ButtonText="Update" />
+                                    <CancelButton Url="/deviceTypes" />
+                                </MudPaper>
 
-                    <MudCheckBox T="bool" @bind-Checked="DeviceTypeEditVm.IsActive" Label="Is Active?" Required="true" />
-                
-                    <MudDivider />
-                    <SubmitButton ButtonText="Update"/>
-                    <CancelButton Url="/deviceTypes" />
-            
-                </MudCardContent>
-            </MudCard>
-        </MudPaper>
-</EditForm>
+                            </MudCardContent>
+                        </MudCard>
+                    </MudPaper>
+                </EditForm>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+
 }
 
 @code {
