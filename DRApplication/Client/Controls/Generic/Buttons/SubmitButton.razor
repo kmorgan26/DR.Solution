@@ -1,0 +1,19 @@
+﻿@inherits MudButton
+@namespace DRApplication.Client.Controls.Generic
+
+<MudButton 
+    Variant="Variant.Filled" 
+    ButtonType="ButtonType.Submit" 
+    EndIcon="@Icons.Filled.Save" 
+    IconColor="Color.Inherit" 
+    Color="Color.Primary" 
+    Size="Size.Small">
+    @ButtonText
+</MudButton>
+
+@code{
+
+    [Parameter]
+    public string? ButtonText { get; set; }
+
+}

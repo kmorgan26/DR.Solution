@@ -1,0 +1,11 @@
+﻿@inherits MudButton
+@namespace DRApplication.Client.Controls.Generic
+
+<MudButton Link="@Url" Variant="Variant.Filled" EndIcon="@Icons.Filled.Cancel" IconColor="Color.Inherit" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
+
+@code {
+
+    [Parameter]
+    public string? Url { get; set; }
+
+}

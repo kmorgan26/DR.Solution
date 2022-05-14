@@ -1,11 +1,7 @@
 ﻿@namespace DRApplication.Client.Controls.Configurations
 @inject LoadManager manager
 
-<div class="row mb-4">
-    <div class="col col-md-6 col-sm-12">
-        <MudButton Size="Size.Small" Variant="Variant.Filled" Color="Color.Success" Link="/load/create">New</MudButton>
-    </div>
-</div>
+<NewButton Url="/load/create"/>
 
 <MudTable Items="@_loadVms" Hover="true" Striped="true" Dense="true">
     <HeaderContent>

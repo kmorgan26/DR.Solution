@@ -12,9 +12,8 @@
                 <label for="Name">Hardware System</label>
                 <InputText class="form-control" @bind-Value="_harwareSystemInsertVm.Name" />
 
-                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Insert</MudButton>
-                <MudButton Link="/hardwaresystem" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
-
+                <SubmitButton ButtonText="Insert"/>
+                <CancelButton Url="/hardwaresystem"/>
             </EditForm>
         }
     </div>

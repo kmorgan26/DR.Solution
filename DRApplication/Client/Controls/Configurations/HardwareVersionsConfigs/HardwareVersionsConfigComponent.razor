@@ -1,11 +1,7 @@
 ﻿@namespace DRApplication.Client.Controls.Configurations
 @inject HardwareVersionsConfigManager manager
 
-<div class="row mb-4">
-    <div class="col col-md-6 col-sm-12">
-        <MudButton Size="Size.Small" Variant="Variant.Filled" Color="Color.Success" Link="/hardwareversionsconfig/create">New</MudButton>
-    </div>
-</div>
+<NewButton Url="/hardwareversionsconfig/create"/>
 
 <MudTable Items="@_hardwareVersionsConfigVms" Hover="true" Striped="true" Dense="true">
     <HeaderContent>

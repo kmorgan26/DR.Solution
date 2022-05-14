@@ -14,8 +14,8 @@
 
                 <HardwareConfigSelect HardwareConfigIdChange="UpdateConfig" SelectedHardwareConfigId="@_softwareSystemInsertVm.HardwareConfigId"></HardwareConfigSelect>
 
-                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Insert</MudButton>
-                <MudButton Link="/Softwaresystem" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
+                <SubmitButton ButtonText="Insert"/>
+                <CancelButton Url="/softwaresystem"/>
 
             </EditForm>
         }

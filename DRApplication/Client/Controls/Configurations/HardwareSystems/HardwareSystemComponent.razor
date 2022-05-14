@@ -1,7 +1,7 @@
 ﻿@namespace DRApplication.Client.Controls.Configurations
 @inject HardwareSystemManager manager
 
-<MudButton Size="Size.Small" Variant="Variant.Filled" Color="Color.Success" Link="/hardwaresystem/create">New</MudButton>
+<NewButton Url="/hardwaresystem/create"/>
 
 <MudTable Items="@_hardwareSystemVms" Hover="true" Striped="true" Dense="true">
     <HeaderContent>

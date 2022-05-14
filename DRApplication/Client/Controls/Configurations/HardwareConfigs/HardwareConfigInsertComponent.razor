@@ -14,8 +14,8 @@
 
                 <DeviceTypeSelectComponent DeviceTypeIdChange="UpdateDeviceType" SelectedDeviceTypeId="@_hardwareConfigInsertVm.DeviceTypeId"></DeviceTypeSelectComponent>
 
-                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Insert</MudButton>
-                <MudButton Link="/hardwareconfig" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
+                <SubmitButton ButtonText="Insert"/>
+                <CancelButton Url="/hardwareconfig"/>
 
             </EditForm>
         }

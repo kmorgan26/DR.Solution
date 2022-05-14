@@ -12,35 +12,32 @@
 
 @if (@DeviceTypeEditVm is not null && _maintainerVms is not null)
 {
-    <EditForm Model="DeviceTypeEditVm" OnValidSubmit="UpdateDeviceType">
+ <EditForm Model="DeviceTypeEditVm" OnValidSubmit="UpdateDeviceType">
         <DataAnnotationsValidator />
         <ValidationSummary />
-        <MudCard>
-            <MudCardContent>
-                <MudTextField T="string" @bind-Value="DeviceTypeEditVm.Name" Label="Device Type" Required="true" />
+        <MudPaper Elevation="3">
+            <MudCard>
+                <MudCardContent>
 
-                <MudSelect Label="Maintainer" @bind-Value="DeviceTypeEditVm.MaintainerId" Required="true">
-                    @foreach (var maintainer in _maintainerVms)
-                    {
+                    <MudTextField T="string" @bind-Value="DeviceTypeEditVm.Name" Label="Device Type" Required="true" />
+
+                    <MudSelect Label="Maintainer" @bind-Value="DeviceTypeEditVm.MaintainerId" Required="true">
+                        @foreach (var maintainer in _maintainerVms)
+                        {
                         <MudSelectItem Value="maintainer.Id">@maintainer.Name</MudSelectItem>
-                    }
-                </MudSelect>
+                        }
+                    </MudSelect>
 
-                <MudCheckBox T="bool" @bind-Checked="DeviceTypeEditVm.IsActive" Label="Is Active?" Required="true" />
-
-                <MudDivider />
-
-                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Update</MudButton>
-                <MudButton Link="/deviceTypes" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
-
-        </MudCardContent>
-    </MudCard>
-
-
+                    <MudCheckBox T="bool" @bind-Checked="DeviceTypeEditVm.IsActive" Label="Is Active?" Required="true" />
+                
+                    <MudDivider />
+                    <SubmitButton ButtonText="Update"/>
+                    <CancelButton Url="/deviceTypes" />
+            
+                </MudCardContent>
+            </MudCard>
+        </MudPaper>
 </EditForm>
-
-
-
 }
 
 @code {

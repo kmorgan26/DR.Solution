@@ -15,7 +15,7 @@ public partial class LoadEditComponent
         LoadEditVm.DeviceTypeId = Convert.ToInt32(id);
     }
 
-    protected async Task UpdateHarwareConfig()
+    protected async Task UpdateLoad()
     {
         var load = Mapping.Mapper.Map<Load>(LoadEditVm);
         await manager.UpdateAsync(load);

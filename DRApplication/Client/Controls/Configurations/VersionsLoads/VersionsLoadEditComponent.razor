@@ -12,8 +12,9 @@
 
                 <SoftwareVersionSelect SoftwareVersionIdChange="UpdateSoftwareVersionId" SelectedSoftwareVersionId="@VersionsLoadEditVm.SoftwareVersionId"/>
 
-                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Update</MudButton>
-                <MudButton Link="/versionsload" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
+                <SubmitButton ButtonText="Update"/>
+                
+                <CancelButton Url="/versionsload"/>
 
             </EditForm>
         }

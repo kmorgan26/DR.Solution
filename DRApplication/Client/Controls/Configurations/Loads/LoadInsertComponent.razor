@@ -14,9 +14,8 @@
 
                 <DeviceTypeSelectComponent DeviceTypeIdChange="UpdateDeviceType" SelectedDeviceTypeId="@_loadInsertVm.DeviceTypeId"></DeviceTypeSelectComponent>
 
-                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Insert</MudButton>
-                <MudButton Link="/load" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
-
+                <SubmitButton ButtonText="Insert"/>
+                <CancelButton Url="/load"/>
             </EditForm>
         }
     </div>
