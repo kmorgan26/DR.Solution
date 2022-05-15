@@ -1,0 +1,13 @@
+﻿@page "/loads/builder/{loadId:int}"
+
+<TitleHeader TitleText="Test Load Builder" IconPath="@Icons.Filled.Badge" />
+
+<DeviceTypeSelectComponent SelectedDeviceTypeId="_loadVm.DeviceTypeId"></DeviceTypeSelectComponent>
+
+@code {
+
+    public int DeviceTypeId { get; set; }
+
+    private LoadVm _loadVm = new();
+
+}

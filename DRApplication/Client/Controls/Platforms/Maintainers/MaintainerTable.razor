@@ -1,0 +1,27 @@
+﻿@namespace DRApplication.Client.Controls.Platforms
+
+<BasicTable Data="MaintainerVms" TItem="MaintainerVm">
+    
+    <BHeaderTemplate>
+        <MudTh>ID</MudTh>
+        <MudTh>Maintainer</MudTh>
+        <MudTh></MudTh>
+    </BHeaderTemplate>
+
+    <BRowTemplate>
+        <MudTd DataLabel="Thread">@context.Id</MudTd>
+        <MudTd DataLabel="Thread">@context.Name</MudTd>
+        <MudTd DataLabel="SELECT">
+            <a href="/maintainer/edit/@context.Id" role="button">
+                <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>    
+            </a>
+        </MudTd>
+    </BRowTemplate>
+
+</BasicTable>
+
+@code {
+
+    [CascadingParameter] 
+    public IEnumerable<MaintainerVm> MaintainerVms { get; set; }
+}

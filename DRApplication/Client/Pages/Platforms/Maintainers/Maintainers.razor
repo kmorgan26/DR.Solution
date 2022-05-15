@@ -9,22 +9,6 @@
 
 <NewButton Url="/maintainer/create" />
 
-<BasicTable Data="_maintainerVms" TItem="MaintainerVm">
-    
-    <BHeaderTemplate>
-        <MudTh>ID</MudTh>
-        <MudTh>Maintainer</MudTh>
-        <MudTh></MudTh>
-    </BHeaderTemplate>
-
-    <BRowTemplate>
-        <MudTd DataLabel="Thread">@context.Id</MudTd>
-        <MudTd DataLabel="Thread">@context.Name</MudTd>
-        <MudTd DataLabel="SELECT">
-            <a href="/maintainer/edit/@context.Id" role="button">
-                <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>    
-            </a>
-        </MudTd>
-    </BRowTemplate>
-
-</BasicTable>
+<CascadingValue Value="@_maintainerVms">
+    <MaintainerTable></MaintainerTable>
+</CascadingValue>
