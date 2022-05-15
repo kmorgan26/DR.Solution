@@ -1,0 +1,18 @@
+﻿@page "/device/details/{deviceId:int}"
+@namespace DRApplication.Client.Pages.Platforms
+
+@if (@DeviceVm is not null)
+{
+    <TitleHeader IconPath="@Icons.Filled.Airlines" TitleText="@DeviceVm.Name" />
+    <MudGrid>
+        <MudItem>
+            <MudPaper Height="140px" Width="140px" />
+        </MudItem>
+        <MudItem>
+            <MudPaper Height="140px" Width="140px" />
+        </MudItem>
+        <MudItem>
+            <MudPaper Height="140px" Width="140px" />
+        </MudItem>
+    </MudGrid>
+}
