@@ -3,7 +3,10 @@
 
 <MudTable Items="Data" Hover="true" Striped="true" Dense="true">
     <HeaderContent>
-        @BHeaderTemplate
+        @foreach(var item in PropertyNames)
+        {
+            <MudTh>@item</MudTh>
+        }
     </HeaderContent>
     <RowTemplate>
         @BRowTemplate(@context)
@@ -20,5 +23,21 @@
 
     [Parameter]
     public RenderFragment BHeaderTemplate { get; set; }
+
+    private List<string> PropertyNames = new();
+
+    private void _setPropertyNames()
+    {
+        foreach (var item in Data)
+        {
+            var prop = item.GetType().Name;
+            PropertyNames.Add(prop);
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _setPropertyNames();   
+    }    
 
 }

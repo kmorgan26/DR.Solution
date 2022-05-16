@@ -3,9 +3,7 @@
 <BasicTable Data="MaintainerVms" TItem="MaintainerVm">
     
     <BHeaderTemplate>
-        <MudTh>ID</MudTh>
-        <MudTh>Maintainer</MudTh>
-        <MudTh></MudTh>
+        @HeaderText
     </BHeaderTemplate>
 
     <BRowTemplate>
@@ -24,4 +22,18 @@
 
     [CascadingParameter] 
     public IEnumerable<MaintainerVm> MaintainerVms { get; set; }
+
+    private string HeaderText = string.Empty;
+
+    private TableTemplateBuilder<MaintainerVm>? builder { get; set; }
+
+    private async Task BuildTableComponents()
+    {
+        HeaderText = await Task.FromResult(builder.GetHeaderTemplate());
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        //builder = new TableTemplateBuilder<MaintainerVm>(new MaintainerVm());
+        //await BuildTableComponents();
+    }
 }
