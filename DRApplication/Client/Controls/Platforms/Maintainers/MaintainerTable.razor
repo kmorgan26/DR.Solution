@@ -1,39 +1,22 @@
 ﻿@namespace DRApplication.Client.Controls.Platforms
 
-<BasicTable Data="MaintainerVms" TItem="MaintainerVm">
-    
-    <BHeaderTemplate>
-        @HeaderText
-    </BHeaderTemplate>
-
-    <BRowTemplate>
-        <MudTd DataLabel="Thread">@context.Id</MudTd>
-        <MudTd DataLabel="Thread">@context.Name</MudTd>
-        <MudTd DataLabel="SELECT">
-            <a href="/maintainer/edit/@context.Id" role="button">
-                <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>    
-            </a>
-        </MudTd>
-    </BRowTemplate>
-
-</BasicTable>
+<table class="mud-table-root">
+    <thead class="mud-table-head">
+        <tr class="mud-table-row">
+            <th scope="col" class="mud-table-cell">ID</th>
+        </tr>
+    </thead>
+    <tbody class="mud-table-body">
+        <tr class="mud-table-row">
+            <td data-label="ID" class="mud-table-cell">hi</td>
+        </tr>
+    </tbody>
+</table>
 
 @code {
 
-    [CascadingParameter] 
+    [CascadingParameter]
     public IEnumerable<MaintainerVm> MaintainerVms { get; set; }
 
-    private string HeaderText = string.Empty;
 
-    private TableTemplateBuilder<MaintainerVm>? builder { get; set; }
-
-    private async Task BuildTableComponents()
-    {
-        HeaderText = await Task.FromResult(builder.GetHeaderTemplate());
-    }
-    protected override async Task OnInitializedAsync()
-    {
-        //builder = new TableTemplateBuilder<MaintainerVm>(new MaintainerVm());
-        //await BuildTableComponents();
-    }
 }

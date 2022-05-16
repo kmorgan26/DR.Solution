@@ -1,15 +1,18 @@
 ﻿@typeparam TItem
-@inherits MudTable<TItem> 
+@inherits MudTable<TItem>
 
 <MudTable Items="Data" Hover="true" Striped="true" Dense="true">
     <HeaderContent>
-        @foreach(var item in PropertyNames)
+        @foreach (var item in _propertyNames)
         {
             <MudTh>@item</MudTh>
         }
     </HeaderContent>
     <RowTemplate>
-        @BRowTemplate(@context)
+        @foreach (var item in TableValues)
+        {
+            <MudTd DataLabel="@item.ToString()">@item.ToString()</MudTd>
+        }
     </RowTemplate>
 </MudTable>
 
@@ -24,20 +27,62 @@
     [Parameter]
     public RenderFragment BHeaderTemplate { get; set; }
 
-    private List<string> PropertyNames = new();
+    private List<string[]>? TableValues = new();
+
+    //private Dictionary<string, TItem> _dataDictionary = new();
+
+    private List<string> _propertyNames = new();
 
     private void _setPropertyNames()
     {
-        foreach (var item in Data)
+        //Working
+        Type type = Data.GetType().GetGenericArguments()[0];
+        var property = type.GetProperties();
+
+        foreach (var item in property)
         {
-            var prop = item.GetType().Name;
-            PropertyNames.Add(prop);
+            var name = item.Name;
+            _propertyNames.Add(name);
         }
+        var myString  = "<td>test</td>";
+        var html = System.Web.HttpUtility.HtmlEncode(myString);
+    }
+    private void _setTableValues()
+    {
+
+        //Make a List<Maintainer>
+        var myList = Data.ToList();
+
+        //Iterate the list for each Maintainer
+        //foreach (var item in myList)
+        //{
+        //    //Working on a single Maintainer
+
+
+        //    //Get the value of each property in the object
+        //    foreach (var property in item.GetType().GetProperties())
+        //    {
+        //        TableValues.Add(property.GetValue());
+        //    }
+        //}
+        //get the property type
+        //Type type = Data.GetType().GetGenericArguments()[0];
+        //if(type.IsGenericType && type.IsGenericTypeDefinition)
+        //{
+        //    Type[] typeParameters = type.GetGenericArguments();
+        //    foreach(Type tParam in typeParameters)
+        //    {
+        //        var name = tParam.Name;
+        //        var id = tParam.GenericParameterPosition;
+        //    }
+        //}
+
     }
 
     protected override async Task OnInitializedAsync()
     {
-        _setPropertyNames();   
-    }    
+        _setPropertyNames();
+        _setTableValues();
+    }
 
 }

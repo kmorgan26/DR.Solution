@@ -7,8 +7,23 @@
     Maintainers
 </MudText>
 
+<MaintainerTable></MaintainerTable>
+
 <NewButton Url="/maintainer/create" />
 
-<CascadingValue Value="@_maintainerVms">
-    <BasicTable Data="@_maintainerVms"/>
+@if(_maintainerVms is not null)
+{
+    <CascadingValue Value="@_maintainerVms">
+    <BasicTable Data="@_maintainerVms">
+        <BRowTemplate>
+        <MudTd DataLabel="Thread">@context.Id</MudTd>
+        <MudTd DataLabel="Thread">@context.Name</MudTd>
+        <MudTd DataLabel="Edit">
+            <a href="/maintainers/edit/@context.Id" role="button">
+                <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>    
+            </a>
+        </MudTd>
+    </BRowTemplate>
+    </BasicTable>
 </CascadingValue>
+}
