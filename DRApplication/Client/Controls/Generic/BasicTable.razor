@@ -4,7 +4,7 @@
 @namespace DRApplication.Client.Controls.Generic
 
 
-@if (_tableValues is not null && _headerNames is not null)
+@if (!isBusy)
 {
     <div class="mud-table mud-xs-table mud-table-dense mud-table-hover mud-table-striped mud-elevation-1">
         <div class="mud-table-container">
