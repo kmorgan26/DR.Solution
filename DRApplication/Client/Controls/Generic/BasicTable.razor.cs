@@ -1,11 +1,12 @@
 using DRApplication.Client.Interfaces;
+using DRApplication.Client.Requests;
 using Microsoft.AspNetCore.Components;
 namespace DRApplication.Client.Controls.Generic;
 
 public partial class BasicTable<TItem> where TItem : class
 {
     [Parameter]
-    public IEnumerable<TItem> Data { get; set; }
+    public TableRequest<TItem> Request { get; set; }
 
     [Inject]
     ITableService<TItem> TableService { get;set; }
@@ -17,8 +18,8 @@ public partial class BasicTable<TItem> where TItem : class
     protected override async Task OnInitializedAsync()
     {
         isBusy = true;
-        _headerNames = await TableService.GetHeaderNamesAsync(Data);
-        _tableValues = await TableService.GetTableValues(Data);
+        _headerNames = await TableService.GetHeaderNamesAsync(Request.Data);
+        _tableValues = await TableService.GetTableValues(Request.Data);
         isBusy = false;
     }
 }

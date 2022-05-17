@@ -20,13 +20,24 @@
                 <tbody class="mud-table-body">
                     @foreach (var item in _tableValues)
                     {
+                        var rowId = "0";
                         <tr class="mud-table-row">
                             @for (int i = 0; i < item.Count; i++)
                             {
+                                //capture the ID:
+                                if (i == 0)
+                                {
+                                    rowId = @item[i];
+                                }
+                                
                                 <td data-label="@item[i].ToString()" class="mud-table-cell">@item[i].ToString()</td>
                             }
+                            <td data-label="edit">
+                                <a href="/@Request.UrlSegment/@rowId" role="button"><MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon></a>
+                            </td>
                         </tr>
                     }
+                    
                 </tbody>
             </table>
         </div>
