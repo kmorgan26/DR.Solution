@@ -8,7 +8,12 @@
     Device Types
 </MudText>
 
-<BasicTable Data="_viewModels" TItem="DeviceTypeVm">
+@if (@_viewModels is not null)
+{
+    <BasicTable Data="@_viewModels"></BasicTable>
+}
+
+@*<BasicTable Data="_viewModels" TItem="DeviceTypeVm">
     
     <BHeaderTemplate>
         <MudTh>ID</MudTh>
@@ -29,7 +34,7 @@
         </MudTd>
     </BRowTemplate>
 
-</BasicTable>
+</BasicTable>*@
 
 @code{
 

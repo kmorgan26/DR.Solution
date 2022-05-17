@@ -1,29 +1,28 @@
 ﻿@namespace DRApplication.Client.Pages.Platforms
-@inject MaintainerManager _manager
 @page "/maintainers"
+@inject MaintainerManager _manager
 
 <MudText Typo="Typo.h3" Class="mb-4">
     <MudIcon Icon="@Icons.Material.Filled.LocalAirport" Size="Size.Large" Class="m-3" />
     Maintainers
 </MudText>
 
-<MaintainerTable></MaintainerTable>
+@if (MaintainerVms is not null)
+{
+    <BasicTable Data="@MaintainerVms"></BasicTable>
+}
+
 
 <NewButton Url="/maintainer/create" />
 
-@if(_maintainerVms is not null)
-{
-    <CascadingValue Value="@_maintainerVms">
-    <BasicTable Data="@_maintainerVms">
-        <BRowTemplate>
-        <MudTd DataLabel="Thread">@context.Id</MudTd>
-        <MudTd DataLabel="Thread">@context.Name</MudTd>
-        <MudTd DataLabel="Edit">
-            <a href="/maintainers/edit/@context.Id" role="button">
-                <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>    
-            </a>
-        </MudTd>
-    </BRowTemplate>
-    </BasicTable>
-</CascadingValue>
+@code{
+ 
+    public IEnumerable<MaintainerVm> MaintainerVms { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var items = await _manager.GetAllAsync();
+        MaintainerVms = Mapping.Mapper.Map<List<MaintainerVm>>(items);
+    }
+
 }
