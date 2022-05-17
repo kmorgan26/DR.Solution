@@ -1,20 +1,30 @@
 ﻿using DRApplication.Client.Interfaces;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Rendering;
-using MudBlazor;
 
 namespace DRApplication.Client.Services
 {
-    public class TableService<TEntity> : ITableService<TEntity> where TEntity : class
+    public class TableService<TItem> : ITableService<TItem> where TItem : class
     {
-        public MudTable<TEntity> GetMudTable(IEnumerable<TEntity> entities)
+        List<string> _headerNames = new();
+        //private List<string>[]? _tableValues;
+        
+        public Task<IEnumerable<string>> GetHeaderNamesAsync(IEnumerable<TItem> items)
         {
-            throw new NotImplementedException();
-        }
+            if (items is not null)
+            {
 
-        public RenderFragment<TEntity> GetRowTemplate(List<string> ValueList)
-        {
-            throw new NotImplementedException();
+                Type type = items.GetType().GetGenericArguments()[0];
+                var property = type.GetProperties();
+
+                foreach (var item in property)
+                {
+                    var name = item.Name;
+                    _headerNames?.Add(name);
+                }
+                if (_headerNames is not null)
+                    return Task.FromResult(_headerNames.AsEnumerable());
+            }
+            return null;
         }
+        
     }
 }

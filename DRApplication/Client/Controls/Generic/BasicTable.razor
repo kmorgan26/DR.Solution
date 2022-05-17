@@ -1,14 +1,17 @@
-﻿@typeparam TItem
-@inherits MudTable<TItem>
+﻿@typeparam TItem where TItem : class
 
-@if (_tableValues is not null && _propertyNames is not null)
+@using DRApplication.Client.Interfaces
+@namespace DRApplication.Client.Controls.Generic
+
+
+@if (_tableValues is not null && _headerNames is not null)
 {
     <div class="mud-table mud-xs-table mud-table-dense mud-table-hover mud-table-striped mud-elevation-1">
         <div class="mud-table-container">
             <table class="mud-table-root">
                 <thead class="mud-table-head">
                     <tr class="mud-table-row">
-                        @foreach (var item in _propertyNames)
+                        @foreach (var item in _headerNames)
                         {
                             <th scope="col" class="mud-table-cell">@item</th>
                         }
@@ -31,60 +34,3 @@
 
 }
 
-@code {
-
-    [Parameter]
-    public IEnumerable<TItem> Data { get; set; }
-
-    private List<string>[] _tableValues;
-
-    private List<string> _propertyNames = new();
-
-    private void _setPropertyNames()
-    {
-        //Working
-        Type type = Data.GetType().GetGenericArguments()[0];
-        var property = type.GetProperties();
-
-        foreach (var item in property)
-        {
-            var name = item.Name;
-            _propertyNames.Add(name);
-        }
-    }
-    private void _setTableValues()
-    {
-        int count = 0;
-
-        //Make a List<Maintainer>
-        var myList = Data.ToList();
-
-        //initialize the list
-        _tableValues = new List<string>[myList.Count];
-
-        //Iterate the list for each Maintainer
-        foreach (var item in myList)
-        {
-            //Working on a single Maintainer
-            //count the properties for current item
-            //int count = item.GetType().GetProperties().Count();
-
-            var newList = new List<string>();
-            //Get the value of each property in the object
-            foreach (var property in item.GetType().GetProperties())
-            {
-                var value = property.GetValue(item, null).ToString();
-                newList.Add(value);
-            }
-            _tableValues[count] = newList;
-            count++;
-        }
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        await Task.Run(() => _setPropertyNames());
-        _setTableValues();
-    }
-
-}

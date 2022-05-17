@@ -49,7 +49,7 @@
         if(_deviceTypeVms is not null)
         {
             var item = _deviceTypeVms.Where(i => i.Id == id).FirstOrDefault();
-            return item == null ? string.Empty : item.Name;
+            return item == null ? string.Empty : item.Platform;
         }
         return string.Empty;
     }

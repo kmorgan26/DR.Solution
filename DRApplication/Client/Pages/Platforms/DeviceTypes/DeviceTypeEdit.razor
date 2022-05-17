@@ -23,7 +23,7 @@
                 <MudSelect Label="Maintainer" @bind-Value="ViewModel.MaintainerId">
                     @foreach (var maintainer in _maintainerVms)
                     {
-                        <MudSelectItem Value="maintainer.Id">@maintainer.Name</MudSelectItem>
+                        <MudSelectItem Value="maintainer.Id">@maintainer.Maintainer</MudSelectItem>
                     }
                 </MudSelect>
             </MudPaper>

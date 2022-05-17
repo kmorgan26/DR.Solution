@@ -3,6 +3,5 @@
     public interface IViewModel
     {
         int Id { get; }
-        string Name { get; }
     }
 }

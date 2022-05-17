@@ -5,10 +5,11 @@ public class DeviceVm
 {
     public int Id { get; set; }
     
-    public string Name { get; set; } = string.Empty;
-    
-    public int DeviceTypeId { get; set; }
-    
+    public string Device { get; set; } = string.Empty;
+
+    [Display(Name ="Device Type")]
+    public string Platform { get; set; } = string.Empty;
+
     public bool IsActive { get; set; }
 
 }

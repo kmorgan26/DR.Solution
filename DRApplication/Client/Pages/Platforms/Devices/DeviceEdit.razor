@@ -10,7 +10,7 @@
     Edit Device Type
 </MudText>
 
-@if (@DeviceEditVm is not null && _deviceTypeVms is not null)
+@*@if (@DeviceEditVm is not null && _deviceTypeVms is not null)
 {
     <EditForm Model="DeviceEditVm" OnValidSubmit="UpdateDevice">
         <DataAnnotationsValidator />
@@ -40,37 +40,37 @@
 
 
 
-}
+}*@
 
 @code {
 
-    [Parameter]
-    public int DeviceId { get; set; }
+    //[Parameter]
+    //public int DeviceId { get; set; }
 
-    public DeviceEditVm DeviceEditVm { get; set; } = new();
+    //public DeviceEditVm DeviceEditVm { get; set; } = new();
 
-    private int SelectedDeviceTypeId;
+    //private int SelectedDeviceTypeId;
 
-    private IEnumerable<DeviceTypeVm>? _deviceTypeVms;
+    //private IEnumerable<DeviceTypeVm>? _deviceTypeVms;
 
-    void UpdateDeviceType(int? id)
-    {
-        DeviceEditVm.DeviceTypeId = Convert.ToInt32(id);
-    }
+    //void UpdateDeviceType(int? id)
+    //{
+    //    DeviceEditVm.DeviceTypeId = Convert.ToInt32(id);
+    //}
 
-    protected async Task UpdateDevice()
-    {
-        var device = Mapping.Mapper.Map<Device>(DeviceEditVm);
-        await manager.UpdateAsync(device);
-        navigation.NavigateTo("/devices");
-    }
+    //protected async Task UpdateDevice()
+    //{
+    //    var device = Mapping.Mapper.Map<Device>(DeviceEditVm);
+    //    await manager.UpdateAsync(device);
+    //    navigation.NavigateTo("/devices");
+    //}
 
-    protected override async Task OnParametersSetAsync()
-    {
-        var device = await manager.GetByIdAsync(DeviceId);
-        DeviceEditVm = Mapping.Mapper.Map<DeviceEditVm>(device);
+    //protected override async Task OnParametersSetAsync()
+    //{
+    //    var device = await manager.GetByIdAsync(DeviceId);
+    //    DeviceEditVm = Mapping.Mapper.Map<DeviceEditVm>(device);
 
-        var deviceTypes = await deviceTypeManager.GetAllAsync();
-        _deviceTypeVms = Mapping.Mapper.Map<IEnumerable<DeviceTypeVm>>(deviceTypes);
-    }
+    //    var deviceTypes = await deviceTypeManager.GetAllAsync();
+    //    _deviceTypeVms = Mapping.Mapper.Map<IEnumerable<DeviceTypeVm>>(deviceTypes);
+    //}
 }

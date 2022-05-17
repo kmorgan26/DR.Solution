@@ -1,5 +1,7 @@
 using Blazored.LocalStorage;
 using DRApplication.Client;
+using DRApplication.Client.Interfaces;
+using DRApplication.Client.Services;
 using DRApplication.Client.Services.Configurations;
 using DRApplication.Client.Services.Platforms;
 using Microsoft.AspNetCore.Components.Web;
@@ -34,6 +36,9 @@ builder.Services.AddScoped<VersionsLoadManager>();
 builder.Services.AddScoped<MaintainerManager>();
 builder.Services.AddScoped<DeviceTypeManager>();
 builder.Services.AddScoped<DeviceManager>();
+
+builder.Services.AddTransient<IPlatformService, PlatformService>();
+builder.Services.AddTransient(typeof(ITableService<>), typeof(TableService<>));
 
 builder.Services.AddBlazoredLocalStorage();
 

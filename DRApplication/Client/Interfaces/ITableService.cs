@@ -1,12 +1,8 @@
-﻿namespace DRApplication.Client.Interfaces;
-
-using Microsoft.AspNetCore.Components;
-using MudBlazor;
-
-public interface ITableService<TEntity> where TEntity : class
+﻿namespace DRApplication.Client.Interfaces
 {
-    RenderFragment<TEntity> GetRowTemplate(List<string> ValueList);
+    public interface ITableService<TItem> where TItem : class
+    {
+        Task<IEnumerable<string>> GetHeaderNamesAsync(IEnumerable<TItem> items);
 
-    MudTable<TEntity> GetMudTable(IEnumerable<TEntity> entities);
-
+    }
 }

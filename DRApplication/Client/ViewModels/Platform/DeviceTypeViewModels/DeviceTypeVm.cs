@@ -1,13 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DRApplication.Client.Interfaces;
+using System.ComponentModel.DataAnnotations;
 namespace DRApplication.Client.ViewModels.Platform;
 
-public class DeviceTypeVm
+public class DeviceTypeVm : IDeviceTypeVm
 {
     public int Id { get; set; }
-    
-    public string Name { get; set; } = string.Empty;
-    
-    public int MaintainerId { get; set; }
+
+    public string Platform { get; set; } = string.Empty;
+
+    public string Maintainer { get; set; }=string.Empty;
     
     public bool IsActive { get; set; }
 }

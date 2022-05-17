@@ -1,28 +1,30 @@
 ﻿@namespace DRApplication.Client.Pages.Platforms
 @page "/maintainers"
-@inject MaintainerManager _manager
+@using DRApplication.Client.Interfaces
+@inject IPlatformService _service
 
 <MudText Typo="Typo.h3" Class="mb-4">
     <MudIcon Icon="@Icons.Material.Filled.LocalAirport" Size="Size.Large" Class="m-3" />
     Maintainers
 </MudText>
 
-@if (MaintainerVms is not null)
+@if (!_isBusy)
 {
-    <BasicTable Data="@MaintainerVms"></BasicTable>
+    <BasicTable Data="_viewModels" TItem="MaintainerVm"></BasicTable>
 }
-
 
 <NewButton Url="/maintainer/create" />
 
 @code{
- 
-    public IEnumerable<MaintainerVm> MaintainerVms { get; set; }
+
+    bool _isBusy;
+
+    public IEnumerable<MaintainerVm> _viewModels { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        var items = await _manager.GetAllAsync();
-        MaintainerVms = Mapping.Mapper.Map<List<MaintainerVm>>(items);
+        _isBusy = true;
+        _viewModels = await _service.GetMaintainerVmsAsync();
+        _isBusy = false;
     }
-
 }

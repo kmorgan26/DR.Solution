@@ -1,61 +1,26 @@
-﻿@namespace DRApplication.Client.Pages.Platforms
-@page "/deviceTypes"
-@inject DeviceTypeManager _manager
-@inject MaintainerManager _maintainerManager
+﻿@page "/deviceTypes"
+@namespace DRApplication.Client.Pages.Platforms
+@using DRApplication.Client.Interfaces
+@inject IPlatformService _platformService
 
 <MudText Typo="Typo.h3" Class="mb-4">
     <MudIcon Icon="@Icons.Material.Filled.LocalAirport" Size="Size.Large" Class="m-3" />
     Device Types
 </MudText>
 
-@if (@_viewModels is not null)
+@if (!isBusy)
 {
-    <BasicTable Data="@_viewModels"></BasicTable>
+    <BasicTable Data="_viewModels" TItem="DeviceTypeVm"></BasicTable>
 }
 
-@*<BasicTable Data="_viewModels" TItem="DeviceTypeVm">
-    
-    <BHeaderTemplate>
-        <MudTh>ID</MudTh>
-        <MudTh>DeviceType</MudTh>
-        <MudTh>Maintainer</MudTh>
-        <MudTh>IsActive?</MudTh>
-    </BHeaderTemplate>
-
-    <BRowTemplate>
-        <MudTd DataLabel="Thread">@context.Id</MudTd>
-        <MudTd DataLabel="Thread">@context.Name</MudTd>
-        <MudTd DataLabel="Maintainer">@GetMaintainer(@context.MaintainerId)</MudTd>
-        <MudTd DataLabel="IsActive">@context.IsActive</MudTd>
-        <MudTd DataLabel="Edit">
-            <a href="/devicetype/edit/@context.Id" role="button">
-                <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>    
-            </a>
-        </MudTd>
-    </BRowTemplate>
-
-</BasicTable>*@
-
 @code{
-
+    bool isBusy;
     private IEnumerable<DeviceTypeVm>? _viewModels;
-    private IEnumerable<MaintainerVm>? _maintainerVms;
 
     protected override async Task OnInitializedAsync()
     {
-        var items = await _manager.GetAllAsync();
-        _viewModels = Mapping.Mapper.Map<List<DeviceTypeVm>>(items);
-
-        var foreignItems = await _maintainerManager.GetAllAsync();
-        _maintainerVms = Mapping.Mapper.Map<List<MaintainerVm>>(foreignItems);
-    }
-    private string GetMaintainer(int id)
-    {
-        if(_maintainerVms is not null)
-        {
-            var item = _maintainerVms.Where(i => i.Id == id).FirstOrDefault();
-            return item == null ? string.Empty : item.Name;
-        }
-        return string.Empty;
+        isBusy = true;
+        _viewModels = await _platformService.GetDeviceTypeVmsAsync();
+       isBusy = false;
     }
 }
