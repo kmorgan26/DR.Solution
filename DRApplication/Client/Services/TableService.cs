@@ -1,4 +1,7 @@
 ﻿using DRApplication.Client.Interfaces;
+using DRApplication.Client.Requests;
+using System.Data;
+using System.Web;
 
 namespace DRApplication.Client.Services
 {
@@ -6,7 +9,12 @@ namespace DRApplication.Client.Services
     {
         List<string> _headerNames = new();
         private List<string>[]? _tableValues;
-        
+
+        public Task<string> CreateTable()
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<IEnumerable<string>> GetHeaderNamesAsync(IEnumerable<TItem> items)
         {
             if (items is not null)
@@ -20,6 +28,8 @@ namespace DRApplication.Client.Services
                     var name = item.Name;
                     _headerNames?.Add(name);
                 }
+                _headerNames?.Add("Edit");
+
                 if (_headerNames is not null)
                     return Task.FromResult(_headerNames.AsEnumerable());
             }
@@ -42,10 +52,11 @@ namespace DRApplication.Client.Services
                 //count the properties for current item
                 var newList = new List<string>();
 
+                var value = string.Empty;
                 //Get the value of each property in the object
                 foreach (var property in item.GetType().GetProperties())
                 {
-                    var value = property.GetValue(item, null).ToString();
+                    value = property.GetValue(item, null).ToString();
                     newList.Add(value);
                 }
 
