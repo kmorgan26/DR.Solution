@@ -1,21 +1,26 @@
 ﻿@page "/deviceTypes"
 @namespace DRApplication.Client.Pages.Platforms
-@using DRApplication.Client.Interfaces
 @inject IPlatformService _platformService
 
-<MudText Typo="Typo.h3" Class="mb-4">
-    <MudIcon Icon="@Icons.Material.Filled.LocalAirport" Size="Size.Large" Class="m-3" />
-    Device Types
-</MudText>
+<TitleHeader IconPath="@Icons.Material.Filled.LocalAirport" TitleText="Device Types" />
 
 @if (!isBusy)
 {
-    <BasicTable Data="_viewModels" TItem="DeviceTypeVm"></BasicTable>
+    <BasicTable Request="_tableRequest()" TItem="DeviceTypeVm"></BasicTable>
 }
 
 @code{
     bool isBusy;
     private IEnumerable<DeviceTypeVm>? _viewModels;
+
+    private TableRequest<DeviceTypeVm> _tableRequest()
+    {
+        return new TableRequest<DeviceTypeVm>()
+        { 
+            Data = _viewModels, 
+            UrlSegment = "devicetype/edit"
+        };
+    }
 
     protected override async Task OnInitializedAsync()
     {
