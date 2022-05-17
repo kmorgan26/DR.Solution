@@ -1,7 +1,6 @@
 ﻿using DRApplication.Client.Interfaces;
 using DRApplication.Client.Requests;
 using DRApplication.Client.ViewModels.Platform;
-using Microsoft.AspNetCore.Mvc;
 
 namespace DRApplication.Client.Services
 {
