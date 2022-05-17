@@ -1,6 +1,7 @@
 ﻿@namespace DRApplication.Client.Pages.Platforms
 @page "/maintainers"
 @using DRApplication.Client.Interfaces
+@using DRApplication.Client.Requests
 @inject IPlatformService _service
 
 <MudText Typo="Typo.h3" Class="mb-4">
@@ -10,21 +11,7 @@
 
 @if (!_isBusy)
 {
-    <BasicTable Data="_viewModels" TItem="MaintainerVm"></BasicTable>
+    <BasicTable Request="_tableRequest()" TItem="MaintainerVm"></BasicTable>
 }
 
 <NewButton Url="/maintainer/create" />
-
-@code{
-
-    bool _isBusy;
-
-    public IEnumerable<MaintainerVm> _viewModels { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        _isBusy = true;
-        _viewModels = await _service.GetMaintainerVmsAsync();
-        _isBusy = false;
-    }
-}
