@@ -5,13 +5,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace DRApplication.Shared.Models.DeviceModels
 {
-    [Table("Maintainers")]
     public partial class Maintainer
     {
-        [Dapper.Contrib.Extensions.Key]
         public int Id { get; set; }
 
         public string Name { get; set; } = null!;
+
+        public IEnumerable<DeviceType> DeviceTypes { get; set; } = new List<DeviceType>();
 
     }
 }
