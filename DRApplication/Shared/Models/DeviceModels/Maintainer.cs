@@ -11,7 +11,5 @@ namespace DRApplication.Shared.Models.DeviceModels
 
         public string Name { get; set; } = null!;
 
-        public IEnumerable<DeviceType> DeviceTypes { get; set; } = new List<DeviceType>();
-
     }
 }

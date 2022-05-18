@@ -13,7 +13,7 @@ namespace DRApplication.Shared.Models.DeviceModels
         public int MaintainerId { get; set; }
         public bool IsActive { get; set; }
 
-        public IEnumerable<Device> Devices { get; set; } = new List<Device>();
+        //public IEnumerable<Device> Devices { get; set; } = new List<Device>();
 
         //public virtual ICollection<Drrb> Drrbs { get; set; }
         //public virtual ICollection<HardwareConfig> HardwareConfigs { get; set; }
