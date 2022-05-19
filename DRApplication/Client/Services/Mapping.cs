@@ -74,7 +74,10 @@ namespace DRApplication.Client.Services
             CreateMap<Device, DeviceVm>().ReverseMap();
 
             CreateMap<Maintainer, GenericListVm>();
-            CreateMap<Maintainer, MaintainerVm>().ReverseMap();
+            CreateMap<Maintainer, MaintainerVm>()
+                .ForMember(dest => dest.Maintainer,
+                    opts => opts.MapFrom(src => src.Name))
+                .ReverseMap();
             CreateMap<Maintainer, MaintainerEditVm>().ReverseMap();
 
         }

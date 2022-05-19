@@ -1,15 +1,30 @@
 ﻿@namespace DRApplication.Client.Pages.Platforms
 @page "/maintainers"
-@inject IPlatformService _service
 
-<MudText Typo="Typo.h3" Class="mb-4">
-    <MudIcon Icon="@Icons.Material.Filled.LocalAirport" Size="Size.Large" Class="m-3" />
-    Maintainers
-</MudText>
+@inject MaintainerManager _db
 
-@if (!_isBusy)
-{
-    <BasicTable Request="_tableRequest()" TItem="MaintainerVm"></BasicTable>
-}
+<TitleHeader IconPath="@Icons.Material.Filled.LocalAirport" TitleText="Maintainers" />
 
 <NewButton Url="/maintainer/create" />
+@if (!_isBusy)
+{
+    <BasicMudTable Items="@_viewModels" Loading="@_isBusy" RowEditCommit="SaveChanges" >
+        <HeaderContent>
+            <MudTh>Id</MudTh>
+            <MudTh>Maintainer</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Id">@context.Id</MudTd>
+            <MudTd DataLabel="Maintainer">@context.Maintainer</MudTd>
+        </RowTemplate>
+
+        <RowEditTemplate>
+            <MudTd DataLabel="Id">@context.Id</MudTd>
+            <MudTd DataLabel="Maintainer">
+                <MudTextField @bind-Value="@context.Maintainer" Required />
+            </MudTd>
+        </RowEditTemplate>
+
+    </BasicMudTable>
+    
+}

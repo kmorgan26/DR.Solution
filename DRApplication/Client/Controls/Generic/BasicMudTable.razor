@@ -1,0 +1,66 @@
+﻿@typeparam TItem
+@inherits MudTable<TItem>
+
+<MudTable Items="@Items" 
+    @bind-SelectedItem="_selectedItem"
+    Hover="true" 
+    Breakpoint="Breakpoint.Sm" 
+    Loading="@Loading" 
+    CommitEditTooltip="Save Changes"
+    IsEditRowSwitchingBlocked="true"
+    RowEditCommit="@ItemHasBeenCommited"
+    OnCommitEditClick="OnCommitEditClick"
+    LoadingProgressColor="Color.Info" >
+
+    <HeaderContent>
+        @HeaderContent
+    </HeaderContent>
+
+    <RowTemplate>
+        @RowTemplate?(@context)
+    </RowTemplate>
+
+    <RowEditingTemplate>
+        @RowEditTemplate?(@context)
+    </RowEditingTemplate>
+
+</MudTable>
+
+@code{
+
+    [Parameter]
+    public IEnumerable<TItem>? Items { get; set; }
+
+    [Parameter]
+    public bool Loading { get; set; }
+
+    [Parameter]
+    public RenderFragment? HeaderContent { get; set; }
+
+    [Parameter]
+    public RenderFragment<TItem>? RowTemplate { get; set; }
+
+    [Parameter]
+    public RenderFragment<TItem>? RowEditTemplate { get; set; }
+
+    public EventCallback<TItem> OnRowCommited { get; set; }
+
+    private TItem _selectedItem;
+
+    private async Task OnCommitEditClick(MouseEventArgs e)
+    {
+        await  OnRowCommited.InvokeAsync(_selectedItem);
+    }
+
+    private void ItemHasBeenCommited(object element)
+    {
+        AddEditionEvent((TItem)element);
+    }
+    private async Task AddEditionEvent(TItem item)
+    {
+        await  OnRowCommited.InvokeAsync(item);
+        StateHasChanged();
+    }
+    private List<string> editEvents = new();
+
+}
