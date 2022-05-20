@@ -8,7 +8,9 @@
     Loading="@Loading" 
     CommitEditTooltip="Save Changes"
     IsEditRowSwitchingBlocked="true"
-    RowEditCommit="@ItemHasBeenCommited"
+    OnRowClick="OnRowClicked"
+    RowEditCommit="RowEditCommited"
+
     OnCommitEditClick="OnCommitEditClick"
     LoadingProgressColor="Color.Info" >
 
@@ -43,24 +45,23 @@
     [Parameter]
     public RenderFragment<TItem>? RowEditTemplate { get; set; }
 
+    [Parameter]
     public EventCallback<TItem> OnRowCommited { get; set; }
+
+    [Parameter]
+    public EventCallback<TableRowClickEventArgs<TItem>> OnRowClicked { get; set; }
 
     private TItem _selectedItem;
 
-    private async Task OnCommitEditClick(MouseEventArgs e)
+    private async Task RowClicked(TableRowClickEventArgs<TItem> args)
     {
-        await  OnRowCommited.InvokeAsync(_selectedItem);
+        await OnRowClicked.InvokeAsync(args);
+    }
+    private async Task RowEditCommited(TItem item)
+    {
+        await OnRowCommited.InvokeAsync(item);
     }
 
-    private void ItemHasBeenCommited(object element)
-    {
-        AddEditionEvent((TItem)element);
-    }
-    private async Task AddEditionEvent(TItem item)
-    {
-        await  OnRowCommited.InvokeAsync(item);
-        StateHasChanged();
-    }
     private List<string> editEvents = new();
 
 }

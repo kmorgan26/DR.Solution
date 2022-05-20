@@ -18,7 +18,7 @@ public partial class Maintainers
         _viewModels = Mapping.Mapper.Map<IEnumerable<MaintainerVm>>(models);
         _isBusy = false;
     }
-    private void RowEditPreview()
+    private void RowClicked()
     {
 
     }

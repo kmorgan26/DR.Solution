@@ -8,7 +8,7 @@
 <NewButton Url="/maintainer/create" />
 @if (!_isBusy)
 {
-    <BasicMudTable Items="@_viewModels" Loading="@_isBusy" RowEditCommit="SaveChanges" >
+    <BasicMudTable Items="@_viewModels" Loading="@_isBusy" OnRowClick="@RowClicked" >
         <HeaderContent>
             <MudTh>Id</MudTh>
             <MudTh>Maintainer</MudTh>
