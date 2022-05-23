@@ -2,10 +2,11 @@
 @inherits MudTable<TItem>
 
 <MudTable Items="@Items" 
-    @bind-SelectedItem="_selectedItem"
-    Hover="true" 
-    Breakpoint="Breakpoint.Sm" 
     Loading="@Loading" 
+    LoadingContent="@LoadingContent"
+    @bind-SelectedItem="_selectedItem"
+    Hover = "true"
+    Breakpoint="Breakpoint.Sm" 
     CommitEditTooltip="Save Changes"
     IsEditRowSwitchingBlocked="true"
     OnRowClick="OnRowClicked"
@@ -29,12 +30,21 @@
 </MudTable>
 
 @code{
+    //@inherits MudTable<TItem> <---removed from above
 
     [Parameter]
     public IEnumerable<TItem>? Items { get; set; }
 
     [Parameter]
     public bool Loading { get; set; }
+
+    [Parameter]
+    public RenderFragment LoadingContent { get; set; }
+
+    [Parameter]
+    public Color LoadingProgressColor { get; set; }
+
+
 
     [Parameter]
     public RenderFragment? HeaderContent { get; set; }
