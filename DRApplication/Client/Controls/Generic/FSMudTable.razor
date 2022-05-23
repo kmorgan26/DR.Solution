@@ -1,7 +1,12 @@
 ﻿@typeparam TItem
 @inherits MudTable<TItem>
 
-<MudTable Items = "TableItems" Hover="true" Breakpoint="Breakpoint.Sm">
+<MudTable Items = "TableItems" 
+    Hover="true" 
+    Dense="true" 
+    Breakpoint="Breakpoint.Sm"
+    @bind-SelectedItem="_selectedItem"
+>
 
     <HeaderContent>
         @FSHeaderContent
@@ -14,7 +19,9 @@
 </MudTable>
 
 @code {
-    
+
+    private TItem _selectedItem;
+
     [Parameter]
     public IEnumerable<TItem>? TableItems { get; set; }
 
