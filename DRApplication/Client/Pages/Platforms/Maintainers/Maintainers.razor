@@ -8,30 +8,22 @@
 <NewButton Url="/maintainer/create" />
 @if (!_isBusy)
 {
-    <BasicMudTable Items="@_viewModels" Loading="@_isBusy" >
-        <HeaderContent>
+    <FSMudTable TableItems="_viewModels" TItem="MaintainerVm">
+        <FSHeaderContent>
             <MudTh>Id</MudTh>
             <MudTh>Maintainer</MudTh>
-        </HeaderContent>
-        <RowTemplate>
+        </FSHeaderContent>
+        <FSRowTemplate>
             <MudTd DataLabel="Id">@context.Id</MudTd>
             <MudTd DataLabel="Maintainer">@context.Maintainer</MudTd>
-        </RowTemplate>
-
-        <RowEditTemplate>
-            <MudTd DataLabel="Id">@context.Id</MudTd>
-            <MudTd DataLabel="Maintainer">
-                <MudTextField @bind-Value="@context.Maintainer" Required />
-            </MudTd>
-        </RowEditTemplate>
-
-    </BasicMudTable>
+        </FSRowTemplate>
+    </FSMudTable>
     
 }
 
 @code{
     bool _isBusy;
-    public IEnumerable<MaintainerVm> _viewModels { get; set; }
+    public IEnumerable<MaintainerVm>? _viewModels { get; set; }
     
 
     protected override async Task OnInitializedAsync()

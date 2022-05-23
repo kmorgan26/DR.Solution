@@ -1,0 +1,34 @@
+﻿@typeparam TItem
+@inherits MudTable<TItem>
+
+<MudTable Items = "TableItems" Hover="true" Breakpoint="Breakpoint.Sm">
+
+    <HeaderContent>
+        @FSHeaderContent
+    </HeaderContent>
+
+    <RowTemplate>
+        @FSRowTemplate?(@context)
+    </RowTemplate>
+
+    <RowEditingTemplate>
+        @FSRowEditTemplate(@context)
+    </RowEditingTemplate>
+
+</MudTable>
+
+@code {
+    
+    [Parameter]
+    public IEnumerable<TItem>? TableItems { get; set; }
+
+    [Parameter]
+    public RenderFragment? FSHeaderContent { get; set; }
+
+    [Parameter]
+    public RenderFragment<TItem>? FSRowTemplate { get; set; }
+
+    [Parameter]
+    public RenderFragment<TItem>? FSRowEditTemplate { get; set; }
+
+}
