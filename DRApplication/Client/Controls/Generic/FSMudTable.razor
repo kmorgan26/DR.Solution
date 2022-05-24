@@ -6,6 +6,7 @@
     Dense="true" 
     Breakpoint="Breakpoint.Sm"
     @bind-SelectedItem="_selectedItem"
+    RowEditCommit="RowCommited"
 >
 
     <HeaderContent>
@@ -23,7 +24,14 @@
 
 @code {
 
+    private EventCallback<TItem> OnRowCommited { get; set; }
+
     private TItem _selectedItem;
+
+    private void RowCommited(object e)
+    {
+        //await OnRowCommited.Invoke(e);
+    }
 
     [Parameter]
     public IEnumerable<TItem>? TableItems { get; set; }

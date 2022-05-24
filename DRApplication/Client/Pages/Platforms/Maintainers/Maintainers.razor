@@ -8,7 +8,7 @@
 <NewButton Url="/maintainer/create" />
 @if (!_isBusy)
 {
-    <FSMudTable TableItems="_viewModels" TItem="MaintainerVm">
+    <FSMudTable TableItems="_viewModels" TItem="MaintainerVm" RowEditCommit="UpdateRowItem">
         <FSHeaderContent>
             <MudTh>Id</MudTh>
             <MudTh>Maintainer</MudTh>
@@ -30,7 +30,12 @@
 @code{
     bool _isBusy;
     public IEnumerable<MaintainerVm>? _viewModels { get; set; }
-    
+
+    private void UpdateRowItem(object e)
+    {
+        var viewModel = (MaintainerVm)e;
+
+    }
 
     protected override async Task OnInitializedAsync()
     {
