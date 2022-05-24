@@ -1,8 +1,9 @@
 ﻿@page "/"
 @namespace DRApplication.Client.Pages
+@inject IPlatformService PlatformService
 
 <MudGrid Spacing="2" Justify="Justify.Center">
-    @if (items is not null)
+    @if (!_isBusy && items is not null)
     {
         @foreach (var item in items)
         {
@@ -10,7 +11,7 @@
                 <MudCard>
                     <MudPaper Class="d-flex justify-center" Elevation="0">
                         <MudCardHeader>
-                            <MudIcon Icon="@Icons.Filled.Link" Color="Color.Primary" Size="Size.Small"/>
+                            <MudIcon Icon="@Icons.Filled.Link" Color="Color.Primary" Size="Size.Small" Class="mr-1"/>
                             <MudLink Href="@($"/devices/list/{@item.Id}")">@item.Platform</MudLink>
                         </MudCardHeader>
                     </MudPaper>

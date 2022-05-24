@@ -7,16 +7,12 @@ namespace DRApplication.Client.Pages;
 public partial class Index
 {
     IEnumerable<DeviceTypeVm>? items;
-
-    [Inject]
-    public DeviceTypeManager? DeviceTypeManager { get; set; }
-    
+    bool _isBusy;
     protected override async Task OnInitializedAsync()
     {
-        if(DeviceTypeManager is not null)
-        {
-            var deviceTypes = await DeviceTypeManager.GetAllAsync();
-            items = Mapping.Mapper.Map<IEnumerable<DeviceTypeVm>>(deviceTypes);
-        }        
+        _isBusy = true;
+        var deviceTypeVms = await PlatformService.GetDeviceTypeVmsAsync();
+        items = Mapping.Mapper.Map<IEnumerable<DeviceTypeVm>>(deviceTypeVms);
+        _isBusy = false;
     }
 }
