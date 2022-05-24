@@ -8,7 +8,7 @@ namespace DRApplication.Client.Controls.Platforms
     public partial class MaintainerTable
     {
         [Parameter]
-        public IEnumerable<MaintainerVm>? _viewModels { get; set; }
+        public IEnumerable<MaintainerVm>? MaintainerVms { get; set; }
 
         private async Task UpdateRowItem(object e)
         {
