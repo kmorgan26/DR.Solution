@@ -15,6 +15,9 @@
     <RowTemplate>
         @FSRowTemplate(@context)
     </RowTemplate>
+    <RowEditingTemplate>
+        @FSRowEditingTemplate(@context)
+    </RowEditingTemplate>
 
 </MudTable>
 
@@ -30,5 +33,8 @@
 
     [Parameter]
     public RenderFragment<TItem>? FSRowTemplate { get; set; }
+
+    [Parameter]
+    public RenderFragment<TItem>? FSRowEditingTemplate { get; set; }
 
 }
