@@ -6,37 +6,15 @@
 <TitleHeader IconPath="@Icons.Material.Filled.LocalAirport" TitleText="Maintainers" />
 
 <NewButton Url="/maintainer/create" />
+
 @if (!_isBusy)
 {
-    <FSMudTable TableItems="_viewModels" TItem="MaintainerVm" OnRowCommited="UpdateRowItem">
-        <FSHeaderContent>
-            <MudTh>Id</MudTh>
-            <MudTh>Maintainer</MudTh>
-        </FSHeaderContent>
-        <FSRowTemplate>
-            <MudTd DataLabel="Id">@context.Id</MudTd>
-            <MudTd DataLabel="Maintainer">@context.Maintainer</MudTd>
-        </FSRowTemplate>
-        <FSRowEditingTemplate>
-            <MudTd DataLabel="Id">@context.Id</MudTd>
-            <MudTd DataLabel="Maintainer">
-                <MudTextField @bind-Value="@context.Maintainer" />
-            </MudTd>
-        </FSRowEditingTemplate>
-    </FSMudTable>
-
+    <MaintainerTable _viewModels="_viewModels"></MaintainerTable>
 }
 
 @code{
     bool _isBusy;
     public IEnumerable<MaintainerVm>? _viewModels { get; set; }
-
-    private async Task UpdateRowItem(object e)
-    {
-        var viewModel = (MaintainerVm)e;
-        var model = Mapping.Mapper.Map<Maintainer>(viewModel);
-        _db.UpdateAsync(model);
-    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -44,13 +22,5 @@
         var models = await _db.GetAllAsync();
         _viewModels = Mapping.Mapper.Map<IEnumerable<MaintainerVm>>(models);
         _isBusy = false;
-    }
-    
-    private List<string> _editEvents = new();
-
-    private void SaveChanges(MaintainerVm maintainerVm)
-    {
-        var maintainer = Mapping.Mapper.Map<Maintainer>(maintainerVm);
-        _db.UpdateAsync(maintainer);
     }
 }

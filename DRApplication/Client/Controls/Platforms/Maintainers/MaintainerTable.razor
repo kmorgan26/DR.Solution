@@ -1,27 +1,37 @@
 ﻿@namespace DRApplication.Client.Controls.Platforms
+@inject MaintainerManager _db
 
-<div class="mud-table mud-xs-table mud-table-dense mud-table-hover mud-table-striped mud-elevation-1">
-    <div class="mud-table-container">
-        <table class="mud-table-root">
-            <thead class="mud-table-head">
-                <tr class="mud-table-row">
-                    <th scope="col" class="mud-table-cell">ID</th>
-                </tr>
-            </thead>
-            <tbody class="mud-table-body">
-                <tr class="mud-table-row">
-                    <td data-label="ID" class="mud-table-cell">hi</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
+<FSMudTable TableItems="_viewModels" TItem="MaintainerVm" OnRowCommited="UpdateRowItem">
+
+        <FSHeaderContent>
+            <MudTh>Id</MudTh>
+            <MudTh>Maintainer</MudTh>
+        </FSHeaderContent>
+
+        <FSRowTemplate>
+            <MudTd DataLabel="Id">@context.Id</MudTd>
+            <MudTd DataLabel="Maintainer">@context.Maintainer</MudTd>
+        </FSRowTemplate>
+
+        <FSRowEditingTemplate>
+            <MudTd DataLabel="Id">@context.Id</MudTd>
+            <MudTd DataLabel="Maintainer">
+                <MudTextField @bind-Value="@context.Maintainer" />
+            </MudTd>
+        </FSRowEditingTemplate>
+
+    </FSMudTable>
 
 
 @code {
+    [Parameter]
+    public IEnumerable<MaintainerVm>? _viewModels { get; set; }
 
-    [CascadingParameter]
-    public IEnumerable<MaintainerVm> MaintainerVms { get; set; }
-
+    private async Task UpdateRowItem(object e)
+    {
+        var viewModel = (MaintainerVm)e;
+        var model = Mapping.Mapper.Map<Maintainer>(viewModel);
+        await _db.UpdateAsync(model);
+    }
 
 }

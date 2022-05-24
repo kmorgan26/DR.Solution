@@ -2,11 +2,12 @@
 @inherits MudTable<TItem>
 
 <MudTable Items = "TableItems" 
-    Hover="true" 
-    Dense="true" 
-    Breakpoint="Breakpoint.Sm"
-    @bind-SelectedItem="_selectedItem"
-    RowEditCommit="RowCommited"
+        Hover="true" 
+        Dense="true" 
+        Breakpoint="Breakpoint.Sm"
+        @bind-SelectedItem="_selectedItem"
+        RowEditCommit="RowCommited"
+        IsEditRowSwitchingBlocked = "true"
 >
 
     <HeaderContent>
