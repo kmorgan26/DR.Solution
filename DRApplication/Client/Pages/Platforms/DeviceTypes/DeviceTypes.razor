@@ -4,28 +4,20 @@
 
 <TitleHeader IconPath="@Icons.Material.Filled.LocalAirport" TitleText="Device Types" />
 
-@if (!isBusy)
+@if (!_isBusy)
 {
-    <BasicTable Request="_tableRequest()" TItem="DeviceTypeVm"></BasicTable>
+    <DeviceTypeTable DeviceTypeVms=_viewModels></DeviceTypeTable>
 }
 
-@code{
-    bool isBusy;
-    private IEnumerable<DeviceTypeVm>? _viewModels;
+@code {
 
-    private TableRequest<DeviceTypeVm> _tableRequest()
-    {
-        return new TableRequest<DeviceTypeVm>()
-        { 
-            Data = _viewModels, 
-            UrlSegment = "devicetype/edit"
-        };
-    }
+    bool _isBusy;
+    private IEnumerable<DeviceTypeVm>? _viewModels;
 
     protected override async Task OnInitializedAsync()
     {
-        isBusy = true;
+        _isBusy = true;
         _viewModels = await _platformService.GetDeviceTypeVmsAsync();
-       isBusy = false;
+        _isBusy = false;
     }
 }

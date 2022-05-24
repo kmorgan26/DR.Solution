@@ -41,6 +41,7 @@ public class PlatformService : IPlatformService
             Id = dt.Id,
             Platform = dt.Name,
             IsActive = dt.IsActive,
+            MaintainerId = dt.MaintainerId,
             Maintainer = maintainers
                     .Where(m => m.Id == dt.MaintainerId).FirstOrDefault().Name
         });

@@ -1,5 +1,36 @@
-﻿<h3>DeviceTypeTable</h3>
+﻿@namespace DRApplication.Client.Controls.Platforms
+@inject DeviceTypeManager _db
+@inject IPlatformService PlatformService
 
-@code {
+<FSMudTable TableItems="DeviceTypeVms" TItem="DeviceTypeVm" OnRowCommited="UpdateRowItem">
 
-}
+    <FSHeaderContent>
+        <MudTh>Id</MudTh>
+        <MudTh>Platform</MudTh>
+        <MudTd>Maintainer</MudTd>
+        <MudTd>Active?</MudTd>
+    </FSHeaderContent>
+
+    <FSRowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Platform">@context.Platform</MudTd>
+        <MudTd DataLabel="Maintainer">@context.Maintainer</MudTd>
+        <MudTd DataLabel="Active?">@context.IsActive</MudTd>
+    </FSRowTemplate>
+
+    <FSRowEditingTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Platform">
+            <MudTextField @bind-Value="@context.Platform" />
+        </MudTd>
+        <MudTd DataLabel="Maintainer">
+            <MudSelect Label="Maintainer" @bind-Value="@context.MaintainerId">
+                @foreach (var maintainer in _maintainers)
+                {
+                    <MudSelectItem Value="maintainer.Id">@maintainer.Maintainer</MudSelectItem>
+                }
+            </MudSelect>
+        </MudTd>
+    </FSRowEditingTemplate>
+
+</FSMudTable>
