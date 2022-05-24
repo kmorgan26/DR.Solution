@@ -8,7 +8,7 @@
 <NewButton Url="/maintainer/create" />
 @if (!_isBusy)
 {
-    <FSMudTable TableItems="_viewModels" TItem="MaintainerVm" RowEditCommit="UpdateRowItem">
+    <FSMudTable TableItems="_viewModels" TItem="MaintainerVm" OnRowCommited="UpdateRowItem">
         <FSHeaderContent>
             <MudTh>Id</MudTh>
             <MudTh>Maintainer</MudTh>
@@ -31,10 +31,11 @@
     bool _isBusy;
     public IEnumerable<MaintainerVm>? _viewModels { get; set; }
 
-    private void UpdateRowItem(object e)
+    private async Task UpdateRowItem(object e)
     {
         var viewModel = (MaintainerVm)e;
-
+        var model = Mapping.Mapper.Map<Maintainer>(viewModel);
+        _db.UpdateAsync(model);
     }
 
     protected override async Task OnInitializedAsync()

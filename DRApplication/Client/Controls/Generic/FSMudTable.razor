@@ -24,14 +24,13 @@
 
 @code {
 
-    private EventCallback<TItem> OnRowCommited { get; set; }
 
     private TItem _selectedItem;
 
-    private void RowCommited(object e)
-    {
-        //await OnRowCommited.Invoke(e);
-    }
+    private void RowCommited(object e) => OnRowCommited.InvokeAsync((TItem)e);
+
+    [Parameter]
+    public EventCallback<TItem> OnRowCommited { get; set; }
 
     [Parameter]
     public IEnumerable<TItem>? TableItems { get; set; }
