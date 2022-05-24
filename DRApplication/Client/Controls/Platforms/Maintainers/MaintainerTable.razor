@@ -21,17 +21,3 @@
         </FSRowEditingTemplate>
 
     </FSMudTable>
-
-
-@code {
-    [Parameter]
-    public IEnumerable<MaintainerVm>? _viewModels { get; set; }
-
-    private async Task UpdateRowItem(object e)
-    {
-        var viewModel = (MaintainerVm)e;
-        var model = Mapping.Mapper.Map<Maintainer>(viewModel);
-        await _db.UpdateAsync(model);
-    }
-
-}
