@@ -1,7 +1,7 @@
 using DRApplication.Client.Interfaces;
 using DRApplication.Client.Requests;
 using Microsoft.AspNetCore.Components;
-namespace DRApplication.Client.Controls.Generic;
+namespace DRApplication.Client.Controls;
 
 public partial class BasicTable<TItem> where TItem : class
 {

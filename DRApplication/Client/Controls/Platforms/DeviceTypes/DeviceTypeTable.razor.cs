@@ -6,6 +6,8 @@ namespace DRApplication.Client.Controls.Platforms;
 
 public partial class DeviceTypeTable
 {
+    bool _isBusy;
+
     [Parameter]
     public IEnumerable<DeviceTypeVm>? DeviceTypeVms { get; set; }
 
@@ -20,7 +22,11 @@ public partial class DeviceTypeTable
 
     protected override async Task OnInitializedAsync()
     {
+        _isBusy = true;
+        DeviceTypeVms = await PlatformService.GetDeviceTypeVmsAsync();
+
         var list = await PlatformService.GetMaintainerVmsAsync();
         _maintainers = list.ToList();
+        _isBusy = false;
     }
 }

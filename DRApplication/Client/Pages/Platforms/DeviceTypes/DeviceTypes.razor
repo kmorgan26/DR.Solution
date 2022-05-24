@@ -4,20 +4,4 @@
 
 <TitleHeader IconPath="@Icons.Material.Filled.LocalAirport" TitleText="Device Types" />
 
-@if (!_isBusy)
-{
-    <DeviceTypeTable DeviceTypeVms=_viewModels></DeviceTypeTable>
-}
-
-@code {
-
-    bool _isBusy;
-    private IEnumerable<DeviceTypeVm>? _viewModels;
-
-    protected override async Task OnInitializedAsync()
-    {
-        _isBusy = true;
-        _viewModels = await _platformService.GetDeviceTypeVmsAsync();
-        _isBusy = false;
-    }
-}
+<DeviceTypeTable></DeviceTypeTable>

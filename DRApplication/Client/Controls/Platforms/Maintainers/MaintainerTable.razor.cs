@@ -7,6 +7,8 @@ namespace DRApplication.Client.Controls.Platforms
 {
     public partial class MaintainerTable
     {
+        bool _isBusy;
+
         [Parameter]
         public IEnumerable<MaintainerVm>? MaintainerVms { get; set; }
 
@@ -15,6 +17,14 @@ namespace DRApplication.Client.Controls.Platforms
             var viewModel = (MaintainerVm)e;
             var model = Mapping.Mapper.Map<Maintainer>(viewModel);
             await _db.UpdateAsync(model);
+        }
+
+        protected override async Task OnInitializedAsync()
+        {
+            _isBusy = true;
+            var models = await _db.GetAllAsync();
+            MaintainerVms = Mapping.Mapper.Map<IEnumerable<MaintainerVm>>(models);
+            _isBusy = false;
         }
     }
 }

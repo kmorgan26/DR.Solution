@@ -2,25 +2,8 @@
 @page "/maintainers"
 @inject MaintainerManager _db
 
-
 <TitleHeader IconPath="@Icons.Material.Filled.LocalAirport" TitleText="Maintainers" />
 
 <NewButton Url="/maintainer/create" />
 
-@if (!_isBusy)
-{
-    <MaintainerTable MaintainerVms="_viewModels"></MaintainerTable>
-}
-
-@code{
-    bool _isBusy;
-    public IEnumerable<MaintainerVm>? _viewModels { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        _isBusy = true;
-        var models = await _db.GetAllAsync();
-        _viewModels = Mapping.Mapper.Map<IEnumerable<MaintainerVm>>(models);
-        _isBusy = false;
-    }
-}
+<MaintainerTable></MaintainerTable>
