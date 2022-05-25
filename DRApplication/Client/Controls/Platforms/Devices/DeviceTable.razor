@@ -1,9 +1,10 @@
 ﻿@namespace DRApplication.Client.Controls.Platforms
-
-@inject IPlatformService PlatformService
 @inject DeviceManager _db
+@inject IPlatformService PlatformService
 
-<MudTable @ref="@_table" Items="@_deviceVms"
+@if (!_isBusy)
+{
+    <MudTable @ref="@_table" Items="@_deviceVms"
           CurrentPage="@_pagedResponse.PageNumber"
           RowsPerPage="@_pagedResponse.PageSize"
           Hover="true"
@@ -11,36 +12,47 @@
           Striped="true"
           Dense="true"
           Elevation="3"
-          TotalItems = "@_pagedResponse.TotalRecords">
-    
-    <HeaderContent>
-        <MudTh>ID</MudTh>
-        <MudTh>Device</MudTh>
-        <MudTh>Device Type</MudTh>
-        <MudTh>Active?</MudTh>
-    </HeaderContent>
+          TotalItems="@_pagedResponse.TotalRecords">
 
-    <RowTemplate>
-        <MudTd DataLabel="ID">@context.Id </MudTd>
-        <MudTd DataLabel="Device">@context.Device</MudTd>
-        <MudTd DataLabel="Platform">@context.Platform</MudTd>
-        <MudTd DataLabel="Active?">@context.IsActive</MudTd>
-    </RowTemplate>
+        <HeaderContent>
+            <MudTh>ID</MudTh>
+            <MudTh>Device</MudTh>
+            <MudTh>Device Type</MudTh>
+            <MudTh>Active?</MudTh>
+        </HeaderContent>
 
-    <PagerContent>
-            <MudPagination Rectangular="true" SelectedChanged="PageChanged" Color="Color.Primary" Count="_pagedResponse.TotalPages" />
+        <RowTemplate>
+            <MudTd DataLabel="ID">@context.Id </MudTd>
+            <MudTd DataLabel="Device">@context.Device</MudTd>
+            <MudTd DataLabel="Platform">@context.Platform</MudTd>
+            <MudTd DataLabel="Active?">@context.IsActive</MudTd>
+        </RowTemplate>
+
+        <RowEditingTemplate>
+
+        </RowEditingTemplate>
+
+        <PagerContent>
+            <MudPagination Rectangular="true" 
+                Color="Color.Primary"
+                SelectedChanged="PageChanged"
+                Count="_pagedResponse.TotalPages" 
+                Class="pa-4"/>
+
             Showing Page @_pagedResponse.PageNumber of @_pagedResponse.TotalPages
             Total Records: @_pagedResponse.TotalRecords
-    </PagerContent>
+        </PagerContent>
 
-</MudTable>
+    </MudTable>
+}
+
 
 
 @code {
 
-    MudTable<DeviceVm> _table;
-
+    private MudTable<DeviceVm> _table = new();
     private bool _isBusy;
+    private int _selected = 1;
     private IEnumerable<DeviceVm>? _deviceVms { get; set; }
     private List<DeviceTypeVm> _deviceTypes = new();
 
@@ -77,6 +89,8 @@
         if (_pagedResponse is not null)
         {
             _paginationFilter.PageNumber = i;
+            _table.NavigateTo(i);
+
             await LoadData();
         }
     }
@@ -89,13 +103,11 @@
         queryFilter.PaginationFilter = _paginationFilter;
 
         _pagedResponse = await _db.GetAsync(queryFilter);
-        _deviceVms = await PlatformService.GetDeviceVmsAsync();
 
-
-        var list = await PlatformService.GetDeviceTypeVmsAsync();
-        _deviceTypes = list.ToList();
-
+        var data = _pagedResponse.Data;
+        _deviceVms = await PlatformService.GetDeviceVmsFromDeviceListAsync(data);
         _isBusy = false;
+        StateHasChanged();
     }
 
     protected override async Task OnInitializedAsync() => await Task.Run(() => LoadData());

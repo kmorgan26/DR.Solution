@@ -1,20 +1,21 @@
 ﻿@typeparam TItem
 @inherits MudTable<TItem>
 @namespace DRApplication.Client.Controls
-@using DRApplication.Shared.Responses
 
-<MudTable @ref="@_table" Items="TableItems"
-          CurrentPage="@_pagedResponse.PageNumber"
-          RowsPerPage="@_pagedResponse.PageSize"
-          Hover="true"
-          Breakpoint="Breakpoint.Sm"
-          Striped="true"
-          Dense="true"
-          Elevation="3"
-          TotalItems="@_pagedResponse.TotalRecords"
-          @bind-SelectedItem="_selectedItem"
-          RowEditCommit="RowCommited"
-          IsEditRowSwitchingBlocked="true">
+<MudTable 
+    Items="TableItems"
+    Hover="true"
+    Dense="true"
+    Breakpoint="Breakpoint.Sm"
+    Striped="true"
+    Elevation="3"
+    @bind-SelectedItem="_selectedItem"
+    RowEditCommit="RowCommited"
+    IsEditRowSwitchingBlocked="true"
+    TotalItems="@_pagedResponse.TotalRecords"
+    CurrentPage="@_pagedResponse.PageNumber"
+    RowsPerPage="@_pagedResponse.PageSize"
+>
 
     <HeaderContent>
         @FSHeaderContent
@@ -27,28 +28,23 @@
         @FSRowEditingTemplate(@context)
     </RowEditingTemplate>
 
-    @*<PagerContent>
-        <MudPagination Rectangular="true" SelectedChanged="PageChanged" Color="Color.Primary" Count="_pagedResponse.TotalPages" />
-        Showing Page @_pagedResponse.PageNumber of @_pagedResponse.TotalPages
-        Total Records: @_pagedResponse.TotalRecords
-    </PagerContent>*@
+    <PagerContent>
+        @FSPagerContent
+    </PagerContent>
 
 </MudTable>
 
 @code {
 
-    private MudTable<TItem>? _table;
-
-    private TItem _selectedItem;
-
-    private PagedResponse<Device> _pagedResponse = new();
-
-    private PaginationFilter _paginationFilter = new();
+    private TItem? _selectedItem;
 
     private void RowCommited(object e) => OnRowCommited.InvokeAsync((TItem)e);
 
     [Parameter]
     public EventCallback<TItem> OnRowCommited { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnPageChanged { get; set; }
 
     [Parameter]
     public IEnumerable<TItem>? TableItems { get; set; }
@@ -61,6 +57,13 @@
 
     [Parameter]
     public RenderFragment<TItem>? FSRowEditingTemplate { get; set; }
+
+    [Parameter]
+    public RenderFragment? FSPagerContent { get; set; }
+
+    private PagedResponse<TItem> _pagedResponse = new();
+
+    private PaginationFilter _paginationFilter = new();
 
 }
 

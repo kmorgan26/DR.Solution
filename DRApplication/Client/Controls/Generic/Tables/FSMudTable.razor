@@ -2,13 +2,16 @@
 @inherits MudTable<TItem>
 @namespace DRApplication.Client.Controls
 
-<MudTable Items = "TableItems" 
-        Hover="true" 
-        Dense="true" 
-        Breakpoint="Breakpoint.Sm"
-        @bind-SelectedItem="_selectedItem"
-        RowEditCommit="RowCommited"
-        IsEditRowSwitchingBlocked = "true"
+<MudTable 
+    Items="TableItems" 
+    Hover="true" 
+    Dense="true" 
+    Breakpoint="Breakpoint.Sm"
+    Striped="true"
+    Elevation="3"
+    @bind-SelectedItem="_selectedItem"
+    RowEditCommit="RowCommited"
+    IsEditRowSwitchingBlocked = "true"
 >
 
     <HeaderContent>
@@ -26,8 +29,7 @@
 
 @code {
 
-
-    private TItem _selectedItem;
+    private TItem? _selectedItem;
 
     private void RowCommited(object e) => OnRowCommited.InvokeAsync((TItem)e);
 
