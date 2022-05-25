@@ -1,0 +1,102 @@
+﻿@namespace DRApplication.Client.Controls.Platforms
+
+@inject IPlatformService PlatformService
+@inject DeviceManager _db
+
+<MudTable @ref="@_table" Items="@_deviceVms"
+          CurrentPage="@_pagedResponse.PageNumber"
+          RowsPerPage="@_pagedResponse.PageSize"
+          Hover="true"
+          Breakpoint="Breakpoint.Sm"
+          Striped="true"
+          Dense="true"
+          Elevation="3"
+          TotalItems = "@_pagedResponse.TotalRecords">
+    
+    <HeaderContent>
+        <MudTh>ID</MudTh>
+        <MudTh>Device</MudTh>
+        <MudTh>Device Type</MudTh>
+        <MudTh>Active?</MudTh>
+    </HeaderContent>
+
+    <RowTemplate>
+        <MudTd DataLabel="ID">@context.Id </MudTd>
+        <MudTd DataLabel="Device">@context.Device</MudTd>
+        <MudTd DataLabel="Platform">@context.Platform</MudTd>
+        <MudTd DataLabel="Active?">@context.IsActive</MudTd>
+    </RowTemplate>
+
+    <PagerContent>
+            <MudPagination Rectangular="true" SelectedChanged="PageChanged" Color="Color.Primary" Count="_pagedResponse.TotalPages" />
+            Showing Page @_pagedResponse.PageNumber of @_pagedResponse.TotalPages
+            Total Records: @_pagedResponse.TotalRecords
+    </PagerContent>
+
+</MudTable>
+
+
+@code {
+
+    MudTable<DeviceVm> _table;
+
+    private bool _isBusy;
+    private IEnumerable<DeviceVm>? _deviceVms { get; set; }
+    private List<DeviceTypeVm> _deviceTypes = new();
+
+    private PagedResponse<Device> _pagedResponse = new();
+    private PaginationFilter _paginationFilter = new();
+
+    private async Task UpdateRowItem(object e)
+    {
+        var viewModel = (DeviceVm)e;
+        var model = Mapping.Mapper.Map<Device>(viewModel);
+        await _db.UpdateAsync(model);
+    }
+
+    private async Task SelectedPage(int page)
+    {
+        if (_pagedResponse is not null)
+        {
+            _pagedResponse.PageNumber = page;
+            await LoadData();
+        }
+    }
+
+    private async Task Pageup()
+    {
+        if (_pagedResponse is not null)
+        {
+            _pagedResponse.PageNumber++;
+            await LoadData();
+        }
+
+    }
+    private async void PageChanged(int i)
+    {
+        if (_pagedResponse is not null)
+        {
+            _paginationFilter.PageNumber = i;
+            await LoadData();
+        }
+    }
+
+    protected async Task LoadData()
+    {
+        _isBusy = true;
+
+        var queryFilter = new QueryFilter<Device>();
+        queryFilter.PaginationFilter = _paginationFilter;
+
+        _pagedResponse = await _db.GetAsync(queryFilter);
+        _deviceVms = await PlatformService.GetDeviceVmsAsync();
+
+
+        var list = await PlatformService.GetDeviceTypeVmsAsync();
+        _deviceTypes = list.ToList();
+
+        _isBusy = false;
+    }
+
+    protected override async Task OnInitializedAsync() => await Task.Run(() => LoadData());
+}

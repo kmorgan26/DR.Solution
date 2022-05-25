@@ -8,7 +8,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Controls\Platforms\Devices\DeviceComponent.razor.cs" />
 	  <Compile Remove="Services\ApiEfRepository.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Remove="Controls\Platforms\Devices\DeviceComponent.razor" />
 	</ItemGroup>
 
 	<ItemGroup>

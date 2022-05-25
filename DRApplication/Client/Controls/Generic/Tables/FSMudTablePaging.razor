@@ -27,11 +27,11 @@
         @FSRowEditingTemplate(@context)
     </RowEditingTemplate>
 
-    <PagerContent>
+    @*<PagerContent>
         <MudPagination Rectangular="true" SelectedChanged="PageChanged" Color="Color.Primary" Count="_pagedResponse.TotalPages" />
         Showing Page @_pagedResponse.PageNumber of @_pagedResponse.TotalPages
         Total Records: @_pagedResponse.TotalRecords
-    </PagerContent>
+    </PagerContent>*@
 
 </MudTable>
 
@@ -61,27 +61,6 @@
 
     [Parameter]
     public RenderFragment<TItem>? FSRowEditingTemplate { get; set; }
-
-    private async void PageChanged(int i)
-    {
-        if (_pagedResponse is not null)
-        {
-            _paginationFilter.PageNumber = i;
-            await LoadData();
-        }
-    }
-
-    private async Task LoadData()
-    {
-        //var queryFilter = new QueryFilter<TItem>();
-        //queryFilter.PaginationFilter = _paginationFilter;
-
-        //_pagedResponse = await manager.GetAsync(queryFilter);
-
-
-        //_deviceVms = Mapping.Mapper.Map<List<DeviceVm>>(_pagedResponse.Data);
-        //StateHasChanged();
-    }
 
 }
 
