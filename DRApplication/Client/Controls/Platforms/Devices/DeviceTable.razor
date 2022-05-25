@@ -31,7 +31,21 @@
         </RowTemplate>
 
         <RowEditingTemplate>
-
+            <MudTd DataLabel="Id">@context.Id</MudTd>
+            <MudTd DataLabel="Platform">
+                <MudTextField @bind-Value="@context.Device" />
+            </MudTd>
+            <MudTd DataLabel="Platform">
+                <MudSelect Label="Platform" @bind-Value="@context.DeviceTypeId">
+                    @foreach (var p in _deviceTypeVms)
+                    {
+                        <MudSelectItem Value="@p.Id">@p.Platform</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudTd>
+            <MudTd>
+                <MudCheckBox @bind-Checked="@context.IsActive" />
+            </MudTd>
         </RowEditingTemplate>
 
         <PagerContent>
@@ -39,7 +53,6 @@
             Showing Page @_pagedResponse.PageNumber of @_pagedResponse.TotalPages
             Total Records: @_pagedResponse.TotalRecords
         </PagerContent>
-
     </MudTable>
 }
 
@@ -49,6 +62,7 @@
     private MudTable<DeviceVm> _table;
     private bool _isBusy;
     private IEnumerable<DeviceVm> _deviceVms;
+    private List<DeviceTypeVm> _deviceTypeVms = new();
 
     private PagedResponse<Device> _pagedResponse = new();
     private PaginationFilter _paginationFilter = new();
@@ -81,10 +95,14 @@
         StateHasChanged();
     }
 
-    protected override async Task OnInitializedAsync() 
+    protected override async Task OnInitializedAsync()
     {
         _isBusy = true;
+
         await LoadData();
+        var list = await PlatformService.GetDeviceTypeVmsAsync();
+        _deviceTypeVms = list.ToList();
+
         _isBusy = false;
     }
 }
