@@ -1,5 +1,5 @@
 ﻿@namespace DRApplication.Client.Controls.Platforms
-@inject DeviceManager _db
+@inject DeviceManager manager
 @inject IPlatformService PlatformService
 
 <NewButton Url="/device/create" />
@@ -42,9 +42,6 @@
 
     </MudTable>
 }
-
-
-
 @code {
     private MudTable<DeviceVm> _table;
     private bool _isBusy;
@@ -57,7 +54,7 @@
     {
         var viewModel = (DeviceVm)e;
         var model = Mapping.Mapper.Map<Device>(viewModel);
-        await _db.UpdateAsync(model);
+        await manager.UpdateAsync(model);
     }
 
     private async void PageChanged(int i)
@@ -68,23 +65,30 @@
             await LoadData();
         }
     }
-
-    protected async Task LoadData()
+    protected override async Task OnInitializedAsync()
     {
+        await LoadData();
+    }
+    private async Task LoadData()
+    {
+        _isBusy = true;
+        //var queryFilter = new QueryFilter<Device>();
+        //queryFilter.PaginationFilter = _paginationFilter;
+
+        //_pagedResponse = await manager.GetAsync(queryFilter);
+        //_deviceVms = Mapping.Mapper.Map<List<DeviceVm>>(_pagedResponse.Data);
+        //StateHasChanged();
+        //_isBusy = true;
+
         var queryFilter = new QueryFilter<Device>();
         queryFilter.PaginationFilter = _paginationFilter;
 
-        _pagedResponse = await _db.GetAsync(queryFilter);
+        _pagedResponse = await manager.GetAsync(queryFilter);
 
         var data = _pagedResponse.Data;
         _deviceVms = await PlatformService.GetDeviceVmsFromDeviceListAsync(data);
-        StateHasChanged();
-    }
-
-    protected override async Task OnInitializedAsync() 
-    {
-        _isBusy = true;
-        await LoadData();
         _isBusy = false;
+        StateHasChanged();
+
     }
 }
