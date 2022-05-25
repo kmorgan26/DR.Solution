@@ -65,25 +65,7 @@
         var model = Mapping.Mapper.Map<Device>(viewModel);
         await _db.UpdateAsync(model);
     }
-
-    private async Task SelectedPage(int page)
-    {
-        if (_pagedResponse is not null)
-        {
-            _pagedResponse.PageNumber = page;
-            await LoadData();
-        }
-    }
-
-    private async Task Pageup()
-    {
-        if (_pagedResponse is not null)
-        {
-            _pagedResponse.PageNumber++;
-            await LoadData();
-        }
-
-    }
+    
     private async void PageChanged(int i)
     {
         if (_pagedResponse is not null)
