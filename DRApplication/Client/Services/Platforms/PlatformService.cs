@@ -62,4 +62,19 @@ public class PlatformService : IPlatformService
         return vms;
     }
 
+    public async Task<IEnumerable<DeviceVm>> GetDeviceVmsFromDeviceListAsync(IEnumerable<Device> devices)
+    {
+        var deviceTypes = await _deviceTypeManager.GetAllAsync();
+        
+        var vms = devices.Select(m => new DeviceVm
+        {
+            Id = m.Id,
+            Device = m.Name,
+            DeviceTypeId = m.DeviceTypeId,
+            Platform = deviceTypes.Where(a => a.Id == m.DeviceTypeId).FirstOrDefault().Name,
+            IsActive = m.IsActive
+        });
+
+        return vms;
+    }
 }
