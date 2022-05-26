@@ -1,6 +1,7 @@
 ﻿@typeparam TItem
 @inherits MudTable<TItem>
 @namespace DRApplication.Client.Controls
+@inject ISnackbar Snackbar
 
 <MudTable 
     Items="TableItems" 
@@ -8,11 +9,12 @@
     Dense="true" 
     Breakpoint="Breakpoint.Sm"
     Striped="true"
+    CommitEditIcon="@Icons.Filled.Save"
     Elevation="3"
     @bind-SelectedItem="_selectedItem"
     RowEditCommit="RowCommited"
-    IsEditRowSwitchingBlocked = "true"
->
+    OnCommitEditClick="@(() => Snackbar.Add("Row was updated", Severity.Success))"
+    IsEditRowSwitchingBlocked = "true">
 
     <HeaderContent>
         @FSHeaderContent

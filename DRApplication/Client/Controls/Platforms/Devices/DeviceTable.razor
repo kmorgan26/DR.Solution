@@ -16,6 +16,7 @@
           Dense="true"
           Elevation="3"
           RowEditCommit="UpdateRowItem"
+          CommitEditIcon="@Icons.Filled.Save"
           OnCommitEditClick="@(() => Snackbar.Add("Row was updated", Severity.Success))"
           TotalItems="@_pagedResponse.TotalRecords">
 
@@ -36,10 +37,10 @@
         <RowEditingTemplate>
             <MudTd DataLabel="Id">@context.Id</MudTd>
             <MudTd DataLabel="Platform">
-                <MudTextField Variant="Variant.Filled" @bind-Value="@context.Device" />
+                <MudTextField Variant="Variant.Outlined" @bind-Value="@context.Device" />
             </MudTd>
             <MudTd DataLabel="Platform">
-                <MudSelect Variant="Variant.Filled" Label="Platform" @bind-Value="@context.DeviceTypeId" Text="@context.Platform">
+                <MudSelect Variant="Variant.Outlined" Label="Platform" @bind-Value="@context.DeviceTypeId" Text="@context.Platform">
                     @foreach (var deviceType in _deviceTypeVms)
                     {
                         <MudSelectItem Value="@deviceType.Id">@deviceType.Platform</MudSelectItem>
