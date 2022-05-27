@@ -1,5 +1,5 @@
 ﻿using DRApplication.Shared.Models.ConfigurationModels;
-namespace DRApplication.Client.Services.Configurations;
+namespace DRApplication.Client.Services;
 
 public class SoftwareVersionManager : ApiRepository<SoftwareVersion>
 {

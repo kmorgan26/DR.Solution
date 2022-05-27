@@ -1,5 +1,6 @@
 ﻿using DRApplication.Shared.Models.ConfigurationModels;
-namespace DRApplication.Client.Services.Configurations;
+namespace DRApplication.Client.Services;
+
 public class VersionsLoadManager : ApiRepository<VersionsLoad>
 {
     private readonly HttpClient _http;

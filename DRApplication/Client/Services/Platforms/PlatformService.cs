@@ -1,8 +1,8 @@
 ﻿using DRApplication.Client.Interfaces;
-using DRApplication.Client.ViewModels.Platform;
+using DRApplication.Client.ViewModels;
 using DRApplication.Shared.Models.DeviceModels;
 
-namespace DRApplication.Client.Services.Platforms;
+namespace DRApplication.Client.Services;
 
 public class PlatformService : IPlatformService
 {
