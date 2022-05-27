@@ -1,10 +1,7 @@
 ﻿using DRApplication.Client.Interfaces;
+namespace DRApplication.Client.ViewModels;
 
-namespace DRApplication.Client.ViewModels.Platform.MaintainerViewModels
+public interface IMaintainerViewModel : IViewModel
 {
 
-    public interface IMaintainerViewModel : IViewModel
-    {
-
-    }
 }

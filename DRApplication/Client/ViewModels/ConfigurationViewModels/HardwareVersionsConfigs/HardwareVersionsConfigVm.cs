@@ -1,4 +1,5 @@
-﻿namespace DRApplication.Client.ViewModels.Configuration;
+﻿namespace DRApplication.Client.ViewModels;
+
 public class HardwareVersionsConfigVm
 {
     public int Id { get; set; }

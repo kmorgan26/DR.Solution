@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
-namespace DRApplication.Client.ViewModels.Configuration;
+namespace DRApplication.Client.ViewModels;
 
 public class HardwareVersionVm
 {
