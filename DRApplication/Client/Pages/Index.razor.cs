@@ -1,6 +1,6 @@
 using DRApplication.Client.Services;
-using DRApplication.Client.Services.Platforms;
-using DRApplication.Client.ViewModels.Platform;
+using DRApplication.Client.Services;
+using DRApplication.Client.ViewModels;
 using Microsoft.AspNetCore.Components;
 namespace DRApplication.Client.Pages;
 

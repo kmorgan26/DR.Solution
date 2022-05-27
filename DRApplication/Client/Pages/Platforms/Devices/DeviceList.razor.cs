@@ -1,12 +1,11 @@
 using DRApplication.Client.Services;
-using DRApplication.Client.Services.Platforms;
-using DRApplication.Client.ViewModels.Platform;
+using DRApplication.Client.ViewModels;
 using DRApplication.Shared.Filters;
 using Microsoft.AspNetCore.Components;
 using DRApplication.Shared.Enums;
 using DRApplication.Shared.Models.DeviceModels;
 
-namespace DRApplication.Client.Pages.Platforms;
+namespace DRApplication.Client.Pages;
 
 public partial class DeviceList
 {

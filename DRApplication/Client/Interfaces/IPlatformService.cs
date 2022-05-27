@@ -1,4 +1,4 @@
-﻿using DRApplication.Client.ViewModels.Platform;
+﻿using DRApplication.Client.ViewModels;
 using DRApplication.Shared.Models.DeviceModels;
 
 namespace DRApplication.Client.Interfaces;

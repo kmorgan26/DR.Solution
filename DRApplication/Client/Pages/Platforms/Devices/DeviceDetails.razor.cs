@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Components;
 using DRApplication.Client.Services;
-using DRApplication.Client.Services.Platforms;
-using DRApplication.Client.ViewModels.Platform;
+using DRApplication.Client.ViewModels;
 
-namespace DRApplication.Client.Pages.Platforms;
+namespace DRApplication.Client.Pages;
 
 public partial class DeviceDetails
 {

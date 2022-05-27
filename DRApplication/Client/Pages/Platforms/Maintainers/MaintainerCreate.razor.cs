@@ -1,4 +1,4 @@
-namespace DRApplication.Client.Pages.Platforms;
+namespace DRApplication.Client.Pages;
 public partial class MaintainerCreate
 {
 

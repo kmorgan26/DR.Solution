@@ -1,0 +1,33 @@
+﻿@inject IPlatformService PlatformService
+@namespace DRApplication.Client.Controls
+
+@if (!_isBusy)
+{
+    <MudRadioGroup SelectedOptionChanged="OnSelectedOptionChanged" >
+        @foreach (var item in _deviceTypeVms)
+        {
+            <MudRadio Option="item.Id" Color="Color.Primary" Size="Size.Small" >@item.Platform</MudRadio>
+        }
+    </MudRadioGroup>
+}
+
+@code {
+
+    [Parameter]
+    public EventCallback<int> OnSelectedOptionChanged { get; set; }
+
+    private int SelectedOption { get; set; }
+
+    private bool _isBusy;
+
+    private List<DeviceTypeVm> _deviceTypeVms = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        var items = await PlatformService.GetDeviceTypeVmsAsync();
+        _deviceTypeVms = items.ToList();
+        _isBusy = false;
+    }
+
+}

@@ -1,5 +1,5 @@
 using DRApplication.Client.Services;
-using DRApplication.Client.ViewModels.Configuration;
+using DRApplication.Client.ViewModels;
 
 namespace DRApplication.Client.Controls.Configurations
 {

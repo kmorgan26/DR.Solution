@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Components;
-namespace DRApplication.Client.Pages.Configuration;
+namespace DRApplication.Client.Pages;
 
 public partial class VersionsLoadEdit
 {

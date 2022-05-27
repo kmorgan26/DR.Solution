@@ -1,0 +1,39 @@
+﻿@namespace DRApplication.Client.Controls
+@inject ILoadBuilderService LoadBuilderService
+
+@if (!_isBusy)
+{
+
+    <MudSelect Variant="Variant.Outlined" T="int" Label="Hardware Config" ValueChanged="OnHardwareConfigIdChanged">
+        <MudSelectItem Value="0">SELECT Hardware Configuration</MudSelectItem>
+        @foreach (var item in _hardwareConfigVms)
+        {
+            <MudSelectItem Value="@item.Id">@item.Name</MudSelectItem>
+        }
+    </MudSelect>
+}
+
+@code {
+
+    bool _isBusy;
+    private IEnumerable<HardwareConfigVm> _hardwareConfigVms { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnHardwareConfigIdChanged { get; set; }
+
+    [Parameter]
+    public int DeviceTypeId { get; set; } = 0;
+
+    private async Task SetHardwareConfigs()
+    {
+        var items = await LoadBuilderService.GetHardwareConfigsByDeviceTypeIdAsync(DeviceTypeId);
+        _hardwareConfigVms = items;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        await SetHardwareConfigs();
+        _isBusy = false;
+    }
+}

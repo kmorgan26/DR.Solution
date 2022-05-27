@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using DRApplication.Client.Services;
-using DRApplication.Client.ViewModels.Platform;
+using DRApplication.Client.ViewModels;
 using DRApplication.Shared.Models.DeviceModels;
 
 namespace DRApplication.Client.Controls.Platforms

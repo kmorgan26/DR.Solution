@@ -1,10 +1,9 @@
-﻿@namespace DRApplication.Client.Pages.Configuration
-@page "/configuration"
-
+﻿@namespace DRApplication.Client.Pages
+@page "/admin/configuration"
 
 <TitleHeader TitleText="Configuration" IconPath="@Icons.Filled.Build" />
 
-<MudGrid Spacing="@spacing" Justify="Justify.Center">
+<MudGrid Spacing="2" Justify="Justify.Center">
     <MudItem>
         <MudCard>
             <MudCardContent>
@@ -106,7 +105,3 @@
         </MudCard>
     </MudItem>
 </MudGrid>
-
-@code {
-    public int spacing { get; set; } = 2;
-}

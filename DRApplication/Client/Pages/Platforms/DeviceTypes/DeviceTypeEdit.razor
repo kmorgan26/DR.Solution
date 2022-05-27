@@ -1,9 +1,8 @@
-﻿@namespace DRApplication.Client.Pages.Platforms
+﻿@page "/devicetype/edit/{deviceTypeId:int}"
+@namespace DRApplication.Client.Pages
 @inject DeviceTypeManager manager
 @inject MaintainerManager maintainerManager
 @inject NavigationManager navigation
-
-@page "/devicetype/edit/{deviceTypeId:int}"
 
 <MudText Typo="Typo.h3" Class="mb-4">
     <MudIcon Icon="@Icons.Material.Filled.LocalAirport" Size="Size.Large" Class="m-3" />
