@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Components;
 using DRApplication.Client.Services;
-using DRApplication.Client.Controls.Generic;
 using DRApplication.Client.ViewModels;
 namespace DRApplication.Client.Controls;
 
