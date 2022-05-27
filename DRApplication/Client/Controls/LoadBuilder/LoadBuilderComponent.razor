@@ -2,7 +2,7 @@
 @inject ILoadBuilderService LoadBuilderService
 @inject IPlatformService PlatformService
 
-<div>HW ID: @_hardwareConfigId | DT ID: @_deviceTypeId | busy: @_isBusy </div>
+
 
 @if (!_isBusy)
 {
@@ -12,6 +12,7 @@
                 <div class="d-flex">
                     <MudIcon Icon="@Icons.Material.Filled.FilterAlt" Color="Color.Info" class="mr-3"></MudIcon>
                     <MudText>Filters</MudText>
+                    <MudText Class="mx-10">HW ID: @_hardwareConfigId | DT ID: @_deviceTypeId | busy: @_isBusy </MudText>
                 </div>
             </TitleContent>
             <ChildContent>
