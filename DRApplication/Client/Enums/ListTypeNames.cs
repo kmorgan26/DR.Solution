@@ -2,11 +2,6 @@
 {
     public enum PlatformListName
     {
-        Maintainer, Platform, Device, RctdLot, ManModule
-    }
-
-    public enum ConfigListName
-    {
-        HardwareConfig, HardwareSystem, HardwareVersion, Load, SoftwareSystem, SoftwareVersion
+        Maintainer, Platform, Device, RctdLot, ManModule, HardwareConfig, HardwareSystem, HardwareVersion, Load, SoftwareSystem, SoftwareVersion
     }
 }

@@ -6,6 +6,4 @@ namespace DRApplication.Client.Interfaces;
 public interface IGenericListService
 {
     Task<IEnumerable<GenericListVm>> GetGenericListVmsFromPlatformListName(PlatformListName listType);
-
-    Task<IEnumerable<GenericListVm>> GetGenericListVmsFromConfigListName(ConfigListName listName);
 }
