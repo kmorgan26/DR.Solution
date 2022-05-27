@@ -1,0 +1,58 @@
+﻿@namespace DRApplication.Client.Controls
+@inject IGenericListService GenericListService
+
+@if (!_isBusy)
+{
+    <MudSelect Variant="@VariantType" T="int" Label="@LabelText" ValueChanged="OnSelectListChanged">
+
+        <MudSelectItem Value="0">@TopMenuItemText</MudSelectItem>
+
+        @foreach (var item in _genericListVms)
+        {
+            <MudSelectItem Value="@item.Id">@item.Name</MudSelectItem>
+        }
+
+    </MudSelect>
+}
+
+@code {
+
+    bool _isBusy;
+
+    private IEnumerable<GenericListVm> _genericListVms { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnSelectListChanged { get; set; }
+
+    /// <summary>
+    /// Default Variant Type is "Outlined""
+    /// </summary>
+    [Parameter]
+    public Variant VariantType { get; set; } = Variant.Outlined;
+
+    /// <summary>
+    /// Default Label is "ITEMS"
+    /// </summary>
+    [Parameter]
+    public string LabelText { get; set; } = "Items";
+
+    /// <summary>
+    /// Default Text is "SELECT ONE";
+    /// </summary>
+    [Parameter]
+    public string TopMenuItemText { get; set; } = "SELECT ONE";
+
+    /// <summary>
+    /// Must provide a List Type that is part of the Enum and incorporated in the Generic List Service
+    /// </summary>
+    [Parameter]
+    public PlatformListName ListType { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        _genericListVms = await GenericListService.GetGenericListVmsFromPlatformListName(ListType);
+        _isBusy = false;
+    }
+}

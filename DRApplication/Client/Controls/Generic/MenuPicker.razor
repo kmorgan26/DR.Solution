@@ -15,7 +15,7 @@
     private IEnumerable<GenericListVm>? _items { get; set; }
 
     [Parameter]
-    public PlatformListType ListType { get; set; }
+    public PlatformListName ListType { get; set; }
 
     [Parameter]
     public string? ToolTipText { get; set; } = string.Empty;
@@ -36,7 +36,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _items = await ListService.GetGenericListVmsAsync(ListType);
+        _items = await ListService.GetGenericListVmsFromPlatformListName(ListType);
     }
 
 }

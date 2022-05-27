@@ -21,14 +21,14 @@
     public EventCallback<int> OnSelectedOptionChanged { get; set; }
 
     [Parameter]
-    public PlatformListType ListType { get; set; }
+    public PlatformListName ListType { get; set; }
 
     public IEnumerable<GenericListVm>? _genericListVms { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
         _isBusy = true;
-        _genericListVms = await GenericListService.GetGenericListVmsAsync(ListType);
+        _genericListVms = await GenericListService.GetGenericListVmsFromPlatformListName(ListType);
         _isBusy = false;
     }
 }
