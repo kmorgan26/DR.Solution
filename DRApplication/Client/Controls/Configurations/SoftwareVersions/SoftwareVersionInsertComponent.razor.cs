@@ -1,7 +1,7 @@
 using DRApplication.Client.Services;
 using DRApplication.Client.ViewModels;
 using DRApplication.Shared.Models.ConfigurationModels;
-namespace DRApplication.Client.Controls.Configurations;
+namespace DRApplication.Client.Controls;
 
 public partial class SoftwareVersionInsertComponent
 {

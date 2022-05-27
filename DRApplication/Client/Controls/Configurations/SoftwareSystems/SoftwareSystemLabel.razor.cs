@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components;
 
-namespace DRApplication.Client.Controls.Configurations
+namespace DRApplication.Client.Controls
 {
     public partial class SoftwareSystemLabel
     {
