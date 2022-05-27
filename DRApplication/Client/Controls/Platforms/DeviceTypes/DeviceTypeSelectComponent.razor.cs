@@ -36,10 +36,10 @@ namespace DRApplication.Client.Controls
         {
             try
             {
-                if (AppStateComponent is not null && AppStateComponent.DeviceTypeId is not null)
+                if (AppStateComponent is not null && AppStateComponent.DeviceTypeVm is not null)
                 {
                     await Task.Delay(0);
-                    SelectedDeviceTypeId = AppStateComponent.DeviceTypeId != null ? AppStateComponent.DeviceTypeId : 0;
+                    SelectedDeviceTypeId = AppStateComponent.DeviceTypeVm?.Id != null ? AppStateComponent.DeviceTypeVm.Id : 0;
                 }
             }
             catch

@@ -14,13 +14,15 @@
                             <MudAvatar Color="Color.Info" Size="Size.Medium">@item.Platform.Substring(0,1)</MudAvatar>
                         </CardHeaderAvatar>
                         <CardHeaderContent>
-                            <MudLink Typo="Typo.h6" Color="Color.Primary" Href="@($"/devices/list/{@item.Id}")">@item.Platform</MudLink>
+                            <MudLink Typo="Typo.h5" Class="ml-6" Color="Color.Primary" Href="@($"/devices/list/{@item.Id}")">@item.Platform</MudLink>
                         </CardHeaderContent>
                         <CardHeaderActions>
                             <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
                         </CardHeaderActions>
                     </MudCardHeader>
-                    <MudSkeleton SkeletonType="SkeletonType.Rectangle" Animation="Animation.Wave" Height="250px" />
+                    <MudLink Href="@($"/devices/list/{@item.Id}")" >
+                        <MudCardMedia Image="@($"/img/cards/{@item.Id}.webp")" Height="250" Class="pa-2"/>
+                    </MudLink>
                     <MudCardContent>
                         <MudSkeleton Animation="Animation.Wave" />
                     </MudCardContent>

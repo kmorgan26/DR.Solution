@@ -1,3 +1,4 @@
+using DRApplication.Client.ViewModels;
 using DRApplication.Shared.Filters;
 using Microsoft.AspNetCore.Components;
 
@@ -115,21 +116,6 @@ public partial class AppStateComponent
         }
     }
 
-    private int? deviceTypeId;
-    public int? DeviceTypeId
-    {
-        get
-        {
-            return deviceTypeId;
-        }
-
-        set
-        {
-            deviceTypeId = value;
-            StateHasChanged();
-        }
-    }
-
     private int? maintainerId;
     public int? MaintainerId
     {
@@ -160,17 +146,16 @@ public partial class AppStateComponent
         }
     }
 
-    private string? platform;
-    public string? Platform
+    private DeviceTypeVm? deviceTypeVm;
+    public DeviceTypeVm? DeviceTypeVm
     {
         get
         {
-            return platform;
+            return deviceTypeVm;
         }
-
         set
         {
-            platform = value;
+            deviceTypeVm = value;
             StateHasChanged();
         }
     }

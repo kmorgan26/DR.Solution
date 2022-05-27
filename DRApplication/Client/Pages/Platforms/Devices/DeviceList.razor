@@ -1,6 +1,6 @@
 ﻿@page "/devices/list/{deviceTypeId:int}"
 @namespace DRApplication.Client.Pages
-
+@inject IPlatformService PlatformService
 
 <MudGrid Spacing="2" Justify="Justify.Center">
     @if (Devices is not null)

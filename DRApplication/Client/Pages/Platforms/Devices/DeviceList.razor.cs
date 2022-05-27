@@ -4,13 +4,20 @@ using DRApplication.Shared.Filters;
 using Microsoft.AspNetCore.Components;
 using DRApplication.Shared.Enums;
 using DRApplication.Shared.Models.DeviceModels;
+using DRApplication.Client.Controls;
 
 namespace DRApplication.Client.Pages;
 
 public partial class DeviceList
 {
+
+    [CascadingParameter]
+    public AppStateComponent AppState { get; set; }
+
     [Parameter]
     public int DeviceTypeId { get; set; }
+
+
 
     [Inject]
     public DeviceManager? DeviceManager { get; set; }
@@ -29,6 +36,11 @@ public partial class DeviceList
             var response = await DeviceManager.GetAsync(filter);
             var items = response.Data;
             Devices = Mapping.Mapper.Map<IEnumerable<DeviceVm>>(items);
+
+            //TODO: Maybe do this with more grace
+            GenericListVm listVm = new() { Id = DeviceTypeId };
+            AppState.DeviceTypeVm = await PlatformService.GetDeviceTypeVmFromGenericVm(listVm);
+            
         }
     }
 }

@@ -15,4 +15,6 @@ public interface IPlatformService
 
     Task<IEnumerable<DeviceVm>> GetDeviceVmsFromDeviceListAsync(IEnumerable<Device> devices);
 
+    Task<DeviceTypeVm> GetDeviceTypeVmFromGenericVm(GenericListVm genericListVm);
+
 }
