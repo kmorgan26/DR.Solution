@@ -1,10 +1,11 @@
 ﻿using DRApplication.Client.Enums;
 using DRApplication.Client.ViewModels;
 
-namespace DRApplication.Client.Interfaces
+namespace DRApplication.Client.Interfaces;
+
+public interface IGenericListService
 {
-    public interface IGenericListService
-    {
-        Task<IEnumerable<GenericListVm>> GetGenericListVmsAsync(PlatformListType listType);
-    }
+    Task<IEnumerable<GenericListVm>> GetGenericListVmsFromPlatformListName(PlatformListName listType);
+
+    Task<IEnumerable<GenericListVm>> GetGenericListVmsFromConfigListName(ConfigListName listName);
 }
