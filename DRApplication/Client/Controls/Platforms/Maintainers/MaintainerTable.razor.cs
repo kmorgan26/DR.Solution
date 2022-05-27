@@ -3,7 +3,7 @@ using DRApplication.Client.Services;
 using DRApplication.Client.ViewModels;
 using DRApplication.Shared.Models.DeviceModels;
 
-namespace DRApplication.Client.Controls.Platforms
+namespace DRApplication.Client.Controls
 {
     public partial class MaintainerTable
     {
