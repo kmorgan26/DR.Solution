@@ -1,0 +1,41 @@
+﻿@namespace DRApplication.Client.Controls
+@inject IPlatformService PlatformService
+
+@if (_notBusy)
+{
+    <MudPaper Class="d-flex flex-row flex-grow-1 gap-6 pa-3">
+        <HardwareConfigSelect DeviceTypeId="@AppState.DeviceTypeVm.Id" OnHardwareConfigIdChanged="SetHardwareConfigId"></HardwareConfigSelect>
+
+        <GenericSelect LabelText="Service" ListType="PlatformListName.HardwareConfig" OnSelectListChanged="SetHardwareConfigId" 
+            TopMenuItemText="Pick one!" VariantType="Variant.Filled"/>
+    </MudPaper>
+}
+
+
+@code {
+
+    bool _notBusy = true;
+
+    [CascadingParameter]
+    public AppStateComponent AppState { get; set; } = new();
+
+    async Task SetHardwareConfigId(int id)
+    {
+        await Task.Run(() => AppState.HardwareConfigId = id);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _notBusy = false;
+        if (AppState.DeviceTypeVm is not null)
+        {
+            await SetHardwareConfigId(AppState.DeviceTypeVm.Id);
+        }
+        else
+        {
+            AppState.DeviceTypeVm = await PlatformService.GetDeviceTypeVmFromGenericVm(new GenericListVm() { Id = 1 });
+            await SetHardwareConfigId(AppState.DeviceTypeVm.Id);
+        }
+        _notBusy = true;
+    }
+}
