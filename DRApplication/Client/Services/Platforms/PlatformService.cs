@@ -1,4 +1,5 @@
-﻿using DRApplication.Client.Interfaces;
+﻿using DRApplication.Client.Enums;
+using DRApplication.Client.Interfaces;
 using DRApplication.Client.ViewModels;
 using DRApplication.Shared.Models.DeviceModels;
 
@@ -77,4 +78,5 @@ public class PlatformService : IPlatformService
 
         return vms;
     }
+
 }

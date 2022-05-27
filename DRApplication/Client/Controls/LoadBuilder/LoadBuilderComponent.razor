@@ -1,33 +1,39 @@
 ﻿@namespace DRApplication.Client.Controls
 @inject ILoadBuilderService LoadBuilderService
+@inject IPlatformService PlatformService
 
 <div>HW ID: @_hardwareConfigId | DT ID: @_deviceTypeId | busy: @_isBusy </div>
-<MudExpansionPanels>
-    <MudExpansionPanel>
-        <TitleContent>
-            <div class="d-flex">
-                <MudIcon Icon="@Icons.Material.Filled.FilterAlt" Color="Color.Info" class="mr-3"></MudIcon>
-                <MudText>Filters</MudText>
-            </div>
-        </TitleContent>
-        <ChildContent>
 
-            <MudPaper Class="d-flex flex-row flex-grow-1 gap-10">
-
-                <div>
-                    <DeviceTypeRadios OnSelectedOptionChanged="SetDeviceTypeId"></DeviceTypeRadios>
+@if (!_isBusy)
+{
+    <MudExpansionPanels>
+        <MudExpansionPanel>
+            <TitleContent>
+                <div class="d-flex">
+                    <MudIcon Icon="@Icons.Material.Filled.FilterAlt" Color="Color.Info" class="mr-3"></MudIcon>
+                    <MudText>Filters</MudText>
                 </div>
-                <div>
-                    @if (_deviceTypeId > 0 && !_isBusy)
-                    {
-                        <HardwareConfigSelect DeviceTypeId="_deviceTypeId" OnHardwareConfigIdChanged="SetHardwareConfigId"></HardwareConfigSelect>
-                    }
-                </div>
-            </MudPaper>
+            </TitleContent>
+            <ChildContent>
 
-        </ChildContent>
-    </MudExpansionPanel>
-</MudExpansionPanels>
+                <MudPaper Class="d-flex flex-row flex-grow-1 gap-10">
+
+                    <div>
+                        <GenericRadios OnSelectedOptionChanged="SetDeviceTypeId" ListType="PlatformListType.Platform" />
+                    </div>
+                    <div>
+                        @if (_deviceTypeId > 0 && !_isBusy)
+                        {
+                            <HardwareConfigSelect DeviceTypeId="_deviceTypeId" OnHardwareConfigIdChanged="SetHardwareConfigId"></HardwareConfigSelect>
+                        }
+                    </div>
+                </MudPaper>
+
+            </ChildContent>
+        </MudExpansionPanel>
+    </MudExpansionPanels>
+}
+
 
 @if (_hardwareConfigId is not 0 && _isBusy == false)
 {
@@ -36,7 +42,7 @@
         <MudItem xs="3">
             <MudPaper Class="m-9">
                 <MudList Clickable="true" Dense="true" Color="Color.Success">
-                    @foreach(var item in _softwareSystemVms)
+                    @foreach (var item in _softwareSystemVms)
                     {
                         <MudListItem Text="@item.Name" Value="@item.Name" />
                     }
@@ -54,7 +60,7 @@
     int _hardwareConfigId = 0;
 
     private IEnumerable<HardwareConfigVm> _hardwareConfigVms { get; set; }
-    private IEnumerable<SoftwareSystemVm> _softwareSystemVms { get;set; }
+    private IEnumerable<SoftwareSystemVm> _softwareSystemVms { get; set; }
 
     async Task SetDeviceTypeId(int id)
     {
@@ -70,11 +76,10 @@
     async Task SetSoftwareConfigs()
     {
         _isBusy = true;
-        
+
         var softwareConfigs = await LoadBuilderService.GetSoftwareSystemsByHardwareConfigIg(_hardwareConfigId);
         _softwareSystemVms = softwareConfigs;
-        
+
         _isBusy = false;
     }
-
 }
