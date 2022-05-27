@@ -68,6 +68,9 @@ public class MappingProfile : Profile
         CreateMap<DeviceType, DeviceTypeVm>().ReverseMap();
 
         CreateMap<Device, DeviceEditVm>().ReverseMap();
+        CreateMap<Device, DeviceVm>()
+            .ForMember(dest => dest.Device,
+                opts => opts.MapFrom(src => src.Name));
         CreateMap<DeviceVm, Device>()
             .ForMember(dest => dest.Name,
                 opts => opts.MapFrom(src => src.Device));

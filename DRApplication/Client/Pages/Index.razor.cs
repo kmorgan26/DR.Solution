@@ -1,7 +1,5 @@
 using DRApplication.Client.Services;
-using DRApplication.Client.Services;
 using DRApplication.Client.ViewModels;
-using Microsoft.AspNetCore.Components;
 namespace DRApplication.Client.Pages;
 
 public partial class Index

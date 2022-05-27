@@ -1,5 +1,4 @@
 using DRApplication.Shared.Filters;
-using DRApplication.Shared.Responses;
 using Microsoft.AspNetCore.Components;
 
 namespace DRApplication.Client.Controls;
@@ -157,6 +156,21 @@ public partial class AppStateComponent
         set
         {
             isSet = value;
+            StateHasChanged();
+        }
+    }
+
+    private string? platform;
+    public string? Platform
+    {
+        get
+        {
+            return platform;
+        }
+
+        set
+        {
+            platform = value;
             StateHasChanged();
         }
     }
