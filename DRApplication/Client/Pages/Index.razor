@@ -5,20 +5,23 @@
 <MudGrid Spacing="2" Justify="Justify.Center">
     @if (_isBusy || items is null)
     {
-        <MudItem xs="12" sm="12" md="6" lg="3">
-            <MudCard>
-                <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="200px" />
-                <MudCardContent>
-                    <MudSkeleton Width="30%" Height="42px;" />
-                    <MudSkeleton Width="80%" />
-                    <MudSkeleton Width="100%" />
-                </MudCardContent>
-                <MudCardActions>
-                    <MudSkeleton Width="64px" Height="40px" Class="ml-2" />
-                    <MudSkeleton Width="105px" Height="40px" Class="ml-3" />
-                </MudCardActions>
-            </MudCard>
-        </MudItem>
+        @for (int i = 0; i < 7; i++)
+        {
+            <MudItem xs="12" sm="12" md="6" lg="3">
+                <MudCard>
+                    <MudSkeleton SkeletonType="SkeletonType.Rectangle" Height="200px" />
+                    <MudCardContent>
+                        <MudSkeleton Width="30%" Height="42px;" />
+                        <MudSkeleton Width="80%" />
+                        <MudSkeleton Width="100%" />
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudSkeleton Width="64px" Height="40px" Class="ml-2" />
+                        <MudSkeleton Width="105px" Height="40px" Class="ml-3" />
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        }
     }
     else
     {
