@@ -1,26 +1,25 @@
-using DRApplication.Client.Services;
-using DRApplication.Client.ViewModels;
-using DRApplication.Shared.Filters;
-using Microsoft.AspNetCore.Components;
-using DRApplication.Shared.Enums;
-using DRApplication.Shared.Models.DeviceModels;
-using DRApplication.Client.Controls;
+﻿@namespace DRApplication.Client.Controls
 
-namespace DRApplication.Client.Pages;
+@inject IPlatformService PlatformService
+@inject DeviceManager DeviceManager
 
-public partial class DeviceList
-{
+<MudGrid Spacing="2" Justify="Justify.Center">
+    @if (Devices is not null)
+    {
+        @foreach (var item in Devices)
+        {
+            <DeviceCard DeviceVm="item"></DeviceCard>
+        }
+    }
+</MudGrid>
+
+@code {
 
     [CascadingParameter]
     public AppStateComponent AppState { get; set; }
 
     [Parameter]
     public int DeviceTypeId { get; set; }
-
-
-
-    [Inject]
-    public DeviceManager? DeviceManager { get; set; }
 
     IEnumerable<DeviceVm>? Devices;
 
@@ -29,7 +28,9 @@ public partial class DeviceList
         if(DeviceManager is not null)
         {
             var filterProperty = new FilterProperty() {  Name ="DeviceTypeId", Operator=FilterQueryOperator.Equals, Value=DeviceTypeId.ToString() };
+            
             var filter = new QueryFilter<Device>();
+
             filter.PaginationFilter = null;
             filter.FilterProperties.Add(filterProperty);
 
