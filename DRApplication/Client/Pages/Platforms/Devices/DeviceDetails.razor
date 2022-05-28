@@ -1,18 +1,11 @@
 ﻿@page "/device/details/{deviceId:int}"
 @namespace DRApplication.Client.Pages
 
-@if (@DeviceVm is not null)
-{
-    <TitleHeader IconPath="@Icons.Filled.Airlines" TitleText="@DeviceVm.Platform" />
-    <MudGrid>
-        <MudItem>
-            <MudPaper Height="140px" Width="140px" />
-        </MudItem>
-        <MudItem>
-            <MudPaper Height="140px" Width="140px" />
-        </MudItem>
-        <MudItem>
-            <MudPaper Height="140px" Width="140px" />
-        </MudItem>
-    </MudGrid>
+<DeviceLogbook DeviceId="@DeviceId"></DeviceLogbook>
+
+@code {
+
+    [Parameter]
+    public int DeviceId { get; set; }
+
 }
