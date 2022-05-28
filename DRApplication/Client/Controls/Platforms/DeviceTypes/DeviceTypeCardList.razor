@@ -1,12 +1,27 @@
-using DRApplication.Client.Controls;
-using DRApplication.Client.Services;
-using DRApplication.Client.ViewModels;
-using Microsoft.AspNetCore.Components;
+﻿@namespace DRApplication.Client.Controls
 
-namespace DRApplication.Client.Pages;
+@inject IPlatformService PlatformService
 
-public partial class Index
-{
+<MudGrid Spacing="2" Justify="Justify.Center">
+    @if (_isBusy || items is null)
+    {
+        @for (int i = 0; i < 7; i++)
+        {
+            <DeviceSkeleton />
+        }
+    }
+    else
+    {
+        @foreach (var item in items)
+        {
+            <DeviceTypeCard DeviceTypeVm="item" />
+        }
+    }
+
+</MudGrid>
+
+@code {
+
     IEnumerable<DeviceTypeVm>? items;
     bool _isBusy;
 
@@ -26,4 +41,5 @@ public partial class Index
         items = Mapping.Mapper.Map<IEnumerable<DeviceTypeVm>>(deviceTypeVms);
         _isBusy = false;
     }
+
 }

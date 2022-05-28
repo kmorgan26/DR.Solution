@@ -1,0 +1,41 @@
+﻿@namespace DRApplication.Client.Controls
+
+<MudItem xs="12" sm="12" md="6" lg="3">
+    <MudCard>
+        <MudCardHeader>
+            <CardHeaderAvatar>
+                <MudAvatar Color="@AvatarColor" Size="Size.Medium">@DeviceTypeVm.Platform.Substring(0,1)</MudAvatar>
+            </CardHeaderAvatar>
+            <CardHeaderContent>
+                <MudLink Typo="Typo.h5" Class="ml-6" Color="@HeaderColor" Href="@($"/devices/list/{@DeviceTypeVm.Id}")">@DeviceTypeVm.Platform</MudLink>
+            </CardHeaderContent>
+            <CardHeaderActions>
+                <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
+            </CardHeaderActions>
+        </MudCardHeader>
+        <MudLink Href="@($"/devices/list/{@DeviceTypeVm.Id}")">
+            <MudCardMedia Image="@($"/img/cards/{@DeviceTypeVm.Id}.webp")" Height="250" Class="pa-2" />
+        </MudLink>
+        <MudCardContent>
+            <MudSkeleton Animation="Animation.Wave" />
+        </MudCardContent>
+        <MudCardActions>
+            <MudIconButton Icon="@Icons.Material.Filled.Favorite" Color="Color.Default" />
+            <MudIconButton Icon="@Icons.Material.Filled.Share" Color="Color.Default" />
+        </MudCardActions>
+    </MudCard>
+</MudItem>
+
+@code {
+
+    [Parameter]
+    public DeviceTypeVm DeviceTypeVm { get; set; } = new();
+
+    [Parameter]
+    public Color AvatarColor { get; set; } = Color.Default;
+
+    [Parameter]
+    public Color HeaderColor { get; set; } = Color.Primary;
+
+
+}
