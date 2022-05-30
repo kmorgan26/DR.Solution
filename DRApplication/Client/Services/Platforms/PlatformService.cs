@@ -1,4 +1,4 @@
-﻿using DRApplication.Client.Enums;
+﻿using DRApplication.Shared.Enums;
 using DRApplication.Client.Interfaces;
 using DRApplication.Client.ViewModels;
 using DRApplication.Shared.Models.DeviceModels;

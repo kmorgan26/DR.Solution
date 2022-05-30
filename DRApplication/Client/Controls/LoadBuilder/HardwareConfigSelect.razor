@@ -3,7 +3,6 @@
 
 @if (!_isBusy)
 {
-
     <MudSelect Variant="Variant.Outlined" T="int" Label="Hardware Config" ValueChanged="OnHardwareConfigIdChanged">
         <MudSelectItem Value="0">SELECT Hardware Configuration</MudSelectItem>
         @foreach (var item in _hardwareConfigVms)

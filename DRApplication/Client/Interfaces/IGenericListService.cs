@@ -1,4 +1,4 @@
-﻿using DRApplication.Client.Enums;
+﻿using DRApplication.Shared.Enums;
 using DRApplication.Client.ViewModels;
 
 namespace DRApplication.Client.Interfaces;

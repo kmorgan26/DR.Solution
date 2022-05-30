@@ -1,12 +1,11 @@
 ﻿@namespace DRApplication.Client.Controls
-@inject IGenericListService GenericListService
+@using DRApplication.Shared.Requests
+@inject IForeignKeyListService ForeignKeyListService
 
 @if (!_isBusy)
 {
     <MudSelect Variant="@VariantType" T="int" Label="@LabelText" ValueChanged="OnSelectListChanged">
-
         <MudSelectItem Value="0">@TopMenuItemText</MudSelectItem>
-
         @foreach (var item in _genericListVms)
         {
             <MudSelectItem Value="@item.Id">@item.Name</MudSelectItem>
@@ -19,7 +18,7 @@
 
     bool _isBusy;
 
-    private IEnumerable<GenericListVm> _genericListVms { get; set; }
+    private IEnumerable<ForeignKeyListVm> _genericListVms { get; set; } = new List<ForeignKeyListVm>();
 
     [Parameter]
     public EventCallback<int> OnSelectListChanged { get; set; }
@@ -46,13 +45,21 @@
     /// Must provide a List Type that is part of the Enum and incorporated in the Generic List Service
     /// </summary>
     [Parameter]
-    public PlatformListName ListType { get; set; }
+    public ForeignKeyListRequest Request { get; set; }
 
+    [Parameter]
+    public int ForeignKey { get; set; }
+
+    private async Task GetGenericListVms()
+    {
+        var items = await ForeignKeyListService.GetForeignKeyListVmsFromPlatformListName(Request);
+        _genericListVms = items;
+    }
 
     protected override async Task OnInitializedAsync()
     {
         _isBusy = true;
-        _genericListVms = await GenericListService.GetGenericListVmsFromPlatformListName(ListType);
+        await GetGenericListVms();
         _isBusy = false;
     }
 }

@@ -2,15 +2,11 @@
 @inject ILoadBuilderService LoadBuilderService
 @inject IPlatformService PlatformService
 
-@if (!_isBusy)
-{
-    <LoadBuilderFilters></LoadBuilderFilters>
-}
+<LoadBuilderFilters></LoadBuilderFilters>
 
-
-@if (_hardwareConfigId is not 0 && _isBusy == false)
+@if (@AppState.HardwareConfigId is not null && @AppState.SoftwareSystemId is not null && _isBusy is not true)
 {
-    <div>software @_hardwareConfigId</div>
+    <div>software @AppState.HardwareConfigId</div>
     <MudGrid Spacing="3">
         <MudItem xs="3">
             <MudPaper Class="m-9">
@@ -29,7 +25,6 @@
 @code {
 
     bool _isBusy;
-    int _hardwareConfigId = 0;
 
     private IEnumerable<HardwareConfigVm> _hardwareConfigVms { get; set; }
     private IEnumerable<SoftwareSystemVm> _softwareSystemVms { get; set; }
@@ -37,13 +32,11 @@
     [CascadingParameter]
     public AppStateComponent AppState { get; set; } = new();
 
-    
-
     async Task SetSoftwareConfigs()
     {
         _isBusy = true;
-
-        var softwareConfigs = await LoadBuilderService.GetSoftwareSystemsByHardwareConfigIg(_hardwareConfigId);
+        var id = Convert.ToInt32(@AppState.HardwareConfigId);
+        var softwareConfigs = await LoadBuilderService.GetSoftwareSystemsByHardwareConfigIg(id);
         _softwareSystemVms = softwareConfigs;
 
         _isBusy = false;

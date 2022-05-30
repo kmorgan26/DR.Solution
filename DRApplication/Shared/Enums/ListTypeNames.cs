@@ -1,4 +1,4 @@
-﻿namespace DRApplication.Client.Enums
+﻿namespace DRApplication.Shared.Enums
 {
     public enum PlatformListName
     {

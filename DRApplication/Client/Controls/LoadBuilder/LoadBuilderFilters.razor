@@ -1,20 +1,30 @@
 ﻿@namespace DRApplication.Client.Controls
+@using DRApplication.Shared.Requests
 @inject IPlatformService PlatformService
+@inject IForeignKeyListService ForeignKeyListService
 
 @if (_notBusy)
 {
     <MudPaper Class="d-flex flex-row flex-grow-1 gap-6 pa-3">
-        <HardwareConfigSelect DeviceTypeId="@AppState.DeviceTypeVm.Id" OnHardwareConfigIdChanged="SetHardwareConfigId"></HardwareConfigSelect>
+        <HardwareConfigSelect 
+            DeviceTypeId="@AppState.DeviceTypeVm.Id" 
+            OnHardwareConfigIdChanged="SetHardwareConfigId" />
+        
+        <GenericSelect 
+            LabelText="Sofware Systems" 
+            ForeignKey="@Convert.ToInt32(@AppState.HardwareConfigId)" 
+            OnSelectListChanged="SetSoftwareSystemId" 
+            Request="Request"
+            TopMenuItemText="SELECT Software System" />
 
-        <GenericSelect LabelText="Service" ListType="PlatformListName.HardwareConfig" OnSelectListChanged="SetHardwareConfigId" 
-            TopMenuItemText="Pick one!" VariantType="Variant.Filled"/>
     </MudPaper>
 }
-
+@AppState.HardwareConfigId
 
 @code {
 
     bool _notBusy = true;
+    public ForeignKeyListRequest Request { get; set; }
 
     [CascadingParameter]
     public AppStateComponent AppState { get; set; } = new();
@@ -24,6 +34,30 @@
         await Task.Run(() => AppState.HardwareConfigId = id);
     }
 
+    async Task SetSoftwareSystemId(int id)
+    {
+        await Task.Run(() => AppState.SoftwareSystemId = id);
+    }
+
+    async Task GetSoftwareSystemVms()
+    {
+        _notBusy = false;
+        var request = new ForeignKeyListRequest();
+        request.ForeignKeyName = "HardwareConfigId";
+        request.ForeignKeyValue = AppState.HardwareConfigId.ToString();
+        var vms = await ForeignKeyListService.GetForeignKeyListVmsFromPlatformListName(request); //Request
+
+        _notBusy = true;
+    }
+    private void SetRequest()
+    {
+        Request = new ForeignKeyListRequest()
+        {
+            TableName = PlatformListName.SoftwareSystem,
+            ForeignKeyName = "HardwareConfigId",
+            ForeignKeyValue = AppState!.HardwareConfigId!.ToString()
+        };
+    }
     protected override async Task OnInitializedAsync()
     {
         _notBusy = false;
@@ -36,6 +70,7 @@
             AppState.DeviceTypeVm = await PlatformService.GetDeviceTypeVmFromGenericVm(new GenericListVm() { Id = 1 });
             await SetHardwareConfigId(AppState.DeviceTypeVm.Id);
         }
+        SetRequest();
         _notBusy = true;
     }
 }
