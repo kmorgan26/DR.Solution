@@ -4,7 +4,7 @@
 
 <LoadBuilderFilters></LoadBuilderFilters>
 
-@if (@AppState.HardwareConfigId is not null && @AppState.SoftwareSystemId is not null && _isBusy is not true)
+@if (@AppState.HardwareConfigId > 0 && @AppState.SoftwareSystemId >0 && _isBusy is not true)
 {
     <div>software @AppState.HardwareConfigId</div>
     <MudGrid Spacing="3">

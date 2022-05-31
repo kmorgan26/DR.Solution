@@ -9,7 +9,7 @@ namespace DRApplication.Shared.Requests;
 
 public class ForeignKeyListRequest
 {
-    public PlatformListName TableName { get; set; }
+    public string TableName { get; set; }
 
     public string ForeignKeyName { get; set; }
 

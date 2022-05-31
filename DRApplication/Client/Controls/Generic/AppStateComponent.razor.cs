@@ -41,8 +41,8 @@ public partial class AppStateComponent
         }
     }
 
-    private int? hardwareConfigId;
-    public int? HardwareConfigId
+    private int hardwareConfigId;
+    public int HardwareConfigId
     {
         get
         {

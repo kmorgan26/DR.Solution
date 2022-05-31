@@ -28,7 +28,7 @@ public class ForeignKeyListService : IForeignKeyListService
 
         switch (request.TableName)
         {
-            case PlatformListName.HardwareConfig :
+            case "HardwareConfigs" :
                 
                 var hFilter = new QueryFilter<HardwareConfig>() { FilterProperties = filterproperties, PaginationFilter = null };
                 var response = await _hardwareConfigManager.GetAsync(hFilter);
@@ -41,7 +41,7 @@ public class ForeignKeyListService : IForeignKeyListService
                 });
                 return vms;
 
-            case PlatformListName.Load:
+            case "Loads":
 
                 var lFilter = new QueryFilter<Load>() { FilterProperties = filterproperties, PaginationFilter = null};
                 var lResponse = await _loadManager.GetAsync(lFilter);
@@ -53,7 +53,7 @@ public class ForeignKeyListService : IForeignKeyListService
                     ForeignKey = i.DeviceTypeId
                 });
                 return vms;
-            case PlatformListName.SoftwareSystem:
+            case "SoftwareSystems":
 
                 var sFilter = new QueryFilter<SoftwareSystem>() { FilterProperties = filterproperties, PaginationFilter = null };
                 var sResponse = await _softwareSystemManager.GetAsync(sFilter);
