@@ -21,26 +21,6 @@ namespace DRApplication.Client.Services
             NotifyStateChanged(Source, "CurrentDeviceTypeVm");
         }
 
-
-
-        //public void UpdateMessage(ComponentBase Source, string Message)
-        //{
-        //    this.Message = Message;
-        //    NotifyStateChanged(Source, "Message");
-        //}
-
-        //public void UpdateEnabled(ComponentBase Source, bool Enabled)
-        //{
-        //    this.Enabled = Enabled;
-        //    NotifyStateChanged(Source, "Enabled");
-        //}
-
-        //public void UpdateCounter(ComponentBase Source, int Counter)
-        //{
-        //    this.Counter = Counter;
-        //    NotifyStateChanged(Source, "Counter");
-        //}
-
         public event Action<ComponentBase, string> StateChanged;
 
         private void NotifyStateChanged(ComponentBase Source, string Property) => StateChanged?.Invoke(Source, Property);
