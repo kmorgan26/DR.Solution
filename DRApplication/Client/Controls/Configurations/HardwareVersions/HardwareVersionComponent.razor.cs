@@ -1,7 +1,7 @@
 using DRApplication.Client.Services;
-using DRApplication.Client.ViewModels.Configuration;
+using DRApplication.Client.ViewModels;
 
-namespace DRApplication.Client.Controls.Configurations
+namespace DRApplication.Client.Controls
 {
     public partial class HardwareVersionComponent
     {

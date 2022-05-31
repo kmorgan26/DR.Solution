@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Components;
 
-namespace DRApplication.Client.Controls.Platforms
+namespace DRApplication.Client.Controls
 {
     public partial class DeviceTypeLabel
     {

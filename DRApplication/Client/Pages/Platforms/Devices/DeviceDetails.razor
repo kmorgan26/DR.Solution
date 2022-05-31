@@ -1,0 +1,11 @@
+﻿@page "/device/details/{deviceId:int}"
+@namespace DRApplication.Client.Pages
+
+<DeviceLogbook DeviceId="@DeviceId"></DeviceLogbook>
+
+@code {
+
+    [Parameter]
+    public int DeviceId { get; set; }
+
+}

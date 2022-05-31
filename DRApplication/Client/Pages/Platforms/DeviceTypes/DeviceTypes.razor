@@ -1,6 +1,7 @@
-﻿@namespace DRApplication.Client.Pages.Platforms
-@page "/deviceTypes"
+﻿@page "/deviceTypes"
+@namespace DRApplication.Client.Pages
+@inject IPlatformService _platformService
 
-<h3>Device Types</h3>
+<TitleHeader IconPath="@Icons.Material.Filled.LocalAirport" TitleText="Device Types" />
 
-<DeviceTypeComponent></DeviceTypeComponent>
+<DeviceTypeTable></DeviceTypeTable>

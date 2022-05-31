@@ -1,6 +1,75 @@
-﻿@namespace DRApplication.Client.Pages.Platforms
-@page "/devicetype/edit/{deviceTypeId:int}"
+﻿@page "/devicetype/edit/{deviceTypeId:int}"
+@namespace DRApplication.Client.Pages
+@inject DeviceTypeManager manager
+@inject MaintainerManager maintainerManager
+@inject NavigationManager navigation
 
-<h3>Device Type Edit</h3>
+<MudText Typo="Typo.h3" Class="mb-4">
+    <MudIcon Icon="@Icons.Material.Filled.LocalAirport" Size="Size.Large" Class="m-3" />
+    Edit Device Type
+</MudText>
 
-<DeviceTypeEditComponent DeviceTypeId=@DeviceTypeId></DeviceTypeEditComponent>
+@if (ViewModel is not null && _maintainerVms is not null)
+{
+    <GenericForm CancelPath="/devicetypes" Item="ViewModel" Model="ViewModel" TItem="DeviceTypeEditVm" OnValidSubmit="UpdateDeviceType">
+        <FormItems>
+
+            <MudPaper Class="pa-2 ma-2" Elevation="0">
+                <MudTextField T="string" @bind-Value="ViewModel.Name" Label="Device Type" Required="true" />
+            </MudPaper>
+
+            <MudPaper Class="pa-2 ma-2" Elevation="0">
+                <MudSelect Label="Maintainer" @bind-Value="ViewModel.MaintainerId">
+                    @foreach (var maintainer in _maintainerVms)
+                    {
+                        <MudSelectItem Value="maintainer.Id">@maintainer.Maintainer</MudSelectItem>
+                    }
+                </MudSelect>
+            </MudPaper>
+
+            <MudPaper Class="pa-2 ma-2" Elevation="0">
+                <MudCheckBox T="bool" @bind-Checked="ViewModel.IsActive" Label="Is Active?" />
+            </MudPaper>
+
+        </FormItems>
+    </GenericForm>
+
+
+}
+
+@code {
+
+    [Parameter]
+    public int DeviceTypeId { get; set; }
+
+    public DeviceTypeEditVm ViewModel { get; set; } = new();
+
+    private int SelectedMaintainerId;
+
+    private IEnumerable<MaintainerVm>? _maintainerVms;
+
+    void UpdateMaintainer(int? id)
+    {
+        ViewModel.MaintainerId = Convert.ToInt32(id);
+    }
+    void UpdateName(string name)
+    {
+        ViewModel.Name = name;
+    }
+
+    protected async Task UpdateDeviceType()
+    {
+        var deviceType = Mapping.Mapper.Map<DeviceType>(ViewModel);
+        await manager.UpdateAsync(deviceType);
+        navigation.NavigateTo("/deviceTypes");
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var deviceType = await manager.GetByIdAsync(DeviceTypeId);
+        ViewModel = Mapping.Mapper.Map<DeviceTypeEditVm>(deviceType);
+
+        var maintainers = await maintainerManager.GetAllAsync();
+        _maintainerVms = Mapping.Mapper.Map<IEnumerable<MaintainerVm>>(maintainers);
+    }
+}

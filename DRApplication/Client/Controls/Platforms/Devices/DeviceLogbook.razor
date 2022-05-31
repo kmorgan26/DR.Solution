@@ -1,0 +1,54 @@
+﻿@namespace DRApplication.Client.Controls
+
+@if (@_isBusy)
+{
+    <MudSkeleton />
+    <MudSkeleton Animation="Animation.False" />
+    <MudSkeleton Animation="Animation.Wave" />
+}
+else
+{
+    <TitleHeader IconPath="@Icons.Filled.Book" TitleText="@($"{DeviceVm?.Device} Logbook")" />
+    
+    <MudTabs Elevation="2" Rounded="true" Centered="true">
+        <MudTabPanel Icon="@Icons.Material.Filled.Cancel" BadgeData='"12"' BadgeColor="Color.Error" Text="DRs" ToolTip="Discrepancy Reports">
+            <FakeTable></FakeTable>
+        </MudTabPanel>
+        <MudTabPanel Icon="@Icons.Material.Filled.Build" BadgeData='"23"' BadgeColor="Color.Info" Text="MI" ToolTip="Maintenance Issues">
+            <FakeTable></FakeTable>
+        </MudTabPanel>
+        <MudTabPanel Icon="@Icons.Material.Filled.WatchLater" BadgeData='"1"' ToolTip="Deferred Issues">
+            <FakeTable></FakeTable>
+        </MudTabPanel>
+        <MudTabPanel Icon="@Icons.Material.Filled.BugReport" BadgeData='"5"' BadgeColor="Color.Warning" Text="??" ToolTip="Potential Issues" >
+            A list of Issues that might apply to this device, but have not been verified!
+        </MudTabPanel>
+    </MudTabs>
+
+}
+
+@code {
+
+    bool _isBusy;
+
+    [Parameter]
+    public int DeviceId { get; set; }
+
+    [Inject]
+    public DeviceManager? manager { get; set; }
+
+    DeviceVm? DeviceVm;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        if (manager is not null)
+        {
+            var device = await manager.GetByIdAsync(DeviceId);
+            DeviceVm = Mapping.Mapper.Map<DeviceVm>(device);
+        }
+
+        _isBusy = false;
+    }
+
+}

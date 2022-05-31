@@ -1,6 +1,9 @@
-﻿namespace DRApplication.Client.ViewModels.Platform;
-public class MaintainerVm
+﻿namespace DRApplication.Client.ViewModels;
+
+public class MaintainerVm : IMaintainerViewModel
 {
     public int Id { get; set; }
-    public string Name { get; set; } = null!;
+
+    public string Maintainer { get; set; } = null!;
+    
 }

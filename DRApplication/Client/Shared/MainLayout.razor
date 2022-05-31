@@ -1,21 +1,58 @@
 ﻿@inherits LayoutComponentBase
+@inject IPlatformService PlatformService
 
-<MudThemeProvider/>
-<MudDialogProvider/>
-<MudSnackbarProvider/>
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
 
-<div class="page">
-    <div class="sidebar">
+<MudLayout>
+
+    <MudAppBar Elevation="0">
+
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+
+
+        <MudSpacer />
+
+        <MenuPicker MenuIcon="@Icons.Material.Filled.DeviceHub"
+                    ToolTipColor="Color.Warning"
+                    ToolTipText="Platform"
+                    OnItemClick="SetDeviceType"
+                    ListType="PlatformListName.Platform" />
+
+        <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Inherit" Link="/user/settings" />
+    </MudAppBar>
+
+    <MudDrawer @bind-Open="_drawerOpen" Elevation="3">
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h5" Color="Color.Primary" Class="pl-6 mt-2">@AppState?.DeviceTypeVm?.Platform</MudText>
+        </MudDrawerHeader>
         <NavMenu />
-    </div>
+    </MudDrawer>
 
-    <main>
-        <div class="top-row px-4">
-            Login Here
-        </div>
-
-        <article class="content px-4">
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="my-8 pt-4">
             @Body
-        </article>
-    </main>
-</div>
+        </MudContainer>
+    </MudMainContent>
+
+</MudLayout>
+@code {
+
+    [CascadingParameter]
+    AppStateComponent? AppState { get; set; }
+
+
+    bool _drawerOpen = true;
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    private async Task SetDeviceType(GenericListVm genericListVm)
+    {
+        var deviceTypeVm = await PlatformService.GetDeviceTypeVmFromGenericVm(genericListVm);
+        AppState.DeviceTypeVm = deviceTypeVm;
+    }
+
+}

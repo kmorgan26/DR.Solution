@@ -1,0 +1,42 @@
+﻿@namespace DRApplication.Client.Controls
+@inject IGenericListService ListService
+
+<MudTooltip Text="@ToolTipText" Color="@ToolTipColor">
+    <MudMenu Icon="@MenuIcon" Color="Color.Inherit">
+        @foreach (var item in _items)
+        {
+            <MudMenuItem @onclick="() => OnMenuItemClick(item)">@item.Name</MudMenuItem>
+        }
+    </MudMenu>
+</MudTooltip>
+
+@code {
+
+    private IEnumerable<GenericListVm>? _items { get; set; }
+
+    [Parameter]
+    public PlatformListName ListType { get; set; }
+
+    [Parameter]
+    public string? ToolTipText { get; set; } = string.Empty;
+
+    [Parameter]
+    public Color ToolTipColor { get; set; } = Color.Warning;
+
+    [Parameter]
+    public string MenuIcon { get; set; } = Icons.Material.Filled.QuestionMark;
+
+    [Parameter]
+    public EventCallback<GenericListVm> OnItemClick { get; set; }
+
+    void OnMenuItemClick(GenericListVm genericListVm)
+    {
+        OnItemClick.InvokeAsync(genericListVm);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _items = await ListService.GetGenericListVmsFromPlatformListName(ListType);
+    }
+
+}

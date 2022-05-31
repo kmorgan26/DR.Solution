@@ -1,4 +1,4 @@
-﻿@namespace DRApplication.Client.Controls.Configurations
+﻿@namespace DRApplication.Client.Controls
 @inject HardwareSystemManager manager
 @inject NavigationManager navigation
 
@@ -11,8 +11,8 @@
                 <label for="Name">Hardware System</label>
                 <InputText class="form-control" @bind-Value="HardwareSystemEditVm.Name" />
 
-                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Update</MudButton>
-                <MudButton Link="/hardwaresystem" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
+                <SubmitButton ButtonText="Update"/>
+                <CancelButton Url="/hardwaresystem"/>
 
             </EditForm>
         }

@@ -1,0 +1,39 @@
+﻿@namespace DRApplication.Client.Controls
+
+<MudItem xs="12" sm="12" md="6" lg="3">
+    <MudCard>
+        <MudCardHeader>
+            <CardHeaderAvatar>
+                <MudAvatar Color="@AvatarColor" Size="Size.Medium">@DeviceVm.Device</MudAvatar>
+            </CardHeaderAvatar>
+            <CardHeaderContent>
+                <MudLink Typo="Typo.h6" Color="@HeaderColor" Href="@($"/device/details/{@DeviceVm.Id}")">@DeviceVm.Device</MudLink>
+            </CardHeaderContent>
+            <CardHeaderActions>
+                <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
+            </CardHeaderActions>
+        </MudCardHeader>
+        <MudSkeleton SkeletonType="SkeletonType.Rectangle" Animation="Animation.Wave" Height="250px" />
+        <MudCardContent>
+            The Current Load will be displayed here.
+        </MudCardContent>
+        <MudCardActions>
+            <MudIconButton Icon="@Icons.Material.Filled.Favorite" Color="Color.Default" />
+            <MudIconButton Icon="@Icons.Material.Filled.Share" Color="Color.Default" />
+        </MudCardActions>
+    </MudCard>
+</MudItem>
+
+@code {
+
+    [Parameter]
+    public DeviceVm DeviceVm { get; set; } = new();
+
+    [Parameter]
+    public Color AvatarColor { get; set; } = Color.Default;
+
+    [Parameter]
+    public Color HeaderColor { get; set; } = Color.Primary;
+
+
+}

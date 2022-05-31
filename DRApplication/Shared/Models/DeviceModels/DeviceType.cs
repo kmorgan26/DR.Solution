@@ -5,26 +5,16 @@ using System;
 using System.Collections.Generic;
 namespace DRApplication.Shared.Models.DeviceModels
 {
-    [Table("DeviceTypes")]
     public partial class DeviceType
     {
-        //public DeviceType()
-        //{
-        //    Devices = new HashSet<Device>();
-        //    Drrbs = new HashSet<Drrb>();
-        //    HardwareConfigs = new HashSet<HardwareConfig>();
-        //    RctdLots = new HashSet<RctdLot>();
-        //    SsrdTasks = new HashSet<SsrdTask>();
-        //}
-        [Key]
         public int Id { get; set; }
 
         public string Name { get; set; } = null!;
         public int MaintainerId { get; set; }
         public bool IsActive { get; set; }
 
-        //public virtual Maintainer Maintainer { get; set; } = null!;
-        //public virtual ICollection<Device> Devices { get; set; }
+        //public IEnumerable<Device> Devices { get; set; } = new List<Device>();
+
         //public virtual ICollection<Drrb> Drrbs { get; set; }
         //public virtual ICollection<HardwareConfig> HardwareConfigs { get; set; }
         //public virtual ICollection<RctdLot> RctdLots { get; set; }

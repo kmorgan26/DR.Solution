@@ -1,4 +1,4 @@
-﻿@namespace DRApplication.Client.Controls.Configurations
+﻿@namespace DRApplication.Client.Controls
 @inject VersionsLoadManager manager
 @inject NavigationManager navigation
 
@@ -13,9 +13,8 @@
 
                 <LoadSelect LoadIdChange="UpdateLoad" SelectedLoadId="@_versionsLoadInsertVm.LoadId"/>
 
-                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Insert</MudButton>
-                <MudButton Link="/versionsload" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
-
+                <SubmitButton ButtonText="Insert"/>
+                <CancelButton Url="/versionsload"/>
             </EditForm>
         }
     </div>

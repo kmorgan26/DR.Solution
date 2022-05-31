@@ -1,0 +1,15 @@
+﻿@page "/devices/list/{deviceTypeId:int}"
+@namespace DRApplication.Client.Pages
+@inject IPlatformService PlatformService
+
+@if (DeviceTypeId > 0)
+{
+    <DeviceCardList DeviceTypeId="DeviceTypeId"></DeviceCardList>
+}
+
+@code {
+
+    [Parameter]
+    public int DeviceTypeId { get; set; } = 0;
+
+}

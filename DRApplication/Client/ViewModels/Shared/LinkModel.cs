@@ -1,4 +1,5 @@
-﻿namespace DRApplication.Client.ViewModels.Shared;
+﻿namespace DRApplication.Client.ViewModels;
+
 public class LinkModel
 {
     public LinkModel(int page) : this(page, true)

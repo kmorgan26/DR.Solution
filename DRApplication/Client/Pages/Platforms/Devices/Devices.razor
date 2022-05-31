@@ -1,6 +1,15 @@
-﻿@namespace DRApplication.Client.Pages.Platforms
-@page "/devices"
+﻿@page "/devices"
+@namespace DRApplication.Client.Pages
 
-<h3>Devices</h3>
+@inject IPlatformService _platformService
+@inject DeviceManager manager
 
-<DeviceComponent></DeviceComponent>
+<TitleHeader IconPath="@Icons.Material.Filled.LocalAirport" TitleText="Devices" />
+
+<MudGrid Justify="Justify.FlexStart" Spacing="3" Class="p-9">
+    <MudItem>
+    </MudItem>
+
+</MudGrid>
+
+<DeviceTable></DeviceTable>

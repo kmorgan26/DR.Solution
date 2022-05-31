@@ -1,0 +1,44 @@
+﻿@namespace DRApplication.Client.Controls
+@inject ILoadBuilderService LoadBuilderService
+@inject IPlatformService PlatformService
+
+<LoadBuilderFilters></LoadBuilderFilters>
+
+@if (@AppState.HardwareConfigId > 0 && @AppState.SoftwareSystemId >0 && _isBusy is not true)
+{
+    <div>software @AppState.HardwareConfigId</div>
+    <MudGrid Spacing="3">
+        <MudItem xs="3">
+            <MudPaper Class="m-9">
+                <MudList Clickable="true" Dense="true" Color="Color.Success">
+                    @foreach (var item in _softwareSystemVms)
+                    {
+                        <MudListItem Text="@item.Name" Value="@item.Name" />
+                    }
+                </MudList>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+}
+
+
+@code {
+
+    bool _isBusy;
+
+    private IEnumerable<HardwareConfigVm> _hardwareConfigVms { get; set; }
+    private IEnumerable<SoftwareSystemVm> _softwareSystemVms { get; set; }
+
+    [CascadingParameter]
+    public AppStateComponent AppState { get; set; } = new();
+
+    async Task SetSoftwareConfigs()
+    {
+        _isBusy = true;
+        var id = Convert.ToInt32(@AppState.HardwareConfigId);
+        var softwareConfigs = await LoadBuilderService.GetSoftwareSystemsByHardwareConfigIg(id);
+        _softwareSystemVms = softwareConfigs;
+
+        _isBusy = false;
+    }
+}

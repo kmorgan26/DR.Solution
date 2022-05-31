@@ -1,5 +1,6 @@
 ﻿using DRApplication.Shared.Models.DeviceModels;
-namespace DRApplication.Client.Services.Platforms;
+namespace DRApplication.Client.Services;
+
 public class DeviceManager : ApiRepository<Device>
 {
     private readonly HttpClient _http;

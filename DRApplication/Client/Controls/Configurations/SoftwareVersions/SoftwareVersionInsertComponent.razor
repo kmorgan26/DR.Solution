@@ -1,4 +1,4 @@
-﻿@namespace DRApplication.Client.Controls.Configurations
+﻿@namespace DRApplication.Client.Controls
 @inject SoftwareVersionManager manager
 @inject NavigationManager navigation
 
@@ -17,9 +17,8 @@
                 <label for="Name">Version Date</label>
                 <InputDate class="form-control" @bind-Value="_softwareVersionInsertVm.VersionDate" />
 
-                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Insert</MudButton>
-                <MudButton Link="/softwareversion" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
-
+                <SubmitButton ButtonText="Insert"/>
+                <CancelButton Url="softwareversion"/>
             </EditForm>
         }
     </div>

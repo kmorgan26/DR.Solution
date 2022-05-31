@@ -1,0 +1,56 @@
+﻿@namespace DRApplication.Client.Controls
+@using DRApplication.Shared.Requests
+@inject IPlatformService PlatformService
+@inject IForeignKeyListService ForeignKeyListService
+
+@if (_notBusy)
+{
+    <MudPaper Class="d-flex flex-row flex-grow-1 gap-6 pa-3">
+
+        @if (AppState.DeviceTypeVm is not null && AppState.DeviceTypeVm!.Id > 0)
+        {
+            <GenericSelect LabelText="Hardware Config" TableName="HardwareConfigs" ForeignKeyName="DeviceTypeId" ForeignKeyValue="@AppState.DeviceTypeVm.Id"
+                OnSelectListChanged="SetHardwareConfigId" TopMenuItemText="Select a HW Config" />
+        }
+
+        @if (AppState.HardwareConfigId > 0)
+        {
+            <GenericSelect LabelText="Sofware Systems" TableName="SoftwareSystems" ForeignKeyName="HardwareConfigId" ForeignKeyValue="@AppState.HardwareConfigId"
+                   OnSelectListChanged="SetSoftwareSystemId" Request="Request" TopMenuItemText="SELECT Software System" />
+        }
+
+    </MudPaper>
+}
+@AppState.HardwareConfigId
+
+@code {
+
+    bool _notBusy = true;
+
+    public ForeignKeyListRequest Request { get; set; }
+
+    [CascadingParameter]
+    public AppStateComponent AppState { get; set; } = new();
+
+    async Task SetHardwareConfigId(int id)
+    {
+        await Task.Run(() => AppState.HardwareConfigId = id);
+    }
+
+    async Task SetSoftwareSystemId(int id)
+    {
+        await Task.Run(() => AppState.SoftwareSystemId = id);
+    }
+
+    async Task GetSoftwareSystemVms()
+    {
+        _notBusy = false;
+
+        var request = new ForeignKeyListRequest();
+        request.ForeignKeyName = "HardwareConfigId";
+        request.ForeignKeyValue = AppState.HardwareConfigId.ToString();
+        var vms = await ForeignKeyListService.GetForeignKeyListVmsFromPlatformListName(request); //Request
+
+        _notBusy = true;
+    }
+}

@@ -1,0 +1,24 @@
+﻿@inherits MudButton
+@namespace DRApplication.Client.Controls
+
+<MudButton
+    Variant="Variant.Filled" 
+    ButtonType="ButtonType.Button"
+    EndIcon="@Icons.Filled.AddCircle" 
+    IconColor="Color.Inherit" 
+    Color="Color.Success" 
+    Size="Size.Small" 
+    Link="@Url">
+    New
+</MudButton>
+
+@code {
+
+    /// <summary>
+    /// Clicking the button will open the referenced route. Example "/route/new" 
+    /// </summary>
+    
+    [Parameter]
+    public string? Url { get; set; }
+
+}

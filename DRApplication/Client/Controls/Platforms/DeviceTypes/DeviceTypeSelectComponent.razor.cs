@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Components;
 using DRApplication.Client.Services;
-using DRApplication.Client.Controls.Generic;
-using DRApplication.Client.ViewModels.Shared;
+using DRApplication.Client.ViewModels;
 
-namespace DRApplication.Client.Controls.Platforms
+namespace DRApplication.Client.Controls
 {
     public partial class DeviceTypeSelectComponent
     {
@@ -37,10 +36,10 @@ namespace DRApplication.Client.Controls.Platforms
         {
             try
             {
-                if (AppStateComponent is not null && AppStateComponent.DeviceTypeId is not null)
+                if (AppStateComponent is not null && AppStateComponent.DeviceTypeVm is not null)
                 {
                     await Task.Delay(0);
-                    SelectedDeviceTypeId = AppStateComponent.DeviceTypeId != null ? AppStateComponent.DeviceTypeId : 0;
+                    SelectedDeviceTypeId = AppStateComponent.DeviceTypeVm?.Id != null ? AppStateComponent.DeviceTypeVm.Id : 0;
                 }
             }
             catch

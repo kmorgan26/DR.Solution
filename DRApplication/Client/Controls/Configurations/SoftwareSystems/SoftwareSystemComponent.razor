@@ -1,11 +1,7 @@
-﻿@namespace DRApplication.Client.Controls.Configurations
+﻿@namespace DRApplication.Client.Controls
 @inject SoftwareSystemManager manager
 
-<div class="row mb-4">
-    <div class="col col-md-6 col-sm-12">
-        <MudButton Size="Size.Small" Variant="Variant.Filled" Color="Color.Success" Link="/softwaresystem/create">New</MudButton>
-    </div>
-</div>
+<NewButton Url="/softwaresystem/create"/>
 
 <MudTable Items="@_softwareSystemVms" Hover="true" Striped="true" Dense="true">
     <HeaderContent>

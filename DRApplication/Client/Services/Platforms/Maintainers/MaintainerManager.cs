@@ -1,5 +1,7 @@
 ﻿using DRApplication.Shared.Models.DeviceModels;
-namespace DRApplication.Client.Services.Platforms;
+
+namespace DRApplication.Client.Services;
+
 public class MaintainerManager : ApiRepository<Maintainer>
 {
     HttpClient _http;

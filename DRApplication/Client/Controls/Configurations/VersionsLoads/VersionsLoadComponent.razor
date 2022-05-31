@@ -1,11 +1,7 @@
-﻿@namespace DRApplication.Client.Controls.Configurations
+﻿@namespace DRApplication.Client.Controls
 @inject VersionsLoadManager manager
 
-<div class="row mb-4">
-    <div class="col col-md-6 col-sm-12">
-        <MudButton Size="Size.Small" Variant="Variant.Filled" Color="Color.Success" Link="/versionsload/create">New</MudButton>
-    </div>
-</div>
+<NewButton Url="/versionsload/create"/>
 
 <MudTable Items="@_versionsLoadVms" Hover="true" Striped="true" Dense="true">
     <HeaderContent>

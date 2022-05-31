@@ -1,6 +1,75 @@
-﻿@namespace DRApplication.Client.Pages.Platforms
-@page "/device/edit/{deviceId:int}"
+﻿@page "/device/edit/{deviceId:int}"
+@namespace DRApplication.Client.Pages
+@inject DeviceManager manager
+@inject DeviceTypeManager deviceTypeManager
+@inject NavigationManager navigation
 
-<h3>DeviceEdit</h3>
+<MudText Typo="Typo.h3" Class="mb-4">
+    <MudIcon Icon="@Icons.Material.Filled.LocalAirport" Size="Size.Large" Class="m-3" />
+    Edit Device Type
+</MudText>
 
-<DeviceEditComponent DeviceId="@DeviceId"></DeviceEditComponent>
+@*@if (@DeviceEditVm is not null && _deviceTypeVms is not null)
+{
+    <EditForm Model="DeviceEditVm" OnValidSubmit="UpdateDevice">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <MudCard>
+            <MudCardContent>
+                <MudTextField T="string" @bind-Value="DeviceEditVm.Name" Label="Device Type" Required="true" />
+
+                <MudSelect Label="DeviceType" @bind-Value="DeviceEditVm.DeviceTypeId" Required="true">
+                    @foreach (var deviceType in _deviceTypeVms)
+                    {
+                        <MudSelectItem Value="deviceType.Id">@deviceType.Name</MudSelectItem>
+                    }
+                </MudSelect>
+
+                <MudCheckBox T="bool" @bind-Checked="DeviceEditVm.IsActive" Label="Is Active?" Required="true" />
+
+                <MudDivider />
+
+                <SubmitButton ButtonText="Update"/>
+                <CancelButton Url="/devices" />
+        </MudCardContent>
+    </MudCard>
+
+
+</EditForm>
+
+
+
+}*@
+
+@code {
+
+    //[Parameter]
+    //public int DeviceId { get; set; }
+
+    //public DeviceEditVm DeviceEditVm { get; set; } = new();
+
+    //private int SelectedDeviceTypeId;
+
+    //private IEnumerable<DeviceTypeVm>? _deviceTypeVms;
+
+    //void UpdateDeviceType(int? id)
+    //{
+    //    DeviceEditVm.DeviceTypeId = Convert.ToInt32(id);
+    //}
+
+    //protected async Task UpdateDevice()
+    //{
+    //    var device = Mapping.Mapper.Map<Device>(DeviceEditVm);
+    //    await manager.UpdateAsync(device);
+    //    navigation.NavigateTo("/devices");
+    //}
+
+    //protected override async Task OnParametersSetAsync()
+    //{
+    //    var device = await manager.GetByIdAsync(DeviceId);
+    //    DeviceEditVm = Mapping.Mapper.Map<DeviceEditVm>(device);
+
+    //    var deviceTypes = await deviceTypeManager.GetAllAsync();
+    //    _deviceTypeVms = Mapping.Mapper.Map<IEnumerable<DeviceTypeVm>>(deviceTypes);
+    //}
+}

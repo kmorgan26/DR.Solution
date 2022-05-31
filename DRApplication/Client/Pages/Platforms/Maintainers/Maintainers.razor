@@ -1,6 +1,10 @@
-﻿@namespace DRApplication.Client.Pages.Platforms
-@page "/maintainers"
+﻿@page "/maintainers"
+@namespace DRApplication.Client.Pages
 
-<h3>Maintainers</h3>
+@inject MaintainerManager _db
 
-<MaintainerComponent></MaintainerComponent>
+<TitleHeader IconPath="@Icons.Material.Filled.LocalAirport" TitleText="Maintainers" />
+
+<NewButton Url="/maintainer/create" />
+
+<MaintainerTable></MaintainerTable>

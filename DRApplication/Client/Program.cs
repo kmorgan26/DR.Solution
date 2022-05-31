@@ -1,7 +1,7 @@
 using Blazored.LocalStorage;
 using DRApplication.Client;
-using DRApplication.Client.Services.Configurations;
-using DRApplication.Client.Services.Platforms;
+using DRApplication.Client.Interfaces;
+using DRApplication.Client.Services;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
@@ -34,6 +34,13 @@ builder.Services.AddScoped<VersionsLoadManager>();
 builder.Services.AddScoped<MaintainerManager>();
 builder.Services.AddScoped<DeviceTypeManager>();
 builder.Services.AddScoped<DeviceManager>();
+
+builder.Services.AddTransient<IPlatformService, PlatformService>();
+builder.Services.AddTransient<ILoadBuilderService, LoadBuilderService>();
+builder.Services.AddTransient<IGenericListService, GenericListService>();
+builder.Services.AddTransient<IForeignKeyListService, ForeignKeyListService>();
+
+builder.Services.AddTransient(typeof(ITableService<>), typeof(TableService<>));
 
 builder.Services.AddBlazoredLocalStorage();
 

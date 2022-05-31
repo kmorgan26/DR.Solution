@@ -1,0 +1,69 @@
+﻿@typeparam TItem
+@inherits MudTable<TItem>
+@namespace DRApplication.Client.Controls
+
+<MudTable 
+    Items="TableItems"
+    Hover="true"
+    Dense="true"
+    Breakpoint="Breakpoint.Sm"
+    Striped="true"
+    Elevation="3"
+    @bind-SelectedItem="_selectedItem"
+    RowEditCommit="RowCommited"
+    IsEditRowSwitchingBlocked="true"
+    TotalItems="@_pagedResponse.TotalRecords"
+    CurrentPage="@_pagedResponse.PageNumber"
+    RowsPerPage="@_pagedResponse.PageSize"
+>
+
+    <HeaderContent>
+        @FSHeaderContent
+    </HeaderContent>
+
+    <RowTemplate>
+        @FSRowTemplate(@context)
+    </RowTemplate>
+    <RowEditingTemplate>
+        @FSRowEditingTemplate(@context)
+    </RowEditingTemplate>
+
+    <PagerContent>
+        @FSPagerContent
+    </PagerContent>
+
+</MudTable>
+
+@code {
+
+    private TItem? _selectedItem;
+
+    private void RowCommited(object e) => OnRowCommited.InvokeAsync((TItem)e);
+
+    [Parameter]
+    public EventCallback<TItem> OnRowCommited { get; set; }
+
+    [Parameter]
+    public EventCallback<int> OnPageChanged { get; set; }
+
+    [Parameter]
+    public IEnumerable<TItem>? TableItems { get; set; }
+
+    [Parameter]
+    public RenderFragment? FSHeaderContent { get; set; }
+
+    [Parameter]
+    public RenderFragment<TItem>? FSRowTemplate { get; set; }
+
+    [Parameter]
+    public RenderFragment<TItem>? FSRowEditingTemplate { get; set; }
+
+    [Parameter]
+    public RenderFragment? FSPagerContent { get; set; }
+
+    private PagedResponse<TItem> _pagedResponse = new();
+
+    private PaginationFilter _paginationFilter = new();
+
+}
+

@@ -1,4 +1,4 @@
-﻿@namespace DRApplication.Client.Controls.Configurations
+﻿@namespace DRApplication.Client.Controls
 @inject LoadManager manager
 @inject NavigationManager navigation
 
@@ -6,15 +6,15 @@
     <div class="col-md-6 col-sm-12">
         @if (@LoadEditVm != null)
         {
-            <EditForm Model="@LoadEditVm" OnValidSubmit="@UpdateHarwareConfig">
+            <EditForm Model="@LoadEditVm" OnValidSubmit="@UpdateLoad">
 
                 <label for="Name">Hardware Configuration</label>
                 <InputText class="form-control" @bind-Value="LoadEditVm.Name" />
 
                 <DeviceTypeSelectComponent DeviceTypeIdChange="UpdateDeviceType" SelectedDeviceTypeId="@LoadEditVm.DeviceTypeId"></DeviceTypeSelectComponent>
 
-                <MudButton Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Primary" Size="Size.Small">Update</MudButton>
-                <MudButton Link="/hardwareconfig" Variant="Variant.Filled" Color="Color.Error" Size="Size.Small">Cancel</MudButton>
+                <SubmitButton ButtonText="Update"/>
+                <CancelButton Url="/load"/>
 
             </EditForm>
         }

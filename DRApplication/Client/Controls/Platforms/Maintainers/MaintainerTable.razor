@@ -1,0 +1,26 @@
+﻿@namespace DRApplication.Client.Controls
+@inject MaintainerManager _db
+
+@if (!_isBusy)
+{
+    <FSMudTable TableItems="MaintainerVms" TItem="MaintainerVm" OnRowCommited="UpdateRowItem">
+
+        <FSHeaderContent>
+            <MudTh>Id</MudTh>
+            <MudTh>Maintainer</MudTh>
+        </FSHeaderContent>
+
+        <FSRowTemplate>
+            <MudTd DataLabel="Id">@context.Id</MudTd>
+            <MudTd DataLabel="Maintainer">@context.Maintainer</MudTd>
+        </FSRowTemplate>
+
+        <FSRowEditingTemplate>
+            <MudTd DataLabel="Id">@context.Id</MudTd>
+            <MudTd DataLabel="Maintainer">
+                <MudTextField Variant="Variant.Outlined" @bind-Value="@context.Maintainer" />
+            </MudTd>
+        </FSRowEditingTemplate>
+
+    </FSMudTable>
+}

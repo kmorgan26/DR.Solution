@@ -60,26 +60,37 @@ namespace DRApplication.Server.Data
                 try
                 {
                     SqlQueryBuilder<TEntity> sqlQueryBuilder = new SqlQueryBuilder<TEntity>(Filter, entityName);
+                    var response = new PagedResponse<TEntity>();
 
                     //Get the packet for the main query that will have the data
                     var sqlPacket = sqlQueryBuilder.GetSqlPacket();
                     var result = await db.QueryAsync<TEntity>(sqlPacket.SqlQuery, sqlPacket.DynamicParameters);
 
-
-                    //Get the packet for the query with the count
-                    var countQuery = sqlQueryBuilder.GetSqlCountPacket();
-                    int count = await db.ExecuteScalarAsync<int>(countQuery.SqlQuery, countQuery.DynamicParameters);
-
-                    //pack it up in a response
-                    var response = new PagedResponse<TEntity>()
+                    if(Filter.PaginationFilter is not null)
                     {
-                        Data = result,
-                        PageNumber = Filter.PaginationFilter.PageNumber,
-                        PageSize = Filter.PaginationFilter.PageSize,
-                        TotalRecords = count,
-                        TotalPages = (count / Filter.PaginationFilter.PageSize),
-                        Success = true
-                    };
+                        //Get the packet for the query with the count
+                        var countQuery = sqlQueryBuilder.GetSqlCountPacket();
+                        int count = await db.ExecuteScalarAsync<int>(countQuery.SqlQuery, countQuery.DynamicParameters);
+
+                        //pack it up in a response
+                        response = new PagedResponse<TEntity>()
+                        {
+                            Data = result,
+                            PageNumber = Filter.PaginationFilter.PageNumber,
+                            PageSize = Filter.PaginationFilter.PageSize,
+                            TotalRecords = count,
+                            TotalPages = (count / Filter.PaginationFilter.PageSize),
+                            Success = true
+                        };
+                    }
+                    else
+                    {
+                        response = new PagedResponse<TEntity>()
+                        {
+                            Data = result,
+                            Success = true
+                        };
+                    }
 
                     return response;
                 }
