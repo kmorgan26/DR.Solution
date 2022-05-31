@@ -23,12 +23,6 @@
 
 @code {
 
-    //private async Task SetDeviceType(GenericListVm genericListVm)
-    //{
-    //    var deviceTypeVm = await PlatformService.GetDeviceTypeVmFromGenericVm(genericListVm);
-    //    AppState.UpdateCurrentDeviceTypeVm(this, deviceTypeVm);
-    //}
-
     private async Task AppState_StateChanged(ComponentBase Source, string Property)
     {
         if (Source != this)
