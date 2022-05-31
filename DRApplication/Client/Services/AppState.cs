@@ -7,6 +7,7 @@ namespace DRApplication.Client.Services
     {
 
         public DeviceTypeVm CurrentDeviceTypeVm { get; private set; } = new();
+
         public IEnumerable<DeviceTypeVm> DeviceTypeVms { get; private set; } = new List<DeviceTypeVm>();
 
         public void UpdateDeviceTypeVms(ComponentBase Source, IEnumerable<DeviceTypeVm> Model)
