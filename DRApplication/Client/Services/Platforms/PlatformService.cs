@@ -92,4 +92,17 @@ public class PlatformService : IPlatformService
         };
         return vm;
     }
+
+    public async Task<DeviceTypeVm> GetDeviceTypeVmById(int id)
+    {
+        var deviceType = await _deviceTypeManager.GetByIdAsync(id);
+        var vm = new DeviceTypeVm()
+        {
+            Id = deviceType.Id,
+            IsActive = deviceType.IsActive,
+            MaintainerId = deviceType.MaintainerId,
+            Platform = deviceType.Name,
+        };
+        return vm;
+    }
 }
