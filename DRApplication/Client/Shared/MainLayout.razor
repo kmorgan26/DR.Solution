@@ -1,5 +1,6 @@
 ﻿@inherits LayoutComponentBase
 @inject IPlatformService PlatformService
+@inject AppState AppState
 
 <MudThemeProvider />
 <MudDialogProvider />
@@ -25,7 +26,7 @@
 
     <MudDrawer @bind-Open="_drawerOpen" Elevation="3">
         <MudDrawerHeader>
-            <MudText Typo="Typo.h5" Color="Color.Primary" Class="pl-6 mt-2">@AppState?.DeviceTypeVm?.Platform</MudText>
+            <MudText Typo="Typo.h5" Color="Color.Primary" Class="pl-6 mt-2">@AppState?.CurrentDeviceTypeVm?.Platform</MudText>
         </MudDrawerHeader>
         <NavMenu />
     </MudDrawer>
@@ -38,21 +39,30 @@
 
 </MudLayout>
 @code {
-
-    [CascadingParameter]
-    AppStateComponent? AppState { get; set; }
-
-
+    
     bool _drawerOpen = true;
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
     }
+    
+    private async Task AppState_StateChanged(ComponentBase Source, string Property)
+    {
+        if (Source != this)
+        {
+            await InvokeAsync(StateHasChanged);
+        }
+    }
 
     private async Task SetDeviceType(GenericListVm genericListVm)
     {
         var deviceTypeVm = await PlatformService.GetDeviceTypeVmFromGenericVm(genericListVm);
-        AppState.DeviceTypeVm = deviceTypeVm;
+        AppState.UpdateCurrentDeviceTypeVm(this, deviceTypeVm);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        AppState.StateChanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
     }
 
 }
