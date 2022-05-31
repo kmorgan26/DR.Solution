@@ -1,9 +1,10 @@
 ﻿@namespace DRApplication.Client.Controls
-
 @inject IPlatformService PlatformService
+@inject AppState AppState
+@implements IDisposable
 
 <MudGrid Spacing="2" Justify="Justify.Center">
-    @if (_isBusy || items is null)
+    @if (AppState.DeviceTypeVms is null)
     {
         @for (int i = 0; i < 7; i++)
         {
@@ -12,7 +13,7 @@
     }
     else
     {
-        @foreach (var item in items)
+        @foreach (var item in AppState.DeviceTypeVms)
         {
             <DeviceTypeCard DeviceTypeVm="item" />
         }
@@ -22,24 +23,31 @@
 
 @code {
 
-    IEnumerable<DeviceTypeVm>? items;
-    bool _isBusy;
+    //private async Task SetDeviceType(GenericListVm genericListVm)
+    //{
+    //    var deviceTypeVm = await PlatformService.GetDeviceTypeVmFromGenericVm(genericListVm);
+    //    AppState.UpdateCurrentDeviceTypeVm(this, deviceTypeVm);
+    //}
 
-    [CascadingParameter]
-    AppStateComponent? AppState { get; set; }
-
-    private async Task SetDeviceType(GenericListVm genericListVm)
+    private async Task AppState_StateChanged(ComponentBase Source, string Property)
     {
-        var deviceTypeVm = await PlatformService.GetDeviceTypeVmFromGenericVm(genericListVm);
-        AppState.DeviceTypeVm = deviceTypeVm;
+        if (Source != this)
+        {
+            await InvokeAsync(StateHasChanged);
+        }
     }
 
     protected override async Task OnInitializedAsync()
     {
-        _isBusy = true;
-        var deviceTypeVms = await PlatformService.GetDeviceTypeVmsAsync();
-        items = Mapping.Mapper.Map<IEnumerable<DeviceTypeVm>>(deviceTypeVms);
-        _isBusy = false;
+        var items =  await PlatformService.GetDeviceTypeVmsAsync();
+        AppState.UpdateDeviceTypeVms(this, items);
+
+        AppState.StateChanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
+    }
+
+    void IDisposable.Dispose()
+    {
+        AppState.StateChanged -= async (Source, Property) => await AppState_StateChanged(Source, Property);
     }
 
 }
