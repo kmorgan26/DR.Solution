@@ -2,15 +2,11 @@
 
 namespace DRApplication.Client.Business_Models
 {
-    public class MaintainerBm : Maintainer
+    public class MaintainerBm
     {
-        private string? maintainer;
+        public int Id { get; set; } = 0;
 
-        public string? Maintainer
-        {
-            get { return this.Name; }
-            set { maintainer = value; }
-        }
+        public string Name { get; set; } = string.Empty;
 
     }
 }
