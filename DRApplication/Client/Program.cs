@@ -35,6 +35,8 @@ builder.Services.AddScoped<MaintainerManager>();
 builder.Services.AddScoped<DeviceTypeManager>();
 builder.Services.AddScoped<DeviceManager>();
 
+builder.Services.AddScoped<AppState>();
+
 builder.Services.AddTransient<IPlatformService, PlatformService>();
 builder.Services.AddTransient<ILoadBuilderService, LoadBuilderService>();
 builder.Services.AddTransient<IGenericListService, GenericListService>();
