@@ -10,9 +10,17 @@ namespace DRApplication.Client.Services
 
         public IEnumerable<DeviceTypeVm> DeviceTypeVms { get; private set; } = new List<DeviceTypeVm>();
 
+        public IEnumerable<HardwareConfigVm> HardwareConfigVms { get; private set; } = new List<HardwareConfigVm>();
+
         public HardwareConfigVm CurrentHardwareConfigVm { get; private set; } = new();
 
         public SoftwareSystemVm CurrentSoftwareSystemVm { get; private set; } = new();
+
+        public void UpdateHardwareConfigVms(ComponentBase Source, IEnumerable<HardwareConfigVm> Model)
+        {
+            this.HardwareConfigVms = Model;
+            NotifyStateChanged(Source, "HardwareConfigVms");
+        }
 
         public void UpdateDeviceTypeVms(ComponentBase Source, IEnumerable<DeviceTypeVm> Model)
         {
