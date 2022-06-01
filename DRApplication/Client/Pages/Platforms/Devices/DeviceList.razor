@@ -25,8 +25,10 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var deviceTypeVm = await PlatformService.GetDeviceTypeVmById(this.DeviceTypeId);
-        AppState.UpdateCurrentDeviceTypeVm(this, deviceTypeVm);
+        //var deviceTypeVm = await PlatformService.GetDeviceTypeVmById(this.DeviceTypeId);
+        //AppState.UpdateCurrentDeviceTypeVm(this, deviceTypeVm);
+
+        AppState.UpdateDeviceTypeId(this, DeviceTypeId);
 
         AppState.StateChanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
     }

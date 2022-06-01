@@ -12,7 +12,7 @@
         <HardwareConfigSelect OnHardwareConfigIdChanged="SetHardwareConfigId"></HardwareConfigSelect>
     </MudPaper>
 }
-Harware config: @AppState.CurrentHardwareConfigVm.Id
+Harware config: @AppState.HardwareConfigId
 
 @code {
 
@@ -22,8 +22,7 @@ Harware config: @AppState.CurrentHardwareConfigVm.Id
 
     async Task SetHardwareConfigId(int id)
     {
-        var hardwareVm = await LoadBuilderService.GetHardwareConfigVmById(id);
-        AppState.UpdateCurrentHardwareConfigVm(this, hardwareVm);
+        AppState.UpdateHardwareConfigId(this, id);
     }
 
     async Task SetSoftwareSystemId(int id)

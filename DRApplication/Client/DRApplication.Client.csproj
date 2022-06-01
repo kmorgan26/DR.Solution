@@ -8,6 +8,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Enums\**" />
+	  <Content Remove="Enums\**" />
+	  <EmbeddedResource Remove="Enums\**" />
+	  <None Remove="Enums\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Compile Remove="Controls\Platforms\Devices\DeviceComponent.razor.cs" />
 	  <Compile Remove="Services\ApiEfRepository.cs" />
 	</ItemGroup>
@@ -31,10 +38,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Shared\DRApplication.Shared.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Enums\" />
 	</ItemGroup>
 
 </Project>

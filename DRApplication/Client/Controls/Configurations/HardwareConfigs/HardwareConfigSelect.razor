@@ -5,7 +5,7 @@
 
 @if (!_isBusy)
 {
-    <MudSelect Variant="Variant.Outlined" T="int" Label="Hardware Config" Value="@AppState.CurrentHardwareConfigVm.Id" ValueChanged="OnHardwareConfigIdChanged">
+    <MudSelect Variant="Variant.Outlined" T="int" Label="Hardware Config" Value="@AppState.HardwareConfigId" ValueChanged="@OnHardwareConfigIdChanged">
         <MudSelectItem Value="0">SELECT Hardware Configuration</MudSelectItem>
         @foreach (var item in @AppState.HardwareConfigVms)
         {
@@ -23,7 +23,7 @@
 
     private async Task SetHardwareConfigs()
     {
-        var items = await LoadBuilderService.GetHardwareConfigsByDeviceTypeIdAsync(@AppState.CurrentDeviceTypeVm.Id);
+        var items = await LoadBuilderService.GetHardwareConfigsByDeviceTypeIdAsync(AppState.DeviceTypeId);
         AppState.UpdateHardwareConfigVms(this, items);
     }
 
