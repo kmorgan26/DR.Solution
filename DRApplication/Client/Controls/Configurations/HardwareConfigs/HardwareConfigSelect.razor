@@ -1,0 +1,51 @@
+﻿@namespace DRApplication.Client.Controls
+@inject ILoadBuilderService LoadBuilderService
+@inject AppState AppState
+@implements IDisposable
+
+@if (!_isBusy)
+{
+    <MudSelect Variant="Variant.Outlined" T="int" Label="Hardware Config" Value="@AppState.CurrentHardwareConfigVm.Id" ValueChanged="OnHardwareConfigIdChanged">
+        <MudSelectItem Value="0">SELECT Hardware Configuration</MudSelectItem>
+        @foreach (var item in @AppState.HardwareConfigVms)
+        {
+            <MudSelectItem Value="@item.Id">@item.Name</MudSelectItem>
+        }
+    </MudSelect>
+}
+
+@code {
+
+    bool _isBusy;
+
+    [Parameter]
+    public EventCallback<int> OnHardwareConfigIdChanged { get; set; }
+
+    private async Task SetHardwareConfigs()
+    {
+        var items = await LoadBuilderService.GetHardwareConfigsByDeviceTypeIdAsync(@AppState.CurrentDeviceTypeVm.Id);
+        AppState.UpdateHardwareConfigVms(this, items);
+    }
+
+    private async Task AppState_StateChanged(ComponentBase Source, string Property)
+    {
+        if (Source != this)
+        {
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        AppState.StateChanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
+        await SetHardwareConfigs();
+        _isBusy = false;
+    }
+
+    void IDisposable.Dispose()
+    {
+        AppState.StateChanged -= async (Source, Property) => await AppState_StateChanged(Source, Property);
+    }
+
+}
