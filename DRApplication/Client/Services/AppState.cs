@@ -5,6 +5,10 @@ namespace DRApplication.Client.Services
 {
     public class AppState
     {
+        public int HardwareConfigId { get; set; } = 0;
+
+        public int DeviceTypeId { get; set; } = 0;
+
 
         public DeviceTypeVm CurrentDeviceTypeVm { get; private set; } = new();
 
@@ -15,6 +19,18 @@ namespace DRApplication.Client.Services
         public HardwareConfigVm CurrentHardwareConfigVm { get; private set; } = new();
 
         public SoftwareSystemVm CurrentSoftwareSystemVm { get; private set; } = new();
+
+        public void UpdateHardwareConfigId(ComponentBase Source, int Model)
+        {
+            HardwareConfigId = Model;
+            NotifyStateChanged(Source, "HardwareConfigId");
+        }
+        public void UpdateDeviceTypeId(ComponentBase Source, int Model)
+        {
+            DeviceTypeId = Model;
+            NotifyStateChanged(Source, "DeviceTypeId");
+        }
+
 
         public void UpdateHardwareConfigVms(ComponentBase Source, IEnumerable<HardwareConfigVm> Model)
         {
