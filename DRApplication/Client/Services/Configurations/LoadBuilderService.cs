@@ -22,6 +22,15 @@ public class LoadBuilderService : ILoadBuilderService
         return Mapping.Mapper.Map<IEnumerable<HardwareConfigVm>>(filtered);
     }
 
+    public async Task<HardwareConfigVm> GetHardwareConfigVmById(int id)
+    {
+        var config = await _hardwareConfigManager.GetByIdAsync(id);
+        if(config == null)
+            return new HardwareConfigVm();
+
+        return Mapping.Mapper.Map<HardwareConfigVm>(config);
+    }
+
     public async Task<IEnumerable<SoftwareSystemVm>> GetSoftwareSystemsByHardwareConfigIg(int id)
     {
         var systems = await _softwareSystemManager.GetAllAsync();
