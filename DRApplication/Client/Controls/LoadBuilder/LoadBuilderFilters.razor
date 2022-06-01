@@ -2,28 +2,14 @@
 @using DRApplication.Shared.Requests
 @inject IPlatformService PlatformService
 @inject IForeignKeyListService ForeignKeyListService
+@inject ILoadBuilderService LoadBuilderService
 @inject AppState AppState
 @implements IDisposable
 
 @if (_notBusy)
 {
     <MudPaper Class="d-flex flex-row flex-grow-1 gap-6 pa-3">
-
-        @if (AppState.CurrentDeviceTypeVm is not null && AppState.CurrentDeviceTypeVm.Id > 0)
-        {
-            <MudItem xs="12" sm="12" md="6" lg="3">
-                <GenericSelect LabelText="Hardware Config" TableName="HardwareConfigs" ForeignKeyName="DeviceTypeId" ForeignKeyValue="@AppState.CurrentDeviceTypeVm.Id"
-                       TopMenuItemText="Select a HW Config" SelectedValue="@AppState.CurrentHardwareConfigVm.Id" />
-            </MudItem>
-
-        }
-
-        @if (AppState.CurrentHardwareConfigVm is not null && AppState.CurrentDeviceTypeVm?.Id > 0)
-        {
-            <GenericSelect LabelText="Sofware Systems" TableName="SoftwareSystems" ForeignKeyName="HardwareConfigId" ForeignKeyValue="@AppState.CurrentHardwareConfigVm.Id"
-                   OnSelectListChanged="SetSoftwareSystemId" Request="Request" TopMenuItemText="SELECT Software System" />
-        }
-
+        <HardwareConfigSelect OnHardwareConfigIdChanged="SetHardwareConfigId"></HardwareConfigSelect>
     </MudPaper>
 }
 Harware config: @AppState.CurrentHardwareConfigVm.Id
@@ -36,7 +22,8 @@ Harware config: @AppState.CurrentHardwareConfigVm.Id
 
     async Task SetHardwareConfigId(int id)
     {
-        await Task.Run(() => AppState.CurrentHardwareConfigVm.Id = id);
+        var hardwareVm = await LoadBuilderService.GetHardwareConfigVmById(id);
+        AppState.UpdateCurrentHardwareConfigVm(this, hardwareVm);
     }
 
     async Task SetSoftwareSystemId(int id)
