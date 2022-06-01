@@ -11,9 +11,11 @@
 
         @if (AppState.CurrentDeviceTypeVm is not null && AppState.CurrentDeviceTypeVm.Id > 0)
         {
-            <GenericSelect LabelText="Hardware Config" TableName="HardwareConfigs" ForeignKeyName="DeviceTypeId" ForeignKeyValue="@AppState.CurrentDeviceTypeVm.Id"
-                TopMenuItemText="Select a HW Config" SelectedValue="@AppState.CurrentHardwareConfigVm.Id" />
-            
+            <MudItem xs="12" sm="12" md="6" lg="3">
+                <GenericSelect LabelText="Hardware Config" TableName="HardwareConfigs" ForeignKeyName="DeviceTypeId" ForeignKeyValue="@AppState.CurrentDeviceTypeVm.Id"
+                       TopMenuItemText="Select a HW Config" SelectedValue="@AppState.CurrentHardwareConfigVm.Id" />
+            </MudItem>
+
         }
 
         @if (AppState.CurrentHardwareConfigVm is not null && AppState.CurrentDeviceTypeVm?.Id > 0)
