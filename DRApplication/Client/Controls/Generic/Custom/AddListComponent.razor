@@ -1,0 +1,20 @@
+﻿@namespace DRApplication.Client.Controls
+
+<MudPaper Class="flex-lg-6 flex-sm-12" >
+    
+    <MudTextField @bind-Value="TextValue" Variant="Variant.Outlined" Label="Add"></MudTextField>
+    <MudButton Variant="Variant.Filled" Color="Color.Default">ADD</MudButton>
+    <MudList Clickable="true">
+        <MudListItem Text="Trash" />
+        <MudListItem Text="More" />
+        <MudListItem Text="Spam" />
+    </MudList>
+
+</MudPaper>
+
+@code {
+
+    [Parameter]
+    public string TextValue { get; set; } = string.Empty;
+
+}

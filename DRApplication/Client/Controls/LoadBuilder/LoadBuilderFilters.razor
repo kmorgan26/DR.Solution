@@ -2,26 +2,29 @@
 @using DRApplication.Shared.Requests
 @inject IPlatformService PlatformService
 @inject IForeignKeyListService ForeignKeyListService
+@inject AppState AppState
+@implements IDisposable
 
 @if (_notBusy)
 {
     <MudPaper Class="d-flex flex-row flex-grow-1 gap-6 pa-3">
 
-        @if (AppState.DeviceTypeVm is not null && AppState.DeviceTypeVm!.Id > 0)
+        @if (AppState.CurrentDeviceTypeVm is not null && AppState.CurrentDeviceTypeVm.Id > 0)
         {
-            <GenericSelect LabelText="Hardware Config" TableName="HardwareConfigs" ForeignKeyName="DeviceTypeId" ForeignKeyValue="@AppState.DeviceTypeVm.Id"
-                OnSelectListChanged="SetHardwareConfigId" TopMenuItemText="Select a HW Config" />
+            <GenericSelect LabelText="Hardware Config" TableName="HardwareConfigs" ForeignKeyName="DeviceTypeId" ForeignKeyValue="@AppState.CurrentDeviceTypeVm.Id"
+                TopMenuItemText="Select a HW Config" SelectedValue="@AppState.CurrentHardwareConfigVm.Id" />
+            
         }
 
-        @if (AppState.HardwareConfigId > 0)
+        @if (AppState.CurrentHardwareConfigVm is not null && AppState.CurrentDeviceTypeVm?.Id > 0)
         {
-            <GenericSelect LabelText="Sofware Systems" TableName="SoftwareSystems" ForeignKeyName="HardwareConfigId" ForeignKeyValue="@AppState.HardwareConfigId"
+            <GenericSelect LabelText="Sofware Systems" TableName="SoftwareSystems" ForeignKeyName="HardwareConfigId" ForeignKeyValue="@AppState.CurrentHardwareConfigVm.Id"
                    OnSelectListChanged="SetSoftwareSystemId" Request="Request" TopMenuItemText="SELECT Software System" />
         }
 
     </MudPaper>
 }
-@AppState.HardwareConfigId
+Harware config: @AppState.CurrentHardwareConfigVm.Id
 
 @code {
 
@@ -29,17 +32,14 @@
 
     public ForeignKeyListRequest Request { get; set; }
 
-    [CascadingParameter]
-    public AppStateComponent AppState { get; set; } = new();
-
     async Task SetHardwareConfigId(int id)
     {
-        await Task.Run(() => AppState.HardwareConfigId = id);
+        await Task.Run(() => AppState.CurrentHardwareConfigVm.Id = id);
     }
 
     async Task SetSoftwareSystemId(int id)
     {
-        await Task.Run(() => AppState.SoftwareSystemId = id);
+        await Task.Run(() => AppState.CurrentSoftwareSystemVm.Id = id);
     }
 
     async Task GetSoftwareSystemVms()
@@ -48,9 +48,27 @@
 
         var request = new ForeignKeyListRequest();
         request.ForeignKeyName = "HardwareConfigId";
-        request.ForeignKeyValue = AppState.HardwareConfigId.ToString();
+        request.ForeignKeyValue = AppState.CurrentHardwareConfigVm.Id.ToString();
         var vms = await ForeignKeyListService.GetForeignKeyListVmsFromPlatformListName(request); //Request
 
         _notBusy = true;
+    }
+
+    private async Task AppState_StateChanged(ComponentBase Source, string Property)
+    {
+        if (Source != this)
+        {
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        AppState.StateChanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
+    }
+
+    void IDisposable.Dispose()
+    {
+        AppState.StateChanged -= async (Source, Property) => await AppState_StateChanged(Source, Property);
     }
 }

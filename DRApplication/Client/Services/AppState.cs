@@ -10,6 +10,10 @@ namespace DRApplication.Client.Services
 
         public IEnumerable<DeviceTypeVm> DeviceTypeVms { get; private set; } = new List<DeviceTypeVm>();
 
+        public HardwareConfigVm CurrentHardwareConfigVm { get; private set; } = new();
+
+        public SoftwareSystemVm CurrentSoftwareSystemVm { get; private set; } = new();
+
         public void UpdateDeviceTypeVms(ComponentBase Source, IEnumerable<DeviceTypeVm> Model)
         {
             this.DeviceTypeVms = Model;
@@ -20,6 +24,18 @@ namespace DRApplication.Client.Services
         {
             this.CurrentDeviceTypeVm = Model;
             NotifyStateChanged(Source, "CurrentDeviceTypeVm");
+        }
+
+        public void UpdateCurrentHardwareConfigVm(ComponentBase Source, HardwareConfigVm Model)
+        {
+            this.CurrentHardwareConfigVm = Model;
+            NotifyStateChanged(Source, "CurrentHardwareConfigVm");
+        }
+
+        public void UpdateCurrentSoftwareSystemVm(ComponentBase Source, SoftwareSystemVm Model)
+        {
+            this.CurrentSoftwareSystemVm = Model;
+            NotifyStateChanged(Source, "CurrentSoftwareSystemVm");
         }
 
         public event Action<ComponentBase, string> StateChanged;
