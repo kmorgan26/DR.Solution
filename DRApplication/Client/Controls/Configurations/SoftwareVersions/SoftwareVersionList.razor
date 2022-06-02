@@ -12,7 +12,9 @@
                 <MudList Clickable="true" Dense="true" Color="Color.Success">
                     @foreach (var item in AppState.SoftwareVersionVms)
                     {
-                        <MudListItem Text="@item.Name" Value="@item.Name" />
+                        <MudListItem Text="@item.Name" Value="@item.Name"/> 
+                        @item.VersionDate.ToShortDateString()
+                        <MudDivider />
                     }
                 </MudList>
             </MudPaper>
