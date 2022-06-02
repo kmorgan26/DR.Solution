@@ -5,7 +5,7 @@
 
 @if (!_isBusy)
 {
-    <MudSelect Variant="Variant.Outlined" T="int" Label="Hardware Config" Value="@AppState.HardwareConfigId" ValueChanged="@OnHardwareConfigIdChanged">
+    <MudSelect Variant="Variant.Outlined" T="int" Label="Hardware Config" Value="@AppState.HardwareConfigVm.Id" ValueChanged="@OnHardwareConfigIdChanged">
         <MudSelectItem Value="0">SELECT Hardware Configuration</MudSelectItem>
         @foreach (var item in @AppState.HardwareConfigVms)
         {
@@ -34,7 +34,7 @@
             if (Property == "DeviceTypeVm")
             {
                 await SetHardwareConfigs();
-                AppState.UpdateHardwareConfigId(this, 0);
+                AppState.UpdateHardwareConfigVm(this, new HardwareConfigVm());
             }
             await InvokeAsync(StateHasChanged);
         }
