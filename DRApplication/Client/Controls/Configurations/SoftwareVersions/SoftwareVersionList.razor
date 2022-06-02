@@ -9,14 +9,16 @@
     <MudGrid Spacing="3">
         <MudItem xs="3">
             <MudPaper Class="m-9">
-                <MudList Clickable="true" Dense="true" Color="Color.Success">
-                    @foreach (var item in AppState.SoftwareVersionVms)
-                    {
-                        <MudListItem Text="@item.Name" Value="@item.Name"/> 
-                        @item.VersionDate.ToShortDateString()
-                        <MudDivider />
-                    }
-                </MudList>
+                <MudTable Items="@AppState.SoftwareVersionVms" Hover="true" Breakpoint="Breakpoint.Sm" T="SoftwareVersionVm">
+                    <HeaderContent>
+                        <MudTh>Version</MudTh>
+                        <MudTh>Date</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                            <MudTd DataLabel="Version">@context.Name</MudTd>
+                            <MudTd DataLabel="Date">@context.VersionDate.ToShortDateString()</MudTd>
+                    </RowTemplate>
+                </MudTable>
             </MudPaper>
         </MudItem>
     </MudGrid>
@@ -35,7 +37,7 @@
     {
         if (Source != this)
         {
-            if(Property == "SoftwareSystemVm")
+            if (Property == "SoftwareSystemVm")
             {
                 await SetSoftwareVersions();
                 AppState.UpdateSoftwareVersionVm(this, new SoftwareVersionVm());
