@@ -15,9 +15,11 @@ namespace DRApplication.Client.Services
 
         public IEnumerable<HardwareConfigVm> HardwareConfigVms { get; private set; } = new List<HardwareConfigVm>();
 
-        public HardwareConfigVm CurrentHardwareConfigVm { get; private set; } = new();
+        public IEnumerable<SoftwareSystemVm> SoftwareSystemVms { get; private set; } = new List<SoftwareSystemVm>();
 
-        public SoftwareSystemVm CurrentSoftwareSystemVm { get; private set; } = new();
+        public HardwareConfigVm HardwareConfigVm { get; private set; } = new();
+
+        public SoftwareSystemVm SoftwareSystemVm { get; private set; } = new();
 
         public void UpdateHardwareConfigId(ComponentBase Source, int Model)
         {
@@ -36,6 +38,14 @@ namespace DRApplication.Client.Services
             NotifyStateChanged(Source, "HardwareConfigVms");
         }
 
+        public void UpdateSoftwareSystemVms(ComponentBase Source, IEnumerable<SoftwareSystemVm> Model)
+        {
+            this.SoftwareSystemVms = Model;
+            NotifyStateChanged(Source, "SoftwareSystemVms");
+        }
+
+
+
         public void UpdateDeviceTypeVms(ComponentBase Source, IEnumerable<DeviceTypeVm> Model)
         {
             this.DeviceTypeVms = Model;
@@ -48,16 +58,16 @@ namespace DRApplication.Client.Services
             NotifyStateChanged(Source, "DeviceTypeVm");
         }
 
-        public void UpdateCurrentHardwareConfigVm(ComponentBase Source, HardwareConfigVm Model)
+        public void UpdateHardwareConfigVm(ComponentBase Source, HardwareConfigVm Model)
         {
-            this.CurrentHardwareConfigVm = Model;
-            NotifyStateChanged(Source, "CurrentHardwareConfigVm");
+            this.HardwareConfigVm = Model;
+            NotifyStateChanged(Source, "HardwareConfigVm");
         }
 
-        public void UpdateCurrentSoftwareSystemVm(ComponentBase Source, SoftwareSystemVm Model)
+        public void UpdateSoftwareSystemVm(ComponentBase Source, SoftwareSystemVm Model)
         {
-            this.CurrentSoftwareSystemVm = Model;
-            NotifyStateChanged(Source, "CurrentSoftwareSystemVm");
+            this.SoftwareSystemVm = Model;
+            NotifyStateChanged(Source, "SoftwareSystemVm");
         }
 
         public event Action<ComponentBase, string> StateChanged;
