@@ -23,7 +23,7 @@
 
     private async Task SetHardwareConfigs()
     {
-        var items = await LoadBuilderService.GetHardwareConfigsByDeviceTypeIdAsync(AppState.DeviceTypeId);
+        var items = await LoadBuilderService.GetHardwareConfigsByDeviceTypeIdAsync(AppState.DeviceTypeVm.Id);
         AppState.UpdateHardwareConfigVms(this, items);
     }
 
@@ -31,6 +31,11 @@
     {
         if (Source != this)
         {
+            if (Property == "DeviceTypeVm")
+            {
+                await SetHardwareConfigs();
+                AppState.UpdateHardwareConfigId(this, 0);
+            }
             await InvokeAsync(StateHasChanged);
         }
     }
