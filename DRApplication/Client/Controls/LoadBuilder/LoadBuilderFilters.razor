@@ -8,10 +8,14 @@
 
 @if (_notBusy)
 {
-    <MudPaper Class="d-flex flex-row flex-grow-1 gap-6 pa-3">
-        <HardwareConfigSelect OnHardwareConfigIdChanged="SetHardwareConfigId"></HardwareConfigSelect>
-        <SoftwareSystemSelect OnSoftwareSystemIdChanged="SetSoftwareSystemId"></SoftwareSystemSelect>
-    </MudPaper>
+    <MudGrid>
+        <MudItem xs="12" sm="9" md="6" lg="3">
+            <HardwareConfigSelect OnHardwareConfigIdChanged="SetHardwareConfigId"></HardwareConfigSelect>
+        </MudItem>
+        <MudItem xs="12" sm="9" md="6" lg="3">
+            <SoftwareSystemSelect OnSoftwareSystemIdChanged="SetSoftwareSystemId"></SoftwareSystemSelect>
+        </MudItem>
+    </MudGrid>
 }
 
 @code {
