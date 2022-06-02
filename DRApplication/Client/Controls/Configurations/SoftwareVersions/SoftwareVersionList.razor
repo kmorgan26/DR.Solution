@@ -6,22 +6,18 @@
 
 @if (@AppState.HardwareConfigVm.Id > 0 && @AppState.SoftwareSystemVm.Id > 0 && _isBusy is not true)
 {
-    <MudGrid Spacing="3">
-        <MudItem xs="3">
-            <MudPaper Class="m-9">
-                <MudTable Items="@AppState.SoftwareVersionVms" Hover="true" Breakpoint="Breakpoint.Sm" T="SoftwareVersionVm">
-                    <HeaderContent>
-                        <MudTh>Version</MudTh>
-                        <MudTh>Date</MudTh>
-                    </HeaderContent>
-                    <RowTemplate>
-                            <MudTd DataLabel="Version">@context.Name</MudTd>
-                            <MudTd DataLabel="Date">@context.VersionDate.ToShortDateString()</MudTd>
-                    </RowTemplate>
-                </MudTable>
-            </MudPaper>
-        </MudItem>
-    </MudGrid>
+    <MudItem xs="12" sm="9" md="6" lg="4" Class="mt-6">
+        <MudTable Items="@AppState.SoftwareVersionVms" Hover="true" Breakpoint="Breakpoint.Sm" T="SoftwareVersionVm">
+            <HeaderContent>
+                <MudTh>Version</MudTh>
+                <MudTh>Date</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Version">@context.Name</MudTd>
+                <MudTd DataLabel="Date">@context.VersionDate.ToShortDateString()</MudTd>
+            </RowTemplate>
+        </MudTable>
+    </MudItem>
 }
 
 @code {
