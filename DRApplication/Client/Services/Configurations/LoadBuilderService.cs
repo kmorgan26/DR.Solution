@@ -61,7 +61,8 @@ public class LoadBuilderService : ILoadBuilderService
             Name = "SoftwareSystemId", 
             Value = id.ToString(), 
             Operator = DRApplication.Shared.Enums.FilterQueryOperator.Equals });
-
+        filter.OrderByDescending = true;
+        filter.OrderByPropertyName = "VersionDate";
         filter.PaginationFilter = null;
 
         filter.FilterProperties = filterProperties;
