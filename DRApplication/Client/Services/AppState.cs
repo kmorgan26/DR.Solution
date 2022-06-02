@@ -5,11 +5,27 @@ namespace DRApplication.Client.Services
 {
     public class AppState
     {
+        #region -- single ID properties --
+
         public int HardwareConfigId { get; private set; } = 0;
 
         public int DeviceTypeId { get; private set; } = 0;
 
+        #endregion
+
+        #region -- single View Model Properties --
+
         public DeviceTypeVm DeviceTypeVm { get; private set; } = new();
+
+        public HardwareConfigVm HardwareConfigVm { get; private set; } = new();
+        
+        public SoftwareSystemVm SoftwareSystemVm { get; private set; } = new();
+
+        public SoftwareVersionVm SoftwareVersionVm { get; private set; } = new();
+
+        #endregion
+
+        #region -- View Model Collections --
 
         public IEnumerable<DeviceTypeVm> DeviceTypeVms { get; private set; } = new List<DeviceTypeVm>();
 
@@ -17,9 +33,11 @@ namespace DRApplication.Client.Services
 
         public IEnumerable<SoftwareSystemVm> SoftwareSystemVms { get; private set; } = new List<SoftwareSystemVm>();
 
-        public HardwareConfigVm HardwareConfigVm { get; private set; } = new();
+        public IEnumerable<SoftwareVersionVm> SoftwareVersionVms { get; private set; } = new List<SoftwareVersionVm>();
 
-        public SoftwareSystemVm SoftwareSystemVm { get; private set; } = new();
+        #endregion
+
+        #region -- single ID Methods --
 
         public void UpdateHardwareConfigId(ComponentBase Source, int Model)
         {
@@ -31,6 +49,10 @@ namespace DRApplication.Client.Services
             DeviceTypeId = Model;
             NotifyStateChanged(Source, "DeviceTypeId");
         }
+
+        #endregion
+
+        #region -- View Model Collection Methods --
 
         public void UpdateHardwareConfigVms(ComponentBase Source, IEnumerable<HardwareConfigVm> Model)
         {
@@ -44,13 +66,21 @@ namespace DRApplication.Client.Services
             NotifyStateChanged(Source, "SoftwareSystemVms");
         }
 
-
-
         public void UpdateDeviceTypeVms(ComponentBase Source, IEnumerable<DeviceTypeVm> Model)
         {
             this.DeviceTypeVms = Model;
             NotifyStateChanged(Source, "DeviceTypeVms");
         }
+
+        public void UpdateSoftwareVersionVms(ComponentBase Source, IEnumerable<SoftwareVersionVm> Model)
+        {
+            this.SoftwareVersionVms = Model;
+            NotifyStateChanged(Source, "SoftwareVersionVms");
+        }
+
+        #endregion
+
+        #region -- View Model Methods --
 
         public void UpdateDeviceTypeVm(ComponentBase Source, DeviceTypeVm Model)
         {
@@ -69,6 +99,14 @@ namespace DRApplication.Client.Services
             this.SoftwareSystemVm = Model;
             NotifyStateChanged(Source, "SoftwareSystemVm");
         }
+
+        public void UpdateSoftwareVersionVm(ComponentBase Source, SoftwareVersionVm Model)
+        {
+            this.SoftwareVersionVm = Model;
+            NotifyStateChanged(Source, "SoftwareVersionVm");
+        }
+
+        #endregion
 
         public event Action<ComponentBase, string> StateChanged;
 
