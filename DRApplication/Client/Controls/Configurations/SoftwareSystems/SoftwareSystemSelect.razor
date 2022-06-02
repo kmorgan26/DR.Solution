@@ -1,15 +1,56 @@
 ﻿@namespace DRApplication.Client.Controls
-@inject SoftwareSystemManager manager
-@inject NavigationManager navigation
+@inject ILoadBuilderService LoadBuilderService
+@inject AppState AppState
+@implements IDisposable
 
-<div class="form-group">
-    <label>Software System</label>
-    <InputSelect ValueExpression="@(()=> SelectedSoftwareSystemId)" id="softwareSystemSelect" DisplayName="Software System" class="form-control" Value="SelectedSoftwareSystemId"
-                 ValueChanged="@((int? value) => ChangeSoftwareSystem(value))">
-        <option value=0>------</option>
-        @foreach (var item in _softwareSystemVms)
+@if (!_isBusy)
+{
+    <MudSelect Variant="Variant.Outlined" T="int" Label="Software System" Value="@AppState.SoftwareSystemVm.Id" ValueChanged="@OnSoftwareSystemIdChanged">
+        <MudSelectItem Value="0">SELECT Software System</MudSelectItem>
+        @foreach (var item in @AppState.SoftwareSystemVms)
         {
-            <option value="@item.Id">@item.Name</option>
+            <MudSelectItem Value="@item.Id">@item.Name</MudSelectItem>
         }
-    </InputSelect>
-</div>
+    </MudSelect>
+}
+
+@code {
+    
+    bool _isBusy;
+
+    [Parameter]
+    public EventCallback<int> OnSoftwareSystemIdChanged { get; set; }
+
+    private async Task SetSoftwareSystems()
+    {
+        var items = await LoadBuilderService.GetSoftwareSystemsByHardwareConfigId(AppState.HardwareConfigVm.Id);
+        AppState.UpdateSoftwareSystemVms(this, items);
+    }
+
+    private async Task AppState_StateChanged(ComponentBase Source, string Property)
+    {
+        if (Source != this)
+        {
+            if (Property == "HardwareConfigVm")
+            {
+                await SetSoftwareSystems();
+                AppState.UpdateSoftwareSystemVm(this, new SoftwareSystemVm());
+            }
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        AppState.StateChanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
+        await SetSoftwareSystems();
+        _isBusy = false;
+    }
+
+    void IDisposable.Dispose()
+    {
+        AppState.StateChanged -= async (Source, Property) => await AppState_StateChanged(Source, Property);
+    }
+
+}
