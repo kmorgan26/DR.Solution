@@ -1,43 +1,5 @@
 ﻿@namespace DRApplication.Client.Controls
-@inject ILoadBuilderService LoadBuilderService
-@inject IPlatformService PlatformService
-@inject AppState AppState
-@implements IDisposable
 
 <LoadBuilderFilters></LoadBuilderFilters>
 
 <SoftwareVersionList></SoftwareVersionList>
-
-
-@code {
-
-    bool _isBusy;
-
-    async Task SetSoftwareConfigs()
-    {
-        _isBusy = true;
-        var id = Convert.ToInt32(@AppState.HardwareConfigId);
-        var softwareConfigs = await LoadBuilderService.GetSoftwareSystemsByHardwareConfigId(id);
-        AppState.UpdateSoftwareSystemVms( this, softwareConfigs);
-
-        _isBusy = false;
-    }
-
-    private async Task AppState_StateChanged(ComponentBase Source, string Property)
-    {
-        if (Source != this)
-        {
-            await InvokeAsync(StateHasChanged);
-        }
-    }
-
-    protected override void OnInitialized()
-    {
-        AppState.StateChanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
-    }
-
-    void IDisposable.Dispose()
-    {
-        AppState.StateChanged -= async (Source, Property) => await AppState_StateChanged(Source, Property);
-    }
-}
