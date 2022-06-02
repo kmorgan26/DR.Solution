@@ -8,6 +8,8 @@ public interface ILoadBuilderService
 
     Task<HardwareConfigVm> GetHardwareConfigVmById(int id);
     
-    Task<IEnumerable<SoftwareSystemVm>> GetSoftwareSystemsByHardwareConfigIg(int id);
+    Task<IEnumerable<SoftwareSystemVm>> GetSoftwareSystemsByHardwareConfigId(int id);
+
+    Task<SoftwareSystemVm> GetSoftwareSystemVmById(int id);
 
 }

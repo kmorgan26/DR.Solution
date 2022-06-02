@@ -31,10 +31,19 @@ public class LoadBuilderService : ILoadBuilderService
         return Mapping.Mapper.Map<HardwareConfigVm>(config);
     }
 
-    public async Task<IEnumerable<SoftwareSystemVm>> GetSoftwareSystemsByHardwareConfigIg(int id)
+    public async Task<IEnumerable<SoftwareSystemVm>> GetSoftwareSystemsByHardwareConfigId(int id)
     {
         var systems = await _softwareSystemManager.GetAllAsync();
         var filterd = systems.Where(x => x.HardwareConfigId == id);
         return Mapping.Mapper.Map<IEnumerable<SoftwareSystemVm>>(filterd);
+    }
+
+    public async Task<SoftwareSystemVm> GetSoftwareSystemVmById(int id)
+    {
+        var softwareSystem = await _softwareSystemManager.GetByIdAsync(id);
+        if (softwareSystem == null)
+            return new SoftwareSystemVm();
+
+        return Mapping.Mapper.Map<SoftwareSystemVm>(softwareSystem);
     }
 }
