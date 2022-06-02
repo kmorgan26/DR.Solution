@@ -6,15 +6,16 @@
 
     //TODO: User Preference for DeviceTypes will be set here
 
+    /// <summary>
+    /// Checks if there is a current DeviceTypeVM. Sets to "1" if none is set.
+    /// </summary>
+    /// <returns></returns>
     protected override async Task OnInitializedAsync()
     {
-        if (AppState.DeviceTypeId == 0)
+        if (AppState.DeviceTypeVm.Id == 0)
         {
-            AppState.UpdateDeviceTypeId(this, 1);
-
             var deviceTypeVm = await Service.GetDeviceTypeVmById(1);
-
-            AppState.UpdateCurrentDeviceTypeVm(this, deviceTypeVm);
+            AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
         }
     }
 }
