@@ -12,4 +12,6 @@ public interface ILoadBuilderService
 
     Task<SoftwareSystemVm> GetSoftwareSystemVmById(int id);
 
+    Task<IEnumerable<SoftwareVersionVm>> GetSoftwareVersionsBySoftwareSystemId(int id);
+
 }

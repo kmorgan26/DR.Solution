@@ -1,5 +1,7 @@
 ﻿using DRApplication.Client.Interfaces;
 using DRApplication.Client.ViewModels;
+using DRApplication.Shared.Filters;
+using DRApplication.Shared.Models.ConfigurationModels;
 
 namespace DRApplication.Client.Services;
 
@@ -7,11 +9,13 @@ public class LoadBuilderService : ILoadBuilderService
 {
     private readonly HardwareConfigManager _hardwareConfigManager;
     private readonly SoftwareSystemManager _softwareSystemManager;
+    private readonly SoftwareVersionManager _softwareVersionManager;
 
-    public LoadBuilderService(HardwareConfigManager hardwareConfigManager, SoftwareSystemManager softwareSystemManager)
+    public LoadBuilderService(HardwareConfigManager hardwareConfigManager, SoftwareSystemManager softwareSystemManager, SoftwareVersionManager softwareVersionManager)
     {
         _hardwareConfigManager = hardwareConfigManager;
         _softwareSystemManager = softwareSystemManager;
+        _softwareVersionManager = softwareVersionManager;
     }
 
     //TODO: Use a filter to get ONLY by DeviceTypeId
@@ -45,5 +49,28 @@ public class LoadBuilderService : ILoadBuilderService
             return new SoftwareSystemVm();
 
         return Mapping.Mapper.Map<SoftwareSystemVm>(softwareSystem);
+    }
+
+    //TODO: Create a filter helper to write these filters
+    public async Task<IEnumerable<SoftwareVersionVm>> GetSoftwareVersionsBySoftwareSystemId(int id)
+    {
+        var filter = new QueryFilter<SoftwareVersion>();
+        var filterProperties = new List<FilterProperty>();
+        filterProperties.Add(new FilterProperty()
+        { 
+            Name = "SoftwareSystemId", 
+            Value = id.ToString(), 
+            Operator = DRApplication.Shared.Enums.FilterQueryOperator.Equals });
+
+        filter.PaginationFilter = null;
+
+        filter.FilterProperties = filterProperties;
+        var response = await _softwareVersionManager.GetAsync(filter);
+
+        if (response.Data != null)
+            return Mapping.Mapper.Map<IEnumerable<SoftwareVersionVm>>(response.Data);
+
+        return new List<SoftwareVersionVm>();
+
     }
 }
