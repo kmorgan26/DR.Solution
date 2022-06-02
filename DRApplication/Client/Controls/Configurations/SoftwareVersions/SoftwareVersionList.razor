@@ -1,0 +1,57 @@
+﻿@namespace DRApplication.Client.Controls
+@inject ILoadBuilderService LoadBuilderService
+@inject AppState AppState
+@implements IDisposable
+
+
+@if (@AppState.HardwareConfigVm.Id > 0 && @AppState.SoftwareSystemVm.Id > 0 && _isBusy is not true)
+{
+    <MudGrid Spacing="3">
+        <MudItem xs="3">
+            <MudPaper Class="m-9">
+                <MudList Clickable="true" Dense="true" Color="Color.Success">
+                    @foreach (var item in AppState.SoftwareVersionVms)
+                    {
+                        <MudListItem Text="@item.Name" Value="@item.Name" />
+                    }
+                </MudList>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+}
+
+@code {
+    bool _isBusy;
+
+    async Task SetSoftwareVersions()
+    {
+        var items = await LoadBuilderService.GetSoftwareVersionsBySoftwareSystemId(AppState.SoftwareSystemVm.Id);
+        AppState.UpdateSoftwareVersionVms(this, items);
+
+    }
+    private async Task AppState_StateChanged(ComponentBase Source, string Property)
+    {
+        if (Source != this)
+        {
+            if(Property == "SoftwareSystemVm")
+            {
+                await SetSoftwareVersions();
+                AppState.UpdateSoftwareVersionVm(this, new SoftwareVersionVm());
+            }
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        AppState.StateChanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
+        await SetSoftwareVersions();
+        _isBusy = false;
+    }
+
+    void IDisposable.Dispose()
+    {
+        AppState.StateChanged -= async (Source, Property) => await AppState_StateChanged(Source, Property);
+    }
+}

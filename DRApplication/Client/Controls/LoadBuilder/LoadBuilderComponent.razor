@@ -6,22 +6,7 @@
 
 <LoadBuilderFilters></LoadBuilderFilters>
 
-@if (@AppState.HardwareConfigVm.Id > 0 && @AppState.SoftwareSystemVm.Id > 0 && _isBusy is not true)
-{
-    <div>software @AppState.HardwareConfigId</div>
-    <MudGrid Spacing="3">
-        <MudItem xs="3">
-            <MudPaper Class="m-9">
-                <MudList Clickable="true" Dense="true" Color="Color.Success">
-                    @foreach (var item in AppState.SoftwareSystemVms)
-                    {
-                        <MudListItem Text="@item.Name" Value="@item.Name" />
-                    }
-                </MudList>
-            </MudPaper>
-        </MudItem>
-    </MudGrid>
-}
+<SoftwareVersionList></SoftwareVersionList>
 
 
 @code {
