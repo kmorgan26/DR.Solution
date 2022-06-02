@@ -10,6 +10,7 @@
 {
     <MudPaper Class="d-flex flex-row flex-grow-1 gap-6 pa-3">
         <HardwareConfigSelect OnHardwareConfigIdChanged="SetHardwareConfigId"></HardwareConfigSelect>
+        <SoftwareSystemSelect OnSoftwareSystemIdChanged="SetSoftwareSystemId"></SoftwareSystemSelect>
     </MudPaper>
 }
 
@@ -21,12 +22,14 @@
 
     async Task SetHardwareConfigId(int id)
     {
-        AppState.UpdateHardwareConfigId(this, id);
+        var vm = await LoadBuilderService.GetHardwareConfigVmById(id);
+        AppState.UpdateHardwareConfigVm(this, vm);
     }
 
     async Task SetSoftwareSystemId(int id)
     {
-        await Task.Run(() => AppState.CurrentSoftwareSystemVm.Id = id);
+        var vm = await LoadBuilderService.GetSoftwareSystemVmById(id);
+        AppState.UpdateSoftwareSystemVm(this, vm);
     }
 
     async Task GetSoftwareSystemVms()
@@ -35,7 +38,7 @@
 
         var request = new ForeignKeyListRequest();
         request.ForeignKeyName = "HardwareConfigId";
-        request.ForeignKeyValue = AppState.CurrentHardwareConfigVm.Id.ToString();
+        request.ForeignKeyValue = AppState.HardwareConfigVm.Id.ToString();
         var vms = await ForeignKeyListService.GetForeignKeyListVmsFromPlatformListName(request); //Request
 
         _notBusy = true;
