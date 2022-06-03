@@ -1,0 +1,100 @@
+﻿@namespace DRApplication.Client.Controls
+@inject ILoadBuilderService LoadBuilderService
+@inject AppState AppState
+@implements IDisposable
+
+<style>
+    .selected {
+        background-color: #1E88E5 !important;
+    }
+
+        .selected > td {
+            color: white !important;
+        }
+
+            .selected > td .mud-input {
+                color: white !important;
+            }
+</style>
+
+@if (@AppState.LoadVm.Id > 0 && _isBusy is not true)
+{
+    <MudTable Items="@AppState.VersionsLoadVms"
+          @ref="mudTable"
+          Hover="true"
+          RowClassFunc="@SelectedRowClassFunc"
+          OnRowClick="RowClickEvent"
+          T="VersionsLoadVm">
+        <HeaderContent>
+            <MudTh>Load</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Load">@context.SoftwareVersionName</MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+
+@code {
+
+    bool _isBusy;
+    private int selectedRowNumber = -1;
+    private MudTable<VersionsLoadVm> mudTable;
+    private List<string> clickedEvents = new();
+    private string SelectedRowClassFunc(VersionsLoadVm element, int rowNumber)
+    {
+        if (selectedRowNumber == rowNumber)
+        {
+            selectedRowNumber = -1;
+            clickedEvents.Add("Selected Row: None");
+            return string.Empty;
+        }
+        else if (mudTable.SelectedItem != null && mudTable.SelectedItem.Equals(element))
+        {
+            selectedRowNumber = rowNumber;
+            clickedEvents.Add($"Selected Row: {rowNumber}");
+            return "selected";
+        }
+        else
+        {
+            return string.Empty;
+        }
+    }
+
+    private void RowClickEvent(TableRowClickEventArgs<VersionsLoadVm> tableRowClickEventArgs)
+    {
+        clickedEvents.Add("Row has been clicked");
+    }
+
+    async Task SetVersionsLoads()
+    {
+        var items = await LoadBuilderService.GetVersionsLoadVmsByLoadId(AppState.LoadVm.Id, AppState.SoftwareVersionVm.Id);
+        AppState.UpdateVersionsLoadVms(this, items);
+    }
+
+    private async Task AppState_StateChanged(ComponentBase Source, string Property)
+    {
+        if (Source != this)
+        {
+            if (Property == "LoadVm")
+            {
+                await SetVersionsLoads();
+                AppState.UpdateVersionsLoadVm(this, new VersionsLoadVm());
+            }
+
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        AppState.StateChanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
+        await SetVersionsLoads();
+        _isBusy = false;
+    }
+
+    void IDisposable.Dispose()
+    {
+        AppState.StateChanged -= async (Source, Property) => await AppState_StateChanged(Source, Property);
+    }
+}
