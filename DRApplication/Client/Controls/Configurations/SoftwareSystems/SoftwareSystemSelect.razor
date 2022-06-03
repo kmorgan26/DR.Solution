@@ -23,7 +23,7 @@
 
     private async Task SetSoftwareSystems()
     {
-        var items = await LoadBuilderService.GetSoftwareSystemsByHardwareConfigId(AppState.HardwareConfigVm.Id);
+        var items = await LoadBuilderService.GetSoftwareSystemVmsByHardwareConfigId(AppState.HardwareConfigVm.Id);
         AppState.UpdateSoftwareSystemVms(this, items);
     }
 
