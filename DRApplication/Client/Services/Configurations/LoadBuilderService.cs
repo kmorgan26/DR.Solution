@@ -29,12 +29,15 @@ public class LoadBuilderService : ILoadBuilderService
         _versionsLoadManager = versionsLoadManager;
     }
 
-    //TODO: Use a filter to get ONLY by DeviceTypeId
-    public async Task<IEnumerable<HardwareConfigVm>> GetHardwareConfigVmsByDeviceTypeIdAsync(int i)
+    public async Task<IEnumerable<HardwareConfigVm>> GetHardwareConfigVmsByDeviceTypeIdAsync(int id)
     {
-        var configs = await _hardwareConfigManager.GetAllAsync();
-        var filtered = configs.Where(x => x.DeviceTypeId == i);
-        return Mapping.Mapper.Map<IEnumerable<HardwareConfigVm>>(filtered);
+        var filter = await new FilterGenerator<HardwareConfig>().GetFilterForPropertyByNameAsync("DeviceTypeId", id);
+        var response = await _hardwareConfigManager.GetAsync(filter);
+
+        if (response.Data is not null)
+            return Mapping.Mapper.Map<IEnumerable<HardwareConfigVm>>(response.Data);
+
+        return new List<HardwareConfigVm>();
     }
 
     public async Task<HardwareConfigVm> GetHardwareConfigVmById(int id)
@@ -85,21 +88,10 @@ public class LoadBuilderService : ILoadBuilderService
         return Mapping.Mapper.Map<SoftwareSystemVm>(softwareSystem);
     }
 
-    //TODO: Create a filter helper to write these filters
     public async Task<IEnumerable<SoftwareVersionVm>> GetSoftwareVersionVmsBySoftwareSystemId(int id)
     {
-        var filter = new QueryFilter<SoftwareVersion>();
-        var filterProperties = new List<FilterProperty>();
-        filterProperties.Add(new FilterProperty()
-        { 
-            Name = "SoftwareSystemId", 
-            Value = id.ToString(), 
-            Operator = FilterQueryOperator.Equals });
-        filter.OrderByDescending = true;
-        filter.OrderByPropertyName = "VersionDate";
-        filter.PaginationFilter = null;
-
-        filter.FilterProperties = filterProperties;
+        var filter = await new FilterGenerator<SoftwareVersion>().GetFilterForPropertyByNameAsync("SoftwareSystemId", id);
+        
         var response = await _softwareVersionManager.GetAsync(filter);
 
         if (response.Data is not null)
@@ -109,26 +101,26 @@ public class LoadBuilderService : ILoadBuilderService
 
     }
 
-    public async Task<IEnumerable<VersionsLoadVm>> GetVersionsLoadVmsByLoadId(int id)
+    public async Task<IEnumerable<VersionsLoadVm>> GetVersionsLoadVmsByLoadId(int id, int softwareVersionId)
     {
-        var filter = new QueryFilter<VersionsLoad>();
-        var filterProperties = new List<FilterProperty>();
-        filterProperties.Add(new FilterProperty()
-        {
-            Name = "LoadId",
-            Value = id.ToString(),
-            Operator = FilterQueryOperator.Equals
-        });
-        filter.OrderByDescending = true;
-        filter.OrderByPropertyName = "Id";
-        filter.PaginationFilter = null;
-
-        filter.FilterProperties = filterProperties;
+        var filter = await new FilterGenerator<VersionsLoad>().GetFilterForPropertyByNameAsync("LoadId", id);
         var response = await _versionsLoadManager.GetAsync(filter);
 
-        if(response.Data is not null)
-            return Mapping.Mapper.Map<IEnumerable<VersionsLoadVm>>(response.Data);
+        var sFilter = await new FilterGenerator<SoftwareVersion>().GetFilterForPropertyByNameAsync("SoftwareSystemId", softwareVersionId);
+        var softwareVersions = await _softwareVersionManager.GetAsync(sFilter);
+
+        var result = response.Data.Select(i => new VersionsLoadVm()
+        {
+            SoftwareVersionId = i.Id,
+            SoftwareVersionName = softwareVersions.Data.Where(m => m.Id == i.SoftwareVersionId).FirstOrDefault().Name,
+            Id = i.Id,
+            LoadId = i.LoadId
+        });
+
+        if (result is not null)
+            return result;
 
         return new List<VersionsLoadVm>();
     }
+
 }
