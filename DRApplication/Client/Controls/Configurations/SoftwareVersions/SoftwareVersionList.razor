@@ -3,22 +3,9 @@
 @inject AppState AppState
 @implements IDisposable
 
-<style>
-    .selected {
-        background-color: #1E88E5 !important;
-    }
-
-        .selected > td {
-            color: white !important;
-        }
-
-            .selected > td .mud-input {
-                color: white !important;
-            }
-</style>
-
 @if (@AppState.HardwareConfigVm.Id > 0 && @AppState.SoftwareSystemVm.Id > 0 && _isBusy is not true)
 {
+    <h1 class="selected">test</h1>
     <MudTable Items="@AppState.SoftwareVersionVms"
           @ref="mudTable"
           Hover="true"
