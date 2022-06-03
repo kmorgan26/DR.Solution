@@ -16,5 +16,5 @@ public interface ILoadBuilderService
 
     Task<IEnumerable<LoadVm>> GetLoadVmByDeviceTypeId(int id);
 
-    Task<IEnumerable<VersionsLoadVm>> GetVersionsLoadVmsByLoadId(int id);
+    Task<IEnumerable<VersionsLoadVm>> GetVersionsLoadVmsByLoadId(int id, int softwareVersionId);
 }
