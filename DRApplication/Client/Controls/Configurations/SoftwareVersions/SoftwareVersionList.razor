@@ -3,11 +3,29 @@
 @inject AppState AppState
 @implements IDisposable
 
+<style>
+    .selected {
+        background-color: #1E88E5 !important;
+    }
+
+        .selected > td {
+            color: white !important;
+        }
+
+            .selected > td .mud-input {
+                color: white !important;
+            }
+</style>
 
 @if (@AppState.HardwareConfigVm.Id > 0 && @AppState.SoftwareSystemVm.Id > 0 && _isBusy is not true)
 {
     <MudItem xs="12" sm="9" md="6" lg="4" Class="mt-6">
-        <MudTable Items="@AppState.SoftwareVersionVms" Hover="true" Breakpoint="Breakpoint.Sm" T="SoftwareVersionVm">
+        <MudTable Items="@AppState.SoftwareVersionVms"
+              @ref="mudTable"
+              Hover="true"
+              RowClassFunc="@SelectedRowClassFunc"
+              OnRowClick="RowClickEvent"
+              T="SoftwareVersionVm">
             <HeaderContent>
                 <MudTh>Version</MudTh>
                 <MudTh>Date</MudTh>
@@ -20,38 +38,4 @@
     </MudItem>
 }
 
-@code {
-    bool _isBusy;
 
-    async Task SetSoftwareVersions()
-    {
-        var items = await LoadBuilderService.GetSoftwareVersionsBySoftwareSystemId(AppState.SoftwareSystemVm.Id);
-        AppState.UpdateSoftwareVersionVms(this, items);
-
-    }
-    private async Task AppState_StateChanged(ComponentBase Source, string Property)
-    {
-        if (Source != this)
-        {
-            if (Property == "SoftwareSystemVm")
-            {
-                await SetSoftwareVersions();
-                AppState.UpdateSoftwareVersionVm(this, new SoftwareVersionVm());
-            }
-            await InvokeAsync(StateHasChanged);
-        }
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        _isBusy = true;
-        AppState.StateChanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
-        await SetSoftwareVersions();
-        _isBusy = false;
-    }
-
-    void IDisposable.Dispose()
-    {
-        AppState.StateChanged -= async (Source, Property) => await AppState_StateChanged(Source, Property);
-    }
-}
