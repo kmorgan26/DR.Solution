@@ -23,6 +23,10 @@ namespace DRApplication.Client.Services
 
         public SoftwareVersionVm SoftwareVersionVm { get; private set; } = new();
 
+        public LoadVm LoadVm { get; private set; } = new();
+
+        public VersionsLoadVm VersionsLoadVm { get; private set; } = new();
+
         #endregion
 
         #region -- View Model Collections --
@@ -34,6 +38,10 @@ namespace DRApplication.Client.Services
         public IEnumerable<SoftwareSystemVm> SoftwareSystemVms { get; private set; } = new List<SoftwareSystemVm>();
 
         public IEnumerable<SoftwareVersionVm> SoftwareVersionVms { get; private set; } = new List<SoftwareVersionVm>();
+
+        public IEnumerable<LoadVm> LoadVms { get; private set; } = new List<LoadVm>();
+
+        public IEnumerable<VersionsLoadVm> VersionsLoadVms { get; private set; } = new List<VersionsLoadVm>();
 
         #endregion
 
@@ -54,10 +62,22 @@ namespace DRApplication.Client.Services
 
         #region -- View Model Collection Methods --
 
+        public void UpdateLoadVms(ComponentBase Source, IEnumerable<LoadVm> Model)
+        {
+            this.LoadVms = Model;
+            NotifyStateChanged(Source, "LoadVms");
+        }
+
         public void UpdateHardwareConfigVms(ComponentBase Source, IEnumerable<HardwareConfigVm> Model)
         {
             this.HardwareConfigVms = Model;
             NotifyStateChanged(Source, "HardwareConfigVms");
+        }
+
+        public void UpdateVersionsLoadVms(ComponentBase Source, IEnumerable<VersionsLoadVm> Model)
+        {
+            this.VersionsLoadVms = Model;
+            NotifyStateChanged(Source, "VersionsLoadVms");
         }
 
         public void UpdateSoftwareSystemVms(ComponentBase Source, IEnumerable<SoftwareSystemVm> Model)
@@ -81,6 +101,18 @@ namespace DRApplication.Client.Services
         #endregion
 
         #region -- View Model Methods --
+
+        public void UpdateVersionsLoadVm(ComponentBase Source, VersionsLoadVm Model)
+        {
+            this.VersionsLoadVm = Model;
+            NotifyStateChanged(Source, "VersionsLoadVm");
+        }
+
+        public void UpdateLoadVm(ComponentBase Source, LoadVm Model)
+        {
+            this.LoadVm = Model;
+            NotifyStateChanged(Source, "LoadVm");
+        }
 
         public void UpdateDeviceTypeVm(ComponentBase Source, DeviceTypeVm Model)
         {
