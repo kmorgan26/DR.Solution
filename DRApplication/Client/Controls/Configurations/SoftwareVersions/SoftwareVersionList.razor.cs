@@ -15,12 +15,14 @@ public partial class SoftwareVersionList
     {
         if (selectedRowNumber == rowNumber)
         {
+            AppState.UpdateSoftwareVersionVm(this, new SoftwareVersionVm());
             selectedRowNumber = -1;
             clickedEvents.Add("Selected Row: None");
             return string.Empty;
         }
         else if (mudTable.SelectedItem != null && mudTable.SelectedItem.Equals(element))
         {
+            AppState.UpdateSoftwareVersionVm(this, element);
             selectedRowNumber = rowNumber;
             clickedEvents.Add($"Selected Row: {rowNumber}");
             return "selected";

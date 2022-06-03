@@ -1,5 +1,4 @@
-﻿
-.selected {
+﻿.selected {
     background-color: #1E88E5 !important;
 }
 
@@ -7,6 +6,6 @@
     color: white !important;
 }
 
-    .selected > td .mud-input {
-        color: white !important;
-    }
+.selected > td .mud-input {
+    color: white !important;
+}
