@@ -15,7 +15,7 @@
 }
 
 @code {
-    
+
     bool _isBusy;
 
     [Parameter]
@@ -35,8 +35,8 @@
             {
                 await SetSoftwareSystems();
                 AppState.UpdateSoftwareSystemVm(this, new SoftwareSystemVm());
+                await InvokeAsync(StateHasChanged);
             }
-            await InvokeAsync(StateHasChanged);
         }
     }
 
