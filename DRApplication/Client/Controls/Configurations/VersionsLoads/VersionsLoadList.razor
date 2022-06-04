@@ -35,6 +35,7 @@
             if (Property == "LoadVm")
             {
                 await SetSoftwareVersionsForLoad();
+                await InvokeAsync(StateHasChanged);
             }
         }
     }
