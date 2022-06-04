@@ -3,33 +3,16 @@
 @inject AppState AppState
 @implements IDisposable
 
-<style>
-    .selected {
-        background-color: #1E88E5 !important;
-    }
-
-        .selected > td {
-            color: white !important;
-        }
-
-            .selected > td .mud-input {
-                color: white !important;
-            }
-</style>
-
 @if (@AppState.LoadVm.Id > 0 && _isBusy is not true)
 {
-    <MudTable Items="@AppState.VersionsLoadVms"
-          @ref="mudTable"
+    <MudTable Items="@AppState.SoftwareVersionVms"
           Hover="true"
-          RowClassFunc="@SelectedRowClassFunc"
-          OnRowClick="RowClickEvent"
-          T="VersionsLoadVm">
+          T="SoftwareVersionVm">
         <HeaderContent>
-            <MudTh>Load</MudTh>
+            <MudTh>Version</MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Load">@context.SoftwareVersionName</MudTd>
+            <MudTd DataLabel="Load">@context.Name</MudTd>
         </RowTemplate>
     </MudTable>
 }
@@ -37,51 +20,22 @@
 @code {
 
     bool _isBusy;
-    private int selectedRowNumber = -1;
-    private MudTable<VersionsLoadVm> mudTable;
-    private List<string> clickedEvents = new();
-    private string SelectedRowClassFunc(VersionsLoadVm element, int rowNumber)
-    {
-        if (selectedRowNumber == rowNumber)
-        {
-            selectedRowNumber = -1;
-            clickedEvents.Add("Selected Row: None");
-            return string.Empty;
-        }
-        else if (mudTable.SelectedItem != null && mudTable.SelectedItem.Equals(element))
-        {
-            selectedRowNumber = rowNumber;
-            clickedEvents.Add($"Selected Row: {rowNumber}");
-            return "selected";
-        }
-        else
-        {
-            return string.Empty;
-        }
-    }
 
-    private void RowClickEvent(TableRowClickEventArgs<VersionsLoadVm> tableRowClickEventArgs)
+    async Task SetSoftwareVersionsForLoad()
     {
-        clickedEvents.Add("Row has been clicked");
-    }
-
-    async Task SetVersionsLoads()
-    {
-        var items = await LoadBuilderService.GetVersionsLoadVmsByLoadId(AppState.LoadVm.Id, AppState.SoftwareVersionVm.Id);
-        AppState.UpdateVersionsLoadVms(this, items);
+        var items = await LoadBuilderService.GetSoftwareVersionVmsByLoadId(AppState.LoadVm.Id);
+        AppState.UpdateSoftwareVersionVms(this, items);
     }
 
     private async Task AppState_StateChanged(ComponentBase Source, string Property)
     {
         if (Source != this)
         {
+            //If the Current Load Changes, we have to repopulate the Software VersionsList for the new Load ID.
             if (Property == "LoadVm")
             {
-                await SetVersionsLoads();
-                AppState.UpdateVersionsLoadVm(this, new VersionsLoadVm());
+                await SetSoftwareVersionsForLoad();
             }
-
-            await InvokeAsync(StateHasChanged);
         }
     }
 
@@ -89,7 +43,7 @@
     {
         _isBusy = true;
         AppState.StateChanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
-        await SetVersionsLoads();
+        await SetSoftwareVersionsForLoad();
         _isBusy = false;
     }
 
