@@ -7,5 +7,6 @@ public class VersionsLoadVm
     public int SoftwareVersionId { get; set; } = 0;
     
     public string SoftwareVersionName { get; set; } = string.Empty;
+    public string SoftwareSystemName { get; set; } = string.Empty;
 
 }
