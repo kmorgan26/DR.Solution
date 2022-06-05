@@ -5,14 +5,14 @@
 
 @if (@AppState.LoadVm.Id > 0 && _isBusy is not true)
 {
-    <MudTable Items="@AppState.SoftwareVersionVms"
-          Hover="true"
-          T="SoftwareVersionVm">
+    <MudTable Items="@AppState.VersionsLoadVms" Hover="true" T="VersionsLoadVm">
         <HeaderContent>
-            <MudTh>Version</MudTh>
+            <MudTh>Software System</MudTh>
+            <MudTh>Software Version</MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Load">@context.Name</MudTd>
+            <MudTd DataLabel="System">@context.SoftwareSystemName</MudTd>
+            <MudTd DataLabel="Version">@context.SoftwareVersionName</MudTd>
         </RowTemplate>
     </MudTable>
 }
@@ -21,10 +21,17 @@
 
     bool _isBusy;
 
-    async Task SetSoftwareVersionsForLoad()
+    async Task SetVersionLoadVmsForLoad()
     {
-        var items = await LoadBuilderService.GetSoftwareVersionVmsByLoadId(AppState.LoadVm.Id);
-        AppState.UpdateSoftwareVersionVms(this, items);
+        if (AppState.LoadVm.Id > 0)
+        {
+            var items = await LoadBuilderService.GetVersionsLoadVmsByLoadId(AppState.LoadVm.Id);
+            AppState.UpdateVersionsLoadVms(this, items);
+        }
+        else
+        {
+            AppState.UpdateVersionsLoadVms(this, new List<VersionsLoadVm>());
+        }
     }
 
     private async Task AppState_StateChanged(ComponentBase Source, string Property)
@@ -34,7 +41,7 @@
             //If the Current Load Changes, we have to repopulate the Software VersionsList for the new Load ID.
             if (Property == "LoadVm")
             {
-                await SetSoftwareVersionsForLoad();
+                await SetVersionLoadVmsForLoad();
                 await InvokeAsync(StateHasChanged);
             }
         }
@@ -44,7 +51,7 @@
     {
         _isBusy = true;
         AppState.StateChanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
-        await SetSoftwareVersionsForLoad();
+        await SetVersionLoadVmsForLoad();
         _isBusy = false;
     }
 
