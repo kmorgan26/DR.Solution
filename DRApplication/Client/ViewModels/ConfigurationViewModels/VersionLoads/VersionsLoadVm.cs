@@ -2,10 +2,10 @@
 
 public class VersionsLoadVm
 {
-    public int Id { get; set; }
-    public int LoadId { get; set; }
-    public int SoftwareVersionId { get; set; }
+    public int Id { get; set; } = 0;
+    public int LoadId { get; set; } = 0;
+    public int SoftwareVersionId { get; set; } = 0;
     
-    public string SoftwareVersionName { get; set; }
+    public string SoftwareVersionName { get; set; } = string.Empty;
 
 }

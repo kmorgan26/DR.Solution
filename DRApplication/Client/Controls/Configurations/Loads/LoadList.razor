@@ -3,13 +3,28 @@
 @inject AppState AppState
 @implements IDisposable
 
+<style>
+    .selected {
+        background-color: #1E88E5 !important;
+    }
+
+        .selected > td {
+            color: white !important;
+        }
+
+            .selected > td .mud-input {
+                color: white !important;
+            }
+
+</style>
+
 @if (@AppState.DeviceTypeVm.Id > 0 && _isBusy is not true)
 {
     <MudTable Items="@AppState.LoadVms"
           @ref="mudTable"
           Hover="true"
-          RowClassFunc="@SelectedRowClassFunc"
           OnRowClick="RowClickEvent"
+          RowClassFunc="@SelectedRowClassFunc"
           T="LoadVm">
         <HeaderContent>
             <MudTh>Load</MudTh>
@@ -34,35 +49,33 @@
             AppState.UpdateLoadVm(this, element);
             return "selected";
         }
-        else
+        else if(mudTable.SelectedItem == @AppState.LoadVm)
         {
             AppState.UpdateLoadVm(this, new LoadVm());
         }
         return string.Empty;
     }
 
-    private void RowClickEvent(TableRowClickEventArgs<LoadVm> tableRowClickEventArgs)
-    {
-        clickedEvents.Add("Row has been clicked");
-    }
-
     async Task SetLoads()
     {
         var items = await LoadBuilderService.GetLoadVmByDeviceTypeId(AppState.DeviceTypeVm.Id);
         AppState.UpdateLoadVms(this, items);
+    }    
+
+    private void RowClickEvent(TableRowClickEventArgs<LoadVm> tableRowClickEventArgs)
+    {
+        clickedEvents.Add("Row has been clicked");
     }
 
     private async Task AppState_StateChanged(ComponentBase Source, string Property)
     {
         if (Source != this)
         {
-            //if (Property == "DeviceTypeVm")
-            //{
-            //    await SetLoads();
-            //    //AppState.UpdateLoadVm(this, new LoadVm());
-            //}
-
-            await InvokeAsync(StateHasChanged);
+            if (Property == "DeviceTypeVm")
+            {
+                await SetLoads();
+                //State Has Changed invokes on SetLoads()?
+            }
         }
     }
 
