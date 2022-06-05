@@ -10,21 +10,19 @@ public partial class SoftwareVersionList
     bool _isBusy;
     private int selectedRowNumber = -1;
     private MudTable<SoftwareVersionVm> mudTable;
-    private List<string> clickedEvents = new();
+
     private string SelectedRowClassFunc(SoftwareVersionVm element, int rowNumber)
     {
         if (selectedRowNumber == rowNumber)
         {
             AppState.UpdateSoftwareVersionVm(this, new SoftwareVersionVm());
             selectedRowNumber = -1;
-            clickedEvents.Add("Selected Row: None");
             return string.Empty;
         }
         else if (mudTable.SelectedItem != null && mudTable.SelectedItem.Equals(element))
         {
             AppState.UpdateSoftwareVersionVm(this, element);
             selectedRowNumber = rowNumber;
-            clickedEvents.Add($"Selected Row: {rowNumber}");
             return "selected";
         }
         else
@@ -35,7 +33,7 @@ public partial class SoftwareVersionList
 
     private void RowClickEvent(TableRowClickEventArgs<SoftwareVersionVm> tableRowClickEventArgs)
     {
-        clickedEvents.Add("Row has been clicked");
+        //clickedEvents.Add("Row has been clicked");
     }
 
     async Task SetSoftwareVersions()
@@ -44,6 +42,14 @@ public partial class SoftwareVersionList
         AppState.UpdateSoftwareVersionVms(this, items);
     }
 
+    /// <summary>
+    /// State Change only fires on change of SoftwareSystemVm. Any changes to HardwareConfig fires in SoftwareSystem
+    /// and changes to Device Type will cascade through Hardware Config. A new SoftwareVersionVm is also updated
+    /// and the default ID will be the default 0 for a new SoftwareVersionVm
+    /// </summary>
+    /// <param name="Source"></param>
+    /// <param name="Property"></param>
+    /// <returns></returns>
     private async Task AppState_StateChanged(ComponentBase Source, string Property)
     {
         if (Source != this)
@@ -52,9 +58,8 @@ public partial class SoftwareVersionList
             {
                 await SetSoftwareVersions();
                 AppState.UpdateSoftwareVersionVm(this, new SoftwareVersionVm());
+                await InvokeAsync(StateHasChanged);
             }
-
-            await InvokeAsync(StateHasChanged);
         }
     }
 
