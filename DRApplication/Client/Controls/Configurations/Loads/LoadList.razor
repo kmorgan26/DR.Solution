@@ -24,7 +24,7 @@
           @ref="mudTable"
           Hover="true"
           OnRowClick="RowClickEvent"
-          RowClassFunc="@SelectedRowClassFunc"
+          RowClassFunc="SelectedRowClassFunc"
           T="LoadVm">
         <HeaderContent>
             <MudTh>Load</MudTh>
@@ -51,6 +51,7 @@
         }
         else if(mudTable.SelectedItem == @AppState.LoadVm)
         {
+            selectedRowNumber = -1;
             AppState.UpdateLoadVm(this, new LoadVm());
         }
         return string.Empty;
@@ -64,7 +65,7 @@
 
     private void RowClickEvent(TableRowClickEventArgs<LoadVm> tableRowClickEventArgs)
     {
-        clickedEvents.Add("Row has been clicked");
+        //clickedEvents.Add("Row has been clicked");
     }
 
     private async Task AppState_StateChanged(ComponentBase Source, string Property)
@@ -74,7 +75,7 @@
             if (Property == "DeviceTypeVm")
             {
                 await SetLoads();
-                //State Has Changed invokes on SetLoads()?
+                await InvokeAsync(StateHasChanged);
             }
         }
     }
