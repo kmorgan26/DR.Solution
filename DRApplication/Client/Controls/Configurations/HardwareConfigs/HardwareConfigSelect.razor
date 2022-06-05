@@ -27,6 +27,13 @@
         AppState.UpdateHardwareConfigVms(this, items);
     }
 
+    /// <summary>
+    /// When the DeviceTypeVm changes, the HardwareConfigVms populate with a new list for that Device Type
+    /// With the new list populating, the HardwarConfigVm is set to a new instance, setting the ID to 0
+    /// </summary>
+    /// <param name="Source"></param>
+    /// <param name="Property"></param>
+    /// <returns></returns>
     private async Task AppState_StateChanged(ComponentBase Source, string Property)
     {
         if (Source != this)
@@ -35,8 +42,8 @@
             {
                 await SetHardwareConfigs();
                 AppState.UpdateHardwareConfigVm(this, new HardwareConfigVm());
+                await InvokeAsync(StateHasChanged);
             }
-            await InvokeAsync(StateHasChanged);
         }
     }
 
