@@ -136,6 +136,11 @@ namespace DRApplication.Shared.Services
                             _sb.Append(" >= @");
                             _sb.Append(key);
                             break;
+                        case FilterQueryOperator.In:
+                            _sb.Append(" IN (SELECT value FROM string_split(@");
+                            _sb.Append(key);
+                            _sb.Append(", ','))");
+                            break;
                     }
 
                     if (_queryFilter.FilterProperties[count].CaseSensitive)
