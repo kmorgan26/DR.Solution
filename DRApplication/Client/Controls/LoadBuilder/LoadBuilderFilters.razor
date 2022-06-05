@@ -1,28 +1,17 @@
 ﻿@namespace DRApplication.Client.Controls
-@using DRApplication.Shared.Requests
-@inject IPlatformService PlatformService
-@inject IForeignKeyListService ForeignKeyListService
 @inject ILoadBuilderService LoadBuilderService
 @inject AppState AppState
-@implements IDisposable
 
-@if (_notBusy)
-{
-    <MudGrid>
-        <MudItem xs="12" sm="9" md="6" lg="3">
-            <HardwareConfigSelect OnHardwareConfigIdChanged="SetHardwareConfigId"></HardwareConfigSelect>
-        </MudItem>
-        <MudItem xs="12" sm="9" md="6" lg="3">
-            <SoftwareSystemSelect OnSoftwareSystemIdChanged="SetSoftwareSystemId"></SoftwareSystemSelect>
-        </MudItem>
-    </MudGrid>
-}
+<MudGrid>
+    <MudItem xs="12" sm="9" md="6" lg="3">
+        <HardwareConfigSelect OnHardwareConfigIdChanged="SetHardwareConfigId"></HardwareConfigSelect>
+    </MudItem>
+    <MudItem xs="12" sm="9" md="6" lg="3">
+        <SoftwareSystemSelect OnSoftwareSystemIdChanged="SetSoftwareSystemId"></SoftwareSystemSelect>
+    </MudItem>
+</MudGrid>
 
 @code {
-
-    bool _notBusy = true;
-
-    public ForeignKeyListRequest Request { get; set; }
 
     async Task SetHardwareConfigId(int id)
     {
@@ -34,35 +23,5 @@
     {
         var vm = await LoadBuilderService.GetSoftwareSystemVmById(id);
         AppState.UpdateSoftwareSystemVm(this, vm);
-    }
-
-    async Task GetSoftwareSystemVms()
-    {
-        _notBusy = false;
-
-        var request = new ForeignKeyListRequest();
-        request.ForeignKeyName = "HardwareConfigId";
-        request.ForeignKeyValue = AppState.HardwareConfigVm.Id.ToString();
-        var vms = await ForeignKeyListService.GetForeignKeyListVmsFromPlatformListName(request); //Request
-
-        _notBusy = true;
-    }
-
-    private async Task AppState_StateChanged(ComponentBase Source, string Property)
-    {
-        if (Source != this)
-        {
-            await InvokeAsync(StateHasChanged);
-        }
-    }
-
-    protected override void OnInitialized()
-    {
-        AppState.StateChanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
-    }
-
-    void IDisposable.Dispose()
-    {
-        AppState.StateChanged -= async (Source, Property) => await AppState_StateChanged(Source, Property);
     }
 }
