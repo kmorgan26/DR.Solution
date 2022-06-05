@@ -27,6 +27,13 @@
         AppState.UpdateSoftwareSystemVms(this, items);
     }
 
+    /// <summary>
+    /// StateHasChanged only needs to fire if there is a HardwareConfigVm change, since a DeviceTypeVm change will
+    /// fire in the HardwareConfig Select component
+    /// </summary>
+    /// <param name="Source"></param>
+    /// <param name="Property"></param>
+    /// <returns></returns>
     private async Task AppState_StateChanged(ComponentBase Source, string Property)
     {
         if (Source != this)
