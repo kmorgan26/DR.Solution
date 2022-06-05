@@ -106,7 +106,6 @@ public class LoadBuilderService : ILoadBuilderService
         var filter = await new FilterGenerator<VersionsLoad>().GetFilterForPropertyByNameAsync("LoadId", id);
         var response = await _versionsLoadManager.GetAsync(filter);
 
-        //make a List<string> where string = Id.ToString for response.Date
         List<string> softwareVersionIdList = new List<string>();
         foreach(var item in response.Data)
         {
