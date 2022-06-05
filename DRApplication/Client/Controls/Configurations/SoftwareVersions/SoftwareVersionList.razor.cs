@@ -25,6 +25,7 @@ public partial class SoftwareVersionList
             selectedRowNumber = rowNumber;
             return "selected";
         }
+        
         else
         {
             return string.Empty;
