@@ -15,8 +15,8 @@ public class LoadBuilderService : ILoadBuilderService
     private readonly VersionsLoadManager _versionsLoadManager;
 
     public LoadBuilderService(
-            HardwareConfigManager hardwareConfigManager, 
-            SoftwareSystemManager softwareSystemManager, 
+            HardwareConfigManager hardwareConfigManager,
+            SoftwareSystemManager softwareSystemManager,
             SoftwareVersionManager softwareVersionManager,
             LoadManager loadManager,
             VersionsLoadManager versionsLoadManager
@@ -43,7 +43,7 @@ public class LoadBuilderService : ILoadBuilderService
     public async Task<HardwareConfigVm> GetHardwareConfigVmById(int id)
     {
         var config = await _hardwareConfigManager.GetByIdAsync(id);
-        if(config == null)
+        if (config == null)
             return new HardwareConfigVm();
 
         return Mapping.Mapper.Map<HardwareConfigVm>(config);
@@ -91,7 +91,7 @@ public class LoadBuilderService : ILoadBuilderService
     public async Task<IEnumerable<SoftwareVersionVm>> GetSoftwareVersionVmsBySoftwareSystemId(int id)
     {
         var filter = await new FilterGenerator<SoftwareVersion>().GetFilterForPropertyByNameAsync("SoftwareSystemId", id);
-        
+
         var response = await _softwareVersionManager.GetAsync(filter);
 
         if (response.Data is not null)
@@ -101,25 +101,45 @@ public class LoadBuilderService : ILoadBuilderService
 
     }
 
-    public async Task<IEnumerable<VersionsLoadVm>> GetVersionsLoadVmsByLoadId(int id, int softwareVersionId)
+    public async Task<IEnumerable<SoftwareVersionVm>> GetSoftwareVersionVmsByLoadId(int id)
     {
         var filter = await new FilterGenerator<VersionsLoad>().GetFilterForPropertyByNameAsync("LoadId", id);
         var response = await _versionsLoadManager.GetAsync(filter);
 
-        var sFilter = await new FilterGenerator<SoftwareVersion>().GetFilterForPropertyByNameAsync("SoftwareSystemId", softwareVersionId);
-        var softwareVersions = await _softwareVersionManager.GetAsync(sFilter);
-
-        var result = response.Data.Select(i => new VersionsLoadVm()
+        //make a List<string> where string = Id.ToString for response.Date
+        List<string> softwareVersionIdList = new List<string>();
+        foreach(var item in response.Data)
         {
-            SoftwareVersionId = i.Id,
-            SoftwareVersionName = softwareVersions.Data.Where(m => m.Id == i.SoftwareVersionId).FirstOrDefault().Name,
-            Id = i.Id,
-            LoadId = i.LoadId
-        });
+            softwareVersionIdList.Add(item.SoftwareVersionId.ToString());
+        }
+        var softVersionFilter = await new FilterGenerator<SoftwareVersion>().GetFilterForPropertiesByNamesAsync("SoftwareVersion", softwareVersionIdList);
+        var softwareVersionResponse = await _softwareVersionManager.GetAsync(softVersionFilter);
 
-        if (result is not null)
-            return result;
 
+        return Mapping.Mapper.Map<IEnumerable<SoftwareVersionVm>>(softwareVersionResponse.Data);
+
+    }
+
+    public async Task<IEnumerable<VersionsLoadVm>> GetVersionsLoadVmsByLoadId(int id)
+    {
+        var filter = await new FilterGenerator<VersionsLoad>().GetFilterForPropertyByNameAsync("LoadId", id);
+        var response = await _versionsLoadManager.GetAsync(filter);
+
+        var ids = response.Data?.Select(x => x.SoftwareVersionId.ToString()).ToList();
+
+        if (ids is not null)
+        {
+            var softwareVersions = await new FilterGenerator<SoftwareVersion>().GetFilterForPropertiesByNamesAsync("SoftwareSystemId", ids);
+            var result = response.Data.Select(i => new VersionsLoadVm()
+            {
+                SoftwareVersionId = i.Id,
+                Id = i.Id,
+                LoadId = i.LoadId
+            });
+
+            if (result is not null)
+                return result;
+        }
         return new List<VersionsLoadVm>();
     }
 
