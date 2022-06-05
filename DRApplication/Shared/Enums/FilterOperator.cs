@@ -16,6 +16,7 @@ namespace DRApplication.Shared.Enums
         LessThan,
         GreaterThan,
         LessThanOrEqual,
-        GreaterThanOrEqual
+        GreaterThanOrEqual,
+        In
     }
 }
