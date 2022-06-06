@@ -1,4 +1,5 @@
 ﻿@namespace DRApplication.Client.Controls
+@inject NavigationManager NavigationManager
 @inject HardwareSystemManager manager
 @inject AppState AppState
 
@@ -20,3 +21,26 @@
         </MudTd>
     </RowTemplate>
 </MudTable>
+
+@code {
+
+    bool _isBusy;
+
+    async Task SetHardwareSystems()
+    {
+        var items = await manager.GetAllAsync();
+        var vms = Mapping.Mapper.Map<List<HardwareSystemVm>>(items);
+        AppState.UpdateHardwareSystemVms(this, vms);
+    }
+    async Task SetHardwareSystemAndNavigate()
+    {
+
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        await SetHardwareSystems();
+        _isBusy = false;
+    }
+
+}

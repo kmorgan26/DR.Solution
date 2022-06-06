@@ -18,7 +18,9 @@ namespace DRApplication.Client.Services
         public DeviceTypeVm DeviceTypeVm { get; private set; } = new();
 
         public HardwareConfigVm HardwareConfigVm { get; private set; } = new();
-        
+
+        public HardwareSystemVm HardwareSystemVm { get; private set; } = new();
+
         public SoftwareSystemVm SoftwareSystemVm { get; private set; } = new();
 
         public SoftwareVersionVm SoftwareVersionVm { get; private set; } = new();
@@ -132,6 +134,12 @@ namespace DRApplication.Client.Services
         {
             this.HardwareConfigVm = Model;
             NotifyStateChanged(Source, "HardwareConfigVm");
+        }
+
+        public void UpdateHardwareSystemVm(ComponentBase Source, HardwareSystemVm Model)
+        {
+            this.HardwareSystemVm = Model;
+            NotifyStateChanged(Source, "HardwareSystemVm");
         }
 
         public void UpdateSoftwareSystemVm(ComponentBase Source, SoftwareSystemVm Model)
