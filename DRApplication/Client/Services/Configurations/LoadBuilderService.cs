@@ -117,58 +117,58 @@ public class LoadBuilderService : ILoadBuilderService
         var softVersionFilter = await new FilterGenerator<SoftwareVersion>().GetFilterForPropertiesByNamesAsync("SoftwareVersion", softwareVersionIdList);
         var softwareVersionResponse = await _softwareVersionManager.GetAsync(softVersionFilter);
 
-
         return Mapping.Mapper.Map<IEnumerable<SoftwareVersionVm>>(softwareVersionResponse.Data);
 
     }
 
+    /// <summary>
+    /// Returns a list of LoadVms for a given Test Load
+    /// </summary>
+    /// <param name="id">
+    ///    This is the Id from the Loads Table
+    /// </param>
     public async Task<IEnumerable<VersionsLoadVm>> GetVersionsLoadVmsByLoadId(int id)
     {
-        var versionLoadsFilter = await new FilterGenerator<VersionsLoad>().GetFilterForPropertyByNameAsync("LoadId", id);
-        var response = await _versionsLoadManager.GetAsync(versionLoadsFilter);
-        var versionLoads = response.Data;
-
-        //get a list of the software version IDs
-        var ids = versionLoads?.Select(x => x.SoftwareVersionId.ToString()).ToList();
-        string csv = string.Join(",", ids);
-
-        if (ids is not null)
+        try
         {
-            var softwareVersionFilter = await new FilterGenerator<SoftwareVersion>().GetFilterForPropertyByListOfIdsAsync("Id", csv);
-            var softwareVersionResponse = await _softwareVersionManager.GetAsync(softwareVersionFilter);
-            var softwareVersions = softwareVersionResponse.Data;
+            var versionLoadsFilter = await new FilterGenerator<VersionsLoad>().GetFilterForPropertyByNameAsync("LoadId", id);
+            var response = await _versionsLoadManager.GetAsync(versionLoadsFilter);
+            var versionLoads = response.Data;
 
-            var softwareSystemIds = softwareVersions?.Select(x => x.SoftwareSystemId.ToString()).ToList();
+            var mappedLoads = Mapping.Mapper.Map<IEnumerable<VersionsLoadVm>>(versionLoads);
 
-            string softwareSystemIdsCsv = string.Join(",", softwareSystemIds);
+            var versionIds = mappedLoads.Select(x => x.SoftwareVersionId.ToString()).ToList();
+            var versionCsv = string.Join(",", versionIds);
+            var versionFilter = await new FilterGenerator<SoftwareVersion>().GetFilterForPropertyByListOfIdsAsync("Id", versionCsv);
+            var versionResponse = await _softwareVersionManager.GetAsync(versionFilter);
+            var softwareVersions = versionResponse.Data;
 
-            //now get a list of Software Systems with those IDs
-            if (softwareSystemIds is not null)
+            var systemIds = softwareVersions?.Select(x => x.SoftwareSystemId.ToString()).ToList();
+            var systemCsv = string.Join(",", systemIds);
+            var systemFilter = await new FilterGenerator<SoftwareSystem>().GetFilterForPropertyByListOfIdsAsync("Id", systemCsv);
+            var systemResponse = await _softwareSystemManager.GetAsync(systemFilter);
+            var softwareSystems = systemResponse.Data;
+
+            var ids = mappedLoads?.Select(x => x.SoftwareVersionId.ToString()).ToList();
+
+            foreach (var item in mappedLoads)
             {
-                var softwareSystemFilter = await new FilterGenerator<SoftwareSystem>().GetFilterForPropertyByListOfIdsAsync("Id", softwareSystemIdsCsv);
-                var softwareSystemResponse = await _softwareSystemManager.GetAsync(softwareSystemFilter);
-                var softwareSystems = softwareSystemResponse.Data;
-
-                var result = softwareVersions.Select(i => new VersionsLoadVm()
-                {
-                    SoftwareVersionId = i.Id,
-                    LoadId = id,
-                    SoftwareVersionName = i.Name,
-                    SoftwareSystemName = softwareSystems.Where(s => s.Id == i.SoftwareSystemId).FirstOrDefault().Name
-                });
-
-                if (result is not null)
-                    return result;
+                item.SoftwareVersionName = softwareVersions.Where(i => i.Id == item.SoftwareVersionId).FirstOrDefault().Name;
+                var version = softwareVersions.Where(i => i.Id == item.SoftwareVersionId).FirstOrDefault();
+                item.SoftwareSystemName = softwareSystems.Where(a => a.Id == version.SoftwareSystemId).FirstOrDefault().Name;
             }
-
-
+            return mappedLoads;
         }
-        return new List<VersionsLoadVm>();
+        catch (Exception ex)
+        {
+
+            return new List<VersionsLoadVm>();
+        }
     }
 
     public async Task AddSoftwareVersionToLoad()
     {
-        var loadId = _appState.LoadVm.Id;  //--------------------------------------------------LOAD ID = loadId
+        var loadId = _appState.LoadVm.Id;
         var vms = _appState.VersionsLoadVms.ToList();
         var softwareSystemId = _appState.SoftwareSystemVm.Id;
 
@@ -182,15 +182,15 @@ public class LoadBuilderService : ILoadBuilderService
         if (softwareSystemIds.Contains(softwareSystemId))
         {
             var index = softwareSystemIds.IndexOf(softwareSystemId);
-            var versionLoadVmToRemove = vms[index];
-            
+            var versionLoadIdToRemove = vms[index].Id;
+
             //THE ID is the same as the SoftwareVersionId?
 
-            var versionLoad = Mapping.Mapper.Map<VersionsLoad>(versionLoadVmToRemove);
-            await _versionsLoadManager.DeleteAsync(versionLoad);
+            //var versionLoad = Mapping.Mapper.Map<VersionsLoad>(versionLoadVmToRemove);
+            await _versionsLoadManager.DeleteByIdAsync(versionLoadIdToRemove);
         }
 
-        var loadVersionToAdd = new VersionsLoad() { LoadId=loadId, SoftwareVersionId = _appState.SoftwareVersionVm.Id };
+        var loadVersionToAdd = new VersionsLoad() { LoadId = loadId, SoftwareVersionId = _appState.SoftwareVersionVm.Id };
         var result = await _versionsLoadManager.InsertAsync(loadVersionToAdd);
     }
 }
