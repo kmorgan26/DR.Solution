@@ -1,0 +1,21 @@
+﻿@namespace DRApplication.Client.Pages
+@page "/testing"
+
+<TitleHeader TitleText="Testing" IconPath="@Icons.Filled.Pages" />
+
+<MudGrid Spacing="@spacing" Justify="Justify.Center">
+    <MudItem>
+        <MudCard>
+            <MudCardContent>
+                <MudText>
+                    <MudIcon Icon="@Icons.Filled.Link" Color="Color.Primary" Size="Size.Small"/>
+                    <MudLink Href="/loadbuilder">Load Builder</MudLink>
+                </MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+@code {
+    public int spacing { get; set; } = 2;
+}
