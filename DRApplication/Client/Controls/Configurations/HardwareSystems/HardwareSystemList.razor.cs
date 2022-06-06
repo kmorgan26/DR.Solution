@@ -3,7 +3,7 @@ using DRApplication.Client.ViewModels;
 
 namespace DRApplication.Client.Controls
 {
-    public partial class HardwareSystemComponent
+    public partial class HardwareSystemList
     {
         List<HardwareSystemVm> _hardwareSystemVms = new();
         protected override async Task OnInitializedAsync()
