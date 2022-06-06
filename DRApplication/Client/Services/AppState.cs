@@ -35,6 +35,8 @@ namespace DRApplication.Client.Services
 
         public IEnumerable<HardwareConfigVm> HardwareConfigVms { get; private set; } = new List<HardwareConfigVm>();
 
+        public IEnumerable<HardwareSystemVm> HardwareSystemVms { get; private set; } = new List<HardwareSystemVm>();
+
         public IEnumerable<SoftwareSystemVm> SoftwareSystemVms { get; private set; } = new List<SoftwareSystemVm>();
 
         public IEnumerable<SoftwareVersionVm> SoftwareVersionVms { get; private set; } = new List<SoftwareVersionVm>();
@@ -66,6 +68,12 @@ namespace DRApplication.Client.Services
         {
             this.LoadVms = Model;
             NotifyStateChanged(Source, "LoadVms");
+        }
+
+        public void UpdateHardwareSystemVms(ComponentBase Source, IEnumerable<HardwareSystemVm> Model)
+        {
+            this.HardwareSystemVms = Model;
+            NotifyStateChanged(Source, "HardwareSystemVms");
         }
 
         public void UpdateHardwareConfigVms(ComponentBase Source, IEnumerable<HardwareConfigVm> Model)
