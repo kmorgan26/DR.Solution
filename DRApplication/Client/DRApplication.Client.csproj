@@ -8,18 +8,24 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Business Models\**" />
 	  <Compile Remove="Enums\**" />
+	  <Content Remove="Business Models\**" />
 	  <Content Remove="Enums\**" />
+	  <EmbeddedResource Remove="Business Models\**" />
 	  <EmbeddedResource Remove="Enums\**" />
+	  <None Remove="Business Models\**" />
 	  <None Remove="Enums\**" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Controls\Generic\Tables\BasicTable.razor.cs" />
 	  <Compile Remove="Controls\Platforms\Devices\DeviceComponent.razor.cs" />
 	  <Compile Remove="Services\ApiEfRepository.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Remove="Controls\Generic\Tables\BasicTable.razor" />
 	  <Content Remove="Controls\Generic\Tables\FSMudTablePaging.razor" />
 	  <Content Remove="Controls\Platforms\Devices\DeviceComponent.razor" />
 	  <Content Remove="Controls\Platforms\Devices\DeviceTestComponent.razor" />
@@ -38,6 +44,10 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Shared\DRApplication.Shared.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Pages\NewFolder\" />
 	</ItemGroup>
 
 </Project>
