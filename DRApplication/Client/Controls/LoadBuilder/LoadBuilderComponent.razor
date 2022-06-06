@@ -1,15 +1,49 @@
 ﻿@namespace DRApplication.Client.Controls
+@inject AppState AppState
+@implements IDisposable
+
+<MudPaper Class="pa-2 mb-6" Elevation="0">
+    <MudAlert Severity="Severity.Normal">Set the filters for Harware Configuration and Software System</MudAlert>
+</MudPaper>
 
 <LoadBuilderFilters></LoadBuilderFilters>
 
-<MudGrid>
-    <MudItem xs="12" sm="12" md="4" lg="3">
-        <SoftwareVersionList></SoftwareVersionList>
-    </MudItem>
-    <MudItem xs="12" sm="12" md="4" lg="3">
-        <VersionsLoadList></VersionsLoadList>
-    </MudItem>
-    <MudItem xs="12" sm="12" md="4" lg="3">
-        <LoadList></LoadList>
-    </MudItem>
-</MudGrid>
+@if (AppState.SoftwareSystemVm.Id > 0)
+{
+    <MudGrid Class="mt-10">
+        <MudItem xs="12" sm="12" md="4" lg="3">
+            <MudAlert Severity="Severity.Success">Select a Version for this Software System</MudAlert>
+            <SoftwareVersionList></SoftwareVersionList>
+        </MudItem>
+        <MudItem xs="12" sm="12" md="4" lg="3">
+            <VersionsLoadList></VersionsLoadList>
+        </MudItem>
+        <MudItem xs="12" sm="12" md="4" lg="3">
+            <MudAlert Severity="Severity.Success">Select a Load to build</MudAlert>
+            <LoadList></LoadList>
+        </MudItem>
+    </MudGrid>
+}
+
+@code {
+
+    private async Task AppState_StateChanged(ComponentBase Source, string Property)
+    {
+        if (Source != this)
+        {
+            if (Property == "SoftwareSystemVm")
+            {
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+    }
+    protected override void OnInitialized()
+    {
+        AppState.StateChanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
+    }
+
+    void IDisposable.Dispose()
+    {
+        AppState.StateChanged -= async (Source, Property) => await AppState_StateChanged(Source, Property);
+    }
+}

@@ -13,13 +13,15 @@ public class LoadBuilderService : ILoadBuilderService
     private readonly SoftwareVersionManager _softwareVersionManager;
     private readonly LoadManager _loadManager;
     private readonly VersionsLoadManager _versionsLoadManager;
+    private readonly AppState _appState;
 
     public LoadBuilderService(
             HardwareConfigManager hardwareConfigManager,
             SoftwareSystemManager softwareSystemManager,
             SoftwareVersionManager softwareVersionManager,
             LoadManager loadManager,
-            VersionsLoadManager versionsLoadManager
+            VersionsLoadManager versionsLoadManager,
+            AppState appState
         )
     {
         _hardwareConfigManager = hardwareConfigManager;
@@ -27,6 +29,7 @@ public class LoadBuilderService : ILoadBuilderService
         _softwareVersionManager = softwareVersionManager;
         _loadManager = loadManager;
         _versionsLoadManager = versionsLoadManager;
+        _appState = appState;
     }
 
     public async Task<IEnumerable<HardwareConfigVm>> GetHardwareConfigVmsByDeviceTypeIdAsync(int id)
@@ -149,7 +152,6 @@ public class LoadBuilderService : ILoadBuilderService
                 var result = softwareVersions.Select(i => new VersionsLoadVm()
                 {
                     SoftwareVersionId = i.Id,
-                    Id = i.Id,
                     LoadId = id,
                     SoftwareVersionName = i.Name,
                     SoftwareSystemName = softwareSystems.Where(s => s.Id == i.SoftwareSystemId).FirstOrDefault().Name
@@ -164,4 +166,31 @@ public class LoadBuilderService : ILoadBuilderService
         return new List<VersionsLoadVm>();
     }
 
+    public async Task AddSoftwareVersionToLoad()
+    {
+        var loadId = _appState.LoadVm.Id;  //--------------------------------------------------LOAD ID = loadId
+        var vms = _appState.VersionsLoadVms.ToList();
+        var softwareSystemId = _appState.SoftwareSystemVm.Id;
+
+        List<int> softwareSystemIds = new List<int>();
+        foreach (var v in vms)
+        {
+            var versionVm = await _softwareVersionManager.GetByIdAsync(v.SoftwareVersionId);
+            softwareSystemIds.Add(versionVm.SoftwareSystemId);
+        }
+
+        if (softwareSystemIds.Contains(softwareSystemId))
+        {
+            var index = softwareSystemIds.IndexOf(softwareSystemId);
+            var versionLoadVmToRemove = vms[index];
+            
+            //THE ID is the same as the SoftwareVersionId?
+
+            var versionLoad = Mapping.Mapper.Map<VersionsLoad>(versionLoadVmToRemove);
+            await _versionsLoadManager.DeleteAsync(versionLoad);
+        }
+
+        var loadVersionToAdd = new VersionsLoad() { LoadId=loadId, SoftwareVersionId = _appState.SoftwareVersionVm.Id };
+        var result = await _versionsLoadManager.InsertAsync(loadVersionToAdd);
+    }
 }

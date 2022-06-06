@@ -5,7 +5,7 @@
 
 @if (@AppState.LoadVm.Id > 0 && _isBusy is not true)
 {
-    <MudTable Items="@AppState.VersionsLoadVms" Hover="true" T="VersionsLoadVm">
+    <MudTable Items="@AppState.VersionsLoadVms" Hover="true" T="VersionsLoadVm" Dense="true">
         <HeaderContent>
             <MudTh>Software System</MudTh>
             <MudTh>Software Version</MudTh>
@@ -15,6 +15,10 @@
             <MudTd DataLabel="Version">@context.SoftwareVersionName</MudTd>
         </RowTemplate>
     </MudTable>
+
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mt-2" OnClick="AddToLoad">
+        Add to Load
+    </MudButton>
 }
 
 @code {
@@ -32,6 +36,12 @@
         {
             AppState.UpdateVersionsLoadVms(this, new List<VersionsLoadVm>());
         }
+    }
+
+    private async Task AddToLoad()
+    {
+        await LoadBuilderService.AddSoftwareVersionToLoad();
+        await SetVersionLoadVmsForLoad();
     }
 
     private async Task AppState_StateChanged(ComponentBase Source, string Property)

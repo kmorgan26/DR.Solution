@@ -23,6 +23,7 @@
     <MudTable Items="@AppState.LoadVms"
           @ref="mudTable"
           Hover="true"
+          Dense="true"
           OnRowClick="RowClickEvent"
           RowClassFunc="SelectedRowClassFunc"
           T="LoadVm">
