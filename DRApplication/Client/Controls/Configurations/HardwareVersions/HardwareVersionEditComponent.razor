@@ -1,26 +1,62 @@
 ﻿@namespace DRApplication.Client.Controls
-@inject HardwareVersionManager manager
+
+@inject AppState AppState
+@inject HardwareVersionManager HardwareVersionManager
+@inject HardwareSystemManager HardwareSystemManager
 @inject NavigationManager navigation
 
-<div class="row">
-    <div class="col-md-6 col-sm-12">
-        @if (@HardwareVersionEditVm != null)
+@if (!_isBusy)
+{
+    <MudItem xs="12" sm="12" md="4" lg="3">
+        <EditForm Model="@AppState.HardwareVersionVm" OnValidSubmit="@UpdateHardwareVersion">
+
+            <MudTextField @bind-Value="AppState.HardwareVersionVm.Name" Class="my-6" Label="Hardware Version" Variant="Variant.Outlined"></MudTextField>
+
+            <HardwareSystemSelect OnHardwareSystemIdChanged="UpdateHardwareSystemForHardwareVersion"></HardwareSystemSelect>
+
+            <MudDatePicker Class="my-6" Label="Version Date" @bind-Date="@AppState.HardwareVersionVm.VersionDate" />
+
+            <SubmitButton ButtonText="Update" />
+            <CancelButton Url="hardwareversion" />
+
+        </EditForm>
+    </MudItem>
+}
+
+@code {
+    bool _isBusy;
+
+    [Parameter]
+    public int HardwareVersionId { get; set; }
+
+    async Task UpdateHardwareSystemForHardwareVersion(int id)
+    {
+        if (id > 0)
         {
-            <EditForm Model="@HardwareVersionEditVm" OnValidSubmit="@UpdateHardwareVersion">
+            var hardwareSystem = await HardwareSystemManager.GetByIdAsync(id);
+            var hardwareSystemVm = Mapping.Mapper.Map<HardwareSystemVm>(hardwareSystem);
 
-                <label for="Name">Hardware Version</label>
-                <InputText class="form-control" @bind-Value="HardwareVersionEditVm.Name" />
-
-                <HardwareSystemSelect HardwareSystemIdChange="UpdateHardwareSystem" SelectedHardwareSystemId="@HardwareVersionEditVm.HardwareSystemId"></HardwareSystemSelect>
-
-                <label for="Name">Version Date</label>
-                <InputDate class="form-control" @bind-Value="HardwareVersionEditVm.VersionDate" />
-
-                <SubmitButton ButtonText="Update"/>
-                <CancelButton Url="hardwareversion"/>
-
-            </EditForm>
+            var hardwareVersionVm = AppState.HardwareVersionVm;
+            hardwareVersionVm.HardwareSystemId = id;
+            AppState.UpdateHardwareSystemVm(this, hardwareSystemVm);
+            AppState.UpdateHardwareVersionVm(this, hardwareVersionVm);
         }
-    </div>
-</div>
+    }
 
+    protected async Task UpdateHardwareVersion()
+    {
+        var hardwareVersion = Mapping.Mapper.Map<HardwareVersion>(AppState.HardwareVersionVm);
+        await HardwareVersionManager.UpdateAsync(hardwareVersion);
+        navigation.NavigateTo("/hardwareversion");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        var hardwareVersion = await HardwareVersionManager.GetByIdAsync(HardwareVersionId);
+        var vm = Mapping.Mapper.Map<HardwareVersionVm>(hardwareVersion);
+        AppState.UpdateHardwareVersionVm(this, vm);
+        _isBusy = false;
+    }
+
+}

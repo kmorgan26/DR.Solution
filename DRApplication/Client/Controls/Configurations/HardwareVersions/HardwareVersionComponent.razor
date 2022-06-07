@@ -10,11 +10,13 @@
 <HardwareVersionTable></HardwareVersionTable>
 
 @code {
-    
+
     async Task SetHardwareSystemId(int id)
     {
-        var vm = await HardwareService.GetHardwareSystemVmById(id);
-        AppState.UpdateHardwareSystemVm(this, vm);
+        if (id > 0)
+        {
+            var vm = await HardwareService.GetHardwareSystemVmById(id);
+            AppState.UpdateHardwareSystemVm(this, vm);
+        }
     }
-
 }

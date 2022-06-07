@@ -5,29 +5,32 @@
 
 <NewButton Url="/hardwareversion/create" />
 
-<MudTable Items="@AppState.HardwareVersionVms" Hover="true" Striped="true" Dense="true" Class="my-4">
-    <HeaderContent>
-        <MudTh>ID</MudTh>
-        <MudTh>Name</MudTh>
-        <MudTh>Version Date</MudTh>
-        <MudTh></MudTh>
-    </HeaderContent>
-    <RowTemplate>
-        <MudTd DataLabel="Id">@context.Id</MudTd>
-        <MudTd DataLabel="Name">@context.Name</MudTd>
-        <MudTd DataLabel="Date">@context.VersionDate.ToShortDateString()</MudTd>
-        <MudTd DataLabel="SELECT">
-            <a href="/hardwareversion/edit/@context.Id" role="button">
-                <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>
-            </a>
-        </MudTd>
-    </RowTemplate>
-</MudTable>
+@if (AppState.HardwareSystemVm.Id > 0 && !_isBusy)
+{
+    <MudTable Items="@AppState.HardwareVersionVms" Hover="true" Striped="true" Dense="true" Class="my-4">
+        <HeaderContent>
+            <MudTh>ID</MudTh>
+            <MudTh>Name</MudTh>
+            <MudTh>Version Date</MudTh>
+            <MudTh></MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Id">@context.Id</MudTd>
+            <MudTd DataLabel="Name">@context.Name</MudTd>
+            <MudTd DataLabel="Date">@context.VersionDate</MudTd>
+            <MudTd DataLabel="SELECT">
+                <a href="/hardwareversion/edit/@context.Id" role="button">
+                    <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>
+                </a>
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+}
 
 @code {
 
     bool _isBusy;
-    
+
     private async Task SetHardwareVersions()
     {
         var hardwareVersionVms = await HardwareService.GetHardwareVersionsByHardwareSystemId(AppState.HardwareSystemVm.Id);

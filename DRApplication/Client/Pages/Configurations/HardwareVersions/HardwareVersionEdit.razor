@@ -1,4 +1,17 @@
 ﻿@namespace DRApplication.Client.Pages
 @page "/hardwareversion/edit/{HardwareVersionId:int}"
 
+<TitleHeader TitleText="Hardware Version Edit" IconPath="@Icons.Material.Filled.VerifiedUser" />
+
+<MudPaper Class="pa-2 mb-6" Elevation="0">
+    <MudAlert Severity="Severity.Success">Make Changes to the Software Version, then click Update</MudAlert>
+</MudPaper>
+
 <HardwareVersionEditComponent HardwareVersionId=@HardwareVersionId />
+
+@code{
+
+    [Parameter]
+    public int HardwareVersionId { get; set; }
+
+}
