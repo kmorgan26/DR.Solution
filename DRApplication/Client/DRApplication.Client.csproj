@@ -23,12 +23,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Controls\Configurations\HardwareSystems\HardwareSystemLabel.razor.cs" />
 	  <Compile Remove="Controls\Generic\Tables\BasicTable.razor.cs" />
 	  <Compile Remove="Controls\Platforms\Devices\DeviceComponent.razor.cs" />
 	  <Compile Remove="Services\ApiEfRepository.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Content Remove="Controls\Configurations\HardwareSystems\HardwareSystemLabel.razor" />
 	  <Content Remove="Controls\Generic\Tables\BasicTable.razor" />
 	  <Content Remove="Controls\Generic\Tables\FSMudTablePaging.razor" />
 	  <Content Remove="Controls\Platforms\Devices\DeviceComponent.razor" />
