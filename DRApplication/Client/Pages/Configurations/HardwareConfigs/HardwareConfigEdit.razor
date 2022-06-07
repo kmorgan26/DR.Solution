@@ -1,4 +1,17 @@
 ﻿@namespace DRApplication.Client.Pages
 @page "/hardwareconfig/edit/{HardwareConfigId:int}"
 
+<TitleHeader TitleText="Hardware Config Edit" IconPath="@Icons.Material.Filled.VerifiedUser" />
+
+<MudPaper Class="pa-2 mb-6" Elevation="0">
+    <MudAlert Severity="Severity.Success">Make Changes to the Hardware Configuration, then click Update</MudAlert>
+</MudPaper>
+
 <HardwareConfigEditComponent HardwareConfigId="@HardwareConfigId"></HardwareConfigEditComponent>
+
+@code{
+
+    [Parameter]
+    public int HardwareConfigId { get; set; }
+
+}
