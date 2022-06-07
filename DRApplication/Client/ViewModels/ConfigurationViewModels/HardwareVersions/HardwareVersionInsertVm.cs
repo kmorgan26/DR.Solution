@@ -13,5 +13,6 @@ public class HardwareVersionInsertVm
 
     [Required]
     [DataType(DataType.Date)]
+    [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
     public DateTime? VersionDate { get; set; } = DateTime.Today;
 }
