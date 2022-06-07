@@ -1,4 +1,5 @@
 ﻿@namespace DRApplication.Client.Controls
+
 @inject AppState AppState
 @inject HardwareVersionManager HardwareVersionManager
 @inject NavigationManager navigation
@@ -31,13 +32,13 @@
             var hardwareSystemVm = AppState.HardwareSystemVm;
             hardwareSystemVm.Id = id;
             AppState.UpdateHardwareSystemVm(this, hardwareSystemVm);
-            _hardwareVersionInsertVm.HardwareSystemId = id;
         }
 
     }
 
     private async Task InsertHardwareVersion()
     {
+        _hardwareVersionInsertVm.HardwareSystemId = AppState.HardwareSystemVm.Id;
         var hardwareVersion = Mapping.Mapper.Map<HardwareVersion>(_hardwareVersionInsertVm);
         await HardwareVersionManager.InsertAsync(hardwareVersion);
         navigation.NavigateTo("/hardwareversion");
