@@ -13,13 +13,15 @@ namespace DRApplication.Client.Services
 
         #endregion
 
-        #region -- single View Model Properties --
-
-        public DeviceTypeVm DeviceTypeVm { get; private set; } = new();
-
-        public HardwareConfigVm HardwareConfigVm { get; private set; } = new();
+        #region -- View Model Properties --
 
         public HardwareSystemVm HardwareSystemVm { get; private set; } = new();
+
+        public HardwareVersionVm HardwareVersionVm { get; private set; } = new();
+
+        public HardwareVersionsConfigVm HardwareVersionsConfigVm { get; private set; } = new();
+        
+        public HardwareConfigVm HardwareConfigVm { get; private set; } = new();
 
         public SoftwareSystemVm SoftwareSystemVm { get; private set; } = new();
 
@@ -29,23 +31,29 @@ namespace DRApplication.Client.Services
 
         public VersionsLoadVm VersionsLoadVm { get; private set; } = new();
 
+        public DeviceTypeVm DeviceTypeVm { get; private set; } = new();
+        
         #endregion
 
         #region -- View Model Collections --
+        
+        public IEnumerable<HardwareSystemVm> HardwareSystemVms { get; private set; } = new List<HardwareSystemVm>();
 
-        public IEnumerable<DeviceTypeVm> DeviceTypeVms { get; private set; } = new List<DeviceTypeVm>();
+        public IEnumerable<HardwareVersionVm> HardwareVersionVms { get; private set; } = new List<HardwareVersionVm>();
+
+        public IEnumerable<HardwareVersionsConfigVm> HardwareVersionsConfigVms { get; private set; } = new List<HardwareVersionsConfigVm>();
 
         public IEnumerable<HardwareConfigVm> HardwareConfigVms { get; private set; } = new List<HardwareConfigVm>();
 
-        public IEnumerable<HardwareSystemVm> HardwareSystemVms { get; private set; } = new List<HardwareSystemVm>();
-
         public IEnumerable<SoftwareSystemVm> SoftwareSystemVms { get; private set; } = new List<SoftwareSystemVm>();
-
+        
         public IEnumerable<SoftwareVersionVm> SoftwareVersionVms { get; private set; } = new List<SoftwareVersionVm>();
-
+        
         public IEnumerable<LoadVm> LoadVms { get; private set; } = new List<LoadVm>();
-
+        
         public IEnumerable<VersionsLoadVm> VersionsLoadVms { get; private set; } = new List<VersionsLoadVm>();
+        
+        public IEnumerable<DeviceTypeVm> DeviceTypeVms { get; private set; } = new List<DeviceTypeVm>();
 
         #endregion
 
@@ -64,96 +72,107 @@ namespace DRApplication.Client.Services
 
         #endregion
 
-        #region -- View Model Collection Methods --
-
-        public void UpdateLoadVms(ComponentBase Source, IEnumerable<LoadVm> Model)
-        {
-            this.LoadVms = Model;
-            NotifyStateChanged(Source, "LoadVms");
-        }
-
-        public void UpdateHardwareSystemVms(ComponentBase Source, IEnumerable<HardwareSystemVm> Model)
-        {
-            this.HardwareSystemVms = Model;
-            NotifyStateChanged(Source, "HardwareSystemVms");
-        }
-
-        public void UpdateHardwareConfigVms(ComponentBase Source, IEnumerable<HardwareConfigVm> Model)
-        {
-            this.HardwareConfigVms = Model;
-            NotifyStateChanged(Source, "HardwareConfigVms");
-        }
-
-        public void UpdateVersionsLoadVms(ComponentBase Source, IEnumerable<VersionsLoadVm> Model)
-        {
-            this.VersionsLoadVms = Model;
-            NotifyStateChanged(Source, "VersionsLoadVms");
-        }
-
-        public void UpdateSoftwareSystemVms(ComponentBase Source, IEnumerable<SoftwareSystemVm> Model)
-        {
-            this.SoftwareSystemVms = Model;
-            NotifyStateChanged(Source, "SoftwareSystemVms");
-        }
-
-        public void UpdateDeviceTypeVms(ComponentBase Source, IEnumerable<DeviceTypeVm> Model)
-        {
-            this.DeviceTypeVms = Model;
-            NotifyStateChanged(Source, "DeviceTypeVms");
-        }
-
-        public void UpdateSoftwareVersionVms(ComponentBase Source, IEnumerable<SoftwareVersionVm> Model)
-        {
-            this.SoftwareVersionVms = Model;
-            NotifyStateChanged(Source, "SoftwareVersionVms");
-        }
-
-        #endregion
-
         #region -- View Model Methods --
-
-        public void UpdateVersionsLoadVm(ComponentBase Source, VersionsLoadVm Model)
-        {
-            this.VersionsLoadVm = Model;
-            NotifyStateChanged(Source, "VersionsLoadVm");
-        }
-
-        public void UpdateLoadVm(ComponentBase Source, LoadVm Model)
-        {
-            this.LoadVm = Model;
-            NotifyStateChanged(Source, "LoadVm");
-        }
-
-        public void UpdateDeviceTypeVm(ComponentBase Source, DeviceTypeVm Model)
-        {
-            this.DeviceTypeVm = Model;
-            NotifyStateChanged(Source, "DeviceTypeVm");
-        }
-
-        public void UpdateHardwareConfigVm(ComponentBase Source, HardwareConfigVm Model)
-        {
-            this.HardwareConfigVm = Model;
-            NotifyStateChanged(Source, "HardwareConfigVm");
-        }
 
         public void UpdateHardwareSystemVm(ComponentBase Source, HardwareSystemVm Model)
         {
             this.HardwareSystemVm = Model;
             NotifyStateChanged(Source, "HardwareSystemVm");
         }
-
+        public void UpdateHardwareVersionVm(ComponentBase Source, HardwareVersionVm Model)
+        {
+            this.HardwareVersionVm = Model;
+            NotifyStateChanged(Source, "HardwareVersionVm");
+        }
+        public void UpdateHardwareVersionsConfigVm(ComponentBase Source, HardwareVersionsConfigVm Model)
+        {
+            this.HardwareVersionsConfigVm = Model;
+            NotifyStateChanged(Source, "HardwareVersionsConfigVm");
+        }
+        public void UpdateHardwareConfigVm(ComponentBase Source, HardwareConfigVm Model)
+        {
+            this.HardwareConfigVm = Model;
+            NotifyStateChanged(Source, "HardwareConfigVm");
+        }
         public void UpdateSoftwareSystemVm(ComponentBase Source, SoftwareSystemVm Model)
         {
             this.SoftwareSystemVm = Model;
             NotifyStateChanged(Source, "SoftwareSystemVm");
         }
-
         public void UpdateSoftwareVersionVm(ComponentBase Source, SoftwareVersionVm Model)
         {
             this.SoftwareVersionVm = Model;
             NotifyStateChanged(Source, "SoftwareVersionVm");
         }
+        public void UpdateVersionsLoadVm(ComponentBase Source, VersionsLoadVm Model)
+        {
+            this.VersionsLoadVm = Model;
+            NotifyStateChanged(Source, "VersionsLoadVm");
+        }
+        public void UpdateLoadVm(ComponentBase Source, LoadVm Model)
+        {
+            this.LoadVm = Model;
+            NotifyStateChanged(Source, "LoadVm");
+        }
+        public void UpdateDeviceTypeVm(ComponentBase Source, DeviceTypeVm Model)
+        {
+            this.DeviceTypeVm = Model;
+            NotifyStateChanged(Source, "DeviceTypeVm");
+        }
 
+
+        
+
+
+        #endregion
+
+        #region -- View Model Collection Methods --
+        
+        public void UpdateHardwareSystemVms(ComponentBase Source, IEnumerable<HardwareSystemVm> Model)
+        {
+            this.HardwareSystemVms = Model;
+            NotifyStateChanged(Source, "HardwareSystemVms");
+        }
+        public void UpdateHardwareVersionVms(ComponentBase Source, IEnumerable<HardwareVersionVm> Model)
+        {
+            this.HardwareVersionVms = Model;
+            NotifyStateChanged(Source, "HardwareVersionVms");
+        }
+        public void UpdateHardwareVersionsConfigVms(ComponentBase Source, IEnumerable<HardwareVersionsConfigVm> Model)
+        {
+            this.HardwareVersionsConfigVms = Model;
+            NotifyStateChanged(Source, "HardwareVersionsConfigVms");
+        }
+        public void UpdateHardwareConfigVms(ComponentBase Source, IEnumerable<HardwareConfigVm> Model)
+        {
+            this.HardwareConfigVms = Model;
+            NotifyStateChanged(Source, "HardwareConfigVms");
+        }
+        public void UpdateSoftwareSystemVms(ComponentBase Source, IEnumerable<SoftwareSystemVm> Model)
+        {
+            this.SoftwareSystemVms = Model;
+            NotifyStateChanged(Source, "SoftwareSystemVms");
+        }
+        public void UpdateSoftwareVersionVms(ComponentBase Source, IEnumerable<SoftwareVersionVm> Model)
+        {
+            this.SoftwareVersionVms = Model;
+            NotifyStateChanged(Source, "SoftwareVersionVms");
+        }
+        public void UpdateVersionsLoadVms(ComponentBase Source, IEnumerable<VersionsLoadVm> Model)
+        {
+            this.VersionsLoadVms = Model;
+            NotifyStateChanged(Source, "VersionsLoadVms");
+        }
+        public void UpdateLoadVms(ComponentBase Source, IEnumerable<LoadVm> Model)
+        {
+            this.LoadVms = Model;
+            NotifyStateChanged(Source, "LoadVms");
+        }
+        public void UpdateDeviceTypeVms(ComponentBase Source, IEnumerable<DeviceTypeVm> Model)
+        {
+            this.DeviceTypeVms = Model;
+            NotifyStateChanged(Source, "DeviceTypeVms");
+        }
         #endregion
 
         public event Action<ComponentBase, string> StateChanged;
