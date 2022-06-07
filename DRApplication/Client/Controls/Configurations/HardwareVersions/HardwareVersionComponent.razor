@@ -1,5 +1,4 @@
 ﻿@namespace DRApplication.Client.Controls
-@inject HardwareVersionManager manager
 @inject IHardwareService HardwareService
 @inject AppState AppState
 
@@ -15,8 +14,8 @@
     {
         if (id > 0)
         {
-            var vm = await HardwareService.GetHardwareSystemVmById(id);
-            AppState.UpdateHardwareSystemVm(this, vm);
+            var hardwareSystemVm = await HardwareService.GetHardwareSystemVmById(id);
+            AppState.UpdateHardwareSystemVm(this, hardwareSystemVm);
         }
     }
 }

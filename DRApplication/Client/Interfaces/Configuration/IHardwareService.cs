@@ -9,4 +9,6 @@ public interface IHardwareService
     Task<IEnumerable<HardwareSystemVm>> GetHardwareSystemVms();
 
     Task<IEnumerable<HardwareVersionVm>> GetHardwareVersionsByHardwareSystemId(int id);
+
+    Task<IEnumerable<HardwareConfigVm>> GetHardwareConfigsByDeviceTypeId(int id);
 }
