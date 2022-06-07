@@ -1,27 +1,45 @@
 ﻿@namespace DRApplication.Client.Controls
-@inject HardwareVersionManager manager
+@inject AppState AppState
+@inject HardwareVersionManager HardwareVersionManager
 @inject NavigationManager navigation
 
-<h3>Add New Hardware Version</h3>
-<div class="row">
-    <div class="col-md-6 col-sm-12">
-        @if (@_hardwareVersionInsertVm != null)
+@if (@_hardwareVersionInsertVm != null)
+{
+    <MudItem xs="12" sm="12" md="4" lg="3">
+        <EditForm Model="@_hardwareVersionInsertVm" OnValidSubmit="@InsertHardwareVersion">
+
+            <MudTextField @bind-Value="_hardwareVersionInsertVm.Name" Class="my-6" Label="Version Name" Variant="Variant.Outlined"></MudTextField>
+
+            <HardwareSystemSelect OnHardwareSystemIdChanged="UpdateHardwareSystem" />
+
+            <MudDatePicker Class="my-6" Label="Version Date" @bind-Date="_hardwareVersionInsertVm.VersionDate" />
+
+            <SubmitButton ButtonText="Insert" />
+            <CancelButton Url="hardwareversion" />
+        </EditForm>
+    </MudItem>
+}
+
+@code {
+
+    private HardwareVersionInsertVm _hardwareVersionInsertVm { get; set; } = new();
+
+    void UpdateHardwareSystem(int id)
+    {
+        if (id > 0)
         {
-            <EditForm Model="@_hardwareVersionInsertVm" OnValidSubmit="@InsertHardwareVersion">
-
-                <label for="Name">Hardware Version</label>
-                <InputText class="form-control" @bind-Value="_hardwareVersionInsertVm.Name" />
-
-                <HardwareSystemSelect SelectedHardwareSystemId="@_hardwareVersionInsertVm.HardwareSystemId" HardwareSystemIdChange="UpdateHardwareSystem" />
-
-                <label for="Name">Version Date</label>
-                <InputDate class="form-control" @bind-Value="_hardwareVersionInsertVm.VersionDate" />
-
-                <SubmitButton ButtonText="Insert"/>
-                <CancelButton Url="hardwareversion"/>
-            </EditForm>
+            var hardwareSystemVm = AppState.HardwareSystemVm;
+            hardwareSystemVm.Id = id;
+            AppState.UpdateHardwareSystemVm(this, hardwareSystemVm);
+            _hardwareVersionInsertVm.HardwareSystemId = id;
         }
-    </div>
-</div>
 
+    }
 
+    private async Task InsertHardwareVersion()
+    {
+        var hardwareVersion = Mapping.Mapper.Map<HardwareVersion>(_hardwareVersionInsertVm);
+        await HardwareVersionManager.InsertAsync(hardwareVersion);
+        navigation.NavigateTo("/hardwareversion");
+    }
+}
