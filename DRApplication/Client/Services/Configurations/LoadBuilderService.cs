@@ -9,6 +9,7 @@ namespace DRApplication.Client.Services;
 public class LoadBuilderService : ILoadBuilderService
 {
     private readonly HardwareConfigManager _hardwareConfigManager;
+    private readonly HardwareVersionManager _hardwareVersionManager;
     private readonly SoftwareSystemManager _softwareSystemManager;
     private readonly SoftwareVersionManager _softwareVersionManager;
     private readonly LoadManager _loadManager;
@@ -17,6 +18,7 @@ public class LoadBuilderService : ILoadBuilderService
 
     public LoadBuilderService(
             HardwareConfigManager hardwareConfigManager,
+            HardwareVersionManager hardwareVersionManager,
             SoftwareSystemManager softwareSystemManager,
             SoftwareVersionManager softwareVersionManager,
             LoadManager loadManager,
@@ -25,6 +27,7 @@ public class LoadBuilderService : ILoadBuilderService
         )
     {
         _hardwareConfigManager = hardwareConfigManager;
+        _hardwareVersionManager = hardwareVersionManager;
         _softwareSystemManager = softwareSystemManager;
         _softwareVersionManager = softwareVersionManager;
         _loadManager = loadManager;
@@ -192,5 +195,17 @@ public class LoadBuilderService : ILoadBuilderService
 
         var loadVersionToAdd = new VersionsLoad() { LoadId = loadId, SoftwareVersionId = _appState.SoftwareVersionVm.Id };
         var result = await _versionsLoadManager.InsertAsync(loadVersionToAdd);
+    }
+
+    public async Task<IEnumerable<HardwareVersionVm>> GetHardwareVersionVmsByHardwareSystemId(int id)
+    {
+        var filter = await new FilterGenerator<HardwareVersion>().GetFilterForPropertyByNameAsync("HardwareSystemId", id);
+        
+        var response = await _hardwareVersionManager.GetAsync(filter);
+
+        if (response.Data is not null)
+            return Mapping.Mapper.Map<IEnumerable<HardwareVersionVm>>(response.Data);
+
+        return new List<HardwareVersionVm>();
     }
 }
