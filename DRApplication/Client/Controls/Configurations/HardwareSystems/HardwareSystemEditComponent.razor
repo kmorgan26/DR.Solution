@@ -5,17 +5,22 @@
 
 @if (AppState.HardwareSystemVm.Id > 0)
 {
-    <EditForm Model="AppState.HardwareSystemVm" OnValidSubmit="@UpdateHardwareSystem">
+    <MudItem xs="12" sm="12" md="4" lg="3">
+        <EditForm Model="AppState.HardwareSystemVm" OnValidSubmit="@UpdateHardwareSystem">
 
-        <InputText class="form-control" @bind-Value="AppState.HardwareSystemVm.Name" />
+            <MudTextField @bind-Value="AppState.HardwareSystemVm.Name" Class="my-6" Label="Hardware System" Variant="Variant.Outlined"></MudTextField>
 
-        <SubmitButton ButtonText="Update" />
-        <CancelButton Url="/hardwaresystem" />
+            <SubmitButton ButtonText="Update" />
+            <CancelButton Url="/hardwaresystem" />
 
-    </EditForm>
+        </EditForm>
+    </MudItem>
 }
 
 @code {
+
+    [Parameter]
+    public int HardwareSystemId { get; set; }
 
     protected async Task UpdateHardwareSystem()
     {
@@ -26,9 +31,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var hardwareSystem = await manager.GetByIdAsync(AppState.HardwareSystemVm.Id);
+        var hardwareSystem = await manager.GetByIdAsync(HardwareSystemId);
         var vm = Mapping.Mapper.Map<HardwareSystemVm>(hardwareSystem);
         AppState.UpdateHardwareSystemVm(this, vm);
     }
-
 }

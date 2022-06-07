@@ -1,29 +1,20 @@
 ﻿@namespace DRApplication.Client.Controls
 @inject HardwareVersionManager manager
+@inject IHardwareService HardwareService
+@inject AppState AppState
 
-<NewButton Url="/hardwareversion/create" />
+<MudItem xs="12" sm="9" md="6" lg="3" Class="mb-4">
+    <HardwareSystemSelect OnHardwareSystemIdChanged="SetHardwareSystemId"></HardwareSystemSelect>
+</MudItem>
 
-<MudTable Items="@_hardwareVersionVms" Hover="true" Striped="true" Dense="true">
-    <HeaderContent>
-        <MudTh>ID</MudTh>
-        <MudTh>Name</MudTh>
-        <MudTh>Hardware System</MudTh>
-        <MudTh>Version Date</MudTh>
-        <MudTh></MudTh>
-    </HeaderContent>
-    <RowTemplate>
-        <MudTd DataLabel="Id">@context.Id</MudTd>
-        <MudTd DataLabel="Name">@context.Name</MudTd>
-        <MudTd DataLabel="Version">
-            <HardwareSystemLabel HardwareSystemId=@context.HardwareSystemId />
-        </MudTd>
-        <MudTd DataLabel="Date">@context.VersionDate.ToShortDateString()</MudTd>
-        <MudTd DataLabel="SELECT">
-            <a href="/hardwareversion/edit/@context.Id" role="button">
-                <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>    
-            </a>
-        </MudTd>
-    </RowTemplate>
-</MudTable>
+<HardwareVersionTable></HardwareVersionTable>
 
+@code {
+    
+    async Task SetHardwareSystemId(int id)
+    {
+        var vm = await HardwareService.GetHardwareSystemVmById(id);
+        AppState.UpdateHardwareSystemVm(this, vm);
+    }
 
+}
