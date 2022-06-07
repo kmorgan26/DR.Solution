@@ -32,10 +32,7 @@
         var vms = Mapping.Mapper.Map<List<HardwareSystemVm>>(items);
         AppState.UpdateHardwareSystemVms(this, vms);
     }
-    async Task SetHardwareSystemAndNavigate()
-    {
-
-    }
+    
     protected override async Task OnInitializedAsync()
     {
         _isBusy = true;
