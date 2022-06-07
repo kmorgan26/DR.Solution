@@ -6,6 +6,8 @@ public interface ILoadBuilderService
 {
     Task<IEnumerable<HardwareConfigVm>> GetHardwareConfigVmsByDeviceTypeIdAsync(int i);
 
+    Task<IEnumerable<HardwareVersionVm>> GetHardwareVersionVmsByHardwareSystemId(int id);
+    
     Task<HardwareConfigVm> GetHardwareConfigVmById(int id);
     
     Task<IEnumerable<SoftwareSystemVm>> GetSoftwareSystemVmsByHardwareConfigId(int id);
@@ -19,6 +21,7 @@ public interface ILoadBuilderService
     Task<IEnumerable<SoftwareVersionVm>> GetSoftwareVersionVmsByLoadId(int id);
 
     Task<IEnumerable<VersionsLoadVm>> GetVersionsLoadVmsByLoadId(int id);
+
 
     Task AddSoftwareVersionToLoad();
 }
