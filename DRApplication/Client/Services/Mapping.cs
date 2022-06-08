@@ -26,13 +26,14 @@ public class MappingProfile : Profile
     {
         CreateMap<HardwareSystem, HardwareSystemVm>().ReverseMap();
         CreateMap<HardwareSystem, HardwareSystemInsertVm>().ReverseMap();
-        CreateMap<HardwareSystem, HardwareSystemEditVm>().ReverseMap();
         CreateMap<HardwareSystem, GenericListVm>().ReverseMap();
 
-        CreateMap<HardwareVersion, HardwareVersionVm>().ReverseMap();
-        CreateMap<HardwareVersion, HardwareVersionEditVm>().ReverseMap();
+        CreateMap<HardwareVersionVm, HardwareVersion>().ReverseMap();
         CreateMap<HardwareVersion, HardwareVersionInsertVm>().ReverseMap();
         CreateMap<HardwareVersion, GenericListVm>().ReverseMap();
+        CreateMap<HardwareVersion, HardwareVersionVm>()
+            .ForMember(dest => dest.VersionDateString,
+                opts => opts.MapFrom(src => src.VersionDate.ToShortDateString()));
 
         CreateMap<HardwareConfig, HardwareConfigEditVm>().ReverseMap();
         CreateMap<HardwareConfig, HardwareConfigVm>().ReverseMap();

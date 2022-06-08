@@ -1,21 +1,61 @@
 ﻿@namespace DRApplication.Client.Controls
-@inject HardwareConfigManager manager
+
+@inject AppState AppState
 @inject NavigationManager navigation
+@inject IPlatformService PlatformService
+@inject HardwareConfigManager HardwareConfigManager
 
-<div class="row">
-    <div class="col-md-6 col-sm-12">
-        @if (@HardwareConfigEditVm != null)
+@if (!_isBusy)
+{
+    <MudItem xs="12" sm="12" md="4" lg="3">
+        <EditForm Model="@AppState.HardwareVersionVm" OnValidSubmit="@UpdateHardwareConfig">
+
+            <DeviceTypeSelect  OnDeviceTypeIdChanged="UpdateDeviceTypeForHardwareConfig"></DeviceTypeSelect>
+
+            <MudTextField @bind-Value="AppState.HardwareConfigVm.Name" Class="my-6" Label="Hardware Configuration" Variant="Variant.Outlined"></MudTextField>
+
+            <SubmitButton ButtonText="Update" />
+            <CancelButton Url="hardwareconfig" />
+
+        </EditForm>
+    </MudItem>
+}
+
+@code {
+    bool _isBusy;
+
+    [Parameter]
+    public int HardwareConfigId { get; set; }
+
+    async Task UpdateDeviceTypeForHardwareConfig(int id)
+    {
+        if (id > 0)
         {
-            <EditForm Model="@HardwareConfigEditVm" OnValidSubmit="@UpdateHarwareConfig">
+            var deviceTypeVm = await PlatformService.GetDeviceTypeVmById(id);
 
-                <label for="Name">Hardware Configuration</label>
-                <InputText class="form-control" @bind-Value="HardwareConfigEditVm.Name" />
+            var hardwareConfigvm = AppState.HardwareConfigVm;
+            hardwareConfigvm.DeviceTypeId = id;
+            AppState.UpdateHardwareConfigVm(this, hardwareConfigvm);
+            AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
 
-                <DeviceTypeSelectComponent DeviceTypeIdChange="UpdateDeviceType" SelectedDeviceTypeId="@HardwareConfigEditVm.DeviceTypeId"></DeviceTypeSelectComponent>
-
-                <SubmitButton ButtonText="Update"/>
-                <CancelButton Url="/hardwareconfig"/>
-            </EditForm>
         }
-    </div>
-</div>
+    }
+
+    protected async Task UpdateHardwareConfig()
+    {
+        var hardwareConfig = Mapping.Mapper.Map<HardwareConfig>(AppState.HardwareConfigVm);
+        await HardwareConfigManager.UpdateAsync(hardwareConfig);
+        navigation.NavigateTo("/hardwareconfig");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+
+        var hardwareConfig = await HardwareConfigManager.GetByIdAsync(HardwareConfigId);
+        var hardwareConfigVm = Mapping.Mapper.Map<HardwareConfigVm>(hardwareConfig);
+        AppState.UpdateHardwareConfigVm(this, hardwareConfigVm);
+        _isBusy = false;
+    }
+
+}

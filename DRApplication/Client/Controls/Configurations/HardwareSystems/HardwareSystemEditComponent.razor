@@ -1,21 +1,38 @@
 ﻿@namespace DRApplication.Client.Controls
 @inject HardwareSystemManager manager
 @inject NavigationManager navigation
+@inject AppState AppState
 
-<div class="row">
-    <div class="col-md-6 col-sm-12">
-        @if (@HardwareSystemEditVm != null)
-        {
-            <EditForm Model="@HardwareSystemEditVm" OnValidSubmit="@UpdateHardwareSystem">
+@if (AppState.HardwareSystemVm.Id > 0)
+{
+    <MudItem xs="12" sm="12" md="4" lg="3">
+        <EditForm Model="AppState.HardwareSystemVm" OnValidSubmit="@UpdateHardwareSystem">
 
-                <label for="Name">Hardware System</label>
-                <InputText class="form-control" @bind-Value="HardwareSystemEditVm.Name" />
+            <MudTextField @bind-Value="AppState.HardwareSystemVm.Name" Class="my-6" Label="Hardware System" Variant="Variant.Outlined"></MudTextField>
 
-                <SubmitButton ButtonText="Update"/>
-                <CancelButton Url="/hardwaresystem"/>
+            <SubmitButton ButtonText="Update" />
+            <CancelButton Url="/hardwaresystem" />
 
-            </EditForm>
-        }
-    </div>
-</div>
+        </EditForm>
+    </MudItem>
+}
 
+@code {
+
+    [Parameter]
+    public int HardwareSystemId { get; set; }
+
+    protected async Task UpdateHardwareSystem()
+    {
+        var hardwareSystem = Mapping.Mapper.Map<HardwareSystem>(AppState.HardwareSystemVm);
+        await manager.UpdateAsync(hardwareSystem);
+        navigation.NavigateTo("/hardwaresystem");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var hardwareSystem = await manager.GetByIdAsync(HardwareSystemId);
+        var vm = Mapping.Mapper.Map<HardwareSystemVm>(hardwareSystem);
+        AppState.UpdateHardwareSystemVm(this, vm);
+    }
+}

@@ -17,4 +17,6 @@ public interface IPlatformService
 
     Task<DeviceTypeVm> GetDeviceTypeVmFromGenericVm(GenericListVm genericListVm);
 
+    Task<DeviceTypeVm> GetDeviceTypeVmById(int id);
+
 }

@@ -1,0 +1,64 @@
+﻿@namespace DRApplication.Client.Controls
+@inject AppState AppState
+@inject IHardwareService HardwareService
+@implements IDisposable
+
+<NewButton Url="/hardwareconfig/create" />
+
+@if (AppState.DeviceTypeVm.Id > 0)
+{
+    <MudTable Items="@AppState.HardwareConfigVms" Class="my-4" Hover="true" Striped="true" Dense="true">
+        <HeaderContent>
+            <MudTh>ID</MudTh>
+            <MudTh>Config</MudTh>
+            <MudTh>Device Type</MudTh>
+            <MudTh></MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Thread">@context.Id</MudTd>
+            <MudTd DataLabel="Thread">@context.Name</MudTd>
+            <MudTd DataLabel="Thread">
+                <DeviceTypeLabel DeviceTypeId=@context.DeviceTypeId />
+            </MudTd>
+            <MudTd DataLabel="SELECT">
+                <a href="/hardwareconfig/edit/@context.Id" role="button">
+                    <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>
+                </a>
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+
+@code {
+
+    bool _isBusy;
+
+    private async Task SetHardwareConfigs()
+    {
+        var hardwareConfigVms = await HardwareService.GetHardwareConfigsByDeviceTypeId(AppState.DeviceTypeVm.Id);
+        AppState.UpdateHardwareConfigVms(this, hardwareConfigVms);
+    }
+
+    private async Task AppState_StateChanged(ComponentBase Source, string Property)
+    {
+        if (Source != this)
+        {
+            if (Property == "DeviceTypeVm")
+            {
+                await SetHardwareConfigs();
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        AppState.StateChanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
+        await SetHardwareConfigs();
+        _isBusy = false;
+    }
+    void IDisposable.Dispose()
+    {
+        AppState.StateChanged -= async (Source, Property) => await AppState_StateChanged(Source, Property);
+    }
+}

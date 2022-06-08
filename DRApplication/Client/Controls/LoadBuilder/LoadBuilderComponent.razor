@@ -1,44 +1,45 @@
 ﻿@namespace DRApplication.Client.Controls
-@inject ILoadBuilderService LoadBuilderService
-@inject IPlatformService PlatformService
+@inject AppState AppState
+@implements IDisposable
 
 <LoadBuilderFilters></LoadBuilderFilters>
 
-@if (@AppState.HardwareConfigId > 0 && @AppState.SoftwareSystemId >0 && _isBusy is not true)
+@if (AppState.SoftwareSystemVm.Id > 0)
 {
-    <div>software @AppState.HardwareConfigId</div>
-    <MudGrid Spacing="3">
-        <MudItem xs="3">
-            <MudPaper Class="m-9">
-                <MudList Clickable="true" Dense="true" Color="Color.Success">
-                    @foreach (var item in _softwareSystemVms)
-                    {
-                        <MudListItem Text="@item.Name" Value="@item.Name" />
-                    }
-                </MudList>
-            </MudPaper>
+    <MudGrid Class="mt-10">
+        <MudItem xs="12" sm="12" md="4" lg="3">
+            <MudAlert Severity="Severity.Success">Select a Version for this Software System</MudAlert>
+            <SoftwareVersionList></SoftwareVersionList>
+        </MudItem>
+        <MudItem xs="12" sm="12" md="4" lg="3">
+            <VersionsLoadList></VersionsLoadList>
+        </MudItem>
+        <MudItem xs="12" sm="12" md="4" lg="3">
+            <MudAlert Severity="Severity.Success">Select a Load to build</MudAlert>
+            <LoadList></LoadList>
         </MudItem>
     </MudGrid>
 }
 
-
 @code {
 
-    bool _isBusy;
-
-    private IEnumerable<HardwareConfigVm> _hardwareConfigVms { get; set; }
-    private IEnumerable<SoftwareSystemVm> _softwareSystemVms { get; set; }
-
-    [CascadingParameter]
-    public AppStateComponent AppState { get; set; } = new();
-
-    async Task SetSoftwareConfigs()
+    private async Task AppState_StateChanged(ComponentBase Source, string Property)
     {
-        _isBusy = true;
-        var id = Convert.ToInt32(@AppState.HardwareConfigId);
-        var softwareConfigs = await LoadBuilderService.GetSoftwareSystemsByHardwareConfigIg(id);
-        _softwareSystemVms = softwareConfigs;
+        if (Source != this)
+        {
+            if (Property == "SoftwareSystemVm")
+            {
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+    }
+    protected override void OnInitialized()
+    {
+        AppState.StateChanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
+    }
 
-        _isBusy = false;
+    void IDisposable.Dispose()
+    {
+        AppState.StateChanged -= async (Source, Property) => await AppState_StateChanged(Source, Property);
     }
 }

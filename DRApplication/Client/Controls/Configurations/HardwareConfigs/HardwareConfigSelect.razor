@@ -1,0 +1,63 @@
+﻿@namespace DRApplication.Client.Controls
+@inject ILoadBuilderService LoadBuilderService
+@inject AppState AppState
+@implements IDisposable
+
+@if (!_isBusy)
+{
+    <MudSelect Variant="Variant.Outlined" T="int" Label="Hardware Config" Value="@AppState.HardwareConfigVm.Id" ValueChanged="@OnHardwareConfigIdChanged">
+        <MudSelectItem Value="0">SELECT Hardware Configuration</MudSelectItem>
+        @foreach (var item in @AppState.HardwareConfigVms)
+        {
+            <MudSelectItem Value="@item.Id">@item.Name</MudSelectItem>
+        }
+    </MudSelect>
+}
+
+@code {
+
+    bool _isBusy;
+
+    [Parameter]
+    public EventCallback<int> OnHardwareConfigIdChanged { get; set; }
+
+    private async Task SetHardwareConfigs()
+    {
+        var items = await LoadBuilderService.GetHardwareConfigVmsByDeviceTypeIdAsync(AppState.DeviceTypeVm.Id);
+        AppState.UpdateHardwareConfigVms(this, items);
+    }
+
+    /// <summary>
+    /// When the DeviceTypeVm changes, the HardwareConfigVms populate with a new list for that Device Type
+    /// With the new list populating, the HardwarConfigVm is set to a new instance, setting the ID to 0
+    /// </summary>
+    /// <param name="Source"></param>
+    /// <param name="Property"></param>
+    /// <returns></returns>
+    private async Task AppState_StateChanged(ComponentBase Source, string Property)
+    {
+        if (Source != this)
+        {
+            if (Property == "DeviceTypeVm")
+            {
+                await SetHardwareConfigs();
+                AppState.UpdateHardwareConfigVm(this, new HardwareConfigVm());
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        AppState.StateChanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
+        await SetHardwareConfigs();
+        _isBusy = false;
+    }
+
+    void IDisposable.Dispose()
+    {
+        AppState.StateChanged -= async (Source, Property) => await AppState_StateChanged(Source, Property);
+    }
+
+}

@@ -4,7 +4,7 @@
 
 @if (!_isBusy)
 {
-    <MudSelect Variant="@VariantType" T="int" Label="@LabelText" ValueChanged="OnSelectListChanged">
+    <MudSelect Variant="@VariantType" T="int" Label="@LabelText" Value="@SelectedValue" MultiSelection="false">
         <MudSelectItem Value="0">@TopMenuItemText</MudSelectItem>
         @foreach (var item in _genericListVms)
         {
@@ -19,6 +19,9 @@
     bool _isBusy;
 
     private IEnumerable<ForeignKeyListVm> _genericListVms { get; set; } = new List<ForeignKeyListVm>();
+
+    [Parameter]
+    public int SelectedValue { get; set; }
 
     [Parameter]
     public EventCallback<int> OnSelectListChanged { get; set; }

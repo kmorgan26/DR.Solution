@@ -1,0 +1,40 @@
+﻿@namespace DRApplication.Client.Controls
+@inject ILoadBuilderService LoadBuilderService
+@inject AppState AppState
+@implements IDisposable
+
+<style>
+    .selected {
+        background-color: #1E88E5 !important;
+    }
+
+        .selected > td {
+            color: white !important;
+        }
+
+            .selected > td .mud-input {
+                color: white !important;
+            }
+
+</style>
+
+@if (@AppState.HardwareConfigVm.Id > 0 && @AppState.SoftwareSystemVm.Id > 0 && _isBusy is not true)
+{
+    <MudTable Items="@AppState.SoftwareVersionVms"
+          @ref="mudTable"
+          Hover="true"
+          RowClassFunc="@SelectedRowClassFunc"
+          Dense="true"
+          OnRowClick="RowClickEvent"
+          T="SoftwareVersionVm">
+        <HeaderContent>
+            <MudTh>Version</MudTh>
+            <MudTh>Date</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Version">@context.Name</MudTd>
+            <MudTd DataLabel="Date">@context.VersionDate.ToShortDateString()</MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+

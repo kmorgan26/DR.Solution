@@ -1,15 +1,35 @@
 ﻿@namespace DRApplication.Client.Controls
-@inject HardwareSystemManager manager
-@inject NavigationManager navigation
+@inject IHardwareService HardwareService
+@inject AppState AppState
 
-<div class="form-group">
-    <label>Hardware System</label>
-    <InputSelect ValueExpression="@(()=> SelectedHardwareSystemId)" id="hardwareSystemSelect" DisplayName="Hardware System" class="form-control" Value="SelectedHardwareSystemId"
-                 ValueChanged="@((int? value) => ChangeHardwareSystem(value))">
-        <option value=0>------</option>
-        @foreach (var item in _hardwareSystemVms)
+@if (!_isBusy)
+{
+    <MudSelect Variant="Variant.Outlined" T="int" Label="Hardware System" Value="@AppState.HardwareSystemVm.Id" ValueChanged="@OnHardwareSystemIdChanged">
+        <MudSelectItem Value="0">SELECT Hardware System</MudSelectItem>
+        @foreach (var item in @AppState.HardwareSystemVms)
         {
-            <option value="@item.Id">@item.Name</option>
+            <MudSelectItem Value="@item.Id">@item.Name</MudSelectItem>
         }
-    </InputSelect>
-</div>
+    </MudSelect>
+}
+
+@code {
+
+    bool _isBusy;
+
+    [Parameter]
+    public EventCallback<int> OnHardwareSystemIdChanged { get; set; }
+
+    private async Task SetHardwareSystems()
+    {
+        var items = await HardwareService.GetHardwareSystemVms();
+        AppState.UpdateHardwareSystemVms(this, items);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        await SetHardwareSystems();
+        _isBusy = false;
+    }
+}

@@ -1,23 +1,45 @@
 ﻿@namespace DRApplication.Client.Controls
-@inject HardwareConfigManager manager
+
+@inject AppState AppState
+@inject HardwareConfigManager HardwareConfigManager
 @inject NavigationManager navigation
 
-<h3>Add New Hardware Config</h3>
-<div class="row">
-    <div class="col-md-6 col-sm-12">
-        @if (@_hardwareConfigInsertVm != null)
+@if (@_hardwareConfigInsertVm != null)
+{
+    <MudItem xs="12" sm="12" md="4" lg="3">
+        <EditForm Model="@_hardwareConfigInsertVm" OnValidSubmit="@InsertHardwareConfig">
+
+            <DeviceTypeSelect OnDeviceTypeIdChanged="UpdateDeviceType" />
+
+            <MudTextField @bind-Value="_hardwareConfigInsertVm.Name" Class="my-6" Label="Version Name" Variant="Variant.Outlined"></MudTextField>
+
+            <SubmitButton ButtonText="Insert" />
+            <CancelButton Url="hardwareconfig" />
+        </EditForm>
+    </MudItem>
+
+}
+
+@code {
+
+    private HardwareConfigInsertVm _hardwareConfigInsertVm { get; set; } = new();
+
+    void UpdateDeviceType(int id)
+    {
+        if (id > 0)
         {
-            <EditForm Model="@_hardwareConfigInsertVm" OnValidSubmit="@InsertHardwareConfig">
-
-                <label for="Name">Hardware Config</label>
-                <InputText class="form-control" @bind-Value="_hardwareConfigInsertVm.Name" />
-
-                <DeviceTypeSelectComponent DeviceTypeIdChange="UpdateDeviceType" SelectedDeviceTypeId="@_hardwareConfigInsertVm.DeviceTypeId"></DeviceTypeSelectComponent>
-
-                <SubmitButton ButtonText="Insert"/>
-                <CancelButton Url="/hardwareconfig"/>
-
-            </EditForm>
+            var hardwareConfigVm = AppState.HardwareConfigVm;
+            hardwareConfigVm.Id = id;
+            AppState.UpdateHardwareConfigVm(this, hardwareConfigVm);
         }
-    </div>
-</div>
+
+    }
+
+    private async Task InsertHardwareConfig()
+    {
+        _hardwareConfigInsertVm.DeviceTypeId = AppState.DeviceTypeVm.Id;
+        var hardwareConfig = Mapping.Mapper.Map<HardwareConfig>(_hardwareConfigInsertVm);
+        await HardwareConfigManager.InsertAsync(hardwareConfig);
+        navigation.NavigateTo("/hardwareconfig");
+    }
+}

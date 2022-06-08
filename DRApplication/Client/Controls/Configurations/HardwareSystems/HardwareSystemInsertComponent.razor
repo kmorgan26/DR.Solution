@@ -2,21 +2,16 @@
 @inject HardwareSystemManager manager
 @inject NavigationManager navigation
 
-<h3>Add New Hardware System</h3>
-<div class="row">
-    <div class="col-md-6 col-sm-12">
-        @if (@_harwareSystemInsertVm != null)
-        {
-            <EditForm Model="@_harwareSystemInsertVm" OnValidSubmit="@InsertHardwareSystem">
+@if (@_harwareSystemInsertVm != null)
+{
+    <MudItem xs="12" sm="12" md="4" lg="3">
+        <EditForm Model="@_harwareSystemInsertVm" OnValidSubmit="@InsertHardwareSystem">
 
-                <label for="Name">Hardware System</label>
-                <InputText class="form-control" @bind-Value="_harwareSystemInsertVm.Name" />
+            <MudTextField @bind-Value="_harwareSystemInsertVm.Name" Class="my-6" Label="Hardware System" Variant="Variant.Outlined"></MudTextField>
 
-                <SubmitButton ButtonText="Insert"/>
-                <CancelButton Url="/hardwaresystem"/>
-            </EditForm>
-        }
-    </div>
-</div>
+            <SubmitButton ButtonText="Insert" />
+            <CancelButton Url="/hardwaresystem" />
 
-
+        </EditForm>
+    </MudItem>
+}

@@ -1,0 +1,72 @@
+﻿@namespace DRApplication.Client.Controls
+@inject ILoadBuilderService LoadBuilderService
+@inject AppState AppState
+@implements IDisposable
+
+@if (@AppState.LoadVm.Id > 0 && _isBusy is not true)
+{
+    <MudTable Items="@AppState.VersionsLoadVms" Hover="true" T="VersionsLoadVm" Dense="true">
+        <HeaderContent>
+            <MudTh>Software System</MudTh>
+            <MudTh>Software Version</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="System">@context.SoftwareSystemName</MudTd>
+            <MudTd DataLabel="Version">@context.SoftwareVersionName</MudTd>
+        </RowTemplate>
+    </MudTable>
+
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mt-2" OnClick="AddToLoad">
+        Add to Load
+    </MudButton>
+}
+
+@code {
+
+    bool _isBusy;
+
+    async Task SetVersionLoadVmsForLoad()
+    {
+        if (AppState.LoadVm.Id > 0)
+        {
+            var items = await LoadBuilderService.GetVersionsLoadVmsByLoadId(AppState.LoadVm.Id);
+            AppState.UpdateVersionsLoadVms(this, items);
+        }
+        else
+        {
+            AppState.UpdateVersionsLoadVms(this, new List<VersionsLoadVm>());
+        }
+    }
+
+    private async Task AddToLoad()
+    {
+        await LoadBuilderService.AddSoftwareVersionToLoad();
+        await SetVersionLoadVmsForLoad();
+    }
+
+    private async Task AppState_StateChanged(ComponentBase Source, string Property)
+    {
+        if (Source != this)
+        {
+            //If the Current Load Changes, we have to repopulate the Software VersionsList for the new Load ID.
+            if (Property == "LoadVm")
+            {
+                await SetVersionLoadVmsForLoad();
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        AppState.StateChanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
+        await SetVersionLoadVmsForLoad();
+        _isBusy = false;
+    }
+
+    void IDisposable.Dispose()
+    {
+        AppState.StateChanged -= async (Source, Property) => await AppState_StateChanged(Source, Property);
+    }
+}

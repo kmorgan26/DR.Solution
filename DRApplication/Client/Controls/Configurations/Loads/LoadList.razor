@@ -1,0 +1,106 @@
+﻿@namespace DRApplication.Client.Controls
+@inject ILoadBuilderService LoadBuilderService
+@inject AppState AppState
+@implements IDisposable
+
+<style>
+    .selected {
+        background-color: #1E88E5 !important;
+    }
+
+        .selected > td {
+            color: white !important;
+        }
+
+            .selected > td .mud-input {
+                color: white !important;
+            }
+
+</style>
+
+@if (@AppState.DeviceTypeVm.Id > 0 && _isBusy is not true)
+{
+    <MudTable Items="@AppState.LoadVms"
+          @ref="mudTable"
+          Hover="true"
+          Dense="true"
+          OnRowClick="RowClickEvent"
+          RowClassFunc="SelectedRowClassFunc"
+          T="LoadVm">
+        <HeaderContent>
+            <MudTh>Load</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Load">@context.Name</MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+
+@code {
+
+    bool _isBusy;
+    private int selectedRowNumber = -1;
+    private MudTable<LoadVm> mudTable;
+    private List<string> clickedEvents = new();
+
+    private string SelectedRowClassFunc(LoadVm element, int rowNumber)
+    {
+        if (selectedRowNumber == rowNumber)
+        {
+            selectedRowNumber = -1;
+            AppState.UpdateLoadVm(this, new LoadVm());
+            return string.Empty;
+        }
+        else if (mudTable.SelectedItem != null && mudTable.SelectedItem.Equals(element))
+        {
+            AppState.UpdateLoadVm(this, element);
+            selectedRowNumber = rowNumber;
+            return "selected";
+        }
+        
+        return string.Empty;
+    }
+
+    async Task SetLoads()
+    {
+        if (AppState.DeviceTypeVm.Id > 0)
+        {
+            var items = await LoadBuilderService.GetLoadVmByDeviceTypeId(AppState.DeviceTypeVm.Id);
+            AppState.UpdateLoadVms(this, items);
+        }
+        else
+        {
+            AppState.UpdateLoadVms(this, new List<LoadVm>());
+        }
+    }
+
+    private void RowClickEvent(TableRowClickEventArgs<LoadVm> tableRowClickEventArgs)
+    {
+        //clickedEvents.Add("Row has been clicked");
+    }
+
+    private async Task AppState_StateChanged(ComponentBase Source, string Property)
+    {
+        if (Source != this)
+        {
+            if (Property == "DeviceTypeVm")
+            {
+                await SetLoads();
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        AppState.StateChanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
+        await SetLoads();
+        _isBusy = false;
+    }
+
+    void IDisposable.Dispose()
+    {
+        AppState.StateChanged -= async (Source, Property) => await AppState_StateChanged(Source, Property);
+    }
+}

@@ -4,7 +4,7 @@ namespace DRApplication.Client.ViewModels;
 
 public class DeviceTypeVm : IDeviceTypeVm
 {
-    public int Id { get; set; }
+    public int Id { get; set; } = 0;
 
     [Required(ErrorMessage = "You must enter a name for the Platform. Otherwise, what would we call it?")]
     [MaxLength(255, ErrorMessage = "Platform Name cannot be more than 255 characters long")]

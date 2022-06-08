@@ -1,0 +1,21 @@
+﻿@namespace DRApplication.Client.Controls
+@inject AppState AppState
+@inject IPlatformService Service
+
+@code {
+
+    //TODO: User Preference for DeviceTypes will be set here
+
+    /// <summary>
+    /// Checks if there is a current DeviceTypeVM. Sets to "1" if none is set.
+    /// </summary>
+    /// <returns></returns>
+    protected override async Task OnInitializedAsync()
+    {
+        if (AppState.DeviceTypeVm.Id == 0)
+        {
+            var deviceTypeVm = await Service.GetDeviceTypeVmById(1);
+            AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
+        }
+    }
+}

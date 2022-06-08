@@ -8,14 +8,57 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Controls\Platforms\Devices\DeviceComponent.razor.cs" />
-	  <Compile Remove="Services\ApiEfRepository.cs" />
+	  <Compile Remove="Business Models\**" />
+	  <Compile Remove="Controls\Configurations\HardwareVersionsConfigs\**" />
+	  <Compile Remove="Enums\**" />
+	  <Compile Remove="Pages\Configurations\HardwareVersionsConfigs\**" />
+	  <Compile Remove="Pages\Configurations\VersionsLoads\**" />
+	  <Compile Remove="Pages\NewFolder\**" />
+	  <Content Remove="Business Models\**" />
+	  <Content Remove="Controls\Configurations\HardwareVersionsConfigs\**" />
+	  <Content Remove="Enums\**" />
+	  <Content Remove="Pages\Configurations\HardwareVersionsConfigs\**" />
+	  <Content Remove="Pages\Configurations\VersionsLoads\**" />
+	  <Content Remove="Pages\NewFolder\**" />
+	  <EmbeddedResource Remove="Business Models\**" />
+	  <EmbeddedResource Remove="Controls\Configurations\HardwareVersionsConfigs\**" />
+	  <EmbeddedResource Remove="Enums\**" />
+	  <EmbeddedResource Remove="Pages\Configurations\HardwareVersionsConfigs\**" />
+	  <EmbeddedResource Remove="Pages\Configurations\VersionsLoads\**" />
+	  <EmbeddedResource Remove="Pages\NewFolder\**" />
+	  <None Remove="Business Models\**" />
+	  <None Remove="Controls\Configurations\HardwareVersionsConfigs\**" />
+	  <None Remove="Enums\**" />
+	  <None Remove="Pages\Configurations\HardwareVersionsConfigs\**" />
+	  <None Remove="Pages\Configurations\VersionsLoads\**" />
+	  <None Remove="Pages\NewFolder\**" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Controls\Configurations\HardwareSystems\HardwareSystemLabel.razor.cs" />
+	  <Compile Remove="Controls\Configurations\VersionsLoads\VersionsLoadComponent.razor.cs" />
+	  <Compile Remove="Controls\Configurations\VersionsLoads\VersionsLoadEditComponent.razor.cs" />
+	  <Compile Remove="Controls\Configurations\VersionsLoads\VersionsLoadInsertComponent.razor.cs" />
+	  <Compile Remove="Controls\Generic\Tables\BasicTable.razor.cs" />
+	  <Compile Remove="Controls\Platforms\Devices\DeviceComponent.razor.cs" />
+	  <Compile Remove="Services\ApiEfRepository.cs" />
+	  <Compile Remove="ViewModels\ConfigurationViewModels\HardwareSystems\HardwareSystemEditVm.cs" />
+	  <Compile Remove="ViewModels\ConfigurationViewModels\HardwareVersions\HardwareVersionEditVm.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Remove="Controls\Configurations\HardwareSystems\HardwareSystemLabel.razor" />
+	  <Content Remove="Controls\Configurations\VersionsLoads\VersionsLoadComponent.razor" />
+	  <Content Remove="Controls\Configurations\VersionsLoads\VersionsLoadEditComponent.razor" />
+	  <Content Remove="Controls\Configurations\VersionsLoads\VersionsLoadInsertComponent.razor" />
+	  <Content Remove="Controls\Generic\Tables\BasicTable.razor" />
 	  <Content Remove="Controls\Generic\Tables\FSMudTablePaging.razor" />
 	  <Content Remove="Controls\Platforms\Devices\DeviceComponent.razor" />
 	  <Content Remove="Controls\Platforms\Devices\DeviceTestComponent.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="Controls\Configurations\VersionsLoads\VersionsLoadList.razor" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -31,10 +74,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Shared\DRApplication.Shared.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Enums\" />
 	</ItemGroup>
 
 </Project>
