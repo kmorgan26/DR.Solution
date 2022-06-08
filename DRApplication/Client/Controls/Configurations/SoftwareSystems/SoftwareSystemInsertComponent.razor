@@ -1,25 +1,45 @@
 ﻿@namespace DRApplication.Client.Controls
-@inject SoftwareSystemManager manager
+
+@inject AppState AppState
+@inject SoftwareSystemManager SoftwareSystemManger
 @inject NavigationManager navigation
 
-<h3>Add New Software System</h3>
-<div class="row">
-    <div class="col-md-6 col-sm-12">
-        @if (@_softwareSystemInsertVm != null)
+@if (_softwareConfigInsertVm != null)
+{
+    <MudItem xs="12" sm="12" md="4" lg="3">
+        <EditForm Model="@_softwareConfigInsertVm" OnValidSubmit="@InsertSoftwareSystem">
+
+            <HardwareConfigSelect OnHardwareConfigIdChanged="UpdateHardwareConfig"></HardwareConfigSelect>
+
+            <MudTextField @bind-Value="_softwareConfigInsertVm.Name" Class="my-6" Label="System Name" Variant="Variant.Outlined"></MudTextField>
+
+            <SubmitButton ButtonText="Insert" />
+            <CancelButton Url="softwaresystem" />
+        </EditForm>
+    </MudItem>
+
+}
+
+@code {
+
+    private SoftwareSystemInsertVm _softwareConfigInsertVm { get; set; } = new();
+
+    void UpdateHardwareConfig(int id)
+    {
+        if (id > 0)
         {
-            <EditForm Model="@_softwareSystemInsertVm" OnValidSubmit="@InsertSoftwareSystem">
-
-                <label for="Name">Software System</label>
-                <InputText class="form-control" @bind-Value="_softwareSystemInsertVm.Name" />
-
-                <HardwareConfigSelect HardwareConfigIdChange="UpdateConfig" SelectedHardwareConfigId="@_softwareSystemInsertVm.HardwareConfigId"></HardwareConfigSelect>
-
-                <SubmitButton ButtonText="Insert"/>
-                <CancelButton Url="/softwaresystem"/>
-
-            </EditForm>
+            var hardwareConfigVm = AppState.HardwareConfigVm;
+            hardwareConfigVm.Id = id;
+            AppState.UpdateHardwareConfigVm(this, hardwareConfigVm);
         }
-    </div>
-</div>
 
+    }
 
+    private async Task InsertSoftwareSystem()
+    {
+        _softwareConfigInsertVm.HardwareConfigId = AppState.HardwareConfigVm.Id;
+        var softwareSystem = Mapping.Mapper.Map<SoftwareSystem>(_softwareConfigInsertVm);
+        await SoftwareSystemManger.InsertAsync(softwareSystem);
+        navigation.NavigateTo("/softwaresystem");
+    }
+}

@@ -1,23 +1,61 @@
 ﻿@namespace DRApplication.Client.Controls
-@inject SoftwareSystemManager manager
+
+@inject AppState AppState
 @inject NavigationManager navigation
+@inject SoftwareSystemManager SoftwareSystemManager
+@inject IHardwareService HardwareService
 
-<div class="row">
-    <div class="col-md-6 col-sm-12">
-        @if (_softwareSystemEditVm != null)
+@if (!_isBusy)
+{
+    <MudItem xs="12" sm="12" md="4" lg="3">
+        <EditForm Model="@AppState.SoftwareSystemVm" OnValidSubmit="@UpdateSoftwareSystem">
+
+            <HardwareConfigSelect OnHardwareConfigIdChanged="UpdateHardwareConfigForSoftwareSystem" ></HardwareConfigSelect>
+
+            <MudTextField @bind-Value="AppState.SoftwareSystemVm.Name" Class="my-6" Label="Software System" Variant="Variant.Outlined"></MudTextField>
+
+            <SubmitButton ButtonText="Update" />
+            <CancelButton Url="softwaresystem" />
+
+        </EditForm>
+    </MudItem>
+}
+
+@code {
+    bool _isBusy;
+
+    [Parameter]
+    public int SoftwareSystemId { get; set; }
+
+    async Task UpdateHardwareConfigForSoftwareSystem(int id)
+    {
+        if (id > 0)
         {
-            <EditForm Model="@_softwareSystemEditVm" OnValidSubmit="@UpdateSoftwareSystem">
+            var hardwareConfigVm = await HardwareService.GetHardwareConfigVmById(id);
 
-                <label for="Name">Software System</label>
-                <InputText class="form-control" @bind-Value="_softwareSystemEditVm.Name" />
+            var softwareSystemVm = AppState.SoftwareSystemVm;
+            softwareSystemVm.HardwareConfigId = id;
+            AppState.UpdateSoftwareSystemVm(this, softwareSystemVm);
+            AppState.UpdateHardwareConfigVm(this, hardwareConfigVm);
 
-                <HardwareConfigSelect HardwareConfigIdChange="UpdateConfig" SelectedHardwareConfigId="@_softwareSystemEditVm.HardwareConfigId"></HardwareConfigSelect>
-
-                <SubmitButton ButtonText="Update"/>
-                <CancelButton Url="/softwaresystem"/>
-
-            </EditForm>
         }
-    </div>
-</div>
+    }
 
+    protected async Task UpdateSoftwareSystem()
+    {
+        var softwareSystem = Mapping.Mapper.Map<SoftwareSystem>(AppState.SoftwareSystemVm);
+        await SoftwareSystemManager.UpdateAsync(softwareSystem);
+        navigation.NavigateTo("/softwaresystem");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+
+        var softwareSystem = await SoftwareSystemManager.GetByIdAsync(SoftwareSystemId);
+        var softwareSystemVm = Mapping.Mapper.Map<SoftwareSystemVm>(softwareSystem);
+        AppState.UpdateSoftwareSystemVm(this, softwareSystemVm);
+        _isBusy = false;
+    }
+
+}
