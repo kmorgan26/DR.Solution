@@ -8,4 +8,6 @@ public class SoftwareSystemVm
 
     public int HardwareConfigId { get; set; }
 
+    public string HardwareConfig { get; set; } = string.Empty;
+
 }
