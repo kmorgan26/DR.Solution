@@ -43,4 +43,10 @@ public class HardwareService : IHardwareService
         var hardwareConfigs = await _hardwareConfigManager.GetAsync(deviceTypeFilter);
         return Mapping.Mapper.Map<IEnumerable<HardwareConfigVm>>(hardwareConfigs.Data);
     }
+
+    public async Task<HardwareConfigVm> GetHardwareConfigVmById(int id)
+    {
+        var hardwareConfigVm = await _hardwareConfigManager.GetByIdAsync(id);
+        return Mapping.Mapper.Map<HardwareConfigVm>(hardwareConfigVm);
+    }
 }
