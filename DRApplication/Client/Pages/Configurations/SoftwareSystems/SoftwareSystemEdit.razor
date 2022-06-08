@@ -1,6 +1,18 @@
 ﻿@namespace DRApplication.Client.Pages
 @page "/softwaresystem/edit/{softwareSystemId:int}"
 
+<TitleHeader TitleText="Software System Edit" IconPath="@Icons.Material.Filled.SystemSecurityUpdate" />
+
+<MudPaper Class="pa-2 mb-6" Elevation="0">
+    <MudAlert Severity="Severity.Success">Make Changes to the Software System, then click Update</MudAlert>
+</MudPaper>
+
 <SoftwareSystemEditComponent SoftwareSystemId=@SoftwareSystemId />
 
 
+@code{
+
+    [Parameter]
+    public int SoftwareSystemId { get; set; }
+
+}
