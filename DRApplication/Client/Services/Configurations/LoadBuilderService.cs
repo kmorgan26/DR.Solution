@@ -160,7 +160,7 @@ public class LoadBuilderService : ILoadBuilderService
                 var version = softwareVersions.Where(i => i.Id == item.SoftwareVersionId).FirstOrDefault();
                 item.SoftwareSystemName = softwareSystems.Where(a => a.Id == version.SoftwareSystemId).FirstOrDefault().Name;
             }
-            return mappedLoads;
+            return mappedLoads.OrderBy(i => i.SoftwareSystemName);
         }
         catch (Exception ex)
         {
