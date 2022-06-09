@@ -125,7 +125,7 @@ public class LoadBuilderService : ILoadBuilderService
     }
 
     /// <summary>
-    /// Returns a list of LoadVms for a given Test Load
+    /// Returns a list of LoadVms for a given Load
     /// </summary>
     /// <param name="id">
     ///    This is the Id from the Loads Table

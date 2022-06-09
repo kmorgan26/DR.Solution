@@ -6,7 +6,7 @@ public class VersionsLoadEditVm
     public int Id { get; set; }
 
     [Required]
-    [Range(1, 100, ErrorMessage = "Please Select a Test Load")]
+    [Range(1, 100, ErrorMessage = "Please Select a Load")]
     public int LoadId { get; set; }
 
     [Required]
