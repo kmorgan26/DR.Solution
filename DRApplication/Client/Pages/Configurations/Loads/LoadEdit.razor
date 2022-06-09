@@ -1,4 +1,17 @@
 ﻿@namespace DRApplication.Client.Pages
 @page "/load/edit/{LoadId:int}"
 
+<TitleHeader TitleText="Test Load Edit" IconPath="@Icons.Material.Filled.LineWeight" />
+
+<MudPaper Class="pa-2 mb-6" Elevation="0">
+    <MudAlert Severity="Severity.Success">Make Changes to the Test Load, then click Update</MudAlert>
+</MudPaper>
+
 <LoadEditComponent LoadId="@LoadId" />
+
+@code{
+
+    [Parameter]
+    public int LoadId { get; set; }
+
+}
