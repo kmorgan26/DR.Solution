@@ -7,13 +7,15 @@ namespace DRApplication.Client.Services
     {
         #region -- single ID properties --
 
-        public int HardwareConfigId { get; private set; } = 0;
+        //public int HardwareConfigId { get; private set; } = 0;
 
-        public int DeviceTypeId { get; private set; } = 0;
+        //public int DeviceTypeId { get; private set; } = 0;
 
         #endregion
 
         #region -- View Model Properties --
+
+        public CurrentLoadVm CurrentLoadVm { get; private set; } = new();
 
         public HardwareSystemVm HardwareSystemVm { get; private set; } = new();
 
@@ -32,10 +34,11 @@ namespace DRApplication.Client.Services
         public VersionsLoadVm VersionsLoadVm { get; private set; } = new();
 
         public DeviceTypeVm DeviceTypeVm { get; private set; } = new();
-        
+
         #endregion
 
         #region -- View Model Collections --
+        public IEnumerable<CurrentLoadVm> CurrentLoadVms { get; private set; } = new List<CurrentLoadVm>();
         
         public IEnumerable<HardwareSystemVm> HardwareSystemVms { get; private set; } = new List<HardwareSystemVm>();
 
@@ -59,21 +62,26 @@ namespace DRApplication.Client.Services
 
         #region -- single ID Methods --
 
-        public void UpdateHardwareConfigId(ComponentBase Source, int Model)
-        {
-            HardwareConfigId = Model;
-            NotifyStateChanged(Source, "HardwareConfigId");
-        }
-        public void UpdateDeviceTypeId(ComponentBase Source, int Model)
-        {
-            DeviceTypeId = Model;
-            NotifyStateChanged(Source, "DeviceTypeId");
-        }
+        //public void UpdateHardwareConfigId(ComponentBase Source, int Model)
+        //{
+        //    HardwareConfigId = Model;
+        //    NotifyStateChanged(Source, "HardwareConfigId");
+        //}
+        //public void UpdateDeviceTypeId(ComponentBase Source, int Model)
+        //{
+        //    DeviceTypeId = Model;
+        //    NotifyStateChanged(Source, "DeviceTypeId");
+        //}
 
         #endregion
 
         #region -- View Model Methods --
 
+        public void UpdateCurrentLoadVm(ComponentBase Source, CurrentLoadVm Model)
+        {
+            this.CurrentLoadVm = Model;
+            NotifyStateChanged(Source, "CurrentLoadVm");
+        }
         public void UpdateHardwareSystemVm(ComponentBase Source, HardwareSystemVm Model)
         {
             this.HardwareSystemVm = Model;
@@ -121,13 +129,18 @@ namespace DRApplication.Client.Services
         }
 
 
-        
+
 
 
         #endregion
 
         #region -- View Model Collection Methods --
         
+        public void UpdateCurrentLoadVms(ComponentBase Source, IEnumerable<CurrentLoadVm> Model)
+        {
+            this.CurrentLoadVms = Model;
+            NotifyStateChanged(Source, "CurrentLoadVms");
+        }
         public void UpdateHardwareSystemVms(ComponentBase Source, IEnumerable<HardwareSystemVm> Model)
         {
             this.HardwareSystemVms = Model;
