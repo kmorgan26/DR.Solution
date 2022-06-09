@@ -1,5 +1,4 @@
-﻿using DRApplication.Shared.Models.DeviceModels;
-using Dapper.Contrib.Extensions;
+﻿using Dapper.Contrib.Extensions;
 
 namespace DRApplication.Shared.Models.ConfigurationModels
 {
