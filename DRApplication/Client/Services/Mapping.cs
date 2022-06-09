@@ -28,7 +28,7 @@ public class MappingProfile : Profile
         CreateMap<HardwareSystem, HardwareSystemInsertVm>().ReverseMap();
         CreateMap<HardwareSystem, GenericListVm>().ReverseMap();
 
-        CreateMap<HardwareVersionVm, HardwareVersion>().ReverseMap();
+        CreateMap<HardwareVersionVm, HardwareVersion>();
         CreateMap<HardwareVersion, HardwareVersionInsertVm>().ReverseMap();
         CreateMap<HardwareVersion, GenericListVm>().ReverseMap();
         CreateMap<HardwareVersion, HardwareVersionVm>()
@@ -44,15 +44,18 @@ public class MappingProfile : Profile
         CreateMap<HardwareVersionsConfig, HardwareVersionsConfigInsertVm>().ReverseMap();
         CreateMap<HardwareVersionsConfig, HardwareVersionsConfigEditVm>().ReverseMap();
 
-        CreateMap<SoftwareSystem, SoftwareSystemVm>().ReverseMap();
         CreateMap<SoftwareSystem, SoftwareSystemInsertVm>().ReverseMap();
         CreateMap<SoftwareSystem, SoftwareSystemEditVm>().ReverseMap();
         CreateMap<SoftwareSystem, GenericListVm>().ReverseMap();
+        CreateMap<SoftwareSystem, SoftwareSystemVm>().ReverseMap();
 
-        CreateMap<SoftwareVersion, SoftwareVersionVm>().ReverseMap();
+        CreateMap<SoftwareVersionVm, SoftwareVersion>();
         CreateMap<SoftwareVersion, SoftwareVersionInsertVm>().ReverseMap();
         CreateMap<SoftwareVersion, SoftwareVersionEditVm>().ReverseMap();
         CreateMap<SoftwareVersion, GenericListVm>().ReverseMap();
+        CreateMap<SoftwareVersion, SoftwareVersionVm>()
+            .ForMember(dest => dest.VersionDateString,
+                opts => opts.MapFrom(src => src.VersionDate.ToShortDateString()));
 
         CreateMap<Load, LoadVm>().ReverseMap();
         CreateMap<Load, LoadEditVm>().ReverseMap();

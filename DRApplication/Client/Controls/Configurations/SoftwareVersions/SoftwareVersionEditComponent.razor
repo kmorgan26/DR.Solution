@@ -1,26 +1,62 @@
 ﻿@namespace DRApplication.Client.Controls
-@inject SoftwareVersionManager manager
+
+@inject AppState AppState
+@inject SoftwareVersionManager SoftwareVersionManager
+@inject SoftwareSystemManager SoftwareSystemManager
 @inject NavigationManager navigation
 
-<div class="row">
-    <div class="col-md-6 col-sm-12">
-        @if (@SoftwareVersionEditVm != null)
+@if (!_isBusy)
+{
+    <MudItem xs="12" sm="12" md="4" lg="3">
+        <EditForm Model="@AppState.SoftwareVersionVm" OnValidSubmit="@UpdateSoftwareVersion">
+
+            <MudTextField @bind-Value="AppState.SoftwareVersionVm.Name" Class="my-6" Label="Software Version" Variant="Variant.Outlined"></MudTextField>
+
+            <SoftwareSystemSelect OnSoftwareSystemIdChanged="UpdateSoftwareSystemForSoftwareVersion"></SoftwareSystemSelect>
+
+            <MudDatePicker Class="my-6" Label="Version Date" @bind-Date="@AppState.SoftwareVersionVm.VersionDate" />
+
+            <SubmitButton ButtonText="Update" />
+            <CancelButton Url="softwareversion" />
+
+        </EditForm>
+    </MudItem>
+}
+
+@code {
+    bool _isBusy;
+
+    [Parameter]
+    public int SoftwareVersionId { get; set; }
+
+    async Task UpdateSoftwareSystemForSoftwareVersion(int id)
+    {
+        if (id > 0)
         {
-            <EditForm Model="@SoftwareVersionEditVm" OnValidSubmit="@UpdateSoftwareVersion">
+            var softwareSystem = await SoftwareSystemManager.GetByIdAsync(id);
+            var softwareSystemVm = Mapping.Mapper.Map<SoftwareSystemVm>(softwareSystem);
 
-                <label for="Name">Software Version</label>
-                <InputText class="form-control" @bind-Value="SoftwareVersionEditVm.Name" />
-
-                <SoftwareSystemSelect SoftwareSystemIdChange="UpdateSoftwareSystem" SelectedSoftwareSystemId="@SoftwareVersionEditVm.SoftwareSystemId"></SoftwareSystemSelect>
-
-                <label for="Name">Version Date</label>
-                <InputDate class="form-control" @bind-Value="SoftwareVersionEditVm.VersionDate" />
-
-                <SubmitButton ButtonText="Update"/>
-                <CancelButton Url="/softwareconfig"/>
-
-            </EditForm>
+            var softwareVersionVm = AppState.SoftwareVersionVm;
+            softwareVersionVm.SoftwareSystemId = id;
+            AppState.UpdateSoftwareSystemVm(this, softwareSystemVm);
+            AppState.UpdateSoftwareVersionVm(this, softwareVersionVm);
         }
-    </div>
-</div>
+    }
 
+    protected async Task UpdateSoftwareVersion()
+    {
+        var softwareVersion = Mapping.Mapper.Map<SoftwareVersion>(AppState.SoftwareVersionVm);
+        await SoftwareVersionManager.UpdateAsync(softwareVersion);
+        navigation.NavigateTo("/softwareversion");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        var softwareVersion = await SoftwareVersionManager.GetByIdAsync(SoftwareVersionId);
+        var vm = Mapping.Mapper.Map<SoftwareVersionVm>(softwareVersion);
+        AppState.UpdateSoftwareVersionVm(this, vm);
+        _isBusy = false;
+    }
+
+}

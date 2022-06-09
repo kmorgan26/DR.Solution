@@ -8,5 +8,5 @@ public partial class SoftwareVersion
     public int Id { get; set; }
     public string Name { get; set; } = null!;
     public int SoftwareSystemId { get; set; }
-    public DateTime? VersionDate { get; set; }
+    public DateTime VersionDate { get; set; }
 }

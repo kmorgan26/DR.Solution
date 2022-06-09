@@ -13,5 +13,5 @@ public class SoftwareVersionInsertVm
 
     [Required]
     [DataType(DataType.Date)]
-    public DateTime VersionDate { get; set; } = DateTime.Today;
+    public DateTime? VersionDate { get; set; } = DateTime.Today;
 }

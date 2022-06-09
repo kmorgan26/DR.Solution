@@ -1,25 +1,46 @@
 ﻿@namespace DRApplication.Client.Controls
-@inject SoftwareVersionManager manager
+
+@inject AppState AppState
+@inject SoftwareVersionManager SoftwareVersionManager
 @inject NavigationManager navigation
 
-<h3>Add New Software Version</h3>
-<div class="row">
-    <div class="col-md-6 col-sm-12">
-        @if (@_softwareVersionInsertVm != null)
+@if (@_softwareVersionInsertVm != null)
+{
+    <MudItem xs="12" sm="12" md="4" lg="3">
+        <EditForm Model="@_softwareVersionInsertVm" OnValidSubmit="@InsertSoftwareVersion">
+
+            <MudTextField @bind-Value="_softwareVersionInsertVm.Name" Class="my-6" Label="Version Name" Variant="Variant.Outlined"></MudTextField>
+
+            <SoftwareSystemSelect OnSoftwareSystemIdChanged="UpdateSoftwareSystem" />
+
+            <MudDatePicker Class="my-6" Label="Version Date" @bind-Date="_softwareVersionInsertVm.VersionDate" />
+
+            <SubmitButton ButtonText="Insert" />
+            <CancelButton Url="softwareversion" />
+        </EditForm>
+    </MudItem>
+}
+
+@code {
+
+    private SoftwareVersionInsertVm _softwareVersionInsertVm { get; set; } = new();
+
+    void UpdateSoftwareSystem(int id)
+    {
+        if (id > 0)
         {
-            <EditForm Model="@_softwareVersionInsertVm" OnValidSubmit="@InsertSoftwareVersion">
-
-                <label for="Name">Software Version</label>
-                <InputText class="form-control" @bind-Value="_softwareVersionInsertVm.Name" />
-
-                <SoftwareSystemSelect SelectedSoftwareSystemId="@_softwareVersionInsertVm.SoftwareSystemId" SoftwareSystemIdChange="UpdateSoftwareSystem" />
-
-                <label for="Name">Version Date</label>
-                <InputDate class="form-control" @bind-Value="_softwareVersionInsertVm.VersionDate" />
-
-                <SubmitButton ButtonText="Insert"/>
-                <CancelButton Url="softwareversion"/>
-            </EditForm>
+            var softwareSystemVm = AppState.SoftwareSystemVm;
+            softwareSystemVm.Id = id;
+            AppState.UpdateSoftwareSystemVm(this, softwareSystemVm);
         }
-    </div>
-</div>
+
+    }
+
+    private async Task InsertSoftwareVersion()
+    {
+        _softwareVersionInsertVm.SoftwareSystemId = AppState.SoftwareSystemVm.Id;
+        var softwareVersion = Mapping.Mapper.Map<SoftwareVersion>(_softwareVersionInsertVm);
+        await SoftwareVersionManager.InsertAsync(softwareVersion);
+        navigation.NavigateTo("/softwareversion");
+    }
+}
