@@ -1,22 +1,45 @@
 ﻿@namespace DRApplication.Client.Controls
-@inject LoadManager manager
+
+@inject AppState AppState
+@inject LoadManager LoadManager
 @inject NavigationManager navigation
 
-<h3>Add New Test Load</h3>
-<div class="row">
-    <div class="col-md-6 col-sm-12">
-        @if (@_loadInsertVm != null)
+@if (@_loadInsertVm != null)
+{
+    <MudItem xs="12" sm="12" md="4" lg="3">
+        <EditForm Model="@_loadInsertVm" OnValidSubmit="@InsertLoad">
+
+            <DeviceTypeSelect OnDeviceTypeIdChanged="UpdateDeviceType" />
+
+            <MudTextField @bind-Value="_loadInsertVm.Name" Class="my-6" Label="Load Name" Variant="Variant.Outlined"></MudTextField>
+
+            <SubmitButton ButtonText="Insert" />
+            <CancelButton Url="load" />
+        </EditForm>
+    </MudItem>
+
+}
+
+@code {
+
+    private LoadInsertVm _loadInsertVm { get; set; } = new();
+
+    void UpdateDeviceType(int id)
+    {
+        if (id > 0)
         {
-            <EditForm Model="@_loadInsertVm" OnValidSubmit="@InsertLoad">
-
-                <label for="Name">Test Load Name</label>
-                <InputText class="form-control" @bind-Value="_loadInsertVm.Name" />
-
-                <DeviceTypeSelectComponent DeviceTypeIdChange="UpdateDeviceType" SelectedDeviceTypeId="@_loadInsertVm.DeviceTypeId"></DeviceTypeSelectComponent>
-
-                <SubmitButton ButtonText="Insert"/>
-                <CancelButton Url="/load"/>
-            </EditForm>
+            var deviceTypeVm = AppState.DeviceTypeVm;
+            deviceTypeVm.Id = id;
+            AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
         }
-    </div>
-</div>
+
+    }
+
+    private async Task InsertLoad()
+    {
+        _loadInsertVm.DeviceTypeId = AppState.DeviceTypeVm.Id;
+        var load = Mapping.Mapper.Map<Load>(_loadInsertVm);
+        await LoadManager.InsertAsync(load);
+        navigation.NavigateTo("/load");
+    }
+}

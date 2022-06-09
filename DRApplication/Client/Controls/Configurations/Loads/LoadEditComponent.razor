@@ -1,22 +1,60 @@
 ﻿@namespace DRApplication.Client.Controls
-@inject LoadManager manager
+
+@inject AppState AppState
 @inject NavigationManager navigation
+@inject IPlatformService PlatformService
+@inject LoadManager LoadManager
 
-<div class="row">
-    <div class="col-md-6 col-sm-12">
-        @if (@LoadEditVm != null)
+@if (!_isBusy)
+{
+    <MudItem xs="12" sm="12" md="4" lg="3">
+        <EditForm Model="@AppState.LoadVm" OnValidSubmit="@UpdateLoad">
+
+            <DeviceTypeSelect  OnDeviceTypeIdChanged="UpdateDeviceTypeForLoad"></DeviceTypeSelect>
+
+            <MudTextField @bind-Value="AppState.LoadVm.Name" Class="my-6" Label="Test Load Name" Variant="Variant.Outlined"></MudTextField>
+
+            <SubmitButton ButtonText="Update" />
+            <CancelButton Url="load" />
+
+        </EditForm>
+    </MudItem>
+}
+
+@code {
+    bool _isBusy;
+
+    [Parameter]
+    public int LoadId { get; set; }
+
+    async Task UpdateDeviceTypeForLoad(int id)
+    {
+        if (id > 0)
         {
-            <EditForm Model="@LoadEditVm" OnValidSubmit="@UpdateLoad">
+            var deviceTypeVm = await PlatformService.GetDeviceTypeVmById(id);
 
-                <label for="Name">Hardware Configuration</label>
-                <InputText class="form-control" @bind-Value="LoadEditVm.Name" />
+            var loadVm = AppState.LoadVm;
+            loadVm.DeviceTypeId = id;
+            AppState.UpdateLoadVm(this, loadVm);
+            AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
 
-                <DeviceTypeSelectComponent DeviceTypeIdChange="UpdateDeviceType" SelectedDeviceTypeId="@LoadEditVm.DeviceTypeId"></DeviceTypeSelectComponent>
-
-                <SubmitButton ButtonText="Update"/>
-                <CancelButton Url="/load"/>
-
-            </EditForm>
         }
-    </div>
-</div>
+    }
+
+    protected async Task UpdateLoad()
+    {
+        var load = Mapping.Mapper.Map<Load>(AppState.LoadVm);
+        await LoadManager.UpdateAsync(load);
+        navigation.NavigateTo("/load");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        var load = await LoadManager.GetByIdAsync(LoadId);
+        var loadVm = Mapping.Mapper.Map<LoadVm>(load);
+        AppState.UpdateLoadVm(this, loadVm);
+        _isBusy = false;
+    }
+
+}

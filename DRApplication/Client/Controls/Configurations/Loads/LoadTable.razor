@@ -1,0 +1,58 @@
+﻿@namespace DRApplication.Client.Controls
+@inject AppState AppState
+@inject ILoadBuilderService LoadBuilderService
+@implements IDisposable
+
+<NewButton Url="/load/create"/>
+
+<MudTable Items="@AppState.LoadVms" Class="my-4" Hover="true" Striped="true" Dense="true">
+    <HeaderContent>
+        <MudTh>ID</MudTh>
+        <MudTh>Name</MudTh>
+        <MudTh></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Load Name">@context.Name</MudTd>
+        <MudTd DataLabel="EDIT">
+            <a href="/load/edit/@context.Id" role="button">
+                <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>    
+            </a>
+        </MudTd>
+    </RowTemplate>
+</MudTable>
+
+
+@code {
+
+    bool _isBusy;
+
+    private async Task SetLoads()
+    {
+        var loadVms = await LoadBuilderService.GetLoadVmByDeviceTypeId(AppState.DeviceTypeVm.Id);
+        AppState.UpdateLoadVms(this, loadVms);
+    }
+
+    private async Task AppState_StateChanged(ComponentBase Source, string Property)
+    {
+        if (Source != this)
+        {
+            if (Property == "DeviceTypeVm")
+            {
+                await SetLoads();
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        AppState.StateChanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
+        await SetLoads();
+        _isBusy = false;
+    }
+    void IDisposable.Dispose()
+    {
+        AppState.StateChanged -= async (Source, Property) => await AppState_StateChanged(Source, Property);
+    }
+}
