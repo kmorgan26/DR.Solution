@@ -1,6 +1,7 @@
 ﻿@namespace DRApplication.Client.Controls
 @inject AppState AppState
 @inject ILoadBuilderService LoadBuilderService
+@inject CurrentLoadManager manager
 @implements IDisposable
 
 <MudTable Items="@AppState.CurrentLoadVms" Class="my-4" Hover="true" Striped="true" Dense="true">
@@ -27,8 +28,8 @@
 
     private async Task SetLoads()
     {
-        //var currentLoadVms = await LoadBuilderService.GetCurrentLoadVmsByDeviceTypeId(int id);
-        //AppState.UpdateCurrentLoadVms(this, currentLoadVms);
+        var currentLoadVms = await LoadBuilderService.GetCurrentLoadVmByDeviceTypeId(AppState.DeviceTypeVm.Id);
+        AppState.UpdateCurrentLoadVms(this, currentLoadVms);
     }
 
     private async Task AppState_StateChanged(ComponentBase Source, string Property)
