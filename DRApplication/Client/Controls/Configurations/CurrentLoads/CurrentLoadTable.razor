@@ -11,7 +11,7 @@
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Id">@context.Id</MudTd>
-        <MudTd DataLabel="Load Name">@context.Name</MudTd>
+        <MudTd DataLabel="Load Name">@context.LoadName</MudTd>
         <MudTd DataLabel="EDIT">
             <a href="/load/edit/@context.Id" role="button">
                 <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>    
@@ -27,8 +27,8 @@
 
     private async Task SetLoads()
     {
-        var currentLoadVms = await LoadBuilderService.GetCurrentLoadVmsByDeviceTypeId(int id);
-        AppState.UpdateCurrentLoadVms(this, currentLoadVms);
+        //var currentLoadVms = await LoadBuilderService.GetCurrentLoadVmsByDeviceTypeId(int id);
+        //AppState.UpdateCurrentLoadVms(this, currentLoadVms);
     }
 
     private async Task AppState_StateChanged(ComponentBase Source, string Property)
