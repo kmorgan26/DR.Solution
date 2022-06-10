@@ -105,4 +105,13 @@ public class PlatformService : IPlatformService
         };
         return vm;
     }
+
+    public async Task<IEnumerable<DeviceVm>> GetDeviceVmsFromDevicTypeId(int id)
+    {
+        //Filter = FROM Devices WHERE DeviceTypeId = id 
+        var deviceTypeFilter = await new FilterGenerator<Device>().GetFilterForPropertyByNameAsync("DeviceTypeId", id);
+        var devices = await _deviceManager.GetAsync(deviceTypeFilter);
+
+        return Mapping.Mapper.Map<IEnumerable<DeviceVm>>(devices.Data);
+    }
 }
