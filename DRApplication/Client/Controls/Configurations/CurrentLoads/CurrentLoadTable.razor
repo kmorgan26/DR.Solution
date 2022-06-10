@@ -7,11 +7,13 @@
 <MudTable Items="@AppState.CurrentLoadVms" Class="my-4" Hover="true" Striped="true" Dense="true">
     <HeaderContent>
         <MudTh>ID</MudTh>
+        <MudTh>Device</MudTh>
         <MudTh>Load</MudTh>
         <MudTh></MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Device">@context.Device</MudTd>
         <MudTd DataLabel="Load Name">@context.LoadName</MudTd>
         <MudTd DataLabel="EDIT">
             <a href="/load/edit/@context.Id" role="button">

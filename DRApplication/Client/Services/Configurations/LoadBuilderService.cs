@@ -15,6 +15,7 @@ public class LoadBuilderService : ILoadBuilderService
     private readonly SoftwareSystemManager _softwareSystemManager;
     private readonly SoftwareVersionManager _softwareVersionManager;
     private readonly LoadManager _loadManager;
+    private readonly DeviceManager _deviceManager;
     private readonly CurrentLoadManager _currentLoadManager;
     private readonly VersionsLoadManager _versionsLoadManager;
     private readonly AppState _appState;
@@ -24,6 +25,7 @@ public class LoadBuilderService : ILoadBuilderService
             SoftwareSystemManager softwareSystemManager,
             SoftwareVersionManager softwareVersionManager,
             LoadManager loadManager,
+            DeviceManager deviceManager,
             CurrentLoadManager currentLoadManager,
             VersionsLoadManager versionsLoadManager,
             AppState appState
@@ -33,6 +35,7 @@ public class LoadBuilderService : ILoadBuilderService
         _softwareSystemManager = softwareSystemManager;
         _softwareVersionManager = softwareVersionManager;
         _loadManager = loadManager;
+        _deviceManager = deviceManager;
         _currentLoadManager = currentLoadManager;
         _versionsLoadManager = versionsLoadManager;
         _appState = appState;
@@ -153,11 +156,16 @@ public class LoadBuilderService : ILoadBuilderService
 
     public async Task<IEnumerable<CurrentLoadVm>> MapCurrentLoadsToCurrentLoadVms(IEnumerable<CurrentLoad> currentLoads)
     {
-        var currentLoadIds = currentLoads.Select(id => id.LoadId).ToList();
-        var currentLoadCsv = string.Join(",", currentLoadIds);
-
+        //Get the Loads for the currentLoads
+        var currentLoadCsv = string.Join(",", currentLoads.Select(id => id.LoadId).ToList());
         var loadFilter = await new FilterGenerator<Load>().GetFilterForPropertyByListOfIdsAsync("Id", currentLoadCsv);
         var loadResponse = await _loadManager.GetAsync(loadFilter);
+
+        //Get the Devices for the currentLoads
+        var deviceCsv = string.Join(",", currentLoads.Select(id => id.DeviceId).ToList());
+        var deviceFilter = await new FilterGenerator<Device>().GetFilterForPropertyByListOfIdsAsync("Id", deviceCsv);
+        var deviceResponse = await _deviceManager.GetAsync(deviceFilter);
+
 
         if (loadResponse.Data is not null)
         {
@@ -165,7 +173,8 @@ public class LoadBuilderService : ILoadBuilderService
             {
                 Id = load.Id,
                 DeviceId = load.DeviceId,
-                LoadName = loadResponse.Data.FirstOrDefault(i => i.Id == load.LoadId).Name
+                LoadName = loadResponse.Data.FirstOrDefault(i => i.Id == load.LoadId).Name,
+                Device = deviceResponse.Data.FirstOrDefault(i => i.Id == load.DeviceId).Name
             });
             return currentLoadVms;
         }
