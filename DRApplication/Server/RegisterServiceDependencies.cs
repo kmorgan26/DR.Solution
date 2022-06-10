@@ -41,6 +41,9 @@ namespace DRApplication.Server
             builder.Services.AddTransient(s => new DapperRepository<Load>(
                builder.Configuration.GetConnectionString("DRConnectionString")));
 
+            builder.Services.AddTransient(s => new DapperRepository<CurrentLoad>(
+               builder.Configuration.GetConnectionString("DRConnectionString")));
+
             builder.Services.AddTransient(s => new DapperRepository<VersionsLoad>(
                builder.Configuration.GetConnectionString("DRConnectionString")));
 
