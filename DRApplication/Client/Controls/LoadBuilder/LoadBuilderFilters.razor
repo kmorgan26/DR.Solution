@@ -1,5 +1,6 @@
 ﻿@namespace DRApplication.Client.Controls
-@inject ILoadBuilderService LoadBuilderService
+@inject IHardwareService HardwareService
+@inject ISoftwareService SoftwareService
 @inject AppState AppState
 
 <MudGrid>
@@ -15,13 +16,13 @@
 
     async Task SetHardwareConfigId(int id)
     {
-        var vm = await LoadBuilderService.GetHardwareConfigVmById(id);
+        var vm = await HardwareService.GetHardwareConfigVmById(id);
         AppState.UpdateHardwareConfigVm(this, vm);
     }
 
     async Task SetSoftwareSystemId(int id)
     {
-        var vm = await LoadBuilderService.GetSoftwareSystemVmById(id);
+        var vm = await SoftwareService.GetSoftwareSystemVmById(id);
         AppState.UpdateSoftwareSystemVm(this, vm);
     }
 }

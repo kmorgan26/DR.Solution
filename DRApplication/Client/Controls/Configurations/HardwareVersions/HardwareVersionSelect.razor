@@ -1,5 +1,5 @@
 ﻿@namespace DRApplication.Client.Controls
-@inject ILoadBuilderService LoadBuilderService
+@inject IHardwareService HardwareService
 @inject AppState AppState
 @implements IDisposable
 
@@ -23,7 +23,7 @@
 
     private async Task SetHardwareVersions()
     {
-        var items = await LoadBuilderService.GetHardwareVersionVmsByHardwareSystemId(AppState.HardwareSystemVm.Id);
+        var items = await HardwareService.GetHardwareVersionVmsByHardwareSystemId(AppState.HardwareSystemVm.Id);
         AppState.UpdateHardwareVersionVms(this, items);
     }
 
