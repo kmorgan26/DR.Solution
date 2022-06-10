@@ -63,36 +63,33 @@ public class LoadBuilderService : ILoadBuilderService
         try
         {
             var versionLoadsFilter = await new FilterGenerator<VersionsLoad>().GetFilterForPropertyByNameAsync("LoadId", id);
-            var response = await _versionsLoadManager.GetAsync(versionLoadsFilter);
-            var versionLoads = response.Data;
+            var versionLoadresponse = await _versionsLoadManager.GetAsync(versionLoadsFilter);
+            var mappedVersionLoads = Mapping.Mapper.Map<IEnumerable<VersionsLoadVm>>(versionLoadresponse.Data);
 
-            var mappedLoads = Mapping.Mapper.Map<IEnumerable<VersionsLoadVm>>(versionLoads);
-
-            var versionIds = mappedLoads.Select(x => x.SoftwareVersionId.ToString()).ToList();
+            var versionIds = mappedVersionLoads.Select(x => x.SoftwareVersionId.ToString()).ToList();
             var versionCsv = string.Join(",", versionIds);
+
             var versionFilter = await new FilterGenerator<SoftwareVersion>().GetFilterForPropertyByListOfIdsAsync("Id", versionCsv);
             var versionResponse = await _softwareVersionManager.GetAsync(versionFilter);
-            var softwareVersions = versionResponse.Data;
 
-            var systemIds = softwareVersions?.Select(x => x.SoftwareSystemId.ToString()).ToList();
+            var systemIds = versionResponse.Data?.Select(x => x.SoftwareSystemId.ToString()).ToList();
             var systemCsv = string.Join(",", systemIds);
+
             var systemFilter = await new FilterGenerator<SoftwareSystem>().GetFilterForPropertyByListOfIdsAsync("Id", systemCsv);
             var systemResponse = await _softwareSystemManager.GetAsync(systemFilter);
-            var softwareSystems = systemResponse.Data;
 
-            var ids = mappedLoads?.Select(x => x.SoftwareVersionId.ToString()).ToList();
+            var ids = mappedVersionLoads?.Select(x => x.SoftwareVersionId.ToString()).ToList();
 
-            foreach (var item in mappedLoads)
+            foreach (var item in mappedVersionLoads)
             {
-                item.SoftwareVersionName = softwareVersions.Where(i => i.Id == item.SoftwareVersionId).FirstOrDefault().Name;
-                var version = softwareVersions.Where(i => i.Id == item.SoftwareVersionId).FirstOrDefault();
-                item.SoftwareSystemName = softwareSystems.Where(a => a.Id == version.SoftwareSystemId).FirstOrDefault().Name;
+                item.SoftwareVersionName = versionResponse.Data.Where(i => i.Id == item.SoftwareVersionId).FirstOrDefault().Name;
+                var version = versionResponse.Data.Where(i => i.Id == item.SoftwareVersionId).FirstOrDefault();
+                item.SoftwareSystemName = systemResponse.Data.Where(a => a.Id == version.SoftwareSystemId).FirstOrDefault().Name;
             }
-            return mappedLoads.OrderBy(i => i.SoftwareSystemName);
+            return mappedVersionLoads.OrderBy(i => i.SoftwareSystemName);
         }
         catch (Exception ex)
         {
-
             return new List<VersionsLoadVm>();
         }
     }
