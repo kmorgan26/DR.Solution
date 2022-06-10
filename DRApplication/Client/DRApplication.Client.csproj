@@ -80,8 +80,4 @@
 		<ProjectReference Include="..\Shared\DRApplication.Shared.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Pages\Configurations\CurrentLoads\" />
-	</ItemGroup>
-
 </Project>
