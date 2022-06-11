@@ -29,8 +29,6 @@
     {
         if (id > 0)
         {
-
-            //CurrentLoadId = id;
             var load = await LoadManager.GetByIdAsync(id);
             var loadVm = Mapping.Mapper.Map<LoadVm>(load);
             loadVm.Id = id;
@@ -43,7 +41,6 @@
 
     protected async Task UpdateCurrentLoad()
     {
-        //not mapping properly
         var vm = AppState.CurrentLoadVm;
         var currentLoad = Mapping.Mapper.Map<CurrentLoad>(AppState.CurrentLoadVm);
         await CurrentLoadManager.UpdateAsync(currentLoad);
@@ -57,9 +54,6 @@
         var currentloadVm = await LoadBuilderService.MapCurrentLoadToCurrentLoadVm(currentLoad);
         AppState.UpdateCurrentLoadVm(this, currentloadVm);
         await UpdateLoadForCurrentLoad(AppState.CurrentLoadVm.LoadId);
-
         _isBusy = false;
-    }
-    
+    }    
 }
-
