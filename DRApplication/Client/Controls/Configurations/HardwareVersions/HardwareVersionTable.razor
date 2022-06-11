@@ -33,7 +33,7 @@
 
     private async Task SetHardwareVersions()
     {
-        var hardwareVersionVms = await HardwareService.GetHardwareVersionsByHardwareSystemId(AppState.HardwareSystemVm.Id);
+        var hardwareVersionVms = await HardwareService.GetHardwareVersionVmsByHardwareSystemId(AppState.HardwareSystemVm.Id);
         AppState.UpdateHardwareVersionVms(this, hardwareVersionVms);
     }
 

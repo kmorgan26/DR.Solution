@@ -1,5 +1,5 @@
 ﻿@namespace DRApplication.Client.Controls
-@inject ILoadBuilderService LoadBuilderService
+@inject IHardwareService HardwareService
 @inject AppState AppState
 @implements IDisposable
 
@@ -23,7 +23,7 @@
 
     private async Task SetHardwareConfigs()
     {
-        var items = await LoadBuilderService.GetHardwareConfigVmsByDeviceTypeIdAsync(AppState.DeviceTypeVm.Id);
+        var items = await HardwareService.GetHardwareConfigVmsByDeviceTypeIdAsync(AppState.DeviceTypeVm.Id);
         AppState.UpdateHardwareConfigVms(this, items);
     }
 

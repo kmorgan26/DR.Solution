@@ -32,7 +32,7 @@
 
     private async Task SetSoftwareSystems()
     {
-        var softwareSystemVms = await SoftwareService.GetSoftwareSystemsByHardwareConfigId(AppState.HardwareConfigVm.Id);
+        var softwareSystemVms = await SoftwareService.GetSoftwareSystemVmsByHardwareConfigId(AppState.HardwareConfigVm.Id);
         AppState.UpdateSoftwareSystemVms(this, softwareSystemVms);
     }
 

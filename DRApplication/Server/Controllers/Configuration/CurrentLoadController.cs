@@ -56,7 +56,6 @@ public class CurrentLoadController : ControllerBase
         }
     }
 
-
     [HttpGet("{Id}")]
     public async Task<ActionResult<APIEntityResponse<CurrentLoad>>> GetById(int Id)
     {

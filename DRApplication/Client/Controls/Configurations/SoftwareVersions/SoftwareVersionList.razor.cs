@@ -39,7 +39,7 @@ public partial class SoftwareVersionList
 
     async Task SetSoftwareVersions()
     {
-        var items = await LoadBuilderService.GetSoftwareVersionVmsBySoftwareSystemId(AppState.SoftwareSystemVm.Id);
+        var items = await SoftwareService.GetSoftwareVersionVmsBySoftwareSystemId(AppState.SoftwareSystemVm.Id);
         AppState.UpdateSoftwareVersionVms(this, items);
     }
 

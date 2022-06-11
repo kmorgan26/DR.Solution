@@ -32,7 +32,7 @@
 
     private async Task SetSoftwareVersions()
     {
-        var softwareVersionVms = await SoftwareService.GetSoftwareVersionsBySoftwareSystemId(AppState.SoftwareSystemVm.Id);
+        var softwareVersionVms = await SoftwareService.GetSoftwareVersionVmsBySoftwareSystemId(AppState.SoftwareSystemVm.Id);
         AppState.UpdateSoftwareVersionVms(this, softwareVersionVms);
     }
 

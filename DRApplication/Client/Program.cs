@@ -29,6 +29,7 @@ builder.Services.AddScoped<SoftwareSystemManager>();
 builder.Services.AddScoped<SoftwareVersionManager>();
 
 builder.Services.AddScoped<LoadManager>();
+builder.Services.AddScoped<CurrentLoadManager>();
 builder.Services.AddScoped<VersionsLoadManager>();
 
 builder.Services.AddScoped<MaintainerManager>();

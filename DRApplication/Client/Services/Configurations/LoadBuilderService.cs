@@ -3,58 +3,63 @@ using DRApplication.Client.ViewModels;
 using DRApplication.Shared.Filters;
 using DRApplication.Shared.Enums;
 using DRApplication.Shared.Models.ConfigurationModels;
+using DRApplication.Shared.Models.DeviceModels;
 
 namespace DRApplication.Client.Services;
 
 public class LoadBuilderService : ILoadBuilderService
 {
-    private readonly HardwareConfigManager _hardwareConfigManager;
-    private readonly HardwareVersionManager _hardwareVersionManager;
+
+    #region ---Fields and Constructor ---
+
+    private readonly IPlatformService _platformService;
     private readonly SoftwareSystemManager _softwareSystemManager;
     private readonly SoftwareVersionManager _softwareVersionManager;
     private readonly LoadManager _loadManager;
+    private readonly DeviceManager _deviceManager;
+    private readonly CurrentLoadManager _currentLoadManager;
     private readonly VersionsLoadManager _versionsLoadManager;
     private readonly AppState _appState;
 
     public LoadBuilderService(
-            HardwareConfigManager hardwareConfigManager,
-            HardwareVersionManager hardwareVersionManager,
+            IPlatformService platformService,
             SoftwareSystemManager softwareSystemManager,
             SoftwareVersionManager softwareVersionManager,
             LoadManager loadManager,
+            DeviceManager deviceManager,
+            CurrentLoadManager currentLoadManager,
             VersionsLoadManager versionsLoadManager,
             AppState appState
         )
     {
-        _hardwareConfigManager = hardwareConfigManager;
-        _hardwareVersionManager = hardwareVersionManager;
+        _platformService = platformService;
         _softwareSystemManager = softwareSystemManager;
         _softwareVersionManager = softwareVersionManager;
         _loadManager = loadManager;
+        _deviceManager = deviceManager;
+        _currentLoadManager = currentLoadManager;
         _versionsLoadManager = versionsLoadManager;
         _appState = appState;
     }
 
-    public async Task<IEnumerable<HardwareConfigVm>> GetHardwareConfigVmsByDeviceTypeIdAsync(int id)
+    #endregion
+
+    public async Task<CurrentLoadVm> MapCurrentLoadToCurrentLoadVm(CurrentLoad currentLoad)
     {
-        var filter = await new FilterGenerator<HardwareConfig>().GetFilterForPropertyByNameAsync("DeviceTypeId", id);
-        var response = await _hardwareConfigManager.GetAsync(filter);
-
-        if (response.Data is not null)
-            return Mapping.Mapper.Map<IEnumerable<HardwareConfigVm>>(response.Data);
-
-        return new List<HardwareConfigVm>();
+        var device = await _deviceManager.GetByIdAsync(currentLoad.Id);
+        var load = await _loadManager.GetByIdAsync(currentLoad.LoadId);
+        var currentLoadVm = new CurrentLoadVm()
+        {
+            Id = currentLoad.Id,
+            LoadId = currentLoad.LoadId,
+            DeviceId = currentLoad.DeviceId,
+            Device = device.Name,
+            LoadName = load.Name
+        };
+        return currentLoadVm;
     }
 
-    public async Task<HardwareConfigVm> GetHardwareConfigVmById(int id)
-    {
-        var config = await _hardwareConfigManager.GetByIdAsync(id);
-        if (config == null)
-            return new HardwareConfigVm();
-
-        return Mapping.Mapper.Map<HardwareConfigVm>(config);
-    }
-
+    #region ---Collection Object Methods---
     public async Task<IEnumerable<LoadVm>> GetLoadVmByDeviceTypeId(int id)
     {
         var filter = new QueryFilter<Load>();
@@ -77,53 +82,6 @@ public class LoadBuilderService : ILoadBuilderService
         return new List<LoadVm>();
 
     }
-
-    public async Task<IEnumerable<SoftwareSystemVm>> GetSoftwareSystemVmsByHardwareConfigId(int id)
-    {
-        var systems = await _softwareSystemManager.GetAllAsync();
-        var filterd = systems.Where(x => x.HardwareConfigId == id);
-        return Mapping.Mapper.Map<IEnumerable<SoftwareSystemVm>>(filterd);
-    }
-
-    public async Task<SoftwareSystemVm> GetSoftwareSystemVmById(int id)
-    {
-        var softwareSystem = await _softwareSystemManager.GetByIdAsync(id);
-        if (softwareSystem == null)
-            return new SoftwareSystemVm();
-
-        return Mapping.Mapper.Map<SoftwareSystemVm>(softwareSystem);
-    }
-
-    public async Task<IEnumerable<SoftwareVersionVm>> GetSoftwareVersionVmsBySoftwareSystemId(int id)
-    {
-        var filter = await new FilterGenerator<SoftwareVersion>().GetFilterForPropertyByNameAsync("SoftwareSystemId", id);
-
-        var response = await _softwareVersionManager.GetAsync(filter);
-
-        if (response.Data is not null)
-            return Mapping.Mapper.Map<IEnumerable<SoftwareVersionVm>>(response.Data);
-
-        return new List<SoftwareVersionVm>();
-
-    }
-
-    public async Task<IEnumerable<SoftwareVersionVm>> GetSoftwareVersionVmsByLoadId(int id)
-    {
-        var filter = await new FilterGenerator<VersionsLoad>().GetFilterForPropertyByNameAsync("LoadId", id);
-        var response = await _versionsLoadManager.GetAsync(filter);
-
-        List<string> softwareVersionIdList = new List<string>();
-        foreach (var item in response.Data)
-        {
-            softwareVersionIdList.Add(item.SoftwareVersionId.ToString());
-        }
-        var softVersionFilter = await new FilterGenerator<SoftwareVersion>().GetFilterForPropertiesByNamesAsync("SoftwareVersion", softwareVersionIdList);
-        var softwareVersionResponse = await _softwareVersionManager.GetAsync(softVersionFilter);
-
-        return Mapping.Mapper.Map<IEnumerable<SoftwareVersionVm>>(softwareVersionResponse.Data);
-
-    }
-
     /// <summary>
     /// Returns a list of LoadVms for a given Load
     /// </summary>
@@ -135,40 +93,55 @@ public class LoadBuilderService : ILoadBuilderService
         try
         {
             var versionLoadsFilter = await new FilterGenerator<VersionsLoad>().GetFilterForPropertyByNameAsync("LoadId", id);
-            var response = await _versionsLoadManager.GetAsync(versionLoadsFilter);
-            var versionLoads = response.Data;
+            var versionLoadresponse = await _versionsLoadManager.GetAsync(versionLoadsFilter);
+            var mappedVersionLoads = Mapping.Mapper.Map<IEnumerable<VersionsLoadVm>>(versionLoadresponse.Data);
 
-            var mappedLoads = Mapping.Mapper.Map<IEnumerable<VersionsLoadVm>>(versionLoads);
-
-            var versionIds = mappedLoads.Select(x => x.SoftwareVersionId.ToString()).ToList();
+            var versionIds = mappedVersionLoads.Select(x => x.SoftwareVersionId.ToString()).ToList();
             var versionCsv = string.Join(",", versionIds);
+
             var versionFilter = await new FilterGenerator<SoftwareVersion>().GetFilterForPropertyByListOfIdsAsync("Id", versionCsv);
             var versionResponse = await _softwareVersionManager.GetAsync(versionFilter);
-            var softwareVersions = versionResponse.Data;
 
-            var systemIds = softwareVersions?.Select(x => x.SoftwareSystemId.ToString()).ToList();
+            var systemIds = versionResponse.Data?.Select(x => x.SoftwareSystemId.ToString()).ToList();
             var systemCsv = string.Join(",", systemIds);
+
             var systemFilter = await new FilterGenerator<SoftwareSystem>().GetFilterForPropertyByListOfIdsAsync("Id", systemCsv);
             var systemResponse = await _softwareSystemManager.GetAsync(systemFilter);
-            var softwareSystems = systemResponse.Data;
 
-            var ids = mappedLoads?.Select(x => x.SoftwareVersionId.ToString()).ToList();
+            var ids = mappedVersionLoads?.Select(x => x.SoftwareVersionId.ToString()).ToList();
 
-            foreach (var item in mappedLoads)
+            foreach (var item in mappedVersionLoads)
             {
-                item.SoftwareVersionName = softwareVersions.Where(i => i.Id == item.SoftwareVersionId).FirstOrDefault().Name;
-                var version = softwareVersions.Where(i => i.Id == item.SoftwareVersionId).FirstOrDefault();
-                item.SoftwareSystemName = softwareSystems.Where(a => a.Id == version.SoftwareSystemId).FirstOrDefault().Name;
+                item.SoftwareVersionName = versionResponse.Data.Where(i => i.Id == item.SoftwareVersionId).FirstOrDefault().Name;
+                var version = versionResponse.Data.Where(i => i.Id == item.SoftwareVersionId).FirstOrDefault();
+                item.SoftwareSystemName = systemResponse.Data.Where(a => a.Id == version.SoftwareSystemId).FirstOrDefault().Name;
             }
-            return mappedLoads.OrderBy(i => i.SoftwareSystemName);
+            return mappedVersionLoads.OrderBy(i => i.SoftwareSystemName);
         }
         catch (Exception ex)
         {
-
             return new List<VersionsLoadVm>();
         }
     }
+    public async Task<IEnumerable<CurrentLoadVm>> GetCurrentLoadVmByDeviceTypeId(int id)
+    {
+        //first, get a list of devices for the DeviceTypeID (ID)
+        var deviceVms = await _platformService.GetDeviceVmsFromDevicTypeId(id);
 
+        var deviceIds = deviceVms.Select(x => x.Id).ToList();
+        var deviceCsv = string.Join(",", deviceIds);
+
+        var currentLoadFilter = await new FilterGenerator<CurrentLoad>().GetFilterForPropertyByListOfIdsAsync("DeviceId", deviceCsv);
+        var currentLoadResponse = await _currentLoadManager.GetAsync(currentLoadFilter);
+
+        if(currentLoadResponse is not null && currentLoadResponse.Data is not null)
+            return await this.MapCurrentLoadsToCurrentLoadVms(currentLoadResponse.Data);
+        
+        return new List<CurrentLoadVm>();
+    }
+    #endregion
+
+    #region --Tasks--
     public async Task AddSoftwareVersionToLoad()
     {
         var loadId = _appState.LoadVm.Id;
@@ -196,16 +169,34 @@ public class LoadBuilderService : ILoadBuilderService
         var loadVersionToAdd = new VersionsLoad() { LoadId = loadId, SoftwareVersionId = _appState.SoftwareVersionVm.Id };
         var result = await _versionsLoadManager.InsertAsync(loadVersionToAdd);
     }
-
-    public async Task<IEnumerable<HardwareVersionVm>> GetHardwareVersionVmsByHardwareSystemId(int id)
+    public async Task<IEnumerable<CurrentLoadVm>> MapCurrentLoadsToCurrentLoadVms(IEnumerable<CurrentLoad> currentLoads)
     {
-        var filter = await new FilterGenerator<HardwareVersion>().GetFilterForPropertyByNameAsync("HardwareSystemId", id);
-        
-        var response = await _hardwareVersionManager.GetAsync(filter);
+        //Get the Loads for the currentLoads
+        var currentLoadCsv = string.Join(",", currentLoads.Select(id => id.LoadId).ToList());
+        var loadFilter = await new FilterGenerator<Load>().GetFilterForPropertyByListOfIdsAsync("Id", currentLoadCsv);
+        var loadResponse = await _loadManager.GetAsync(loadFilter);
 
-        if (response.Data is not null)
-            return Mapping.Mapper.Map<IEnumerable<HardwareVersionVm>>(response.Data);
+        //Get the Devices for the currentLoads
+        var deviceCsv = string.Join(",", currentLoads.Select(id => id.DeviceId).ToList());
+        var deviceFilter = await new FilterGenerator<Device>().GetFilterForPropertyByListOfIdsAsync("Id", deviceCsv);
+        var deviceResponse = await _deviceManager.GetAsync(deviceFilter);
 
-        return new List<HardwareVersionVm>();
+
+        if (loadResponse.Data is not null)
+        {
+            var currentLoadVms = currentLoads.Select(load => new CurrentLoadVm
+            {
+                Id = load.Id,
+                LoadId = load.Id,
+                DeviceId = load.DeviceId,
+                LoadName = loadResponse.Data.FirstOrDefault(i => i.Id == load.LoadId).Name,
+                Device = deviceResponse.Data.FirstOrDefault(i => i.Id == load.DeviceId).Name
+            });
+            return currentLoadVms;
+        }
+
+        return new List<CurrentLoadVm>();
     }
+
+    #endregion
 }

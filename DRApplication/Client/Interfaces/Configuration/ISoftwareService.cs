@@ -4,11 +4,13 @@ namespace DRApplication.Client.Interfaces
 {
     public interface ISoftwareService
     {
-        Task<IEnumerable<SoftwareSystemVm>> GetSoftwareSystemsByHardwareConfigId(int id);
-
-        Task<IEnumerable<SoftwareVersionVm>> GetSoftwareVersionsBySoftwareSystemId(int id);
-
         Task<SoftwareSystemVm> GetSoftwareSystemVmById(int id);
-        
+
+        Task<IEnumerable<SoftwareSystemVm>> GetSoftwareSystemVmsByHardwareConfigId(int id);
+
+        Task<IEnumerable<SoftwareVersionVm>> GetSoftwareVersionVmsBySoftwareSystemId(int id);
+
+        Task<IEnumerable<SoftwareVersionVm>> GetSoftwareVersionVmsByLoadId(int id);
+
     }
 }

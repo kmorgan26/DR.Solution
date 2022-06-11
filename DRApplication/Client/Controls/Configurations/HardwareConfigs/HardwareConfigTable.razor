@@ -35,7 +35,7 @@
 
     private async Task SetHardwareConfigs()
     {
-        var hardwareConfigVms = await HardwareService.GetHardwareConfigsByDeviceTypeId(AppState.DeviceTypeVm.Id);
+        var hardwareConfigVms = await HardwareService.GetHardwareConfigVmsByDeviceTypeIdAsync(AppState.DeviceTypeVm.Id);
         AppState.UpdateHardwareConfigVms(this, hardwareConfigVms);
     }
 

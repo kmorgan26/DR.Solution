@@ -62,6 +62,8 @@ public class MappingProfile : Profile
         CreateMap<Load, LoadInsertVm>().ReverseMap();
         CreateMap<Load, GenericListVm>().ReverseMap();
 
+        CreateMap<CurrentLoadVm, CurrentLoad>();
+
         CreateMap<VersionsLoad, VersionsLoadVm>().ReverseMap();
         CreateMap<VersionsLoad, VersionsLoadInsertVm>().ReverseMap();
         CreateMap<VersionsLoad, VersionsLoadEditVm>().ReverseMap();

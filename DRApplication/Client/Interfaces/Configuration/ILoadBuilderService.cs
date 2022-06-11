@@ -1,27 +1,19 @@
 ﻿using DRApplication.Client.ViewModels;
+using DRApplication.Shared.Models.ConfigurationModels;
 
 namespace DRApplication.Client.Interfaces;
 
 public interface ILoadBuilderService
 {
-    Task<IEnumerable<HardwareConfigVm>> GetHardwareConfigVmsByDeviceTypeIdAsync(int i);
-
-    Task<IEnumerable<HardwareVersionVm>> GetHardwareVersionVmsByHardwareSystemId(int id);
-    
-    Task<HardwareConfigVm> GetHardwareConfigVmById(int id);
-    
-    Task<IEnumerable<SoftwareSystemVm>> GetSoftwareSystemVmsByHardwareConfigId(int id);
-
-    Task<SoftwareSystemVm> GetSoftwareSystemVmById(int id);
-
-    Task<IEnumerable<SoftwareVersionVm>> GetSoftwareVersionVmsBySoftwareSystemId(int id);
+    Task<CurrentLoadVm> MapCurrentLoadToCurrentLoadVm(CurrentLoad currentLoad);
 
     Task<IEnumerable<LoadVm>> GetLoadVmByDeviceTypeId(int id);
-
-    Task<IEnumerable<SoftwareVersionVm>> GetSoftwareVersionVmsByLoadId(int id);
-
+    
     Task<IEnumerable<VersionsLoadVm>> GetVersionsLoadVmsByLoadId(int id);
 
+    Task<IEnumerable<CurrentLoadVm>> GetCurrentLoadVmByDeviceTypeId(int id);
 
+    Task<IEnumerable<CurrentLoadVm>> MapCurrentLoadsToCurrentLoadVms(IEnumerable<CurrentLoad> currentLoads);
+    
     Task AddSoftwareVersionToLoad();
 }
