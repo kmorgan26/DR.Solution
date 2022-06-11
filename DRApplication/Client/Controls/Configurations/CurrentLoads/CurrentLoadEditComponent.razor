@@ -1,0 +1,65 @@
+﻿@namespace DRApplication.Client.Controls
+@inject NavigationManager NavigationManager
+@inject AppState AppState
+@inject CurrentLoadManager CurrentLoadManager
+@inject LoadManager LoadManager
+@inject ILoadBuilderService LoadBuilderService
+
+<MudItem xs="12" sm="12" md="4" lg="3">
+    <EditForm Model="@AppState.LoadVm" OnValidSubmit="@UpdateCurrentLoad">
+
+        <MudField Label="Device" Variant="Variant.Outlined">@AppState.CurrentLoadVm.Device</MudField>
+
+        <LoadSelect OnLoadIdChanged="UpdateLoadForCurrentLoad" />
+
+        <SubmitButton ButtonText="Update" />
+        <CancelButton Url="currentload" />
+
+    </EditForm>
+</MudItem>
+
+
+@code {
+    bool _isBusy;
+
+    [Parameter]
+    public int CurrentLoadId { get; set; }
+
+    async Task UpdateLoadForCurrentLoad(int id)
+    {
+        if (id > 0)
+        {
+
+            //CurrentLoadId = id;
+            var load = await LoadManager.GetByIdAsync(id);
+            var loadVm = Mapping.Mapper.Map<LoadVm>(load);
+            loadVm.Id = id;
+            var currentLoadVm = AppState.CurrentLoadVm;
+            currentLoadVm.LoadId = id;
+            AppState.UpdateCurrentLoadVm(this, currentLoadVm);
+            AppState.UpdateLoadVm(this, loadVm);
+        }
+    }
+
+    protected async Task UpdateCurrentLoad()
+    {
+        //not mapping properly
+        var vm = AppState.CurrentLoadVm;
+        var currentLoad = Mapping.Mapper.Map<CurrentLoad>(AppState.CurrentLoadVm);
+        await CurrentLoadManager.UpdateAsync(currentLoad);
+        NavigationManager.NavigateTo("/currentload");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        var currentLoad = await CurrentLoadManager.GetByIdAsync(CurrentLoadId);
+        var currentloadVm = await LoadBuilderService.MapCurrentLoadToCurrentLoadVm(currentLoad);
+        AppState.UpdateCurrentLoadVm(this, currentloadVm);
+        await UpdateLoadForCurrentLoad(AppState.CurrentLoadVm.LoadId);
+
+        _isBusy = false;
+    }
+    
+}
+

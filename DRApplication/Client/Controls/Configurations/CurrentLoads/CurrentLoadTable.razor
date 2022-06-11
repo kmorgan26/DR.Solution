@@ -9,14 +9,19 @@
         <MudTh>ID</MudTh>
         <MudTh>Device</MudTh>
         <MudTh>Load</MudTh>
+        <MudTh>LoadID</MudTh>
+        <MudTh>DeviceID</MudTh>
         <MudTh></MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Id">@context.Id</MudTd>
         <MudTd DataLabel="Device">@context.Device</MudTd>
         <MudTd DataLabel="Load Name">@context.LoadName</MudTd>
+        <MudTd DataLabel="Load ID">@context.LoadId</MudTd>
+        <MudTd DataLabel="Device ID">@context.DeviceId</MudTd>
+        
         <MudTd DataLabel="EDIT">
-            <a href="/load/edit/@context.Id" role="button">
+            <a href="/currentload/edit/@context.LoadId" role="button">
                 <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>    
             </a>
         </MudTd>

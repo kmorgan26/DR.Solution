@@ -37,7 +37,6 @@
 	<ItemGroup>
 	  <Compile Remove="Controls\Configurations\HardwareSystems\HardwareSystemLabel.razor.cs" />
 	  <Compile Remove="Controls\Configurations\Loads\LoadLabel.razor.cs" />
-	  <Compile Remove="Controls\Configurations\Loads\LoadSelect.razor.cs" />
 	  <Compile Remove="Controls\Configurations\VersionsLoads\VersionsLoadComponent.razor.cs" />
 	  <Compile Remove="Controls\Configurations\VersionsLoads\VersionsLoadEditComponent.razor.cs" />
 	  <Compile Remove="Controls\Configurations\VersionsLoads\VersionsLoadInsertComponent.razor.cs" />
@@ -51,7 +50,6 @@
 	<ItemGroup>
 	  <Content Remove="Controls\Configurations\HardwareSystems\HardwareSystemLabel.razor" />
 	  <Content Remove="Controls\Configurations\Loads\LoadLabel.razor" />
-	  <Content Remove="Controls\Configurations\Loads\LoadSelect.razor" />
 	  <Content Remove="Controls\Configurations\VersionsLoads\VersionsLoadComponent.razor" />
 	  <Content Remove="Controls\Configurations\VersionsLoads\VersionsLoadEditComponent.razor" />
 	  <Content Remove="Controls\Configurations\VersionsLoads\VersionsLoadInsertComponent.razor" />

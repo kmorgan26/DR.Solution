@@ -9,6 +9,7 @@ namespace DRApplication.Client.Services;
 
 public class LoadBuilderService : ILoadBuilderService
 {
+
     #region ---Fields and Constructor ---
 
     private readonly IPlatformService _platformService;
@@ -42,6 +43,21 @@ public class LoadBuilderService : ILoadBuilderService
     }
 
     #endregion
+
+    public async Task<CurrentLoadVm> MapCurrentLoadToCurrentLoadVm(CurrentLoad currentLoad)
+    {
+        var device = await _deviceManager.GetByIdAsync(currentLoad.Id);
+        var load = await _loadManager.GetByIdAsync(currentLoad.LoadId);
+        var currentLoadVm = new CurrentLoadVm()
+        {
+            Id = currentLoad.Id,
+            LoadId = currentLoad.LoadId,
+            DeviceId = currentLoad.DeviceId,
+            Device = device.Name,
+            LoadName = load.Name
+        };
+        return currentLoadVm;
+    }
 
     #region ---Collection Object Methods---
     public async Task<IEnumerable<LoadVm>> GetLoadVmByDeviceTypeId(int id)
@@ -153,7 +169,6 @@ public class LoadBuilderService : ILoadBuilderService
         var loadVersionToAdd = new VersionsLoad() { LoadId = loadId, SoftwareVersionId = _appState.SoftwareVersionVm.Id };
         var result = await _versionsLoadManager.InsertAsync(loadVersionToAdd);
     }
-
     public async Task<IEnumerable<CurrentLoadVm>> MapCurrentLoadsToCurrentLoadVms(IEnumerable<CurrentLoad> currentLoads)
     {
         //Get the Loads for the currentLoads
@@ -172,6 +187,7 @@ public class LoadBuilderService : ILoadBuilderService
             var currentLoadVms = currentLoads.Select(load => new CurrentLoadVm
             {
                 Id = load.Id,
+                LoadId = load.Id,
                 DeviceId = load.DeviceId,
                 LoadName = loadResponse.Data.FirstOrDefault(i => i.Id == load.LoadId).Name,
                 Device = deviceResponse.Data.FirstOrDefault(i => i.Id == load.DeviceId).Name

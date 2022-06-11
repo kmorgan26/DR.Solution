@@ -1,15 +1,64 @@
 ﻿@namespace DRApplication.Client.Controls
-@inject LoadManager manager
-@inject NavigationManager navigation
+@inject ILoadBuilderService LoadBuilderService
+@inject AppState AppState
+@implements IDisposable
 
-<div class="form-group">
-    <label>Load</label>
-    <InputSelect ValueExpression="@(()=> SelectedLoadId)" id="loadSelect" DisplayName="Software Version" class="form-control" Value="SelectedLoadId"
-                 ValueChanged="@((int? value) => ChangeLoad(value))">
-        <option value=0>------</option>
-        @foreach (var item in _loadVms)
+@if (!_isBusy && AppState.LoadVms is not null)
+{
+    <MudSelect Variant="Variant.Outlined" T="int" Class="my-3" Label="Loads" Value="@AppState.LoadVm.Id" ValueChanged="@OnLoadIdChanged">
+        <MudSelectItem Value="0">SELECT Load</MudSelectItem>
+        @foreach (var item in @AppState.LoadVms)
         {
-            <option value="@item.Id">@item.Name</option>
+            <MudSelectItem Value="@item.Id">@item.Name</MudSelectItem>
         }
-    </InputSelect>
-</div>
+    </MudSelect>
+}
+
+@code {
+
+    bool _isBusy;
+
+    [Parameter]
+    public EventCallback<int> OnLoadIdChanged { get; set; }
+
+    private async Task SetLoadVms()
+    {
+        var loadVms = await LoadBuilderService.GetLoadVmByDeviceTypeId(AppState.DeviceTypeVm.Id);
+        AppState.UpdateLoadVms(this, loadVms);
+    }
+
+    /// <summary>
+    /// When the DeviceTypeVm changes, the LoadVms populate with a new list for that Device Type
+    /// With the new list populating, the LoadVms is set to a new instance, setting the ID to 0
+    /// and the Dropdown list will display "SELECT Load"
+    /// </summary>
+    /// <param name="Source"></param>
+    /// <param name="Property"></param>
+    /// <returns></returns>
+    private async Task AppState_StateChanged(ComponentBase Source, string Property)
+    {
+        if (Source != this)
+        {
+            if (Property == "DeviceTypeVm")
+            {
+                await SetLoadVms();
+                AppState.UpdateLoadVms(this, new List<LoadVm>());
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        AppState.StateChanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
+        await SetLoadVms();
+        _isBusy = false;
+    }
+
+    void IDisposable.Dispose()
+    {
+        AppState.StateChanged -= async (Source, Property) => await AppState_StateChanged(Source, Property);
+    }
+
+}
