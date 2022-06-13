@@ -187,7 +187,7 @@ public class LoadBuilderService : ILoadBuilderService
             var currentLoadVms = currentLoads.Select(load => new CurrentLoadVm
             {
                 Id = load.Id,
-                LoadId = load.Id,
+                LoadId = load.LoadId,
                 DeviceId = load.DeviceId,
                 LoadName = loadResponse.Data.FirstOrDefault(i => i.Id == load.LoadId).Name,
                 Device = deviceResponse.Data.FirstOrDefault(i => i.Id == load.DeviceId).Name
