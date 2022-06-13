@@ -16,6 +16,8 @@
         {
             var deviceTypeVm = await Service.GetDeviceTypeVmById(1);
             AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
+            var maintainerVm = await Service.GetMaintainerVmById(deviceTypeVm.Id);
+            AppState.UpdateMaintainerVm(this, maintainerVm);
         }
     }
 }
