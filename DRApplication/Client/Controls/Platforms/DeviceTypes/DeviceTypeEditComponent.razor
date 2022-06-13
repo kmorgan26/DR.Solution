@@ -3,6 +3,7 @@
 @inject DeviceTypeManager DeviceTypeManager
 @inject IPlatformService PlatformService
 @inject NavigationManager navigation
+@inject ISnackbar Snackbar
 
 @if (!_isBusy)
 {
@@ -44,6 +45,7 @@
     {
         var deviceType = await PlatformService.GetDeviceTypeFromDeviceTypeVm(AppState.DeviceTypeVm);
         await DeviceTypeManager.UpdateAsync(deviceType);
+        Snackbar.Add($"{deviceType.Name} was updated", Severity.Success);
         navigation.NavigateTo("/devicetypes");
     }
 
