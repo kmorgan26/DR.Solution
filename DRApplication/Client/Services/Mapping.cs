@@ -80,6 +80,8 @@ public class MappingProfile : Profile
         CreateMap<DeviceVm, Device>()
             .ForMember(dest => dest.Name,
                 opts => opts.MapFrom(src => src.Device));
+        CreateMap<DeviceInsertVm, Device>();
+
 
         CreateMap<Maintainer, GenericListVm>();
         CreateMap<Maintainer, MaintainerVm>()
