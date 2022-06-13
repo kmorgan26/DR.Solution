@@ -1,0 +1,57 @@
+﻿@namespace DRApplication.Client.Controls
+
+@inject AppState AppState
+@inject DeviceManager DeviceManager
+@inject IPlatformService PlatformService
+@inject NavigationManager navigation
+
+@if (!_isBusy)
+{
+    <MudItem xs="12" sm="12" md="4" lg="3">
+        <EditForm Model="@AppState.DeviceVm" OnValidSubmit="@UpdateDevice">
+
+            <MudTextField @bind-Value="AppState.DeviceVm.Device" Class="my-6" Label="Device" Variant="Variant.Outlined"></MudTextField>
+
+            <DeviceTypeSelect OnDeviceTypeIdChanged="UpdateDeviceTypeVmForDeviceVm"></DeviceTypeSelect>
+
+            <MudDatePicker Class="my-6" Label="Version Date" @bind-Date="@AppState.SoftwareVersionVm.VersionDate" />
+
+            <SubmitButton ButtonText="Update" />
+            <CancelButton Url="softwareversion" />
+
+        </EditForm>
+    </MudItem>
+}
+
+@code {
+    bool _isBusy;
+
+    [Parameter]
+    public int DeviceId { get; set; }
+
+    async Task UpdateDeviceTypeVmForDeviceVm(int id)
+    {
+        if (id > 0)
+        {
+            var deviceTypeVm = await PlatformService.GetDeviceTypeVmById(id);
+            AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
+        }
+    }
+
+    protected async Task UpdateDevice()
+    {
+        var device = Mapping.Mapper.Map<Device>(AppState.DeviceVm);
+        await DeviceManager.UpdateAsync(device);
+        navigation.NavigateTo("/device");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        var device = await DeviceManager.GetByIdAsync(DeviceId);
+        var vm = Mapping.Mapper.Map<DeviceVm>(device);
+        AppState.UpdateDeviceVm(this, vm);
+        _isBusy = false;
+    }
+
+}
