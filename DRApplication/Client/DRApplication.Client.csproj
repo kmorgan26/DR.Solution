@@ -45,7 +45,14 @@
 	  <Compile Remove="Controls\Platforms\Devices\DeviceComponent.razor.cs" />
 	  <Compile Remove="Controls\Platforms\DeviceTypes\DeviceTypeTable.razor.cs" />
 	  <Compile Remove="Controls\Platforms\Maintainers\MaintainerTable.razor.cs" />
+	  <Compile Remove="Interfaces\IForeignKeyListService.cs" />
+	  <Compile Remove="Interfaces\ITableService.cs" />
+	  <Compile Remove="Interfaces\ITemplateService.cs" />
 	  <Compile Remove="Services\ApiEfRepository.cs" />
+	  <Compile Remove="Services\ListServices\ForeignKeyListService.cs" />
+	  <Compile Remove="Services\NavigationManagerExtensions.cs" />
+	  <Compile Remove="Services\TableService.cs" />
+	  <Compile Remove="Services\TemplateService.cs" />
 	  <Compile Remove="ViewModels\ConfigurationViewModels\HardwareSystems\HardwareSystemEditVm.cs" />
 	  <Compile Remove="ViewModels\ConfigurationViewModels\HardwareVersions\HardwareVersionEditVm.cs" />
 	</ItemGroup>

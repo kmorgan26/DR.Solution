@@ -41,11 +41,8 @@ builder.Services.AddScoped<AppState>();
 builder.Services.AddTransient<IPlatformService, PlatformService>();
 builder.Services.AddTransient<ILoadBuilderService, LoadBuilderService>();
 builder.Services.AddTransient<IGenericListService, GenericListService>();
-builder.Services.AddTransient<IForeignKeyListService, ForeignKeyListService>();
 builder.Services.AddTransient<IHardwareService, HardwareService>();
 builder.Services.AddTransient<ISoftwareService, SoftwareService>();
-
-builder.Services.AddTransient(typeof(ITableService<>), typeof(TableService<>));
 
 builder.Services.AddBlazoredLocalStorage();
 
