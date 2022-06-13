@@ -1,0 +1,51 @@
+﻿@namespace DRApplication.Client.Controls
+@inject AppState AppState
+@inject IPlatformService PlatformService
+@inject DeviceTypeManager DeviceTypeManager
+@inject NavigationManager navigation
+@inject ISnackbar Snackbar
+
+@if (_deviceTypeInsertVm != null)
+{
+    <MudItem xs="12" sm="12" md="4" lg="3">
+        <EditForm Model="@_deviceTypeInsertVm" OnValidSubmit="@InsertDeviceType">
+
+            <MaintainerSelect OnMaintainerIdChanged="UpdateMaintainer" />
+
+            <MudTextField @bind-Value="_deviceTypeInsertVm.Name" Class="my-6" Label="Device Name" Variant="Variant.Outlined"></MudTextField>
+
+            <MudCheckBox Class="my-6" Label="Active?" @bind-Checked="@_deviceTypeInsertVm.IsActive" />
+
+            <MudPaper Elevation="0">
+                <SubmitButton ButtonText="Insert" />
+                <CancelButton Url="devices" />
+            </MudPaper>
+        </EditForm>
+    </MudItem>
+
+}
+
+@code {
+
+    private DeviceTypeInsertVm _deviceTypeInsertVm { get; set; } = new();
+
+    void UpdateMaintainer(int id)
+    {
+        if (id > 0)
+        {
+            AppState.MaintainerVm.Id = id;
+        }
+
+    }
+
+    private async Task InsertDeviceType()
+    {
+        _deviceTypeInsertVm.MaintainerId = AppState.MaintainerVm.Id;
+        var result = await PlatformService.InsertDeviceTypeFromDeviceTypeInsertVm(_deviceTypeInsertVm);
+
+        if(result > 0)
+            Snackbar.Add($"The new Platform was Added!", Severity.Success);
+        
+        navigation.NavigateTo("/devicetypes");
+    }
+}

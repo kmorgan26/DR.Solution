@@ -25,6 +25,8 @@ public interface IPlatformService
 
     Task<DeviceType> GetDeviceTypeFromDeviceTypeVm(DeviceTypeVm deviceTypeVm); 
 
-    Task<Device> GetDeviceFromDeviceVm(DeviceVm deviceVm); 
+    Task<Device> GetDeviceFromDeviceVm(DeviceVm deviceVm);
+
+    Task<int> InsertDeviceTypeFromDeviceTypeInsertVm(DeviceTypeInsertVm deviceTypeInsertVm);
 
 }

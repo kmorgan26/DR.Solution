@@ -154,4 +154,26 @@ public class PlatformService : IPlatformService
         };
         return await Task.Run(() => device);
     }
+
+    public async Task<int> InsertDeviceTypeFromDeviceTypeInsertVm(DeviceTypeInsertVm deviceTypeInsertVm)
+    {
+        var deviceType = new DeviceType()
+        {
+            IsActive = deviceTypeInsertVm.IsActive,
+            MaintainerId = deviceTypeInsertVm.MaintainerId,
+            Name = deviceTypeInsertVm.Name
+        };
+        try
+        {
+            var result = await _deviceTypeManager.InsertAsync(deviceType);
+            if(result.Id > 0)
+               return result.Id;
+            else
+               return 0;
+        }
+        catch
+        {
+            return 0;
+        }
+    }
 }
