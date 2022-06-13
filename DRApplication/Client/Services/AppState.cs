@@ -35,6 +35,8 @@ namespace DRApplication.Client.Services
 
         public DeviceTypeVm DeviceTypeVm { get; private set; } = new();
 
+        public DeviceVm DeviceVm { get; private set; } = new();
+
         #endregion
 
         #region -- View Model Collections --
@@ -127,15 +129,16 @@ namespace DRApplication.Client.Services
             this.DeviceTypeVm = Model;
             NotifyStateChanged(Source, "DeviceTypeVm");
         }
-
-
-
-
+        public void UpdateDeviceVm(ComponentBase Source, DeviceVm Model)
+        {
+            this.DeviceVm = Model;
+            NotifyStateChanged(Source, "DeviceVm");
+        }
 
         #endregion
 
         #region -- View Model Collection Methods --
-        
+
         public void UpdateCurrentLoadVms(ComponentBase Source, IEnumerable<CurrentLoadVm> Model)
         {
             this.CurrentLoadVms = Model;
