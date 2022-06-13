@@ -11,15 +11,11 @@
         <HeaderContent>
             <MudTh>ID</MudTh>
             <MudTh>Config</MudTh>
-            <MudTh>Platform</MudTh>
             <MudTh></MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="ID">@context.Id</MudTd>
             <MudTd DataLabel="Config">@context.Name</MudTd>
-            <MudTd DataLabel="Platform">
-                <DeviceTypeLabel DeviceTypeId=@context.DeviceTypeId />
-            </MudTd>
             <MudTd DataLabel="SELECT">
                 <a href="/hardwareconfig/edit/@context.Id" role="button">
                     <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>
