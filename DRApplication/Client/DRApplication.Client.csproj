@@ -56,6 +56,8 @@
 	  <Content Remove="Controls\Generic\Tables\BasicTable.razor" />
 	  <Content Remove="Controls\Generic\Tables\FSMudTablePaging.razor" />
 	  <Content Remove="Controls\Platforms\Devices\DeviceTestComponent.razor" />
+	  <Content Remove="Pages\Platforms\Devices\DeviceDetails.razor" />
+	  <Content Remove="Pages\Platforms\Devices\DeviceList.razor" />
 	</ItemGroup>
 
 	<ItemGroup>
