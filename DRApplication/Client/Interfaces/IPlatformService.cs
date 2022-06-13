@@ -29,4 +29,6 @@ public interface IPlatformService
 
     Task<int> InsertDeviceTypeFromDeviceTypeInsertVm(DeviceTypeInsertVm deviceTypeInsertVm);
 
+    Task<bool> EditMaintainerFromMaintainerVm(MaintainerVm maintainerVm);
+
 }

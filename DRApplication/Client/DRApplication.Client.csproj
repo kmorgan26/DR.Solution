@@ -43,6 +43,7 @@
 	  <Compile Remove="Controls\Generic\Tables\BasicTable.razor.cs" />
 	  <Compile Remove="Controls\Platforms\Devices\DeviceComponent.razor.cs" />
 	  <Compile Remove="Controls\Platforms\DeviceTypes\DeviceTypeTable.razor.cs" />
+	  <Compile Remove="Controls\Platforms\Maintainers\MaintainerTable.razor.cs" />
 	  <Compile Remove="Services\ApiEfRepository.cs" />
 	  <Compile Remove="ViewModels\ConfigurationViewModels\HardwareSystems\HardwareSystemEditVm.cs" />
 	  <Compile Remove="ViewModels\ConfigurationViewModels\HardwareVersions\HardwareVersionEditVm.cs" />

@@ -176,4 +176,26 @@ public class PlatformService : IPlatformService
             return 0;
         }
     }
+
+    public async Task<bool> EditMaintainerFromMaintainerVm(MaintainerVm maintainerVm)
+    {
+        var maintainer = new Maintainer()
+        {
+            Id = maintainerVm.Id,
+            Name = maintainerVm.Maintainer
+        };
+        try
+        {
+            var result = await _maintainerManager.UpdateAsync(maintainer);
+            if (result != null)
+                return true;
+            else
+                return false;
+        }
+        catch (Exception)
+        {
+            return false;
+            throw;
+        }
+    }
 }
