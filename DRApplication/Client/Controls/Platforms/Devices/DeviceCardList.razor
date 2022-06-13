@@ -2,11 +2,12 @@
 
 @inject IPlatformService PlatformService
 @inject DeviceManager DeviceManager
+@inject AppState AppState
 
 <MudGrid Spacing="2" Justify="Justify.Center">
-    @if (Devices is not null)
+    @if (!_isBusy && AppState.DeviceVms is not null)
     {
-        @foreach (var item in Devices)
+        @foreach (var item in AppState.DeviceVms)
         {
             <DeviceCard DeviceVm="item"></DeviceCard>
         }
@@ -15,33 +16,19 @@
 
 @code {
 
-    [CascadingParameter]
-    public AppStateComponent AppState { get; set; }
-
     [Parameter]
     public int DeviceTypeId { get; set; }
 
-    IEnumerable<DeviceVm>? Devices;
-
+    bool _isBusy;
+    
     protected override async Task OnInitializedAsync()
     {
-        if(DeviceManager is not null)
-        {
-            var filterProperty = new FilterProperty() {  Name ="DeviceTypeId", Operator=FilterQueryOperator.Equals, Value=DeviceTypeId.ToString() };
-            
-            var filter = new QueryFilter<Device>();
-
-            filter.PaginationFilter = null;
-            filter.FilterProperties.Add(filterProperty);
-
-            var response = await DeviceManager.GetAsync(filter);
-            var items = response.Data;
-            Devices = Mapping.Mapper.Map<IEnumerable<DeviceVm>>(items);
-
-            //TODO: Maybe do this with more grace
-            GenericListVm listVm = new() { Id = DeviceTypeId };
-            AppState.DeviceTypeVm = await PlatformService.GetDeviceTypeVmFromGenericVm(listVm);
-            
-        }
+        _isBusy = true;
+        var deviceTypeVm = await PlatformService.GetDeviceTypeVmById(DeviceTypeId);
+        AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
+        
+        var deviceVms = await PlatformService.GetDeviceVmsFromDevicTypeId(DeviceTypeId);
+        AppState.UpdateDeviceVms(this, deviceVms);
+        _isBusy = false;
     }
 }

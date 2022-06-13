@@ -40,6 +40,7 @@
 	  <Compile Remove="Controls\Configurations\VersionsLoads\VersionsLoadComponent.razor.cs" />
 	  <Compile Remove="Controls\Configurations\VersionsLoads\VersionsLoadEditComponent.razor.cs" />
 	  <Compile Remove="Controls\Configurations\VersionsLoads\VersionsLoadInsertComponent.razor.cs" />
+	  <Compile Remove="Controls\Generic\AppStateComponent.razor.cs" />
 	  <Compile Remove="Controls\Generic\Tables\BasicTable.razor.cs" />
 	  <Compile Remove="Controls\Platforms\Devices\DeviceComponent.razor.cs" />
 	  <Compile Remove="Controls\Platforms\DeviceTypes\DeviceTypeTable.razor.cs" />
@@ -55,6 +56,9 @@
 	  <Content Remove="Controls\Configurations\VersionsLoads\VersionsLoadComponent.razor" />
 	  <Content Remove="Controls\Configurations\VersionsLoads\VersionsLoadEditComponent.razor" />
 	  <Content Remove="Controls\Configurations\VersionsLoads\VersionsLoadInsertComponent.razor" />
+	  <Content Remove="Controls\Generic\AppStateComponent.razor" />
+	  <Content Remove="Controls\Generic\GenericRadios.razor" />
+	  <Content Remove="Controls\Generic\GenericSelect.razor" />
 	  <Content Remove="Controls\Generic\Tables\BasicTable.razor" />
 	  <Content Remove="Controls\Generic\Tables\FSMudTablePaging.razor" />
 	  <Content Remove="Controls\Platforms\Devices\DeviceTestComponent.razor" />
