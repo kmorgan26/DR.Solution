@@ -37,6 +37,8 @@ namespace DRApplication.Client.Services
 
         public DeviceVm DeviceVm { get; private set; } = new();
 
+        public MaintainerVm MaintainerVm { get; private set; } = new();
+
         #endregion
 
         #region -- View Model Collections --
@@ -61,6 +63,8 @@ namespace DRApplication.Client.Services
         public IEnumerable<DeviceTypeVm> DeviceTypeVms { get; private set; } = new List<DeviceTypeVm>();
 
         public IEnumerable<DeviceVm> DeviceVms { get; private set; } = new List<DeviceVm>();
+
+        public IEnumerable<MaintainerVm> MaintainerVms { get; private set; } = new List<MaintainerVm>();
 
         #endregion
 
@@ -136,6 +140,11 @@ namespace DRApplication.Client.Services
             this.DeviceVm = Model;
             NotifyStateChanged(Source, "DeviceVm");
         }
+        public void UpdateMaintainerVm(ComponentBase Source, MaintainerVm Model)
+        {
+            this.MaintainerVm = Model;
+            NotifyStateChanged(Source, "MaintainerVm");
+        }
 
         #endregion
 
@@ -195,6 +204,11 @@ namespace DRApplication.Client.Services
         {
             this.DeviceVms = Model;
             NotifyStateChanged(Source, "DeviceVms");
+        }
+        public void UpdateMaintainerVms(ComponentBase Source, IEnumerable<MaintainerVm> Model)
+        {
+            this.MaintainerVms = Model;
+            NotifyStateChanged(Source, "MaintainerVms");
         }
         #endregion
 
