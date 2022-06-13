@@ -22,20 +22,5 @@ namespace DRApplication.TestProject
             //assert
             Assert.Contains("href=\"myurl\"", renderedMarkup);
         }
-
-        [Fact]
-        public void ButtonNavigatesToUrl()
-        {
-            //arrange
-            var cut = RenderComponent<CancelButton>(parameters => parameters
-            .Add(p => p.Url, "myurl"));
-
-            //act
-            var renderedMarkup = cut.Markup;
-            cut.Find("a").Click();
-
-            Assert.
-            
-        }
     }
 }
