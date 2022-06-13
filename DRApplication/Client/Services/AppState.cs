@@ -60,6 +60,8 @@ namespace DRApplication.Client.Services
         
         public IEnumerable<DeviceTypeVm> DeviceTypeVms { get; private set; } = new List<DeviceTypeVm>();
 
+        public IEnumerable<DeviceVm> DeviceVms { get; private set; } = new List<DeviceVm>();
+
         #endregion
 
         #region -- single ID Methods --
@@ -188,6 +190,11 @@ namespace DRApplication.Client.Services
         {
             this.DeviceTypeVms = Model;
             NotifyStateChanged(Source, "DeviceTypeVms");
+        }
+        public void UpdateDeviceVms(ComponentBase Source, IEnumerable<DeviceVm> Model)
+        {
+            this.DeviceVms = Model;
+            NotifyStateChanged(Source, "DeviceVms");
         }
         #endregion
 

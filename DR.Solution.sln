@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DRApplication.Shared", "DRA
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "DRApplication.Database", "DRApplication.Database\DRApplication.Database.sqlproj", "{91C83824-79B8-4058-BE35-E05E07EE13EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DRApplication.TestProject", "DRApplication.TestProject\DRApplication.TestProject.csproj", "{8012FA09-FEF7-4451-ACDD-95E8F0AA8EA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DRApplication.TestProject", "DRApplication.TestProject\DRApplication.TestProject.csproj", "{8012FA09-FEF7-4451-ACDD-95E8F0AA8EA4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
