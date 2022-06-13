@@ -10,12 +10,16 @@
     <MudItem xs="12" sm="12" md="4" lg="3">
         <EditForm Model="@AppState.LoadVm" OnValidSubmit="@UpdateLoad">
 
-            <DeviceTypeSelect  OnDeviceTypeIdChanged="UpdateDeviceTypeForLoad"></DeviceTypeSelect>
+            <DeviceTypeSelect OnDeviceTypeIdChanged="UpdateDeviceTypeForLoad"></DeviceTypeSelect>
 
             <MudTextField @bind-Value="AppState.LoadVm.Name" Class="my-6" Label="Load Name" Variant="Variant.Outlined"></MudTextField>
 
-            <SubmitButton ButtonText="Update" />
-            <CancelButton Url="load" />
+            <MudCheckBox Class="my-6" Label="Accepted?" @bind-Checked="@AppState.LoadVm.IsAccepted" />
+
+            <MudPaper Elevation="0">
+                <SubmitButton ButtonText="Update" />
+                <CancelButton Url="load" />
+            </MudPaper>
 
         </EditForm>
     </MudItem>

@@ -13,8 +13,11 @@
 
             <MudTextField @bind-Value="_loadInsertVm.Name" Class="my-6" Label="Load Name" Variant="Variant.Outlined"></MudTextField>
 
-            <SubmitButton ButtonText="Insert" />
-            <CancelButton Url="load" />
+            <MudPaper Elevation="0">
+                <SubmitButton ButtonText="Insert" />
+                <CancelButton Url="load" />
+            </MudPaper>
+
         </EditForm>
     </MudItem>
 

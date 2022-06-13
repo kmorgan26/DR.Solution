@@ -5,7 +5,9 @@ namespace DRApplication.Shared.Models.ConfigurationModels;
 public partial class Load
 {
     [Key]
-    public int Id { get; set; }
-    public string Name { get; set; } = null!;
-    public int DeviceTypeId { get; set; }
+    public int Id { get; set; } = 0;
+    public string Name { get; set; } = string.Empty;
+    public int DeviceTypeId { get; set; } = 0;
+
+    public bool IsAccepted { get; set; }
 }
