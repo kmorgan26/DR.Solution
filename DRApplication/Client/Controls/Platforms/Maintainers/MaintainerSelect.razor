@@ -1,0 +1,35 @@
+﻿@namespace DRApplication.Client.Controls
+@inject IPlatformService PlatformService
+@inject AppState AppState
+
+@if (!_isBusy)
+{
+    <MudSelect Variant="Variant.Outlined" T="int" Label="Maintainer" Value="@AppState.MaintainerVm.Id" ValueChanged="@OnMaintainerIdChanged">
+        <MudSelectItem Value="0">SELECT Maintainer</MudSelectItem>
+        @foreach (var item in @AppState.MaintainerVms)
+        {
+            <MudSelectItem Value="@item.Id">@item.Maintainer</MudSelectItem>
+        }
+    </MudSelect>
+}
+
+@code {
+
+    bool _isBusy;
+
+    [Parameter]
+    public EventCallback<int> OnMaintainerIdChanged { get; set; }
+
+    private async Task SetMaintainers()
+    {
+        var maintainerVms = await PlatformService.GetMaintainerVmsAsync();
+        AppState.UpdateMaintainerVms(this, maintainerVms);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        await SetMaintainers();
+        _isBusy = false;
+    }
+}
