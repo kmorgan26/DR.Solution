@@ -11,13 +11,13 @@
         <HeaderContent>
             <MudTh>ID</MudTh>
             <MudTh>Config</MudTh>
-            <MudTh>Device Type</MudTh>
+            <MudTh>Platform</MudTh>
             <MudTh></MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Thread">@context.Id</MudTd>
-            <MudTd DataLabel="Thread">@context.Name</MudTd>
-            <MudTd DataLabel="Thread">
+            <MudTd DataLabel="ID">@context.Id</MudTd>
+            <MudTd DataLabel="Config">@context.Name</MudTd>
+            <MudTd DataLabel="Platform">
                 <DeviceTypeLabel DeviceTypeId=@context.DeviceTypeId />
             </MudTd>
             <MudTd DataLabel="SELECT">
