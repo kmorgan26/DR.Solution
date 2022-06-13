@@ -55,7 +55,6 @@
 	  <Content Remove="Controls\Configurations\VersionsLoads\VersionsLoadInsertComponent.razor" />
 	  <Content Remove="Controls\Generic\Tables\BasicTable.razor" />
 	  <Content Remove="Controls\Generic\Tables\FSMudTablePaging.razor" />
-	  <Content Remove="Controls\Platforms\Devices\DeviceComponent.razor" />
 	  <Content Remove="Controls\Platforms\Devices\DeviceTestComponent.razor" />
 	</ItemGroup>
 
