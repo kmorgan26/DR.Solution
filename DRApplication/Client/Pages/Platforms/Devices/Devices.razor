@@ -1,15 +1,10 @@
 ﻿@page "/devices"
 @namespace DRApplication.Client.Pages
 
-@inject IPlatformService _platformService
-@inject DeviceManager manager
+<TitleHeader TitleText="Devices" IconPath="@Icons.Material.Filled.Rectangle" />
 
-<TitleHeader IconPath="@Icons.Material.Filled.LocalAirport" TitleText="Devices" />
+<MudPaper Class="pa-2 mb-6" Elevation="0">
+    <MudAlert Severity="Severity.Normal">Set the filters to display a list of versions.</MudAlert>
+</MudPaper>
 
-<MudGrid Justify="Justify.FlexStart" Spacing="3" Class="p-9">
-    <MudItem>
-    </MudItem>
-
-</MudGrid>
-
-<DeviceTable></DeviceTable>
+<DeviceComponent></DeviceComponent>
