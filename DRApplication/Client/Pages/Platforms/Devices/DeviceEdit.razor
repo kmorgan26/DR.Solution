@@ -7,11 +7,11 @@
     <MudAlert Severity="Severity.Success">Make Changes to the Device, then click Update</MudAlert>
 </MudPaper>
 
-<DeviceEditComponent DeviceTypeId="@DeviceTypeId"></DeviceEditComponent>
+<DeviceEditComponent DeviceId="@DeviceId"></DeviceEditComponent>
 
 @code{
 
     [Parameter]
-    public int DeviceTypeId { get; set; }
+    public int DeviceId { get; set; }
 
 }

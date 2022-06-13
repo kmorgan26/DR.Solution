@@ -14,10 +14,12 @@
 
             <DeviceTypeSelect OnDeviceTypeIdChanged="UpdateDeviceTypeVmForDeviceVm"></DeviceTypeSelect>
 
-            <MudDatePicker Class="my-6" Label="Version Date" @bind-Date="@AppState.SoftwareVersionVm.VersionDate" />
+            <MudCheckBox Class="my-6" Label="Active?" @bind-Checked="@AppState.DeviceVm.IsActive" />
 
-            <SubmitButton ButtonText="Update" />
-            <CancelButton Url="softwareversion" />
+            <MudPaper Elevation="0">
+                <SubmitButton ButtonText="Update" />
+                <CancelButton Url="devices" />
+            </MudPaper>
 
         </EditForm>
     </MudItem>
@@ -33,8 +35,9 @@
     {
         if (id > 0)
         {
-            var deviceTypeVm = await PlatformService.GetDeviceTypeVmById(id);
-            AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
+            var deviceVm = AppState.DeviceVm;
+            deviceVm.DeviceTypeId = id;
+            AppState.UpdateDeviceVm(this, deviceVm);
         }
     }
 
@@ -42,7 +45,7 @@
     {
         var device = Mapping.Mapper.Map<Device>(AppState.DeviceVm);
         await DeviceManager.UpdateAsync(device);
-        navigation.NavigateTo("/device");
+        navigation.NavigateTo("/devices");
     }
 
     protected override async Task OnInitializedAsync()

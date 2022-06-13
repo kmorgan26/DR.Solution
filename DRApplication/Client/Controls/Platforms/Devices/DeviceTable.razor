@@ -11,11 +11,13 @@
         <HeaderContent>
             <MudTh>ID</MudTh>
             <MudTh>Device</MudTh>
+            <MudTh>Active?</MudTh>
             <MudTh></MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Id">@context.Id</MudTd>
             <MudTd DataLabel="Device">@context.Device</MudTd>
+            <MudTd DataLabel="Active?">@context.IsActive</MudTd>
             <MudTd DataLabel="SELECT">
                 <a href="/device/edit/@context.Id" role="button">
                     <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>
