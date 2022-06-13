@@ -142,4 +142,16 @@ public class PlatformService : IPlatformService
         };
         return await Task.Run(() => deviceType);
     }
+
+    public async Task<Device> GetDeviceFromDeviceVm(DeviceVm deviceVm)
+    {
+        var device = new Device()
+        {
+            Id = deviceVm.Id,
+            IsActive = deviceVm.IsActive,
+            DeviceTypeId = deviceVm.DeviceTypeId,
+            Name = deviceVm.Device
+        };
+        return await Task.Run(() => device);
+    }
 }
