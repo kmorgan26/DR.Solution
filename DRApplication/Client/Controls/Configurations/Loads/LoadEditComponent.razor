@@ -3,6 +3,7 @@
 @inject AppState AppState
 @inject NavigationManager navigation
 @inject IPlatformService PlatformService
+@inject IHardwareService HardwareService
 @inject LoadManager LoadManager
 
 @if (!_isBusy)
@@ -10,7 +11,7 @@
     <MudItem xs="12" sm="12" md="4" lg="3">
         <EditForm Model="@AppState.LoadVm" OnValidSubmit="@UpdateLoad">
 
-            <DeviceTypeSelect OnDeviceTypeIdChanged="UpdateDeviceTypeForLoad"></DeviceTypeSelect>
+            <HardwareConfigSelect OnHardwareConfigIdChanged="UpdateDeviceTypeForLoad" />
 
             <MudTextField @bind-Value="AppState.LoadVm.Name" Class="my-6" Label="Load Name" Variant="Variant.Outlined"></MudTextField>
 
@@ -35,12 +36,12 @@
     {
         if (id > 0)
         {
-            var deviceTypeVm = await PlatformService.GetDeviceTypeVmById(id);
+            var hardwareConfigVm = await HardwareService.GetHardwareConfigVmById(id);
 
             var loadVm = AppState.LoadVm;
-            loadVm.DeviceTypeId = id;
+            loadVm.HardwareConfigId = id;
             AppState.UpdateLoadVm(this, loadVm);
-            AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
+            AppState.UpdateHardwareConfigVm(this, hardwareConfigVm);
 
         }
     }

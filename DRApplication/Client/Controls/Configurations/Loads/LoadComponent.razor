@@ -1,21 +1,22 @@
 ﻿@namespace DRApplication.Client.Controls
 @inject IPlatformService PlatformService
+@inject IHardwareService HardwareService
 @inject AppState AppState
 
 <MudItem xs="12" sm="9" md="6" lg="3" Class="mb-4">
-    <DeviceTypeSelect OnDeviceTypeIdChanged="SetDeviceTypeId"></DeviceTypeSelect>
+    <HardwareConfigSelect OnHardwareConfigIdChanged="SetHardwareConfigId" />
 </MudItem>
 
 <LoadTable></LoadTable>
 
 @code {
 
-    async Task SetDeviceTypeId(int id)
+    async Task SetHardwareConfigId(int id)
     {
         if (id > 0)
         {
-            var deviceTypeVm = await PlatformService.GetDeviceTypeVmById(id);
-            AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
+            var hardwareConfigVm = await HardwareService.GetHardwareConfigVmById(AppState.DeviceTypeVm.Id);
+            AppState.UpdateHardwareConfigVm(this, hardwareConfigVm);
         }
     }
 }

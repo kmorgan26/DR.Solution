@@ -11,7 +11,7 @@ public class LoadEditVm
     
     [Required]
     [Range(1, 100, ErrorMessage = "Please Select a Hardware Configuration")]
-    public int DeviceTypeId { get; set; }
+    public int HardwareConfigId { get; set; }
 
     public bool IsAccepted { get; set; } = false;
 }

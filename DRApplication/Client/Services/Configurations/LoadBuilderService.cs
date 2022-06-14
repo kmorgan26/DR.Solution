@@ -60,13 +60,13 @@ public class LoadBuilderService : ILoadBuilderService
     }
 
     #region ---Collection Object Methods---
-    public async Task<IEnumerable<LoadVm>> GetLoadVmByDeviceTypeId(int id)
+    public async Task<IEnumerable<LoadVm>> GetLoadVmsByHardwareConfigId(int id)
     {
         var filter = new QueryFilter<Load>();
         var filterProperties = new List<FilterProperty>();
         filterProperties.Add(new FilterProperty()
         {
-            Name = "DeviceTypeId",
+            Name = "HardwareConfigId",
             Value = id.ToString(),
             Operator = FilterQueryOperator.Equals
         });

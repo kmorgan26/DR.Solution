@@ -9,7 +9,7 @@
     <MudItem xs="12" sm="12" md="4" lg="3">
         <EditForm Model="@_loadInsertVm" OnValidSubmit="@InsertLoad">
 
-            <DeviceTypeSelect OnDeviceTypeIdChanged="UpdateDeviceType" />
+            <HardwareConfigSelect OnHardwareConfigIdChanged="UpdateHardwareConfig"/>
 
             <MudTextField @bind-Value="_loadInsertVm.Name" Class="my-6" Label="Load Name" Variant="Variant.Outlined"></MudTextField>
 
@@ -27,20 +27,20 @@
 
     private LoadInsertVm _loadInsertVm { get; set; } = new();
 
-    void UpdateDeviceType(int id)
+    void UpdateHardwareConfig(int id)
     {
         if (id > 0)
         {
-            var deviceTypeVm = AppState.DeviceTypeVm;
-            deviceTypeVm.Id = id;
-            AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
+            var hardwareConfigVm = AppState.HardwareConfigVm;
+            hardwareConfigVm.Id = id;
+            AppState.UpdateHardwareConfigVm(this, hardwareConfigVm);
         }
 
     }
 
     private async Task InsertLoad()
     {
-        _loadInsertVm.DeviceTypeId = AppState.DeviceTypeVm.Id;
+        _loadInsertVm.HardwareConfigId = AppState.HardwareConfigVm.Id;
         var load = Mapping.Mapper.Map<Load>(_loadInsertVm);
         await LoadManager.InsertAsync(load);
         navigation.NavigateTo("/load");

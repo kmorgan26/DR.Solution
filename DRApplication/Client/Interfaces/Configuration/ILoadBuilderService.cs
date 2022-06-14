@@ -7,7 +7,7 @@ public interface ILoadBuilderService
 {
     Task<CurrentLoadVm> MapCurrentLoadToCurrentLoadVm(CurrentLoad currentLoad);
 
-    Task<IEnumerable<LoadVm>> GetLoadVmByDeviceTypeId(int id);
+    Task<IEnumerable<LoadVm>> GetLoadVmsByHardwareConfigId(int id);
     
     Task<IEnumerable<VersionsLoadVm>> GetVersionsLoadVmsByLoadId(int id);
 
