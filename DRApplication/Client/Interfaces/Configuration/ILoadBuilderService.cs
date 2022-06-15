@@ -6,6 +6,12 @@ namespace DRApplication.Client.Interfaces;
 public interface ILoadBuilderService
 {
     Task<CurrentLoadVm> MapCurrentLoadToCurrentLoadVm(CurrentLoad currentLoad);
+    
+    Task<CurrentLoadVm> GetCurrentLoadVmById(int id);
+
+    Task<CurrentLoad> GetCurrentLoadFromCurrentLoadVm(CurrentLoadVm currentLoadVm);
+
+    Task<LoadVm> GetLoadVmById(int id);
 
     Task<IEnumerable<LoadVm>> GetLoadVmsByHardwareConfigId(int id);
     

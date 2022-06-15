@@ -198,5 +198,36 @@ public class LoadBuilderService : ILoadBuilderService
         return new List<CurrentLoadVm>();
     }
 
+    public async Task<CurrentLoadVm> GetCurrentLoadVmById(int id)
+    {
+        var currentLoad = await _currentLoadManager.GetByIdAsync(id);
+        return await this.MapCurrentLoadToCurrentLoadVm(currentLoad);
+    }
+
+    public async Task<LoadVm> GetLoadVmById(int id)
+    {
+        var load = await _loadManager.GetByIdAsync(id);
+        var loadVm = new LoadVm()
+        {
+            Id = load.Id,
+            HardwareConfigId = load.HardwareConfigId,
+            IsAccepted = load.IsAccepted,
+            Name = load.Name
+        };
+        return loadVm;
+    }
+
+    public async Task<CurrentLoad> GetCurrentLoadFromCurrentLoadVm(CurrentLoadVm currentLoadVm)
+    {
+
+        var currentLoad = new CurrentLoad()
+        {
+            Id = currentLoadVm.Id,
+            DeviceId = currentLoadVm.DeviceId,
+            LoadId = currentLoadVm.LoadId
+        };
+        return await Task.Run(() =>  currentLoad);
+    }
+
     #endregion
 }
