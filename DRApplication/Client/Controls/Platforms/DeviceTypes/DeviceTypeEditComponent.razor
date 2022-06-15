@@ -31,12 +31,15 @@
     [Parameter]
     public int DeviceTypeId { get; set; }
 
-    void UpdateMaintainerVm(int id)
+    async Task UpdateMaintainerVm(int id)
     {
         if (id > 0)
         {
+            var maintainerVm = await PlatformService.GetMaintainerVmById(id);
+
             var deviceTypeVm = AppState.DeviceTypeVm;
             deviceTypeVm.MaintainerId = id;
+            AppState.UpdateMaintainerVm(this, maintainerVm);
             AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
         }
     }
