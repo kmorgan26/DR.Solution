@@ -1,13 +1,13 @@
 ﻿@namespace DRApplication.Client.Controls
 
 <MudItem xs="12" sm="12" md="6" lg="3">
-    <MudCard>
+    <MudCard Elevation="5">
         <MudCardHeader>
             <CardHeaderAvatar>
-                <MudAvatar Color="@AvatarColor" Size="Size.Medium">@DeviceVm.Device.ToString().Substring(2)</MudAvatar>
+                <MudAvatar Color="Color.Default" Size="Size.Medium">@DeviceVm.Device.ToString().Substring(2)</MudAvatar>
             </CardHeaderAvatar>
             <CardHeaderContent>
-                <MudLink Typo="Typo.h6" Color="@HeaderColor" Href="@($"/device/details/{@DeviceVm.Id}")">@DeviceVm.Device</MudLink>
+                <MudLink Typo="Typo.h6" Color="Color.Primary" Href="@($"/device/details/{@DeviceVm.Id}")">@DeviceVm.Device</MudLink>
             </CardHeaderContent>
             <CardHeaderActions>
                 <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
@@ -28,11 +28,9 @@
     [Parameter]
     public DeviceVm DeviceVm { get; set; } = new();
 
-    [Parameter]
-    public Color AvatarColor { get; set; } = Color.Default;
-
-    [Parameter]
-    public Color HeaderColor { get; set; } = Color.Primary;
-
+    protected override Task OnInitializedAsync()
+    {
+        return base.OnInitializedAsync();
+    }
 
 }
