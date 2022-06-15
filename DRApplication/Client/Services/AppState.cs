@@ -5,14 +5,6 @@ namespace DRApplication.Client.Services
 {
     public class AppState
     {
-        #region -- single ID properties --
-
-        //public int HardwareConfigId { get; private set; } = 0;
-
-        //public int DeviceTypeId { get; private set; } = 0;
-
-        #endregion
-
         #region -- View Model Properties --
 
         public CurrentLoadVm CurrentLoadVm { get; private set; } = new();
