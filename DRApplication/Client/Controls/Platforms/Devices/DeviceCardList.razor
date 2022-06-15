@@ -27,7 +27,7 @@
         var deviceTypeVm = await PlatformService.GetDeviceTypeVmById(DeviceTypeId);
         AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
         
-        var deviceVms = await PlatformService.GetDeviceVmsFromDevicTypeId(DeviceTypeId);
+        var deviceVms = await PlatformService.GetDeviceVmsFromDeviceTypeId(DeviceTypeId);
         AppState.UpdateDeviceVms(this, deviceVms);
         _isBusy = false;
     }
