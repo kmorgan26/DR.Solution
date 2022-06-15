@@ -4,7 +4,7 @@
     <MudCard>
         <MudCardHeader>
             <CardHeaderAvatar>
-                <MudAvatar Color="@AvatarColor" Size="Size.Medium">@DeviceVm.Device</MudAvatar>
+                <MudAvatar Color="@AvatarColor" Size="Size.Medium">@DeviceVm.Device.ToString().Substring(2)</MudAvatar>
             </CardHeaderAvatar>
             <CardHeaderContent>
                 <MudLink Typo="Typo.h6" Color="@HeaderColor" Href="@($"/device/details/{@DeviceVm.Id}")">@DeviceVm.Device</MudLink>
