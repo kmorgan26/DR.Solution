@@ -1,4 +1,5 @@
 ﻿using DRApplication.Client.ViewModels;
+using DRApplication.Shared.Models.ConfigurationModels;
 
 namespace DRApplication.Client.Interfaces
 {
@@ -12,5 +13,6 @@ namespace DRApplication.Client.Interfaces
 
         Task<IEnumerable<SoftwareVersionVm>> GetSoftwareVersionVmsByLoadId(int id);
 
+        Task<IEnumerable<VersionsLoad>> GetVersionLoadsByLoadId(int id);
     }
 }

@@ -70,6 +70,16 @@ public class SoftwareService : ISoftwareService
         return Mapping.Mapper.Map<IEnumerable<SoftwareVersionVm>>(softwareVersionResponse.Data);
 
     }
+    public async Task<IEnumerable<VersionsLoad>> GetVersionLoadsByLoadId(int id)
+    {
+        var versionLoadsFilter = await new FilterGenerator<VersionsLoad>().GetFilterForPropertyByNameAsync("LoadId", id);
+        var versionLoadresponse = await _versionsLoadManager.GetAsync(versionLoadsFilter);
+        if (versionLoadresponse.Data is not null)
+        {
+            return versionLoadresponse.Data;
+        }
+        return new List<VersionsLoad>(); 
+    }
 
     #endregion
 
