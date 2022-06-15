@@ -31,12 +31,16 @@
     [Parameter]
     public int DeviceId { get; set; }
 
-    void UpdateDeviceTypeVmForDeviceVm(int id)
+    async Task UpdateDeviceTypeVmForDeviceVm(int id)
     {
         if (id > 0)
         {
+            var deviceTypeVm = await PlatformService.GetDeviceTypeVmById(id);
+
             var deviceVm = AppState.DeviceVm;
             deviceVm.DeviceTypeId = id;
+
+            AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
             AppState.UpdateDeviceVm(this, deviceVm);
         }
     }
