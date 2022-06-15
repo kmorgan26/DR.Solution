@@ -40,7 +40,6 @@ builder.Services.AddScoped<AppState>();
 
 builder.Services.AddTransient<IPlatformService, PlatformService>();
 builder.Services.AddTransient<ILoadBuilderService, LoadBuilderService>();
-builder.Services.AddTransient<IGenericListService, GenericListService>();
 builder.Services.AddTransient<IHardwareService, HardwareService>();
 builder.Services.AddTransient<ISoftwareService, SoftwareService>();
 

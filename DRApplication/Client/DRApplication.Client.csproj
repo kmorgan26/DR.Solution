@@ -47,10 +47,12 @@
 	  <Compile Remove="Controls\Platforms\DeviceTypes\DeviceTypeTable.razor.cs" />
 	  <Compile Remove="Controls\Platforms\Maintainers\MaintainerTable.razor.cs" />
 	  <Compile Remove="Interfaces\IForeignKeyListService.cs" />
+	  <Compile Remove="Interfaces\IGenericListService.cs" />
 	  <Compile Remove="Interfaces\ITableService.cs" />
 	  <Compile Remove="Interfaces\ITemplateService.cs" />
 	  <Compile Remove="Services\ApiEfRepository.cs" />
 	  <Compile Remove="Services\ListServices\ForeignKeyListService.cs" />
+	  <Compile Remove="Services\ListServices\GenericListService.cs" />
 	  <Compile Remove="Services\NavigationManagerExtensions.cs" />
 	  <Compile Remove="Services\TableService.cs" />
 	  <Compile Remove="Services\TemplateService.cs" />
@@ -67,6 +69,7 @@
 	  <Content Remove="Controls\Generic\AppStateComponent.razor" />
 	  <Content Remove="Controls\Generic\GenericRadios.razor" />
 	  <Content Remove="Controls\Generic\GenericSelect.razor" />
+	  <Content Remove="Controls\Generic\MenuPicker.razor" />
 	  <Content Remove="Controls\Generic\Tables\BasicTable.razor" />
 	  <Content Remove="Controls\Generic\Tables\FSMudTablePaging.razor" />
 	  <Content Remove="Controls\Platforms\Devices\DeviceTestComponent.razor" />
@@ -92,6 +95,10 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Shared\DRApplication.Shared.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Services\ListServices\" />
 	</ItemGroup>
 
 </Project>

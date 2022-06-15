@@ -1,0 +1,23 @@
+﻿@namespace DRApplication.Client.Controls
+@inject AppState AppState
+
+<MudTooltip Text="Platform" Color="Color.Warning">
+    <MudMenu Icon="@Icons.Material.Filled.DeviceHub" Color="Color.Inherit">
+        @foreach (var item in AppState.DeviceTypeVms)
+        {
+            <MudMenuItem @onclick="() => OnMenuItemClick(item)">@item.Platform</MudMenuItem>
+        }
+    </MudMenu>
+</MudTooltip>
+
+@code {
+    
+    [Parameter]
+    public EventCallback<DeviceTypeVm> OnItemClick { get; set; }
+
+    void OnMenuItemClick(DeviceTypeVm deviceTypeVm)
+    {
+        OnItemClick.InvokeAsync(deviceTypeVm);
+    }
+
+}
