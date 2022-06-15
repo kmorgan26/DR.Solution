@@ -44,29 +44,15 @@ public class LoadBuilderService : ILoadBuilderService
 
     #endregion
 
-    public async Task<CurrentLoadVm> MapCurrentLoadToCurrentLoadVm(CurrentLoad currentLoad)
-    {
-        var device = await _deviceManager.GetByIdAsync(currentLoad.Id);
-        var load = await _loadManager.GetByIdAsync(currentLoad.LoadId);
-        var currentLoadVm = new CurrentLoadVm()
-        {
-            Id = currentLoad.Id,
-            LoadId = currentLoad.LoadId,
-            DeviceId = currentLoad.DeviceId,
-            Device = device.Name,
-            LoadName = load.Name
-        };
-        return currentLoadVm;
-    }
 
     #region ---Collection Object Methods---
-    public async Task<IEnumerable<LoadVm>> GetLoadVmsByHardwareConfigId(int id)
+    public async Task<IEnumerable<LoadVm>> GetLoadVmByDeviceTypeId(int id)
     {
         var filter = new QueryFilter<Load>();
         var filterProperties = new List<FilterProperty>();
         filterProperties.Add(new FilterProperty()
         {
-            Name = "HardwareConfigId",
+            Name = "DeviceTypeId",
             Value = id.ToString(),
             Operator = FilterQueryOperator.Equals
         });
@@ -82,12 +68,6 @@ public class LoadBuilderService : ILoadBuilderService
         return new List<LoadVm>();
 
     }
-    /// <summary>
-    /// Returns a list of LoadVms for a given Load
-    /// </summary>
-    /// <param name="id">
-    ///    This is the Id from the Loads Table
-    /// </param>
     public async Task<IEnumerable<VersionsLoadVm>> GetVersionsLoadVmsByLoadId(int id)
     {
         try
@@ -126,7 +106,7 @@ public class LoadBuilderService : ILoadBuilderService
     public async Task<IEnumerable<CurrentLoadVm>> GetCurrentLoadVmByDeviceTypeId(int id)
     {
         //first, get a list of devices for the DeviceTypeID (ID)
-        var deviceVms = await _platformService.GetDeviceVmsFromDevicTypeId(id);
+        var deviceVms = await _platformService.GetDeviceVmsFromDeviceTypeId(id);
 
         var deviceIds = deviceVms.Select(x => x.Id).ToList();
         var deviceCsv = string.Join(",", deviceIds);
@@ -197,11 +177,36 @@ public class LoadBuilderService : ILoadBuilderService
 
         return new List<CurrentLoadVm>();
     }
+    public async Task<CurrentLoadVm> MapCurrentLoadToCurrentLoadVm(CurrentLoad currentLoad)
+    {
+        var device = await _deviceManager.GetByIdAsync(currentLoad.Id);
+        var load = await _loadManager.GetByIdAsync(currentLoad.LoadId);
+        var currentLoadVm = new CurrentLoadVm()
+        {
+            Id = currentLoad.Id,
+            LoadId = currentLoad.LoadId,
+            DeviceId = currentLoad.DeviceId,
+            Device = device.Name,
+            LoadName = load.Name
+        };
+        return currentLoadVm;
+    }
 
     public async Task<CurrentLoadVm> GetCurrentLoadVmById(int id)
     {
         var currentLoad = await _currentLoadManager.GetByIdAsync(id);
         return await this.MapCurrentLoadToCurrentLoadVm(currentLoad);
+    }
+
+    public async Task<CurrentLoad> GetCurrentLoadFromCurrentLoadVm(CurrentLoadVm currentLoadVm)
+    {
+        var currentLoad = new CurrentLoad()
+        {
+            Id = currentLoadVm.Id,
+            DeviceId = currentLoadVm.DeviceId,
+            LoadId = currentLoadVm.LoadId
+        };
+        return await Task.Run(() => currentLoad);
     }
 
     public async Task<LoadVm> GetLoadVmById(int id)
@@ -217,16 +222,26 @@ public class LoadBuilderService : ILoadBuilderService
         return loadVm;
     }
 
-    public async Task<CurrentLoad> GetCurrentLoadFromCurrentLoadVm(CurrentLoadVm currentLoadVm)
+    public async Task<IEnumerable<LoadVm>> GetLoadVmsByHardwareConfigId(int id)
     {
-
-        var currentLoad = new CurrentLoad()
+        var filter = new QueryFilter<Load>();
+        var filterProperties = new List<FilterProperty>();
+        filterProperties.Add(new FilterProperty()
         {
-            Id = currentLoadVm.Id,
-            DeviceId = currentLoadVm.DeviceId,
-            LoadId = currentLoadVm.LoadId
-        };
-        return await Task.Run(() =>  currentLoad);
+            Name = "HardwareConfigId",
+            Value = id.ToString(),
+            Operator = FilterQueryOperator.Equals
+        });
+        filter.OrderByDescending = true;
+        filter.PaginationFilter = null;
+        filter.FilterProperties = filterProperties;
+
+        var response = await _loadManager.GetAsync(filter);
+
+        if (response is not null)
+            return Mapping.Mapper.Map<IEnumerable<LoadVm>>(response.Data);
+
+        return new List<LoadVm>();
     }
 
     #endregion
