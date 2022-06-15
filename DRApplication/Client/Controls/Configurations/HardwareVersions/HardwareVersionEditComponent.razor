@@ -1,9 +1,9 @@
 ﻿@namespace DRApplication.Client.Controls
-
 @inject AppState AppState
 @inject HardwareVersionManager HardwareVersionManager
 @inject HardwareSystemManager HardwareSystemManager
 @inject NavigationManager navigation
+@inject ISnackbar Snackbar
 
 @if (!_isBusy)
 {
@@ -47,6 +47,7 @@
     {
         var hardwareVersion = Mapping.Mapper.Map<HardwareVersion>(AppState.HardwareVersionVm);
         await HardwareVersionManager.UpdateAsync(hardwareVersion);
+        Snackbar.Add($"Hardware Version was updated", Severity.Success);
         navigation.NavigateTo("/hardwareversion");
     }
 
