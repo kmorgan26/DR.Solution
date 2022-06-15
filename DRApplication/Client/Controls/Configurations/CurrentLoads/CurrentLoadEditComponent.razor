@@ -4,6 +4,7 @@
 @inject CurrentLoadManager CurrentLoadManager
 @inject IHardwareService HardwareService
 @inject ILoadBuilderService LoadBuilderService
+@inject ISnackbar Snackbar
 
 @if (!_isBusy)
 {
@@ -46,6 +47,7 @@
     {
         var currentLoad = await LoadBuilderService.GetCurrentLoadFromCurrentLoadVm(AppState.CurrentLoadVm);
         await CurrentLoadManager.UpdateAsync(currentLoad);
+        Snackbar.Add($"Current Load was updated", Severity.Success);
         NavigationManager.NavigateTo("/currentload");
     }
 
