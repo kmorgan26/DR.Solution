@@ -7,6 +7,9 @@ namespace DRApplication.Client.Services;
 
 public class PlatformService : IPlatformService
 {
+
+    #region --fields and constructor----
+
     private readonly MaintainerManager _maintainerManager;
     private readonly DeviceTypeManager _deviceTypeManager;
     private readonly DeviceManager _deviceManager;
@@ -17,6 +20,9 @@ public class PlatformService : IPlatformService
         _deviceTypeManager = deviceTypeManager;
         _deviceManager = deviceManager;
     }
+    #endregion
+
+    #region ---collections---
 
     public async Task<IEnumerable<DeviceTypeVm>> GetDeviceTypeVmsAsync()
     {
@@ -31,11 +37,10 @@ public class PlatformService : IPlatformService
             MaintainerId = dt.MaintainerId,
             Maintainer = maintainers
                     .Where(m => m.Id == dt.MaintainerId).FirstOrDefault().Name
-        });
+        }).OrderBy(i => i.Platform);
 
         return vms;
     }
-
     public async Task<IEnumerable<MaintainerVm>> GetMaintainerVmsAsync()
     {
         var maintainers = await _maintainerManager.GetAllAsync();
@@ -48,7 +53,6 @@ public class PlatformService : IPlatformService
         
         return vms;
     }
-
     public async Task<IEnumerable<DeviceVm>> GetDeviceVmsFromDeviceListAsync(IEnumerable<Device> devices)
     {
         var deviceTypes = await _deviceTypeManager.GetAllAsync();
@@ -60,58 +64,18 @@ public class PlatformService : IPlatformService
             DeviceTypeId = m.DeviceTypeId,
             Platform = deviceTypes.Where(a => a.Id == m.DeviceTypeId).FirstOrDefault().Name,
             IsActive = m.IsActive
-        });
+        }).OrderBy(i => i.Device); ;
 
         return vms;
     }
-
-    public async Task<DeviceTypeVm> GetDeviceTypeVmFromGenericVm(GenericListVm genericListVm)
-    {
-        var deviceType = await _deviceTypeManager.GetByIdAsync(genericListVm.Id);
-
-        var vm = new DeviceTypeVm()
-        {
-            Id = deviceType.Id,
-            IsActive = deviceType.IsActive,
-            MaintainerId = deviceType.MaintainerId,
-            Platform = deviceType.Name,
-        };
-        return vm;
-    }
-
-    public async Task<DeviceTypeVm> GetDeviceTypeVmById(int id)
-    {
-        var deviceType = await _deviceTypeManager.GetByIdAsync(id);
-        var vm = new DeviceTypeVm()
-        {
-            Id = deviceType.Id,
-            IsActive = deviceType.IsActive,
-            MaintainerId = deviceType.MaintainerId,
-            Platform = deviceType.Name,
-        };
-        return vm;
-    }
-
-    public async Task<IEnumerable<DeviceVm>> GetDeviceVmsFromDevicTypeId(int id)
+    public async Task<IEnumerable<DeviceVm>> GetDeviceVmsFromDeviceTypeId(int id)
     {
         //Filter = FROM Devices WHERE DeviceTypeId = id 
         var deviceTypeFilter = await new FilterGenerator<Device>().GetFilterForPropertyByNameAsync("DeviceTypeId", id);
         var devices = await _deviceManager.GetAsync(deviceTypeFilter);
 
-        return Mapping.Mapper.Map<IEnumerable<DeviceVm>>(devices.Data);
+        return Mapping.Mapper.Map<IEnumerable<DeviceVm>>(devices.Data).OrderBy(i => i.Device);
     }
-
-    public async Task<MaintainerVm> GetMaintainerVmById(int id)
-    {
-        var maintainer = await _maintainerManager.GetByIdAsync(id);
-        var maintainerVm = new MaintainerVm()
-        {
-            Id = maintainer.Id,
-            Maintainer = maintainer.Name
-        };
-        return maintainerVm;
-    }
-
     public async Task<IEnumerable<DeviceTypeVm>> GetDeviceTypeVmsByMaintainerId(int id)
     {
         //Filter = FROM DeviceTypes WHERE MaintainerId = id 
@@ -126,11 +90,50 @@ public class PlatformService : IPlatformService
             MaintainerId = i.MaintainerId,
             Platform = i.Name,
             Maintainer = maintainers.Where(m => m.Id == i.MaintainerId).FirstOrDefault().Name
-        });
+        }).OrderBy(i => i.Platform); ;
 
         return result;
     }
 
+    #endregion
+
+    #region ---Object Methods---
+
+    public async Task<DeviceTypeVm> GetDeviceTypeVmFromGenericVm(GenericListVm genericListVm)
+    {
+        var deviceType = await _deviceTypeManager.GetByIdAsync(genericListVm.Id);
+
+        var vm = new DeviceTypeVm()
+        {
+            Id = deviceType.Id,
+            IsActive = deviceType.IsActive,
+            MaintainerId = deviceType.MaintainerId,
+            Platform = deviceType.Name,
+        };
+        return vm;
+    }
+    public async Task<DeviceTypeVm> GetDeviceTypeVmById(int id)
+    {
+        var deviceType = await _deviceTypeManager.GetByIdAsync(id);
+        var vm = new DeviceTypeVm()
+        {
+            Id = deviceType.Id,
+            IsActive = deviceType.IsActive,
+            MaintainerId = deviceType.MaintainerId,
+            Platform = deviceType.Name,
+        };
+        return vm;
+    }
+    public async Task<MaintainerVm> GetMaintainerVmById(int id)
+    {
+        var maintainer = await _maintainerManager.GetByIdAsync(id);
+        var maintainerVm = new MaintainerVm()
+        {
+            Id = maintainer.Id,
+            Maintainer = maintainer.Name
+        };
+        return maintainerVm;
+    }
     public async Task<DeviceType> GetDeviceTypeFromDeviceTypeVm(DeviceTypeVm deviceTypeVm)
     {
         var deviceType = new DeviceType()
@@ -142,7 +145,6 @@ public class PlatformService : IPlatformService
         };
         return await Task.Run(() => deviceType);
     }
-
     public async Task<Device> GetDeviceFromDeviceVm(DeviceVm deviceVm)
     {
         var device = new Device()
@@ -154,7 +156,6 @@ public class PlatformService : IPlatformService
         };
         return await Task.Run(() => device);
     }
-
     public async Task<int> InsertDeviceTypeFromDeviceTypeInsertVm(DeviceTypeInsertVm deviceTypeInsertVm)
     {
         var deviceType = new DeviceType()
@@ -176,7 +177,6 @@ public class PlatformService : IPlatformService
             return 0;
         }
     }
-
     public async Task<bool> EditMaintainerFromMaintainerVm(MaintainerVm maintainerVm)
     {
         var maintainer = new Maintainer()
@@ -198,4 +198,7 @@ public class PlatformService : IPlatformService
             throw;
         }
     }
+
+    #endregion
+
 }
