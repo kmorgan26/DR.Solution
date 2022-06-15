@@ -1,9 +1,9 @@
 ﻿@namespace DRApplication.Client.Controls
-
 @inject AppState AppState
 @inject SoftwareVersionManager SoftwareVersionManager
 @inject SoftwareSystemManager SoftwareSystemManager
 @inject NavigationManager navigation
+@inject ISnackbar Snackbar
 
 @if (!_isBusy)
 {
@@ -47,6 +47,7 @@
     {
         var softwareVersion = Mapping.Mapper.Map<SoftwareVersion>(AppState.SoftwareVersionVm);
         await SoftwareVersionManager.UpdateAsync(softwareVersion);
+        Snackbar.Add($"Software Version was updated", Severity.Success);
         navigation.NavigateTo("/softwareversion");
     }
 

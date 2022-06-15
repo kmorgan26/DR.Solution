@@ -1,9 +1,9 @@
 ﻿@namespace DRApplication.Client.Controls
-
 @inject AppState AppState
 @inject NavigationManager navigation
 @inject SoftwareSystemManager SoftwareSystemManager
 @inject IHardwareService HardwareService
+@inject ISnackbar Snackbar
 
 @if (!_isBusy)
 {
@@ -45,6 +45,7 @@
     {
         var softwareSystem = Mapping.Mapper.Map<SoftwareSystem>(AppState.SoftwareSystemVm);
         await SoftwareSystemManager.UpdateAsync(softwareSystem);
+        Snackbar.Add($"Software System was updated", Severity.Success);
         navigation.NavigateTo("/softwaresystem");
     }
 
