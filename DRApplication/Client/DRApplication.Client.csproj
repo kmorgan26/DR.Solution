@@ -43,6 +43,7 @@
 	  <Compile Remove="Controls\Generic\AppStateComponent.razor.cs" />
 	  <Compile Remove="Controls\Generic\Tables\BasicTable.razor.cs" />
 	  <Compile Remove="Controls\Platforms\Devices\DeviceComponent.razor.cs" />
+	  <Compile Remove="Controls\Platforms\DeviceTypes\DeviceTypeLabel.razor.cs" />
 	  <Compile Remove="Controls\Platforms\DeviceTypes\DeviceTypeTable.razor.cs" />
 	  <Compile Remove="Controls\Platforms\Maintainers\MaintainerTable.razor.cs" />
 	  <Compile Remove="Interfaces\IForeignKeyListService.cs" />
@@ -69,8 +70,9 @@
 	  <Content Remove="Controls\Generic\Tables\BasicTable.razor" />
 	  <Content Remove="Controls\Generic\Tables\FSMudTablePaging.razor" />
 	  <Content Remove="Controls\Platforms\Devices\DeviceTestComponent.razor" />
+	  <Content Remove="Controls\Platforms\DeviceTypes\DeviceTypeLabel.razor" />
+	  <Content Remove="Controls\Platforms\DeviceTypes\DeviceTypeRadios.razor" />
 	  <Content Remove="Pages\Platforms\Devices\DeviceDetails.razor" />
-	  <Content Remove="Pages\Platforms\Devices\DeviceList.razor" />
 	</ItemGroup>
 
 	<ItemGroup>

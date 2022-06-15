@@ -1,8 +1,8 @@
 ﻿@namespace DRApplication.Client.Controls
-
 @inject IPlatformService PlatformService
 @inject DeviceManager DeviceManager
 @inject AppState AppState
+@implements IDisposable
 
 <MudGrid Spacing="2" Justify="Justify.Center">
     @if (!_isBusy && AppState.DeviceVms is not null)
@@ -19,16 +19,37 @@
     [Parameter]
     public int DeviceTypeId { get; set; }
 
+    async Task SetDeviceCards()
+    {
+        var deviceVms = await PlatformService.GetDeviceVmsFromDeviceTypeId(AppState.DeviceTypeVm.Id);
+        AppState.UpdateDeviceVms(this, deviceVms);
+    }
+
     bool _isBusy;
-    
+
+    private async Task AppState_StateChanged(ComponentBase Source, string Property)
+    {
+        if (Source != this)
+        {
+            if (Property == "DeviceTypeVm")
+            {
+                await SetDeviceCards();
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+    }
     protected override async Task OnInitializedAsync()
     {
         _isBusy = true;
+        AppState.StateChanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
         var deviceTypeVm = await PlatformService.GetDeviceTypeVmById(DeviceTypeId);
         AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
-        
-        var deviceVms = await PlatformService.GetDeviceVmsFromDeviceTypeId(DeviceTypeId);
-        AppState.UpdateDeviceVms(this, deviceVms);
+
+        await SetDeviceCards();
         _isBusy = false;
+    }
+    void IDisposable.Dispose()
+    {
+        AppState.StateChanged -= async (Source, Property) => await AppState_StateChanged(Source, Property);
     }
 }
