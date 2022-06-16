@@ -1,16 +1,8 @@
-﻿using DRApplication.Shared.Models.IssueModels;
-using System;
-using System.Collections.Generic;
-
-namespace DRApplication.Shared.Models.TestingModels
+﻿namespace DRApplication.Shared.Models;
+public class TestEventDr
 {
-    public partial class TestEventDr
-    {
-        public int Id { get; set; }
-        public int TestEventId { get; set; }
-        public int DrId { get; set; }
+    public int Id { get; set; }
+    public int TestEventId { get; set; }
+    public int DrId { get; set; }
 
-        public virtual Dr Dr { get; set; } = null!;
-        public virtual TestEvent TestEvent { get; set; } = null!;
-    }
 }

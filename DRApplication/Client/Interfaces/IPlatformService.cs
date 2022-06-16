@@ -1,6 +1,6 @@
 ﻿using DRApplication.Shared.Enums;
 using DRApplication.Client.ViewModels;
-using DRApplication.Shared.Models.DeviceModels;
+using DRApplication.Shared.Models;
 
 namespace DRApplication.Client.Interfaces;
 

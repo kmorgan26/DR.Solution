@@ -1,8 +1,8 @@
 ﻿using Dapper.Contrib.Extensions;
 namespace DRApplication.Shared.Models;
 
-[Table("CurrentLoads")]
-public class CurrentLoad
+[Table("SpecificLoads")]
+public class SpecificLoad
 {
     [Key]
     public int Id { get; set; } = 0;

@@ -1,6 +1,6 @@
 ﻿using DRApplication.Client.Interfaces;
 using DRApplication.Client.ViewModels;
-using DRApplication.Shared.Models.ConfigurationModels;
+using DRApplication.Shared.Models;
 
 namespace DRApplication.Client.Services;
 

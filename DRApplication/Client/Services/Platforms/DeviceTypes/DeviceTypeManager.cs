@@ -1,4 +1,4 @@
-﻿using DRApplication.Shared.Models.DeviceModels;
+﻿using DRApplication.Shared.Models;
 namespace DRApplication.Client.Services;
 
 public class DeviceTypeManager: ApiRepository<DeviceType>

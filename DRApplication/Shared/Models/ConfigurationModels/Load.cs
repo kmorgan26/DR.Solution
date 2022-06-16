@@ -1,8 +1,8 @@
 ﻿using Dapper.Contrib.Extensions;
-namespace DRApplication.Shared.Models.ConfigurationModels;
+namespace DRApplication.Shared.Models;
 
 [Table("Loads")]
-public partial class Load
+public class Load
 {
     [Key]
     public int Id { get; set; } = 0;

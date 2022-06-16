@@ -1,7 +1,5 @@
 ﻿using DRApplication.Server.Data;
 using DRApplication.Shared.Models;
-using DRApplication.Shared.Models.ConfigurationModels;
-using DRApplication.Shared.Models.DeviceModels;
 using Microsoft.AspNetCore.Http.Features;
 using System.Text.Json.Serialization;
 

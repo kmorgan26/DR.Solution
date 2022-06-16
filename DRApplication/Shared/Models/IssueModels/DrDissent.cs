@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DRApplication.Shared.Models.IssueModels
+namespace DRApplication.Shared.Models
 {
-    public partial class DrDissent
+    public class DrDissent
     {
         public int Id { get; set; }
         public int GditPriority { get; set; }
         public int DosPriority { get; set; }
         public int ThirdPriority { get; set; }
         public int DrId { get; set; }
-
-        public virtual Dr Dr { get; set; } = null!;
     }
 }

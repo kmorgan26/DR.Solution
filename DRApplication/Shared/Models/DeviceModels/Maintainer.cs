@@ -1,15 +1,8 @@
-﻿using Dapper.Contrib.Extensions;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿namespace DRApplication.Shared.Models;
 
-namespace DRApplication.Shared.Models.DeviceModels
+public class Maintainer
 {
-    public partial class Maintainer
-    {
-        public int Id { get; set; }
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty;
 
-        public string Name { get; set; } = null!;
-
-    }
 }

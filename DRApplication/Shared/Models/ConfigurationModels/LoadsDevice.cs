@@ -1,16 +1,8 @@
-﻿using DRApplication.Shared.Models.DeviceModels;
-using System;
-using System.Collections.Generic;
+﻿namespace DRApplication.Shared.Models;
 
-namespace DRApplication.Shared.Models.ConfigurationModels
+public class LoadsDevice
 {
-    public partial class LoadsDevice
-    {
-        public int Id { get; set; }
-        public int DeviceId { get; set; }
-        public int LoadId { get; set; }
-
-        public virtual Device Device { get; set; } = null!;
-        public virtual Load Load { get; set; } = null!;
-    }
+    public int Id { get; set; } = 0;
+    public int DeviceId { get; set; } = 0;
+    public int LoadId { get; set; } = 0;
 }

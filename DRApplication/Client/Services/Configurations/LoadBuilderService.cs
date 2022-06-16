@@ -2,8 +2,8 @@
 using DRApplication.Client.ViewModels;
 using DRApplication.Shared.Filters;
 using DRApplication.Shared.Enums;
-using DRApplication.Shared.Models.ConfigurationModels;
-using DRApplication.Shared.Models.DeviceModels;
+using DRApplication.Shared.Models;
+using DRApplication.Shared.Models;
 
 namespace DRApplication.Client.Services;
 

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using DRApplication.Shared.Models.ConfigurationModels;
-using DRApplication.Shared.Models.DeviceModels;
+using DRApplication.Shared.Models;
+using DRApplication.Shared.Models;
 using DRApplication.Client.ViewModels;
 namespace DRApplication.Client.Services;
 
