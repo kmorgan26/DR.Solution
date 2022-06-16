@@ -124,6 +124,22 @@ public class LoadBuilderService : ILoadBuilderService
     #endregion
 
     #region --Tasks--
+    public async Task<IEnumerable<SpecificLoadVm>> GetSpecificLoadVmsByDeviceTypeId(int id)
+    {
+        //first, get a list of devices for the DeviceTypeID (ID)
+        var deviceVms = await _platformService.GetDeviceVmsFromDeviceTypeId(id);
+
+        var deviceIds = deviceVms.Select(x => x.Id).ToList();
+        var deviceCsv = string.Join(",", deviceIds);
+
+        var specificLoadFilter = await new FilterGenerator<SpecificLoad>().GetFilterForPropertyByListOfIdsAsync("DeviceId", deviceCsv);
+        var specificLoadResponse = await _specificLoadManager.GetAsync(specificLoadFilter);
+
+        if (specificLoadResponse is not null && specificLoadResponse.Data is not null)
+            return await this.MapSpecificLoadsToSpecificLoadVms(specificLoadResponse.Data);
+
+        return new List<SpecificLoadVm>();
+    }
     public async Task AddSoftwareVersionToLoad()
     {
         var loadId = _appState.LoadVm.Id;
@@ -293,16 +309,7 @@ public class LoadBuilderService : ILoadBuilderService
         return new List<LoadVm>();
     }
 
-    public async Task<IEnumerable<SpecificLoadVm>> GetSpecificLoadVmsByDeviceId(int id)
-    {
-        var specificLoadFilter = await new FilterGenerator<SpecificLoad>().GetFilterForPropertyByNameAsync("DeviceId", id);
-        var specificLoadResponse = await _specificLoadManager.GetAsync(specificLoadFilter);
-
-        if (specificLoadResponse is not null && specificLoadResponse.Data is not null)
-            return await this.MapSpecificLoadsToSpecificLoadVms(specificLoadResponse.Data);
-
-        return new List<SpecificLoadVm>();
-    }
+    
 
     public async Task<SpecificLoad> GetSpecificLoadFromSpecificLoadVm(SpecificLoadVm specificLoadVm)
     {

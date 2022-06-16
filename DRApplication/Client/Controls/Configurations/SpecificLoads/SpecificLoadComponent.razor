@@ -3,19 +3,19 @@
 @inject AppState AppState
 
 <MudItem xs="12" sm="9" md="6" lg="3" Class="mb-4">
-    <DeviceSelect OnDeviceIdChanged="SetDeviceId" />
+    <DeviceTypeSelect OnDeviceTypeIdChanged="SetDeviceTypeId"></DeviceTypeSelect>
 </MudItem>
 
 <SpecificLoadTable />
 
 @code {
 
-    async Task SetDeviceId(int id)
+    async Task SetDeviceTypeId(int id)
     {
         if (id > 0)
         {
-            var deviceVm = await PlatformService.GetDeviceVmById(id);
-            AppState.UpdateDeviceVm(this, deviceVm);
+            var deviceTypeVm = await PlatformService.GetDeviceTypeVmById(id);
+            AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
         }
     }
 }
