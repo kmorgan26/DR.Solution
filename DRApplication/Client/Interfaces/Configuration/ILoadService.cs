@@ -3,7 +3,7 @@ using DRApplication.Shared.Models;
 
 namespace DRApplication.Client.Interfaces;
 
-public interface ILoadBuilderService
+public interface ILoadService
 {
     Task<IEnumerable<LoadVm>> GetLoadVmsByHardwareConfigId(int id);
     Task<IEnumerable<VersionsLoadVm>> GetVersionsLoadVmsByLoadId(int id);

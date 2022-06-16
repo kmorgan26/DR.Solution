@@ -15,11 +15,13 @@ public interface IPlatformService
     
     Task<IEnumerable<DeviceVm>> GetDeviceVmsFromDeviceTypeId(int id);
 
+    Task<IEnumerable<DeviceVm>> GetDeviceVmsByCsvOfIds(string csvids);
+    
+    Task<IEnumerable<DeviceTypeVm>> GetDeviceTypeVmsByMaintainerId(int id);
+
     Task<DeviceTypeVm> GetDeviceTypeVmById(int id);
 
     Task<DeviceVm> GetDeviceVmById(int id);
-
-    Task<IEnumerable<DeviceTypeVm>> GetDeviceTypeVmsByMaintainerId(int id);
 
     Task<MaintainerVm> GetMaintainerVmById(int id);
 
@@ -30,5 +32,6 @@ public interface IPlatformService
     Task<int> InsertDeviceTypeFromDeviceTypeInsertVm(DeviceTypeInsertVm deviceTypeInsertVm);
 
     Task<bool> EditMaintainerFromMaintainerVm(MaintainerVm maintainerVm);
+
 
 }

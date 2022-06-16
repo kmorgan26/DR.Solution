@@ -6,39 +6,33 @@ using DRApplication.Shared.Models;
 
 namespace DRApplication.Client.Services;
 
-public class LoadBuilderService : ILoadBuilderService
+public class LoadService : ILoadService
 {
 
     #region ---Fields and Constructor ---
 
     private readonly IPlatformService _platformService;
-    private readonly SoftwareSystemManager _softwareSystemManager;
-    private readonly SoftwareVersionManager _softwareVersionManager;
+    private readonly ISoftwareService _softwareService;
     private readonly SpecificLoadManager _specificLoadManager;
     private readonly LoadManager _loadManager;
-    private readonly DeviceManager _deviceManager;
     private readonly CurrentLoadManager _currentLoadManager;
     private readonly VersionsLoadManager _versionsLoadManager;
     private readonly AppState _appState;
 
-    public LoadBuilderService(
+    public LoadService(
             IPlatformService platformService,
-            SoftwareSystemManager softwareSystemManager,
-            SoftwareVersionManager softwareVersionManager,
+            ISoftwareService softwareService,
             SpecificLoadManager specificLoadManager,
             LoadManager loadManager,
-            DeviceManager deviceManager,
             CurrentLoadManager currentLoadManager,
             VersionsLoadManager versionsLoadManager,
             AppState appState
         )
     {
         _platformService = platformService;
-        _softwareSystemManager = softwareSystemManager;
-        _softwareVersionManager = softwareVersionManager;
+        _softwareService = softwareService;
         _specificLoadManager = specificLoadManager;
         _loadManager = loadManager;
-        _deviceManager = deviceManager;
         _currentLoadManager = currentLoadManager;
         _versionsLoadManager = versionsLoadManager;
         _appState = appState;
@@ -79,24 +73,19 @@ public class LoadBuilderService : ILoadBuilderService
             var mappedVersionLoads = Mapping.Mapper.Map<IEnumerable<VersionsLoadVm>>(versionLoadresponse.Data);
 
             var versionIds = mappedVersionLoads.Select(x => x.SoftwareVersionId.ToString()).ToList();
-            var versionCsv = string.Join(",", versionIds);
+            var softwareVersions = await _softwareService.GetSoftwareVersionsByIds(versionIds);
 
-            var versionFilter = await new FilterGenerator<SoftwareVersion>().GetFilterForPropertyByListOfIdsAsync("Id", versionCsv);
-            var versionResponse = await _softwareVersionManager.GetAsync(versionFilter);
+            var systemIds = softwareVersions.Select(x => x.SoftwareSystemId.ToString()).ToList();
 
-            var systemIds = versionResponse.Data?.Select(x => x.SoftwareSystemId.ToString()).ToList();
-            var systemCsv = string.Join(",", systemIds);
-
-            var systemFilter = await new FilterGenerator<SoftwareSystem>().GetFilterForPropertyByListOfIdsAsync("Id", systemCsv);
-            var systemResponse = await _softwareSystemManager.GetAsync(systemFilter);
+            var softwareSystems = await _softwareService.GetSoftwareSystemsByIds(systemIds);
 
             var ids = mappedVersionLoads?.Select(x => x.SoftwareVersionId.ToString()).ToList();
 
             foreach (var item in mappedVersionLoads)
             {
-                item.SoftwareVersionName = versionResponse.Data.Where(i => i.Id == item.SoftwareVersionId).FirstOrDefault().Name;
-                var version = versionResponse.Data.Where(i => i.Id == item.SoftwareVersionId).FirstOrDefault();
-                item.SoftwareSystemName = systemResponse.Data.Where(a => a.Id == version.SoftwareSystemId).FirstOrDefault().Name;
+                item.SoftwareVersionName = softwareVersions.Where(i => i.Id == item.SoftwareVersionId).FirstOrDefault().Name;
+                var version = softwareVersions.Where(i => i.Id == item.SoftwareVersionId).FirstOrDefault();
+                item.SoftwareSystemName = softwareSystems.Where(a => a.Id == version.SoftwareSystemId).FirstOrDefault().Name;
             }
             return mappedVersionLoads.OrderBy(i => i.SoftwareSystemName);
         }
@@ -149,7 +138,7 @@ public class LoadBuilderService : ILoadBuilderService
         List<int> softwareSystemIds = new List<int>();
         foreach (var v in vms)
         {
-            var versionVm = await _softwareVersionManager.GetByIdAsync(v.SoftwareVersionId);
+            var versionVm = await _softwareService.GetSoftwareVersionVmById(v.SoftwareVersionId);
             softwareSystemIds.Add(versionVm.SoftwareSystemId);
         }
 
@@ -176,9 +165,7 @@ public class LoadBuilderService : ILoadBuilderService
 
         //Get the Devices for the currentLoads
         var deviceCsv = string.Join(",", currentLoads.Select(id => id.DeviceId).ToList());
-        var deviceFilter = await new FilterGenerator<Device>().GetFilterForPropertyByListOfIdsAsync("Id", deviceCsv);
-        var deviceResponse = await _deviceManager.GetAsync(deviceFilter);
-
+        var deviceVms = await _platformService.GetDeviceVmsByCsvOfIds(deviceCsv);
 
         if (loadResponse.Data is not null)
         {
@@ -188,7 +175,7 @@ public class LoadBuilderService : ILoadBuilderService
                 LoadId = load.LoadId,
                 DeviceId = load.DeviceId,
                 LoadName = loadResponse.Data.FirstOrDefault(i => i.Id == load.LoadId).Name,
-                Device = deviceResponse.Data.FirstOrDefault(i => i.Id == load.DeviceId).Name
+                Device = deviceVms.FirstOrDefault(i => i.Id == load.DeviceId).Device
             });
             return currentLoadVms;
         }
@@ -204,9 +191,7 @@ public class LoadBuilderService : ILoadBuilderService
 
         //Get the Devices for the currentLoads
         var deviceCsv = string.Join(",", specificLoads.Select(id => id.DeviceId).ToList());
-        var deviceFilter = await new FilterGenerator<Device>().GetFilterForPropertyByListOfIdsAsync("Id", deviceCsv);
-        var deviceResponse = await _deviceManager.GetAsync(deviceFilter);
-
+        var deviceVms = await _platformService.GetDeviceVmsByCsvOfIds(deviceCsv);
 
         if (loadResponse.Data is not null)
         {
@@ -216,7 +201,7 @@ public class LoadBuilderService : ILoadBuilderService
                 LoadId = load.LoadId,
                 DeviceId = load.DeviceId,
                 LoadName = loadResponse.Data.FirstOrDefault(i => i.Id == load.LoadId).Name,
-                Device = deviceResponse.Data.FirstOrDefault(i => i.Id == load.DeviceId).Name
+                Device = deviceVms.FirstOrDefault(i => i.Id == load.DeviceId).Device
             });
             return specificLoadVms;
         }
@@ -225,28 +210,28 @@ public class LoadBuilderService : ILoadBuilderService
     }
     public async Task<CurrentLoadVm> MapCurrentLoadToCurrentLoadVm(CurrentLoad currentLoad)
     {
-        var device = await _deviceManager.GetByIdAsync(currentLoad.Id);
+        var device = await _platformService.GetDeviceVmById(currentLoad.Id);
         var load = await _loadManager.GetByIdAsync(currentLoad.LoadId);
         var currentLoadVm = new CurrentLoadVm()
         {
             Id = currentLoad.Id,
             LoadId = currentLoad.LoadId,
             DeviceId = currentLoad.DeviceId,
-            Device = device.Name,
+            Device = device.Device,
             LoadName = load.Name
         };
         return currentLoadVm;
     }
     public async Task<SpecificLoadVm> MapSpecificLoadToSpecificLoadVm(SpecificLoad specificLoad)
     {
-        var device = await _deviceManager.GetByIdAsync(specificLoad.Id);
+        var device = await _platformService.GetDeviceVmById(specificLoad.Id);
         var load = await _loadManager.GetByIdAsync(specificLoad.LoadId);
         var specificLoadVm = new SpecificLoadVm()
         {
             Id = specificLoad.Id,
             LoadId = specificLoad.LoadId,
             DeviceId = specificLoad.DeviceId,
-            Device = device.Name,
+            Device = device.Device,
             LoadName = load.Name
         };
         return specificLoadVm;

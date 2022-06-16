@@ -32,11 +32,27 @@ public class SoftwareService : ISoftwareService
 
         return Mapping.Mapper.Map<SoftwareSystemVm>(softwareSystem);
     }
+    public async Task<SoftwareVersionVm> GetSoftwareVersionVmById(int id)
+    {
+        var softwareVersion = await _softwareVersionManager.GetByIdAsync(id);
+        if (softwareVersion == null)
+            return new SoftwareVersionVm();
+
+        return new SoftwareVersionVm()
+        {
+            Id = id,
+            Name = softwareVersion.Name,
+            SoftwareSystemId = softwareVersion.SoftwareSystemId,
+            VersionDate = softwareVersion.VersionDate,
+            VersionDateString = softwareVersion.VersionDate.ToShortDateString()
+        };
+
+    }
 
     #endregion
 
     #region Collection Methods---
-    
+
     public async Task<IEnumerable<SoftwareSystemVm>> GetSoftwareSystemVmsByHardwareConfigId(int id)
     {
         var filter = await new FilterGenerator<SoftwareSystem>().GetFilterForPropertyByNameAsync("HardwareConfigId", id);
@@ -59,7 +75,7 @@ public class SoftwareService : ISoftwareService
         var versionLoadResponse = await _versionsLoadManager.GetAsync(versionLoadFilter);
 
         List<string> softwareVersionIdList = new List<string>();
-        
+
         foreach (var item in versionLoadResponse.Data)
         {
             softwareVersionIdList.Add(item.SoftwareVersionId.ToString());
@@ -78,8 +94,32 @@ public class SoftwareService : ISoftwareService
         {
             return versionLoadresponse.Data;
         }
-        return new List<VersionsLoad>(); 
+        return new List<VersionsLoad>();
     }
+
+    public async Task<IEnumerable<SoftwareSystem>> GetSoftwareSystemsByIds(List<string> ids)
+    {
+        var systemCsv = string.Join(",", ids);
+
+        var systemFilter = await new FilterGenerator<SoftwareSystem>().GetFilterForPropertyByListOfIdsAsync("Id", systemCsv);
+        var systemResponse = await _softwareSystemManager.GetAsync(systemFilter);
+        if (systemResponse.Data is not null)
+            return systemResponse.Data;
+        return new List<SoftwareSystem>();
+    }
+
+    public async Task<IEnumerable<SoftwareVersion>> GetSoftwareVersionsByIds(List<string> ids)
+    {
+        var versionCsv = string.Join(",", ids);
+
+        var versionFilter = await new FilterGenerator<SoftwareVersion>().GetFilterForPropertyByListOfIdsAsync("Id", versionCsv);
+        var versionResponse = await _softwareVersionManager.GetAsync(versionFilter);
+        if(versionResponse.Data is not null)
+              return versionResponse.Data;
+        return new List<SoftwareVersion>();
+    }
+
+    
 
     #endregion
 

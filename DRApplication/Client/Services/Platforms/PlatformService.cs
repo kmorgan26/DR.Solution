@@ -95,6 +95,23 @@ public class PlatformService : IPlatformService
 
         return result;
     }
+    
+    //TODO: Get the Platform property set in this method 
+    public async Task<IEnumerable<DeviceVm>> GetDeviceVmsByCsvOfIds(string ids)
+    {
+        var deviceFilter = await new FilterGenerator<Device>().GetFilterForPropertyByListOfIdsAsync("Id", ids);
+        var deviceResponse = await _deviceManager.GetAsync(deviceFilter);
+        var deviceVms = deviceResponse.Data.Select(i => new DeviceVm()
+        {
+            Device = i.Name,
+            DeviceTypeId = i.DeviceTypeId,
+            Id = i.Id,
+            IsActive = i.IsActive,
+        });
+        if (deviceVms is not null)
+            return deviceVms;
+        return new List<DeviceVm>();
+    }
 
     #endregion
 
@@ -200,6 +217,7 @@ public class PlatformService : IPlatformService
             throw;
         }
     }
+
 
     #endregion
 

@@ -1,6 +1,6 @@
 ﻿@namespace DRApplication.Client.Controls
 @inject AppState AppState
-@inject ILoadBuilderService LoadBuilderService
+@inject ILoadService LoadBuilderService
 @implements IDisposable
 
 <MudTable Items="@AppState.CurrentLoadVms" Class="my-4" Hover="true" Striped="true" Dense="true">
