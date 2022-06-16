@@ -3,7 +3,6 @@ using DRApplication.Client.ViewModels;
 using DRApplication.Shared.Filters;
 using DRApplication.Shared.Enums;
 using DRApplication.Shared.Models;
-using DRApplication.Shared.Models;
 
 namespace DRApplication.Client.Services;
 
@@ -15,6 +14,7 @@ public class LoadBuilderService : ILoadBuilderService
     private readonly IPlatformService _platformService;
     private readonly SoftwareSystemManager _softwareSystemManager;
     private readonly SoftwareVersionManager _softwareVersionManager;
+    private readonly SpecificLoadManager _specificLoadManager;
     private readonly LoadManager _loadManager;
     private readonly DeviceManager _deviceManager;
     private readonly CurrentLoadManager _currentLoadManager;
@@ -25,6 +25,7 @@ public class LoadBuilderService : ILoadBuilderService
             IPlatformService platformService,
             SoftwareSystemManager softwareSystemManager,
             SoftwareVersionManager softwareVersionManager,
+            SpecificLoadManager specificLoadManager,
             LoadManager loadManager,
             DeviceManager deviceManager,
             CurrentLoadManager currentLoadManager,
@@ -35,6 +36,7 @@ public class LoadBuilderService : ILoadBuilderService
         _platformService = platformService;
         _softwareSystemManager = softwareSystemManager;
         _softwareVersionManager = softwareVersionManager;
+        _specificLoadManager = specificLoadManager;
         _loadManager = loadManager;
         _deviceManager = deviceManager;
         _currentLoadManager = currentLoadManager;
@@ -103,7 +105,7 @@ public class LoadBuilderService : ILoadBuilderService
             return new List<VersionsLoadVm>();
         }
     }
-    public async Task<IEnumerable<CurrentLoadVm>> GetCurrentLoadVmByDeviceTypeId(int id)
+    public async Task<IEnumerable<CurrentLoadVm>> GetCurrentLoadVmsByDeviceTypeId(int id)
     {
         //first, get a list of devices for the DeviceTypeID (ID)
         var deviceVms = await _platformService.GetDeviceVmsFromDeviceTypeId(id);
@@ -177,6 +179,34 @@ public class LoadBuilderService : ILoadBuilderService
 
         return new List<CurrentLoadVm>();
     }
+    public async Task<IEnumerable<SpecificLoadVm>> MapSpecificLoadsToSpecificLoadVms(IEnumerable<SpecificLoad> specificLoads)
+    {
+        //Get the Loads for the currentLoads
+        var specificLoadCsv = string.Join(",", specificLoads.Select(id => id.LoadId).ToList());
+        var loadFilter = await new FilterGenerator<Load>().GetFilterForPropertyByListOfIdsAsync("Id", specificLoadCsv);
+        var loadResponse = await _loadManager.GetAsync(loadFilter);
+
+        //Get the Devices for the currentLoads
+        var deviceCsv = string.Join(",", specificLoads.Select(id => id.DeviceId).ToList());
+        var deviceFilter = await new FilterGenerator<Device>().GetFilterForPropertyByListOfIdsAsync("Id", deviceCsv);
+        var deviceResponse = await _deviceManager.GetAsync(deviceFilter);
+
+
+        if (loadResponse.Data is not null)
+        {
+            var specificLoadVms = specificLoads.Select(load => new SpecificLoadVm
+            {
+                Id = load.Id,
+                LoadId = load.LoadId,
+                DeviceId = load.DeviceId,
+                LoadName = loadResponse.Data.FirstOrDefault(i => i.Id == load.LoadId).Name,
+                Device = deviceResponse.Data.FirstOrDefault(i => i.Id == load.DeviceId).Name
+            });
+            return specificLoadVms;
+        }
+
+        return new List<SpecificLoadVm>();
+    }
     public async Task<CurrentLoadVm> MapCurrentLoadToCurrentLoadVm(CurrentLoad currentLoad)
     {
         var device = await _deviceManager.GetByIdAsync(currentLoad.Id);
@@ -191,11 +221,30 @@ public class LoadBuilderService : ILoadBuilderService
         };
         return currentLoadVm;
     }
+    public async Task<SpecificLoadVm> MapSpecificLoadToSpecificLoadVm(SpecificLoad specificLoad)
+    {
+        var device = await _deviceManager.GetByIdAsync(specificLoad.Id);
+        var load = await _loadManager.GetByIdAsync(specificLoad.LoadId);
+        var specificLoadVm = new SpecificLoadVm()
+        {
+            Id = specificLoad.Id,
+            LoadId = specificLoad.LoadId,
+            DeviceId = specificLoad.DeviceId,
+            Device = device.Name,
+            LoadName = load.Name
+        };
+        return specificLoadVm;
+    }
 
     public async Task<CurrentLoadVm> GetCurrentLoadVmById(int id)
     {
         var currentLoad = await _currentLoadManager.GetByIdAsync(id);
         return await this.MapCurrentLoadToCurrentLoadVm(currentLoad);
+    }
+    public async Task<SpecificLoadVm> GetSpecificLoadVmById(int id)
+    {
+        var specificLoad = await _specificLoadManager.GetByIdAsync(id);
+        return await this.MapSpecificLoadToSpecificLoadVm(specificLoad);
     }
 
     public async Task<CurrentLoad> GetCurrentLoadFromCurrentLoadVm(CurrentLoadVm currentLoadVm)
@@ -242,6 +291,28 @@ public class LoadBuilderService : ILoadBuilderService
             return Mapping.Mapper.Map<IEnumerable<LoadVm>>(response.Data);
 
         return new List<LoadVm>();
+    }
+
+    public async Task<IEnumerable<SpecificLoadVm>> GetSpecificLoadVmsByDeviceId(int id)
+    {
+        var specificLoadFilter = await new FilterGenerator<SpecificLoad>().GetFilterForPropertyByNameAsync("DeviceId", id);
+        var specificLoadResponse = await _specificLoadManager.GetAsync(specificLoadFilter);
+
+        if (specificLoadResponse is not null && specificLoadResponse.Data is not null)
+            return await this.MapSpecificLoadsToSpecificLoadVms(specificLoadResponse.Data);
+
+        return new List<SpecificLoadVm>();
+    }
+
+    public async Task<SpecificLoad> GetSpecificLoadFromSpecificLoadVm(SpecificLoadVm specificLoadVm)
+    {
+        var specificLoad = new SpecificLoad()
+        {
+            Id = specificLoadVm.Id,
+            DeviceId = specificLoadVm.DeviceId,
+            LoadId = specificLoadVm.LoadId
+        };
+        return await Task.Run(() => specificLoad);
     }
 
     #endregion
