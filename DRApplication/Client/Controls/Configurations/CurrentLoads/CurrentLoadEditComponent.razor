@@ -2,21 +2,25 @@
 @inject NavigationManager NavigationManager
 @inject AppState AppState
 @inject CurrentLoadManager CurrentLoadManager
-@inject LoadManager LoadManager
+@inject IHardwareService HardwareService
 @inject ILoadBuilderService LoadBuilderService
+@inject ISnackbar Snackbar
 
-<MudItem xs="12" sm="12" md="4" lg="3">
-    <EditForm Model="@AppState.LoadVm" OnValidSubmit="@UpdateCurrentLoad">
+@if (!_isBusy)
+{
+    <MudItem xs="12" sm="12" md="4" lg="3">
+        <EditForm Model="@AppState.CurrentLoadVm" OnValidSubmit="@UpdateCurrentLoad">
 
-        <MudField Label="Device" Variant="Variant.Outlined">@AppState.CurrentLoadVm.Device</MudField>
+            <MudField Label="Device" Variant="Variant.Outlined">@AppState.CurrentLoadVm.Device</MudField>
 
-        <LoadSelect OnLoadIdChanged="UpdateLoadForCurrentLoad" />
+            <LoadSelect OnLoadIdChanged="UpdateLoadIdForCurrentLoad" />
 
-        <SubmitButton ButtonText="Update" />
-        <CancelButton Url="currentload" />
+            <SubmitButton ButtonText="Update" />
+            <CancelButton Url="currentload" />
 
-    </EditForm>
-</MudItem>
+        </EditForm>
+    </MudItem>
+}
 
 
 @code {
@@ -25,35 +29,41 @@
     [Parameter]
     public int CurrentLoadId { get; set; }
 
-    async Task UpdateLoadForCurrentLoad(int id)
+    async Task UpdateLoadIdForCurrentLoad(int id)
     {
+        //When the Load Select Value Changes, the LoadId needs to be updated
         if (id > 0)
         {
-            var load = await LoadManager.GetByIdAsync(id);
-            var loadVm = Mapping.Mapper.Map<LoadVm>(load);
-            loadVm.Id = id;
+            var loadVm = await LoadBuilderService.GetLoadVmById(id);
+
             var currentLoadVm = AppState.CurrentLoadVm;
             currentLoadVm.LoadId = id;
-            AppState.UpdateCurrentLoadVm(this, currentLoadVm);
             AppState.UpdateLoadVm(this, loadVm);
+            AppState.UpdateCurrentLoadVm(this, currentLoadVm);
         }
     }
 
     protected async Task UpdateCurrentLoad()
     {
-        var vm = AppState.CurrentLoadVm;
-        var currentLoad = Mapping.Mapper.Map<CurrentLoad>(AppState.CurrentLoadVm);
+        var currentLoad = await LoadBuilderService.GetCurrentLoadFromCurrentLoadVm(AppState.CurrentLoadVm);
         await CurrentLoadManager.UpdateAsync(currentLoad);
+        Snackbar.Add($"Current Load was updated", Severity.Success);
         NavigationManager.NavigateTo("/currentload");
     }
 
     protected override async Task OnInitializedAsync()
     {
         _isBusy = true;
-        var currentLoad = await CurrentLoadManager.GetByIdAsync(CurrentLoadId);
-        var currentloadVm = await LoadBuilderService.MapCurrentLoadToCurrentLoadVm(currentLoad);
-        AppState.UpdateCurrentLoadVm(this, currentloadVm);
-        await UpdateLoadForCurrentLoad(AppState.CurrentLoadVm.LoadId);
+        var currentLoadVm = await LoadBuilderService.GetCurrentLoadVmById(CurrentLoadId);
+        AppState.UpdateCurrentLoadVm(this, currentLoadVm);
+
+        var loadVm = await LoadBuilderService.GetLoadVmById(currentLoadVm.LoadId);
+        AppState.UpdateLoadVm(this, loadVm);
+
+        var hardwareConfigVm = await HardwareService.GetHardwareConfigVmById(loadVm.HardwareConfigId);
+        AppState.UpdateHardwareConfigVm(this, hardwareConfigVm);
+
         _isBusy = false;
-    }    
+    }
+
 }

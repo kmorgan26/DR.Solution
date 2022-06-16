@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using DRApplication.Shared.Models.ConfigurationModels;
-using DRApplication.Shared.Models.DeviceModels;
+using DRApplication.Shared.Models;
+using DRApplication.Shared.Models;
 using DRApplication.Client.ViewModels;
 namespace DRApplication.Client.Services;
 
@@ -80,6 +80,8 @@ public class MappingProfile : Profile
         CreateMap<DeviceVm, Device>()
             .ForMember(dest => dest.Name,
                 opts => opts.MapFrom(src => src.Device));
+        CreateMap<DeviceInsertVm, Device>();
+
 
         CreateMap<Maintainer, GenericListVm>();
         CreateMap<Maintainer, MaintainerVm>()

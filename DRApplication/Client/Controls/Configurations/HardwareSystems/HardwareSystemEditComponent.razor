@@ -2,6 +2,7 @@
 @inject HardwareSystemManager manager
 @inject NavigationManager navigation
 @inject AppState AppState
+@inject ISnackbar Snackbar
 
 @if (AppState.HardwareSystemVm.Id > 0)
 {
@@ -26,6 +27,7 @@
     {
         var hardwareSystem = Mapping.Mapper.Map<HardwareSystem>(AppState.HardwareSystemVm);
         await manager.UpdateAsync(hardwareSystem);
+        Snackbar.Add($"Hardware System was updated", Severity.Success);
         navigation.NavigateTo("/hardwaresystem");
     }
 

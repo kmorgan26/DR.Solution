@@ -1,12 +1,15 @@
 ﻿using DRApplication.Shared.Enums;
 using DRApplication.Client.Interfaces;
 using DRApplication.Client.ViewModels;
-using DRApplication.Shared.Models.DeviceModels;
+using DRApplication.Shared.Models;
 
 namespace DRApplication.Client.Services;
 
 public class PlatformService : IPlatformService
 {
+
+    #region --fields and constructor----
+
     private readonly MaintainerManager _maintainerManager;
     private readonly DeviceTypeManager _deviceTypeManager;
     private readonly DeviceManager _deviceManager;
@@ -17,20 +20,9 @@ public class PlatformService : IPlatformService
         _deviceTypeManager = deviceTypeManager;
         _deviceManager = deviceManager;
     }
-    public async Task<IEnumerable<DeviceVm>> GetDeviceVmsAsync()
-    {
-        var devices = await _deviceManager.GetAllAsync();
-        var deviceTypes = await _deviceTypeManager.GetAllAsync();
+    #endregion
 
-        return devices.Select(dt => new DeviceVm
-        {
-            Id = dt.Id,
-            Device = dt.Name,
-            IsActive = dt.IsActive,
-            Platform = deviceTypes
-                    .Where(m => m.Id == dt.DeviceTypeId).FirstOrDefault().Name
-        });
-    }
+    #region ---collections---
 
     public async Task<IEnumerable<DeviceTypeVm>> GetDeviceTypeVmsAsync()
     {
@@ -45,11 +37,10 @@ public class PlatformService : IPlatformService
             MaintainerId = dt.MaintainerId,
             Maintainer = maintainers
                     .Where(m => m.Id == dt.MaintainerId).FirstOrDefault().Name
-        });
+        }).OrderBy(i => i.Platform);
 
         return vms;
     }
-
     public async Task<IEnumerable<MaintainerVm>> GetMaintainerVmsAsync()
     {
         var maintainers = await _maintainerManager.GetAllAsync();
@@ -62,7 +53,6 @@ public class PlatformService : IPlatformService
         
         return vms;
     }
-
     public async Task<IEnumerable<DeviceVm>> GetDeviceVmsFromDeviceListAsync(IEnumerable<Device> devices)
     {
         var deviceTypes = await _deviceTypeManager.GetAllAsync();
@@ -74,10 +64,40 @@ public class PlatformService : IPlatformService
             DeviceTypeId = m.DeviceTypeId,
             Platform = deviceTypes.Where(a => a.Id == m.DeviceTypeId).FirstOrDefault().Name,
             IsActive = m.IsActive
-        });
+        }).OrderBy(i => i.Device); ;
 
         return vms;
     }
+    public async Task<IEnumerable<DeviceVm>> GetDeviceVmsFromDeviceTypeId(int id)
+    {
+        //Filter = FROM Devices WHERE DeviceTypeId = id 
+        var deviceTypeFilter = await new FilterGenerator<Device>().GetFilterForPropertyByNameAsync("DeviceTypeId", id);
+        var devices = await _deviceManager.GetAsync(deviceTypeFilter);
+
+        return Mapping.Mapper.Map<IEnumerable<DeviceVm>>(devices.Data).OrderBy(i => i.Device);
+    }
+    public async Task<IEnumerable<DeviceTypeVm>> GetDeviceTypeVmsByMaintainerId(int id)
+    {
+        //Filter = FROM DeviceTypes WHERE MaintainerId = id 
+        var maintainerFilter = await new FilterGenerator<DeviceType>().GetFilterForPropertyByNameAsync("MaintainerId", id);
+        var deviceTypes = await _deviceTypeManager.GetAsync(maintainerFilter);
+        var maintainers = await _maintainerManager.GetAllAsync();
+
+        var result = deviceTypes.Data.Select(i => new DeviceTypeVm()
+        {
+            Id = i.Id,
+            IsActive = i.IsActive,
+            MaintainerId = i.MaintainerId,
+            Platform = i.Name,
+            Maintainer = maintainers.Where(m => m.Id == i.MaintainerId).FirstOrDefault().Name
+        }).OrderBy(i => i.Platform); ;
+
+        return result;
+    }
+
+    #endregion
+
+    #region ---Object Methods---
 
     public async Task<DeviceTypeVm> GetDeviceTypeVmFromGenericVm(GenericListVm genericListVm)
     {
@@ -92,7 +112,20 @@ public class PlatformService : IPlatformService
         };
         return vm;
     }
-
+    public async Task<DeviceVm> GetDeviceVmById(int id)
+    {
+        var device = await _deviceManager.GetByIdAsync(id);
+        var deviceType = await _deviceTypeManager.GetByIdAsync(device.DeviceTypeId);
+        var vm = new DeviceVm()
+        {
+            Id = device.Id,
+            IsActive = device.IsActive,
+            DeviceTypeId = device.DeviceTypeId,
+            Device = device.Name,
+            Platform = deviceType.Name
+        };
+        return vm;
+    }
     public async Task<DeviceTypeVm> GetDeviceTypeVmById(int id)
     {
         var deviceType = await _deviceTypeManager.GetByIdAsync(id);
@@ -105,13 +138,83 @@ public class PlatformService : IPlatformService
         };
         return vm;
     }
-
-    public async Task<IEnumerable<DeviceVm>> GetDeviceVmsFromDevicTypeId(int id)
+    public async Task<MaintainerVm> GetMaintainerVmById(int id)
     {
-        //Filter = FROM Devices WHERE DeviceTypeId = id 
-        var deviceTypeFilter = await new FilterGenerator<Device>().GetFilterForPropertyByNameAsync("DeviceTypeId", id);
-        var devices = await _deviceManager.GetAsync(deviceTypeFilter);
-
-        return Mapping.Mapper.Map<IEnumerable<DeviceVm>>(devices.Data);
+        var maintainer = await _maintainerManager.GetByIdAsync(id);
+        var maintainerVm = new MaintainerVm()
+        {
+            Id = maintainer.Id,
+            Maintainer = maintainer.Name
+        };
+        return maintainerVm;
     }
+    public async Task<DeviceType> GetDeviceTypeFromDeviceTypeVm(DeviceTypeVm deviceTypeVm)
+    {
+        var deviceType = new DeviceType()
+        {
+            Id = deviceTypeVm.Id,
+            IsActive = deviceTypeVm.IsActive,
+            MaintainerId = deviceTypeVm.MaintainerId,
+            Name = deviceTypeVm.Platform
+        };
+        return await Task.Run(() => deviceType);
+    }
+    public async Task<Device> GetDeviceFromDeviceVm(DeviceVm deviceVm)
+    {
+        var device = new Device()
+        {
+            Id = deviceVm.Id,
+            IsActive = deviceVm.IsActive,
+            DeviceTypeId = deviceVm.DeviceTypeId,
+            Name = deviceVm.Device
+        };
+        return await Task.Run(() => device);
+    }
+    public async Task<int> InsertDeviceTypeFromDeviceTypeInsertVm(DeviceTypeInsertVm deviceTypeInsertVm)
+    {
+        var deviceType = new DeviceType()
+        {
+            IsActive = deviceTypeInsertVm.IsActive,
+            MaintainerId = deviceTypeInsertVm.MaintainerId,
+            Name = deviceTypeInsertVm.Name
+        };
+        try
+        {
+            var result = await _deviceTypeManager.InsertAsync(deviceType);
+            if(result.Id > 0)
+               return result.Id;
+            else
+               return 0;
+        }
+        catch
+        {
+            return 0;
+        }
+    }
+    public async Task<bool> EditMaintainerFromMaintainerVm(MaintainerVm maintainerVm)
+    {
+        var maintainer = new Maintainer()
+        {
+            Id = maintainerVm.Id,
+            Name = maintainerVm.Maintainer
+        };
+        try
+        {
+            var result = await _maintainerManager.UpdateAsync(maintainer);
+            if (result != null)
+                return true;
+            else
+                return false;
+        }
+        catch (Exception)
+        {
+            return false;
+            throw;
+        }
+    }
+
+    
+
+    #endregion
+
 }

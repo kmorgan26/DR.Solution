@@ -9,5 +9,7 @@ public class LoadInsertVm
 
     [Required]
     [Range(1, 100, ErrorMessage = "Please Select a Hardware Configuration")]
-    public int DeviceTypeId { get; set; }
+    public int HardwareConfigId { get; set; } = 0;
+
+    public bool IsAccepted { get; set; } = false;
 }

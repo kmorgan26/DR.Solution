@@ -1,6 +1,6 @@
 ﻿using DRApplication.Server.Data;
 using DRApplication.Shared.Filters;
-using DRApplication.Shared.Models.ConfigurationModels;
+using DRApplication.Shared.Models;
 using DRApplication.Shared.Responses;
 using Microsoft.AspNetCore.Mvc;
 

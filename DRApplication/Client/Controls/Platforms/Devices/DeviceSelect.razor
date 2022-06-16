@@ -1,0 +1,35 @@
+﻿@namespace DRApplication.Client.Controls
+@inject IPlatformService PlatformService
+@inject AppState AppState
+
+@if (!_isBusy)
+{
+    <MudSelect Variant="Variant.Outlined" T="int" Label="Platform" Value="@AppState.DeviceVm.Id" ValueChanged="@OnDeviceIdChanged">
+        <MudSelectItem Value="0">SELECT Device</MudSelectItem>
+        @foreach (var item in @AppState.DeviceVms)
+        {
+            <MudSelectItem Value="@item.Id">@item.Device</MudSelectItem>
+        }
+    </MudSelect>
+}
+
+@code {
+
+    bool _isBusy;
+
+    [Parameter]
+    public EventCallback<int> OnDeviceIdChanged { get; set; }
+
+    private async Task SetDevices()
+    {
+        var items = await PlatformService.GetDeviceVmsFromDeviceTypeId(AppState.DeviceTypeVm.Id);
+        AppState.UpdateDeviceVms(this, items);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        await SetDevices();
+        _isBusy = false;
+    }
+}

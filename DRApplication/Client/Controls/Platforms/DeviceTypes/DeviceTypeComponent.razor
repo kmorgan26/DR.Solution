@@ -1,0 +1,21 @@
+﻿@namespace DRApplication.Client.Controls
+@inject IPlatformService PlatformService
+@inject AppState AppState
+
+<MudItem xs="12" sm="9" md="6" lg="3" Class="mb-4">
+    <MaintainerSelect OnMaintainerIdChanged="SetMaintainerVm" />
+</MudItem>
+
+<DeviceTypeTable></DeviceTypeTable>
+
+@code {
+
+    async Task SetMaintainerVm(int id)
+    {
+        if (id > 0)
+        {
+            var maintainerVm = await PlatformService.GetMaintainerVmById(id);
+            AppState.UpdateMaintainerVm(this, maintainerVm);
+        }
+    }
+}

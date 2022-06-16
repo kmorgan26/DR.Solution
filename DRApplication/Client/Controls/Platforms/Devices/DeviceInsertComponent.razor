@@ -1,0 +1,49 @@
+﻿@namespace DRApplication.Client.Controls
+
+@inject AppState AppState
+@inject IPlatformService PlatformService
+@inject DeviceManager DeviceManager
+@inject NavigationManager navigation
+
+@if (@_deviceInsertVm != null)
+{
+    <MudItem xs="12" sm="12" md="4" lg="3">
+        <EditForm Model="@_deviceInsertVm" OnValidSubmit="@InsertDevice">
+
+            <DeviceTypeSelect OnDeviceTypeIdChanged="UpdateDeviceType" />
+
+            <MudTextField @bind-Value="_deviceInsertVm.Name" Class="my-6" Label="Device Name" Variant="Variant.Outlined"></MudTextField>
+
+            <MudCheckBox Class="my-6" Label="Active?" @bind-Checked="@AppState.DeviceVm.IsActive" />
+
+            <MudPaper Elevation="0">
+                <SubmitButton ButtonText="Insert" />
+                <CancelButton Url="devices" />
+            </MudPaper>
+        </EditForm>
+    </MudItem>
+
+}
+
+@code {
+
+    private DeviceInsertVm _deviceInsertVm { get; set; } = new();
+
+    void UpdateDeviceType(int id)
+    {
+        if (id > 0)
+        {
+            var deviceTypeVm = AppState.DeviceTypeVm;
+            deviceTypeVm.Id = id;
+        }
+
+    }
+
+    private async Task InsertDevice()
+    {
+        _deviceInsertVm.DeviceTypeId = AppState.DeviceTypeVm.Id;
+        var device = Mapping.Mapper.Map<Device>(_deviceInsertVm);
+        await DeviceManager.InsertAsync(device);
+        navigation.NavigateTo("/devices");
+    }
+}

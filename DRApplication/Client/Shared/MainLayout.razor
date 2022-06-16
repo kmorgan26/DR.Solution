@@ -15,14 +15,14 @@
         HwConfig.Id : @AppState.HardwareConfigVm.Id ||
         SWSystem.Id: @AppState.SoftwareSystemVm.Id ||
         SWVersion.Id: @AppState.SoftwareVersionVm.Id ||
-        LoadVm.Id: @AppState.LoadVm.Id
+        LoadVm.Id: @AppState.LoadVm.Id ||
+        CurrentLoadVm.Id: @AppState.CurrentLoadVm.Id
         <MudSpacer />
-        <MenuPicker MenuIcon="@Icons.Material.Filled.DeviceHub"
-                    ToolTipColor="Color.Warning"
-                    ToolTipText="Platform"
-                    OnItemClick="SetDeviceType"
-                    ListType="PlatformListName.Platform" />
+        
+        <DeviceTypeMenu OnItemClick="SetPlatform" />
+
         <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Inherit" Link="/user/settings" />
+
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" Elevation="3">
         <MudDrawerHeader>
@@ -51,10 +51,8 @@
             await InvokeAsync(StateHasChanged);
         }
     }
-
-    private async Task SetDeviceType(GenericListVm genericListVm)
+    private void SetPlatform(DeviceTypeVm deviceTypeVm)
     {
-        var deviceTypeVm = await PlatformService.GetDeviceTypeVmFromGenericVm(genericListVm);
         AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
     }
 

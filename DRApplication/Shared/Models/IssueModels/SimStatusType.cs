@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace DRApplication.Shared.Models.IssueModels
+﻿namespace DRApplication.Shared.Models;
+public class SimStatusType
 {
-    public partial class SimStatusType
-    {
-        public SimStatusType()
-        {
-            SimStatuses = new HashSet<SimStatus>();
-        }
 
-        public int Id { get; set; }
-        public string Name { get; set; } = null!;
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty;
 
-        public virtual ICollection<SimStatus> SimStatuses { get; set; }
-    }
 }

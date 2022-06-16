@@ -1,0 +1,17 @@
+﻿@namespace DRApplication.Client.Pages
+@page "/specificload/edit/{SpecificLoadId:int}"
+
+<TitleHeader TitleText="Current Load Edit" IconPath="@Icons.Material.Filled.Checklist" />
+
+<MudPaper Class="pa-2 mb-6" Elevation="0">
+    <MudAlert Severity="Severity.Success">Select a current Load for this Device, then click Update</MudAlert>
+</MudPaper>
+
+<SpecificLoadEditComponent SpecificLoadId="@SpecificLoadId" />
+
+@code{
+
+    [Parameter]
+    public int SpecificLoadId { get; set; }
+
+}

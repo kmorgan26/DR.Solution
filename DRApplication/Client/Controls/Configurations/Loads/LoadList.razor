@@ -65,7 +65,7 @@
     {
         if (AppState.DeviceTypeVm.Id > 0)
         {
-            var items = await LoadBuilderService.GetLoadVmByDeviceTypeId(AppState.DeviceTypeVm.Id);
+            var items = await LoadBuilderService.GetLoadVmsByHardwareConfigId(AppState.HardwareConfigVm.Id);
             AppState.UpdateLoadVms(this, items);
         }
         else
@@ -83,7 +83,7 @@
     {
         if (Source != this)
         {
-            if (Property == "DeviceTypeVm")
+            if (Property == "HardwareConfigVm")
             {
                 await SetLoads();
                 await InvokeAsync(StateHasChanged);

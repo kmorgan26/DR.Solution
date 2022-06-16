@@ -1,9 +1,9 @@
 ﻿@namespace DRApplication.Client.Controls
-
 @inject AppState AppState
 @inject NavigationManager navigation
 @inject IPlatformService PlatformService
 @inject HardwareConfigManager HardwareConfigManager
+@inject ISnackbar Snackbar
 
 @if (!_isBusy)
 {
@@ -45,6 +45,7 @@
     {
         var hardwareConfig = Mapping.Mapper.Map<HardwareConfig>(AppState.HardwareConfigVm);
         await HardwareConfigManager.UpdateAsync(hardwareConfig);
+        Snackbar.Add($"Hardware Configuration was updated", Severity.Success);
         navigation.NavigateTo("/hardwareconfig");
     }
 

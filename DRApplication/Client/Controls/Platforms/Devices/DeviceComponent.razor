@@ -1,0 +1,21 @@
+﻿@namespace DRApplication.Client.Controls
+@inject IPlatformService PlatformService
+@inject AppState AppState
+
+<MudItem xs="12" sm="9" md="6" lg="3" Class="mb-4">
+    <DeviceTypeSelect OnDeviceTypeIdChanged="SetDeviceTypeVm"></DeviceTypeSelect>
+</MudItem>
+
+<DeviceTable></DeviceTable>
+
+@code {
+
+    async Task SetDeviceTypeVm(int id)
+    {
+        if (id > 0)
+        {
+            var deviceTypeVm = await PlatformService.GetDeviceTypeVmById(id);
+            AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
+        }
+    }
+}

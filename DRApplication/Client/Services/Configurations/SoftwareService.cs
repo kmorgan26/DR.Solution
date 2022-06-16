@@ -1,6 +1,6 @@
 ﻿using DRApplication.Client.Interfaces;
 using DRApplication.Client.ViewModels;
-using DRApplication.Shared.Models.ConfigurationModels;
+using DRApplication.Shared.Models;
 
 namespace DRApplication.Client.Services;
 
@@ -41,7 +41,7 @@ public class SoftwareService : ISoftwareService
     {
         var filter = await new FilterGenerator<SoftwareSystem>().GetFilterForPropertyByNameAsync("HardwareConfigId", id);
         var softwareSystems = await _softwareSystemManager.GetAsync(filter);
-        return Mapping.Mapper.Map<IEnumerable<SoftwareSystemVm>>(softwareSystems.Data);
+        return Mapping.Mapper.Map<IEnumerable<SoftwareSystemVm>>(softwareSystems.Data).OrderBy(i => i.Name);
     }
     public async Task<IEnumerable<SoftwareVersionVm>> GetSoftwareVersionVmsBySoftwareSystemId(int id)
     {
@@ -69,6 +69,16 @@ public class SoftwareService : ISoftwareService
 
         return Mapping.Mapper.Map<IEnumerable<SoftwareVersionVm>>(softwareVersionResponse.Data);
 
+    }
+    public async Task<IEnumerable<VersionsLoad>> GetVersionLoadsByLoadId(int id)
+    {
+        var versionLoadsFilter = await new FilterGenerator<VersionsLoad>().GetFilterForPropertyByNameAsync("LoadId", id);
+        var versionLoadresponse = await _versionsLoadManager.GetAsync(versionLoadsFilter);
+        if (versionLoadresponse.Data is not null)
+        {
+            return versionLoadresponse.Data;
+        }
+        return new List<VersionsLoad>(); 
     }
 
     #endregion

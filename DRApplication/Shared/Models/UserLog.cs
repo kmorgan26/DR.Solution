@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace DRApplication.Shared.Models;
 
-namespace DRApplication.Shared.Models
+public class UserLog
 {
-    public partial class UserLog
-    {
-        public int Id { get; set; }
-        public string UserName { get; set; } = null!;
-        public string IpAddress { get; set; } = null!;
-        public DateTime LoginDateTime { get; set; }
-        public bool IsSuccess { get; set; }
-    }
+    public int Id { get; set; }
+    public string UserName { get; set; } = string.Empty;
+    public string IpAddress { get; set; } = string.Empty;
+    public DateTime LoginDateTime { get; set; }
+    public bool IsSuccess { get; set; }
 }

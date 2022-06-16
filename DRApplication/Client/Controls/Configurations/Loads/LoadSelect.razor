@@ -23,12 +23,12 @@
 
     private async Task SetLoadVms()
     {
-        var loadVms = await LoadBuilderService.GetLoadVmByDeviceTypeId(AppState.DeviceTypeVm.Id);
+        var loadVms = await LoadBuilderService.GetLoadVmsByHardwareConfigId(AppState.HardwareConfigVm.Id);
         AppState.UpdateLoadVms(this, loadVms);
     }
 
     /// <summary>
-    /// When the DeviceTypeVm changes, the LoadVms populate with a new list for that Device Type
+    /// When the HardwareConfigVm changes, the LoadVms populate with a new list for that Device Type's Hardware Configuration'
     /// With the new list populating, the LoadVms is set to a new instance, setting the ID to 0
     /// and the Dropdown list will display "SELECT Load"
     /// </summary>
@@ -39,7 +39,7 @@
     {
         if (Source != this)
         {
-            if (Property == "DeviceTypeVm")
+            if (Property == "HardwareConfigVm")
             {
                 await SetLoadVms();
                 AppState.UpdateLoadVms(this, new List<LoadVm>());

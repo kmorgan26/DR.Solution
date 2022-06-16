@@ -3,14 +3,14 @@
 @inject AppState AppState
 
 <MudItem xs="12" sm="9" md="6" lg="3" Class="mb-4">
-    <HardwareSystemSelect OnHardwareSystemIdChanged="SetHardwareSystemId"></HardwareSystemSelect>
+    <HardwareSystemSelect OnHardwareSystemIdChanged="SetHardwareSystemVm"></HardwareSystemSelect>
 </MudItem>
 
 <HardwareVersionTable></HardwareVersionTable>
 
 @code {
 
-    async Task SetHardwareSystemId(int id)
+    async Task SetHardwareSystemVm(int id)
     {
         if (id > 0)
         {

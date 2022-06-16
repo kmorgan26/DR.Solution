@@ -1,4 +1,4 @@
-﻿using DRApplication.Shared.Models.ConfigurationModels;
+﻿using DRApplication.Shared.Models;
 
 namespace DRApplication.Client.Services;
 

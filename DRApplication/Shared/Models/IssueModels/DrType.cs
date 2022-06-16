@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace DRApplication.Shared.Models.IssueModels
+namespace DRApplication.Shared.Models
 {
-    public partial class DrType
+    public class DrType
     {
-        public DrType()
-        {
-            Issues = new HashSet<Issue>();
-        }
-
         public int Id { get; set; }
-        public string Name { get; set; } = null!;
+        public string Name { get; set; } = string.Empty;
 
-        public virtual ICollection<Issue> Issues { get; set; }
     }
 }

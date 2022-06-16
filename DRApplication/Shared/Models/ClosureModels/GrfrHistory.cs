@@ -1,17 +1,9 @@
-﻿using DRApplication.Shared.Models.IssueModels;
-using System;
-using System.Collections.Generic;
-
-namespace DRApplication.Shared.Models.ClosureModels
+﻿namespace DRApplication.Shared.Models;
+public class GrfrHistory
 {
-    public partial class GrfrHistory
-    {
-        public int Id { get; set; }
-        public int DrId { get; set; }
-        public DateTime GrfrDate { get; set; }
-        public string EnteredBy { get; set; } = null!;
-        public DateTime EnteredDate { get; set; }
-
-        public virtual Dr Dr { get; set; } = null!;
-    }
+    public int Id { get; set; } = 0;
+    public int DrId { get; set; } = 0;
+    public DateTime GrfrDate { get; set; }
+    public string EnteredBy { get; set; } = string.Empty;
+    public DateTime EnteredDate { get; set; }
 }

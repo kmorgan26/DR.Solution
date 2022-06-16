@@ -1,9 +1,5 @@
 ﻿@page "/devices/list/{deviceTypeId:int}"
 @namespace DRApplication.Client.Pages
-@implements IDisposable
-@inject IPlatformService PlatformService
-@inject AppState AppState
-
 
 @if (DeviceTypeId > 0)
 {
@@ -13,26 +9,5 @@
 @code {
 
     [Parameter]
-    public int DeviceTypeId { get; set; } = 0;
-
-    private async Task AppState_StateChanged(ComponentBase Source, string Property)
-    {
-        if (Source != this)
-        {
-            await InvokeAsync(StateHasChanged);
-        }
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        var deviceTypeVm = await PlatformService.GetDeviceTypeVmById(this.DeviceTypeId);
-        AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
-        AppState.StateChanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
-    }
-
-    void IDisposable.Dispose()
-    {
-        AppState.StateChanged -= async (Source, Property) => await AppState_StateChanged(Source, Property);
-    }
-
+    public int DeviceTypeId { get; set; }
 }

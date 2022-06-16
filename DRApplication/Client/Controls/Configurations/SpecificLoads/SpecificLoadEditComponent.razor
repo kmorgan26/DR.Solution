@@ -1,0 +1,69 @@
+﻿@namespace DRApplication.Client.Controls
+@inject NavigationManager NavigationManager
+@inject AppState AppState
+@inject SpecificLoadManager SpecificLoadManager
+@inject IHardwareService HardwareService
+@inject ILoadBuilderService LoadBuilderService
+@inject ISnackbar Snackbar
+
+@if (!_isBusy)
+{
+    <MudItem xs="12" sm="12" md="4" lg="3">
+        <EditForm Model="@AppState.SpecificLoadVm" OnValidSubmit="@UpdateSpecificLoad">
+
+            <MudField Label="Device" Variant="Variant.Outlined">@AppState.SpecificLoadVm.Device</MudField>
+
+            <LoadSelect OnLoadIdChanged="UpdateLoadIdForSpecificLoad" />
+
+            <SubmitButton ButtonText="Update" />
+            <CancelButton Url="specificload" />
+
+        </EditForm>
+    </MudItem>
+}
+
+
+@code {
+    bool _isBusy;
+
+    [Parameter]
+    public int SpecificLoadId { get; set; }
+
+    async Task UpdateLoadIdForSpecificLoad(int id)
+    {
+        //When the Load Select Value Changes, the LoadId needs to be updated
+        if (id > 0)
+        {
+            var loadVm = await LoadBuilderService.GetLoadVmById(id);
+
+            var specificLoadVm = AppState.SpecificLoadVm;
+            specificLoadVm.LoadId = id;
+            AppState.UpdateLoadVm(this, loadVm);
+            AppState.UpdateSpecificLoadVm(this, specificLoadVm);
+        }
+    }
+
+    protected async Task UpdateSpecificLoad()
+    {
+        var specificLoad = await LoadBuilderService.GetSpecificLoadFromSpecificLoadVm(AppState.SpecificLoadVm);
+        await SpecificLoadManager.UpdateAsync(specificLoad);
+        Snackbar.Add($"Device Specific Load was updated", Severity.Success);
+        NavigationManager.NavigateTo("/specificload");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        var specificLoadVm = await LoadBuilderService.GetSpecificLoadVmById(SpecificLoadId);
+        AppState.UpdateSpecificLoadVm(this, specificLoadVm);
+
+        var loadVm = await LoadBuilderService.GetLoadVmById(specificLoadVm.LoadId);
+        AppState.UpdateLoadVm(this, loadVm);
+
+        var hardwareConfigVm = await HardwareService.GetHardwareConfigVmById(loadVm.HardwareConfigId);
+        AppState.UpdateHardwareConfigVm(this, hardwareConfigVm);
+
+        _isBusy = false;
+    }
+
+}

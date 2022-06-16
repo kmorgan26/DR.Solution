@@ -1,0 +1,46 @@
+﻿@namespace DRApplication.Client.Controls
+@inject AppState AppState
+@inject IPlatformService PlatformService
+@inject NavigationManager navigation
+@inject ISnackbar Snackbar
+
+@if (!_isBusy)
+{
+    <MudItem xs="12" sm="12" md="4" lg="3">
+        <EditForm Model="@AppState.MaintainerVm" OnValidSubmit="@UpdateMaintainer">
+
+            <MudTextField @bind-Value="AppState.MaintainerVm.Maintainer" Class="my-6" Label="Maintainer Name" Variant="Variant.Outlined"></MudTextField>
+
+            <MudPaper Elevation="0">
+                <SubmitButton ButtonText="Update" />
+                <CancelButton Url="maintainers" />
+            </MudPaper>
+
+        </EditForm>
+    </MudItem>
+}
+
+@code {
+    bool _isBusy;
+
+    [Parameter]
+    public int MaintainerId { get; set; }
+
+    protected async Task UpdateMaintainer()
+    {
+        var result = await PlatformService.EditMaintainerFromMaintainerVm(AppState.MaintainerVm);
+        
+        if(result)
+            Snackbar.Add($"{AppState.MaintainerVm.Maintainer} was updated", Severity.Success);
+
+        navigation.NavigateTo("/maintainers");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        var maintainerVm = await PlatformService.GetMaintainerVmById(MaintainerId);
+        AppState.UpdateMaintainerVm(this, maintainerVm);
+        _isBusy = false;
+    }
+}

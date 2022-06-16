@@ -1,10 +1,10 @@
-﻿@page "/maintainers"
-@namespace DRApplication.Client.Pages
+﻿@namespace DRApplication.Client.Pages
+@page "/maintainers"
 
-@inject MaintainerManager _db
+<TitleHeader TitleText="Maintainers" IconPath="@Icons.Material.Filled.Hardware" />
 
-<TitleHeader IconPath="@Icons.Material.Filled.LocalAirport" TitleText="Maintainers" />
+<MudPaper Class="pa-2 mb-6" Elevation="0">
+    <MudAlert Severity="Severity.Normal">This is a list of Maintainers.</MudAlert>
+</MudPaper>
 
-<NewButton Url="/maintainer/create" />
-
-<MaintainerTable></MaintainerTable>
+<MaintainerComponent />

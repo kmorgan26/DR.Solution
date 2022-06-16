@@ -1,43 +1,61 @@
 ﻿@namespace DRApplication.Client.Controls
-@inject DeviceTypeManager _db
+@inject AppState AppState
 @inject IPlatformService PlatformService
+@implements IDisposable
 
-@if (!_isBusy)
+<NewButton Url="/platform/create" />
+
+@if (AppState.DeviceTypeVm.Id > 0)
 {
-    <FSMudTable TableItems="DeviceTypeVms" TItem="DeviceTypeVm" OnRowCommited="UpdateRowItem">
-
-        <FSHeaderContent>
-            <MudTh>Id</MudTh>
+    <MudTable Items="@AppState.DeviceTypeVms" Class="my-4" Hover="true" Striped="true" Dense="true">
+        <HeaderContent>
+            <MudTh>ID</MudTh>
             <MudTh>Platform</MudTh>
-            <MudTd>Maintainer</MudTd>
-            <MudTd>Active?</MudTd>
-        </FSHeaderContent>
-
-        <FSRowTemplate>
+            <MudTh>Active?</MudTh>
+            <MudTh></MudTh>
+        </HeaderContent>
+        <RowTemplate>
             <MudTd DataLabel="Id">@context.Id</MudTd>
             <MudTd DataLabel="Platform">@context.Platform</MudTd>
-            <MudTd DataLabel="Maintainer">@context.Maintainer</MudTd>
             <MudTd DataLabel="Active?">@context.IsActive</MudTd>
-        </FSRowTemplate>
-
-        <FSRowEditingTemplate>
-            <MudTd DataLabel="Id">@context.Id</MudTd>
-            <MudTd DataLabel="Platform">
-                <MudTextField @bind-Value="@context.Platform" />
+            <MudTd DataLabel="SELECT">
+                <a href="/platform/edit/@context.Id" role="button">
+                    <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>
+                </a>
             </MudTd>
-            <MudTd DataLabel="Maintainer">
-                <MudSelect Label="Maintainer" @bind-Value="@context.MaintainerId">
-                    @foreach (var maintainer in _maintainers)
-                    {
-                    <MudSelectItem Value="maintainer.Id">@maintainer.Maintainer</MudSelectItem>
-                    }
-            </MudSelect>
-        </MudTd>
-        <MudTd>
-            <MudCheckBox @bind-Checked="@context.IsActive">Active?</MudCheckBox>
-        </MudTd>
-    </FSRowEditingTemplate>
+        </RowTemplate>
+    </MudTable>
+}
 
-</FSMudTable>
+@code {
 
+    bool _isBusy;
+
+    private async Task SetDeviceTypes()
+    {
+        var deviceTypeVms = await PlatformService.GetDeviceTypeVmsByMaintainerId(AppState.MaintainerVm.Id);
+        AppState.UpdateDeviceTypeVms(this, deviceTypeVms);
+    }
+    private async Task AppState_StateChanged(ComponentBase Source, string Property)
+    {
+        if (Source != this)
+        {
+            if (Property == "MaintainerVm")
+            {
+                await SetDeviceTypes();
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        AppState.StateChanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
+        await SetDeviceTypes();
+        _isBusy = false;
+    }
+    void IDisposable.Dispose()
+    {
+        AppState.StateChanged -= async (Source, Property) => await AppState_StateChanged(Source, Property);
+    }
 }

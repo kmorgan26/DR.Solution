@@ -1,26 +1,42 @@
 ﻿@namespace DRApplication.Client.Controls
-@inject MaintainerManager _db
+@inject AppState AppState
+@inject IPlatformService PlatformService
 
-@if (!_isBusy)
+<NewButton Url="/maintainer/create" />
+
+@if (AppState.MaintainerVm.Id > 0)
 {
-    <FSMudTable TableItems="MaintainerVms" TItem="MaintainerVm" OnRowCommited="UpdateRowItem">
-
-        <FSHeaderContent>
-            <MudTh>Id</MudTh>
+    <MudTable Items="@AppState.MaintainerVms" Class="my-4" Hover="true" Striped="true" Dense="true">
+        <HeaderContent>
+            <MudTh>ID</MudTh>
             <MudTh>Maintainer</MudTh>
-        </FSHeaderContent>
-
-        <FSRowTemplate>
+            <MudTh></MudTh>
+        </HeaderContent>
+        <RowTemplate>
             <MudTd DataLabel="Id">@context.Id</MudTd>
             <MudTd DataLabel="Maintainer">@context.Maintainer</MudTd>
-        </FSRowTemplate>
-
-        <FSRowEditingTemplate>
-            <MudTd DataLabel="Id">@context.Id</MudTd>
-            <MudTd DataLabel="Maintainer">
-                <MudTextField Variant="Variant.Outlined" @bind-Value="@context.Maintainer" />
+            <MudTd DataLabel="SELECT">
+                <a href="/maintainer/edit/@context.Id" role="button">
+                    <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>
+                </a>
             </MudTd>
-        </FSRowEditingTemplate>
+        </RowTemplate>
+    </MudTable>
+}
 
-    </FSMudTable>
+@code {
+
+    bool _isBusy;
+
+    private async Task SetMaintainers()
+    {
+        var maintainerVms = await PlatformService.GetMaintainerVmsAsync();
+        AppState.UpdateMaintainerVms(this, maintainerVms);
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        await SetMaintainers();
+        _isBusy = false;
+    }
 }

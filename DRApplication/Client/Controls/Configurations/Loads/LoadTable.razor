@@ -9,11 +9,13 @@
     <HeaderContent>
         <MudTh>ID</MudTh>
         <MudTh>Name</MudTh>
+        <MudTh>Accepted?</MudTh>
         <MudTh></MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Id">@context.Id</MudTd>
         <MudTd DataLabel="Load Name">@context.Name</MudTd>
+        <MudTd DataLabel="Accepted?">@context.IsAccepted</MudTd>
         <MudTd DataLabel="EDIT">
             <a href="/load/edit/@context.Id" role="button">
                 <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>    
@@ -29,7 +31,7 @@
 
     private async Task SetLoads()
     {
-        var loadVms = await LoadBuilderService.GetLoadVmByDeviceTypeId(AppState.DeviceTypeVm.Id);
+        var loadVms = await LoadBuilderService.GetLoadVmsByHardwareConfigId(AppState.HardwareConfigVm.Id);
         AppState.UpdateLoadVms(this, loadVms);
     }
 
@@ -37,7 +39,7 @@
     {
         if (Source != this)
         {
-            if (Property == "DeviceTypeVm")
+            if (Property == "HardwareConfigVm")
             {
                 await SetLoads();
                 await InvokeAsync(StateHasChanged);

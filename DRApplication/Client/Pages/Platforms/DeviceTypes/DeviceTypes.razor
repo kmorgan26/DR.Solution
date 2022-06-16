@@ -1,7 +1,10 @@
-﻿@page "/deviceTypes"
+﻿@page "/devicetypes"
 @namespace DRApplication.Client.Pages
-@inject IPlatformService _platformService
 
-<TitleHeader IconPath="@Icons.Material.Filled.LocalAirport" TitleText="Device Types" />
+<TitleHeader TitleText="Platforms" IconPath="@Icons.Material.Filled.Rectangle" />
 
-<DeviceTypeTable></DeviceTypeTable>
+<MudPaper Class="pa-2 mb-6" Elevation="0">
+    <MudAlert Severity="Severity.Normal">This is a list of Platforms.</MudAlert>
+</MudPaper>
+
+<DeviceTypeComponent></DeviceTypeComponent>
