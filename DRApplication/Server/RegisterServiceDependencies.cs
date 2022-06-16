@@ -15,7 +15,13 @@ namespace DRApplication.Server
                 o.MemoryBufferThreshold = int.MaxValue;
             });
 
-            builder.Services.AddTransient(s => new DapperRepository<Maintainer>(
+            builder.Services.AddTransient(s => new DapperRepository<CurrentLoad>(
+               builder.Configuration.GetConnectionString("DRConnectionString")));
+
+            builder.Services.AddTransient(s => new DapperRepository<Device>(
+                builder.Configuration.GetConnectionString("DRConnectionString")));
+
+            builder.Services.AddTransient(s => new DapperRepository<DeviceType>(
                 builder.Configuration.GetConnectionString("DRConnectionString")));
 
             builder.Services.AddTransient(s => new DapperRepository<HardwareConfig>(
@@ -30,26 +36,23 @@ namespace DRApplication.Server
             builder.Services.AddTransient(s => new DapperRepository<HardwareVersionsConfig>(
                builder.Configuration.GetConnectionString("DRConnectionString")));
 
+            builder.Services.AddTransient(s => new DapperRepository<Load>(
+               builder.Configuration.GetConnectionString("DRConnectionString")));
+
+            builder.Services.AddTransient(s => new DapperRepository<Maintainer>(
+                builder.Configuration.GetConnectionString("DRConnectionString")));
+
+            builder.Services.AddTransient(s => new DapperRepository<SpecificLoad>(
+               builder.Configuration.GetConnectionString("DRConnectionString")));
+
             builder.Services.AddTransient(s => new DapperRepository<SoftwareSystem>(
                builder.Configuration.GetConnectionString("DRConnectionString")));
 
             builder.Services.AddTransient(s => new DapperRepository<SoftwareVersion>(
                builder.Configuration.GetConnectionString("DRConnectionString")));
 
-            builder.Services.AddTransient(s => new DapperRepository<Load>(
-               builder.Configuration.GetConnectionString("DRConnectionString")));
-
-            builder.Services.AddTransient(s => new DapperRepository<CurrentLoad>(
-               builder.Configuration.GetConnectionString("DRConnectionString")));
-
             builder.Services.AddTransient(s => new DapperRepository<VersionsLoad>(
                builder.Configuration.GetConnectionString("DRConnectionString")));
-
-            builder.Services.AddTransient(s => new DapperRepository<DeviceType>(
-                builder.Configuration.GetConnectionString("DRConnectionString")));
-
-            builder.Services.AddTransient(s => new DapperRepository<Device>(
-                builder.Configuration.GetConnectionString("DRConnectionString")));
 
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddControllers()
