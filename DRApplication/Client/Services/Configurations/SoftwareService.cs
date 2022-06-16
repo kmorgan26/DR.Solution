@@ -41,7 +41,7 @@ public class SoftwareService : ISoftwareService
     {
         var filter = await new FilterGenerator<SoftwareSystem>().GetFilterForPropertyByNameAsync("HardwareConfigId", id);
         var softwareSystems = await _softwareSystemManager.GetAsync(filter);
-        return Mapping.Mapper.Map<IEnumerable<SoftwareSystemVm>>(softwareSystems.Data);
+        return Mapping.Mapper.Map<IEnumerable<SoftwareSystemVm>>(softwareSystems.Data).OrderBy(i => i.Name);
     }
     public async Task<IEnumerable<SoftwareVersionVm>> GetSoftwareVersionVmsBySoftwareSystemId(int id)
     {
