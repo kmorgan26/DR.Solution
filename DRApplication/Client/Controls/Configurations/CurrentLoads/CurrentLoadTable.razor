@@ -34,7 +34,7 @@
 
     private async Task SetLoads()
     {
-        var currentLoadVms = await LoadBuilderService.GetCurrentLoadVmByDeviceTypeId(AppState.DeviceTypeVm.Id);
+        var currentLoadVms = await LoadBuilderService.GetCurrentLoadVmsByDeviceTypeId(AppState.DeviceTypeVm.Id);
         AppState.UpdateCurrentLoadVms(this, currentLoadVms);
     }
 
