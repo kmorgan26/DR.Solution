@@ -112,6 +112,20 @@ public class PlatformService : IPlatformService
         };
         return vm;
     }
+    public async Task<DeviceVm> GetDeviceVmById(int id)
+    {
+        var device = await _deviceManager.GetByIdAsync(id);
+        var deviceType = await _deviceTypeManager.GetByIdAsync(device.DeviceTypeId);
+        var vm = new DeviceVm()
+        {
+            Id = device.Id,
+            IsActive = device.IsActive,
+            DeviceTypeId = device.DeviceTypeId,
+            Device = device.Name,
+            Platform = deviceType.Name
+        };
+        return vm;
+    }
     public async Task<DeviceTypeVm> GetDeviceTypeVmById(int id)
     {
         var deviceType = await _deviceTypeManager.GetByIdAsync(id);
@@ -198,6 +212,8 @@ public class PlatformService : IPlatformService
             throw;
         }
     }
+
+    
 
     #endregion
 
