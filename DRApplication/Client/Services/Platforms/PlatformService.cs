@@ -36,7 +36,8 @@ public class PlatformService : IPlatformService
             IsActive = dt.IsActive,
             MaintainerId = dt.MaintainerId,
             Maintainer = maintainers
-                    .Where(m => m.Id == dt.MaintainerId).FirstOrDefault().Name
+                    .Where(m => m.Id == dt.MaintainerId)
+                    .FirstOrDefault().Name
         }).OrderBy(i => i.Platform);
 
         return vms;
@@ -47,16 +48,16 @@ public class PlatformService : IPlatformService
 
         var vms = maintainers.Select(m => new MaintainerVm
         {
-             Id = m.Id,
-             Maintainer = m.Name,
+            Id = m.Id,
+            Maintainer = m.Name,
         });
-        
+
         return vms;
     }
     public async Task<IEnumerable<DeviceVm>> GetDeviceVmsFromDeviceListAsync(IEnumerable<Device> devices)
     {
         var deviceTypes = await _deviceTypeManager.GetAllAsync();
-        
+
         var vms = devices.Select(m => new DeviceVm
         {
             Id = m.Id,
@@ -98,20 +99,7 @@ public class PlatformService : IPlatformService
     #endregion
 
     #region ---Object Methods---
-
-    public async Task<DeviceTypeVm> GetDeviceTypeVmFromGenericVm(GenericListVm genericListVm)
-    {
-        var deviceType = await _deviceTypeManager.GetByIdAsync(genericListVm.Id);
-
-        var vm = new DeviceTypeVm()
-        {
-            Id = deviceType.Id,
-            IsActive = deviceType.IsActive,
-            MaintainerId = deviceType.MaintainerId,
-            Platform = deviceType.Name,
-        };
-        return vm;
-    }
+    
     public async Task<DeviceVm> GetDeviceVmById(int id)
     {
         var device = await _deviceManager.GetByIdAsync(id);
@@ -181,10 +169,10 @@ public class PlatformService : IPlatformService
         try
         {
             var result = await _deviceTypeManager.InsertAsync(deviceType);
-            if(result.Id > 0)
-               return result.Id;
+            if (result.Id > 0)
+                return result.Id;
             else
-               return 0;
+                return 0;
         }
         catch
         {
@@ -212,8 +200,6 @@ public class PlatformService : IPlatformService
             throw;
         }
     }
-
-    
 
     #endregion
 
