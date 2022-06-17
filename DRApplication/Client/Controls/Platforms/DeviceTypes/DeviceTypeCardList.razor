@@ -1,7 +1,6 @@
 ﻿@namespace DRApplication.Client.Controls
 @inject IPlatformService PlatformService
 @inject AppState AppState
-@implements IDisposable
 
 <MudGrid Spacing="2" Justify="Justify.Center">
     @if (AppState.DeviceTypeVms is null)
@@ -23,25 +22,9 @@
 
 @code {
 
-    private async Task AppState_StateChanged(ComponentBase Source, string Property)
-    {
-        if (Source != this)
-        {
-            await InvokeAsync(StateHasChanged);
-        }
-    }
-
     protected override async Task OnInitializedAsync()
     {
-        var items =  await PlatformService.GetDeviceTypeVmsAsync();
+        var items = await PlatformService.GetDeviceTypeVmsAsync();
         AppState.UpdateDeviceTypeVms(this, items);
-
-        AppState.StateChanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
     }
-
-    void IDisposable.Dispose()
-    {
-        AppState.StateChanged -= async (Source, Property) => await AppState_StateChanged(Source, Property);
-    }
-
 }
