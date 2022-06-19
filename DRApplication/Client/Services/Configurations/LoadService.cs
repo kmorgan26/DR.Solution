@@ -64,6 +64,27 @@ public class LoadService : ILoadService
         return new List<LoadVm>();
 
     }
+    public async Task<IEnumerable<LoadVm>> GetLoadVmsByHardwareConfigId(int id)
+    {
+        var filter = new QueryFilter<Load>();
+        var filterProperties = new List<FilterProperty>();
+        filterProperties.Add(new FilterProperty()
+        {
+            Name = "HardwareConfigId",
+            Value = id.ToString(),
+            Operator = FilterQueryOperator.Equals
+        });
+        filter.OrderByDescending = true;
+        filter.PaginationFilter = null;
+        filter.FilterProperties = filterProperties;
+
+        var response = await _loadManager.GetAsync(filter);
+
+        if (response is not null)
+            return Mapping.Mapper.Map<IEnumerable<LoadVm>>(response.Data);
+
+        return new List<LoadVm>();
+    }
     public async Task<IEnumerable<VersionsLoadVm>> GetVersionsLoadVmsByLoadId(int id)
     {
         try
@@ -110,52 +131,6 @@ public class LoadService : ILoadService
         
         return new List<CurrentLoadVm>();
     }
-    #endregion
-
-    #region --Tasks--
-    public async Task<IEnumerable<SpecificLoadVm>> GetSpecificLoadVmsByDeviceTypeId(int id)
-    {
-        //first, get a list of devices for the DeviceTypeID (ID)
-        var deviceVms = await _platformService.GetDeviceVmsFromDeviceTypeId(id);
-
-        var deviceIds = deviceVms.Select(x => x.Id).ToList();
-        var deviceCsv = string.Join(",", deviceIds);
-
-        var specificLoadFilter = await new FilterGenerator<SpecificLoad>().GetFilterForPropertyByListOfIdsAsync("DeviceId", deviceCsv);
-        var specificLoadResponse = await _specificLoadManager.GetAsync(specificLoadFilter);
-
-        if (specificLoadResponse is not null && specificLoadResponse.Data is not null)
-            return await this.MapSpecificLoadsToSpecificLoadVms(specificLoadResponse.Data);
-
-        return new List<SpecificLoadVm>();
-    }
-    public async Task AddSoftwareVersionToLoad()
-    {
-        var loadId = _appState.LoadVm.Id;
-        var vms = _appState.VersionsLoadVms.ToList();
-        var softwareSystemId = _appState.SoftwareSystemVm.Id;
-
-        List<int> softwareSystemIds = new List<int>();
-        foreach (var v in vms)
-        {
-            var versionVm = await _softwareService.GetSoftwareVersionVmById(v.SoftwareVersionId);
-            softwareSystemIds.Add(versionVm.SoftwareSystemId);
-        }
-
-        if (softwareSystemIds.Contains(softwareSystemId))
-        {
-            var index = softwareSystemIds.IndexOf(softwareSystemId);
-            var versionLoadIdToRemove = vms[index].Id;
-
-            //THE ID is the same as the SoftwareVersionId?
-
-            //var versionLoad = Mapping.Mapper.Map<VersionsLoad>(versionLoadVmToRemove);
-            await _versionsLoadManager.DeleteByIdAsync(versionLoadIdToRemove);
-        }
-
-        var loadVersionToAdd = new VersionsLoad() { LoadId = loadId, SoftwareVersionId = _appState.SoftwareVersionVm.Id };
-        var result = await _versionsLoadManager.InsertAsync(loadVersionToAdd);
-    }
     public async Task<IEnumerable<CurrentLoadVm>> MapCurrentLoadsToCurrentLoadVms(IEnumerable<CurrentLoad> currentLoads)
     {
         //Get the Loads for the currentLoads
@@ -181,6 +156,22 @@ public class LoadService : ILoadService
         }
 
         return new List<CurrentLoadVm>();
+    }
+    public async Task<IEnumerable<SpecificLoadVm>> GetSpecificLoadVmsByDeviceTypeId(int id)
+    {
+        //first, get a list of devices for the DeviceTypeID (ID)
+        var deviceVms = await _platformService.GetDeviceVmsFromDeviceTypeId(id);
+
+        var deviceIds = deviceVms.Select(x => x.Id).ToList();
+        var deviceCsv = string.Join(",", deviceIds);
+
+        var specificLoadFilter = await new FilterGenerator<SpecificLoad>().GetFilterForPropertyByListOfIdsAsync("DeviceId", deviceCsv);
+        var specificLoadResponse = await _specificLoadManager.GetAsync(specificLoadFilter);
+
+        if (specificLoadResponse is not null && specificLoadResponse.Data is not null)
+            return await this.MapSpecificLoadsToSpecificLoadVms(specificLoadResponse.Data);
+
+        return new List<SpecificLoadVm>();
     }
     public async Task<IEnumerable<SpecificLoadVm>> MapSpecificLoadsToSpecificLoadVms(IEnumerable<SpecificLoad> specificLoads)
     {
@@ -208,6 +199,36 @@ public class LoadService : ILoadService
 
         return new List<SpecificLoadVm>();
     }
+    #endregion
+
+    #region --Tasks--
+    public async Task<LoadVm> GetLoadVmById(int id)
+    {
+        var load = await _loadManager.GetByIdAsync(id);
+        var loadVm = new LoadVm()
+        {
+            Id = load.Id,
+            HardwareConfigId = load.HardwareConfigId,
+            IsAccepted = load.IsAccepted,
+            Name = load.Name
+        };
+        return loadVm;
+    }
+    public async Task<CurrentLoadVm> GetCurrentLoadVmById(int id)
+    {
+        var currentLoad = await _currentLoadManager.GetByIdAsync(id);
+        return await this.MapCurrentLoadToCurrentLoadVm(currentLoad);
+    }
+    public async Task<CurrentLoad> GetCurrentLoadFromCurrentLoadVm(CurrentLoadVm currentLoadVm)
+    {
+        var currentLoad = new CurrentLoad()
+        {
+            Id = currentLoadVm.Id,
+            DeviceId = currentLoadVm.DeviceId,
+            LoadId = currentLoadVm.LoadId
+        };
+        return await Task.Run(() => currentLoad);
+    }
     public async Task<CurrentLoadVm> MapCurrentLoadToCurrentLoadVm(CurrentLoad currentLoad)
     {
         var device = await _platformService.GetDeviceVmById(currentLoad.Id);
@@ -221,6 +242,21 @@ public class LoadService : ILoadService
             LoadName = load.Name
         };
         return currentLoadVm;
+    }
+    public async Task<SpecificLoadVm> GetSpecificLoadVmById(int id)
+    {
+        var specificLoad = await _specificLoadManager.GetByIdAsync(id);
+        return await this.MapSpecificLoadToSpecificLoadVm(specificLoad);
+    }
+    public async Task<SpecificLoad> GetSpecificLoadFromSpecificLoadVm(SpecificLoadVm specificLoadVm)
+    {
+        var specificLoad = new SpecificLoad()
+        {
+            Id = specificLoadVm.Id,
+            DeviceId = specificLoadVm.DeviceId,
+            LoadId = specificLoadVm.LoadId
+        };
+        return await Task.Run(() => specificLoad);
     }
     public async Task<SpecificLoadVm> MapSpecificLoadToSpecificLoadVm(SpecificLoad specificLoad)
     {
@@ -236,75 +272,32 @@ public class LoadService : ILoadService
         };
         return specificLoadVm;
     }
+    public async Task AddSoftwareVersionToLoad()
+    {
+        var loadId = _appState.LoadVm.Id;
+        var vms = _appState.VersionsLoadVms.ToList();
+        var softwareSystemId = _appState.SoftwareSystemVm.Id;
 
-    public async Task<CurrentLoadVm> GetCurrentLoadVmById(int id)
-    {
-        var currentLoad = await _currentLoadManager.GetByIdAsync(id);
-        return await this.MapCurrentLoadToCurrentLoadVm(currentLoad);
-    }
-    public async Task<SpecificLoadVm> GetSpecificLoadVmById(int id)
-    {
-        var specificLoad = await _specificLoadManager.GetByIdAsync(id);
-        return await this.MapSpecificLoadToSpecificLoadVm(specificLoad);
-    }
-
-    public async Task<CurrentLoad> GetCurrentLoadFromCurrentLoadVm(CurrentLoadVm currentLoadVm)
-    {
-        var currentLoad = new CurrentLoad()
+        List<int> softwareSystemIds = new List<int>();
+        foreach (var v in vms)
         {
-            Id = currentLoadVm.Id,
-            DeviceId = currentLoadVm.DeviceId,
-            LoadId = currentLoadVm.LoadId
-        };
-        return await Task.Run(() => currentLoad);
-    }
+            var versionVm = await _softwareService.GetSoftwareVersionVmById(v.SoftwareVersionId);
+            softwareSystemIds.Add(versionVm.SoftwareSystemId);
+        }
 
-    public async Task<LoadVm> GetLoadVmById(int id)
-    {
-        var load = await _loadManager.GetByIdAsync(id);
-        var loadVm = new LoadVm()
+        if (softwareSystemIds.Contains(softwareSystemId))
         {
-            Id = load.Id,
-            HardwareConfigId = load.HardwareConfigId,
-            IsAccepted = load.IsAccepted,
-            Name = load.Name
-        };
-        return loadVm;
-    }
+            var index = softwareSystemIds.IndexOf(softwareSystemId);
+            var versionLoadIdToRemove = vms[index].Id;
 
-    public async Task<IEnumerable<LoadVm>> GetLoadVmsByHardwareConfigId(int id)
-    {
-        var filter = new QueryFilter<Load>();
-        var filterProperties = new List<FilterProperty>();
-        filterProperties.Add(new FilterProperty()
-        {
-            Name = "HardwareConfigId",
-            Value = id.ToString(),
-            Operator = FilterQueryOperator.Equals
-        });
-        filter.OrderByDescending = true;
-        filter.PaginationFilter = null;
-        filter.FilterProperties = filterProperties;
+            //THE ID is the same as the SoftwareVersionId?
 
-        var response = await _loadManager.GetAsync(filter);
+            //var versionLoad = Mapping.Mapper.Map<VersionsLoad>(versionLoadVmToRemove);
+            await _versionsLoadManager.DeleteByIdAsync(versionLoadIdToRemove);
+        }
 
-        if (response is not null)
-            return Mapping.Mapper.Map<IEnumerable<LoadVm>>(response.Data);
-
-        return new List<LoadVm>();
-    }
-
-    
-
-    public async Task<SpecificLoad> GetSpecificLoadFromSpecificLoadVm(SpecificLoadVm specificLoadVm)
-    {
-        var specificLoad = new SpecificLoad()
-        {
-            Id = specificLoadVm.Id,
-            DeviceId = specificLoadVm.DeviceId,
-            LoadId = specificLoadVm.LoadId
-        };
-        return await Task.Run(() => specificLoad);
+        var loadVersionToAdd = new VersionsLoad() { LoadId = loadId, SoftwareVersionId = _appState.SoftwareVersionVm.Id };
+        var result = await _versionsLoadManager.InsertAsync(loadVersionToAdd);
     }
 
     #endregion

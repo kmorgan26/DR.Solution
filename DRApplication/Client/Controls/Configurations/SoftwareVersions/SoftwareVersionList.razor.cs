@@ -63,17 +63,20 @@ public partial class SoftwareVersionList
             }
         }
     }
-
+    async void OnStateChanged(ComponentBase componentBase, string property)
+    {
+        await AppState_StateChanged(componentBase, property);
+    }
     protected override async Task OnInitializedAsync()
     {
         _isBusy = true;
-        AppState.StateChanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
+        AppState.StateChanged += OnStateChanged;
         await SetSoftwareVersions();
         _isBusy = false;
     }
 
     void IDisposable.Dispose()
     {
-        AppState.StateChanged -= async (Source, Property) => await AppState_StateChanged(Source, Property);
+        AppState.StateChanged -= OnStateChanged;
     }
 }

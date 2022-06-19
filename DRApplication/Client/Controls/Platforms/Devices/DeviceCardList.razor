@@ -1,15 +1,15 @@
 ﻿@namespace DRApplication.Client.Controls
 @inject IPlatformService PlatformService
-@inject DeviceManager DeviceManager
+@inject ILoadService LoadService
 @inject AppState AppState
 @implements IDisposable
 
 <MudGrid Spacing="2" Justify="Justify.Center">
     @if (!_isBusy && AppState.DeviceVms is not null)
     {
-        @foreach (var item in AppState.DeviceVms)
+        @foreach (var deviceVm in AppState.DeviceVms)
         {
-            <DeviceCard DeviceVm="item"></DeviceCard>
+            <DeviceCard DeviceVm="deviceVm"></DeviceCard>
         }
     }
 </MudGrid>
@@ -19,10 +19,27 @@
     [Parameter]
     public int DeviceTypeId { get; set; }
 
+    async Task SetDeviceTypeVm()
+    {
+        var deviceTypeVm = await PlatformService.GetDeviceTypeVmById(DeviceTypeId);
+        AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
+    }
+    async Task SetCurrentLoads() //This may not need to run if the current loads are set for current DeviceType
+    {
+        var currentLoadVms = await LoadService.GetCurrentLoadVmsByDeviceTypeId(AppState.DeviceTypeVm.Id);
+        AppState.UpdateCurrentLoadVms(this, currentLoadVms);
+    }
+
     async Task SetDeviceCards()
     {
         var deviceVms = await PlatformService.GetDeviceVmsFromDeviceTypeId(AppState.DeviceTypeVm.Id);
         AppState.UpdateDeviceVms(this, deviceVms);
+    }
+
+    async Task SetSpecificLoads()
+    {
+        var specificLoadVms = await LoadService.GetSpecificLoadVmsByDeviceTypeId(AppState.DeviceTypeVm.Id);
+        AppState.UpdateSpecificLoadVms(this, specificLoadVms);
     }
 
     bool _isBusy;
@@ -33,23 +50,37 @@
         {
             if (Property == "DeviceTypeVm")
             {
+                this.DeviceTypeId = AppState.DeviceTypeVm.Id;
+                await SetCurrentLoads();
+                await SetSpecificLoads();
                 await SetDeviceCards();
                 await InvokeAsync(StateHasChanged);
             }
         }
     }
+    async void OnStateChanged(ComponentBase componentBase, string property)
+    {
+        await AppState_StateChanged(componentBase, property);
+    }
     protected override async Task OnInitializedAsync()
     {
         _isBusy = true;
-        AppState.StateChanged += async (Source, Property) => await AppState_StateChanged(Source, Property);
-        var deviceTypeVm = await PlatformService.GetDeviceTypeVmById(DeviceTypeId);
-        AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
+        AppState.StateChanged += OnStateChanged;
 
+        if (DeviceTypeId != AppState.DeviceTypeVm.Id)
+        {
+            //There is a change of platform
+            await SetDeviceTypeVm();
+        }
+
+        await SetCurrentLoads();
+        await SetSpecificLoads();
         await SetDeviceCards();
+
         _isBusy = false;
     }
     void IDisposable.Dispose()
     {
-        AppState.StateChanged -= async (Source, Property) => await AppState_StateChanged(Source, Property);
+        AppState.StateChanged -= OnStateChanged;
     }
 }
