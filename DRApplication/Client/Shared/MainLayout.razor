@@ -53,7 +53,8 @@
     }
     private void SetPlatform(DeviceTypeVm deviceTypeVm)
     {
-        AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
+        if(AppState.DeviceTypeVm.Id != deviceTypeVm.Id)
+            AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
     }
     async void OnStateChanged(ComponentBase componentBase, string property)
     {
