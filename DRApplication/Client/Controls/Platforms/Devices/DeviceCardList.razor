@@ -24,21 +24,21 @@
         var deviceTypeVm = await PlatformService.GetDeviceTypeVmById(DeviceTypeId);
         AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
     }
-    async Task SetCurrentLoads() //This may not need to run if the current loads are set for current DeviceType
+    async Task SetCurrentLoads()
     {
-        var currentLoadVms = await LoadService.GetCurrentLoadVmsByDeviceTypeId(AppState.DeviceTypeVm.Id);
+        var currentLoadVms = await LoadService.GetCurrentLoadVmsByDeviceTypeId(DeviceTypeId);
         AppState.UpdateCurrentLoadVms(this, currentLoadVms);
     }
 
     async Task SetDeviceCards()
     {
-        var deviceVms = await PlatformService.GetDeviceVmsFromDeviceTypeId(AppState.DeviceTypeVm.Id);
+        var deviceVms = await PlatformService.GetDeviceVmsFromDeviceTypeId(DeviceTypeId);
         AppState.UpdateDeviceVms(this, deviceVms);
     }
 
     async Task SetSpecificLoads()
     {
-        var specificLoadVms = await LoadService.GetSpecificLoadVmsByDeviceTypeId(AppState.DeviceTypeVm.Id);
+        var specificLoadVms = await LoadService.GetSpecificLoadVmsByDeviceTypeId(DeviceTypeId);
         AppState.UpdateSpecificLoadVms(this, specificLoadVms);
     }
 
