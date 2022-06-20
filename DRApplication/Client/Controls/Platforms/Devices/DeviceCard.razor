@@ -24,10 +24,18 @@
             </MudCardHeader>
             <MudCardContent>
                 <MudTooltip Text="Primary Load">
-                    <MudChip Icon="@Icons.Filled.Checklist" Label="true" Color="Color.Primary">@_currentLoadVm.LoadName</MudChip>
+                    <MudChip Icon="@Icons.Filled.Checklist" Label="true" Color="Color.Warning">
+                        <MudLink Href="@($"/loadviewer/{@_currentLoadVm.Id}")">
+                            @_currentLoadVm.LoadName
+                        </MudLink>
+                    </MudChip>
                 </MudTooltip>
                 <MudTooltip Text="Device Specific Load">
-                    <MudChip Icon="@Icons.Filled.Architecture" Label="true" Color="Color.Info">@_specificLoadVm.LoadName</MudChip>
+                    <MudChip Icon="@Icons.Filled.Architecture" Label="true" Color="Color.Info">
+                        <MudLink Href="@($"/loadviewer/{@_specificLoadVm.Id}")">
+                            @_specificLoadVm.LoadName
+                        </MudLink>
+                    </MudChip>
                 </MudTooltip>
             </MudCardContent>
             <MudCardActions>
