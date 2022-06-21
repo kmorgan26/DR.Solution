@@ -6,36 +6,36 @@
 {
     <MudItem xs="12" sm="12" md="6" lg="3">
         <MudCard Elevation="5">
-            <MudCardHeader>
+            <MudCardHeader Class="my-0">
                 <CardHeaderAvatar>
-                    <MudAvatar Color="Color.Success" Size="Size.Medium">
+                    <MudAvatar Square="true" Color="Color.Tertiary" Size="Size.Medium">
                         @DeviceVm.Device.ToString().Substring(2)
                     </MudAvatar>
                 </CardHeaderAvatar>
                 <CardHeaderContent>
-                    <MudLink Typo="Typo.h6" Color="Color.Primary" Href="@($"/device/details/{@DeviceVm.Id}")">
-                        @AppState.DeviceTypeVm.Platform
+                    <MudLink Typo="Typo.h5" Class="px-6" Color="Color.Dark" Href="@($"/device/details/{@DeviceVm.Id}")">
                         @DeviceVm.Device
                     </MudLink>
                 </CardHeaderContent>
                 <CardHeaderActions>
-                    <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Settings" Href="@($"/device/edit/{@DeviceVm.Id}")" Color="Color.Info" />
                 </CardHeaderActions>
             </MudCardHeader>
             <MudCardContent>
-                <MudTooltip Text="Primary Load">
-                    <MudChip Icon="@Icons.Filled.Checklist" Label="true" Color="Color.Warning">
-                        <MudLink Href="@($"/loadviewer/{@_currentLoadVm.Id}")">
+                <MudTooltip Text="Primary Load" Arrow="true" Placement="Placement.Right" Color="Color.Transparent">
+                    <MudText Typo="Typo.h5">
+                        <MudLink Href="@($"/load/details/{@_currentLoadVm.LoadId}")">
                             @_currentLoadVm.LoadName
                         </MudLink>
-                    </MudChip>
+                    </MudText>
                 </MudTooltip>
-                <MudTooltip Text="Device Specific Load">
-                    <MudChip Icon="@Icons.Filled.Architecture" Label="true" Color="Color.Info">
-                        <MudLink Href="@($"/loadviewer/{@_specificLoadVm.Id}")">
+                <MudDivider />
+                <MudTooltip Text="Device Specific Load" Arrow="true" Placement="Placement.Right" Color="Color.Transparent">
+                    <MudText Typo="Typo.h5">
+                        <MudLink Href="@($"/load/details/{@_specificLoadVm.LoadId}")">
                             @_specificLoadVm.LoadName
                         </MudLink>
-                    </MudChip>
+                    </MudText>
                 </MudTooltip>
             </MudCardContent>
             <MudCardActions>
