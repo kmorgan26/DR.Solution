@@ -79,6 +79,7 @@
         var loadVm = await LoadService.GetLoadVmById(LoadId);
         AppState.UpdateLoadVm(this, loadVm);
         await SetVersionLoadVmsForLoad();
+        await GetDeviceVmsForLoad();
         _isbusy = false;
     }
 }
