@@ -3,6 +3,11 @@
 @inject IPlatformService PlatformService
 @inject AppState AppState
 
+<MudPaper Class="pa-2 mb-6" Elevation="0">
+    <MudAlert Severity="Severity.Normal">@AppState.LoadVm.Name</MudAlert>
+</MudPaper>
+
+
 @if (!_isbusy)
 {
     <MudGrid>
