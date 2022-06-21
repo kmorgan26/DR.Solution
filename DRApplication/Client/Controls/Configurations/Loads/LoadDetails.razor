@@ -1,0 +1,79 @@
+﻿@namespace DRApplication.Client.Controls
+@inject ILoadService LoadService
+@inject IPlatformService PlatformService
+@inject AppState AppState
+
+@if (!_isbusy)
+{
+    <MudGrid>
+        <MudItem xs="12" sm="9" md="6" lg="3">
+            <MudAlert Severity="Severity.Success">Software Versions</MudAlert>
+            <MudTable Items="@AppState.VersionsLoadVms" Hover="true" T="VersionsLoadVm" Dense="true">
+                <HeaderContent>
+                    <MudTh>System</MudTh>
+                    <MudTh>Version</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="System">@context.SoftwareSystemName</MudTd>
+                    <MudTd DataLabel="Version">@context.SoftwareVersionName</MudTd>
+                </RowTemplate>
+            </MudTable>
+        </MudItem>
+        <MudItem xs="12" sm="9" md="6" lg="3">
+            <MudAlert Severity="Severity.Success">Devices with this Software Load</MudAlert>
+            <MudTable Items="@AppState.DeviceVms" Hover="true" T="DeviceVm" Dense="true">
+                <HeaderContent>
+                    <MudTh>Device</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="System">@context.Device</MudTd>
+                </RowTemplate>
+            </MudTable>
+        </MudItem>
+    </MudGrid>
+}
+
+@code {
+
+    [Parameter]
+    public int LoadId { get; set; }
+
+    bool _isbusy;
+
+    async Task SetVersionLoadVmsForLoad()
+    {
+        if (AppState.LoadVm.Id > 0)
+        {
+            var items = await LoadService.GetVersionsLoadVmsByLoadId(AppState.LoadVm.Id);
+            AppState.UpdateVersionsLoadVms(this, items);
+        }
+        else
+        {
+            AppState.UpdateVersionsLoadVms(this, new List<VersionsLoadVm>());
+        }
+    }
+
+    async Task GetDeviceVmsForLoad()
+    {
+        if (AppState.LoadVm.Id > 0)
+        {
+            List<int> ids = new();
+            var specificLoadVms = await LoadService.GetSpecificLoadVmsByLoadId(AppState.LoadVm.Id);
+            var currentLoadVms = await LoadService.GetCurrentLoadVmsByLoadId(AppState.LoadVm.Id);
+            ids.AddRange(specificLoadVms.Select(i => i.DeviceId).ToList());
+            ids.AddRange(currentLoadVms.Select(i => i.DeviceId).ToList());
+            var deviceCsv = string.Join(",", ids.Select(i => i.ToString()).ToArray());
+            var deviceVms = await PlatformService.GetDeviceVmsByCsvOfIds(deviceCsv);
+            AppState.UpdateDeviceVms(this, deviceVms);
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isbusy = true;
+        var loadVm = await LoadService.GetLoadVmById(LoadId);
+        AppState.UpdateLoadVm(this, loadVm);
+        await SetVersionLoadVmsForLoad();
+        _isbusy = false;
+    }
+}

@@ -1,10 +1,17 @@
-﻿@page "/loadviewer/{LoadId:int}"
+﻿@page "/load/details/{LoadId:int}"
 
 
-This is the page for 
+<TitleHeader TitleText="Load Details" IconPath="@Icons.Material.Filled.LineWeight" />
+
+<MudPaper Class="pa-2 mb-6" Elevation="0">
+    <MudAlert Severity="Severity.Normal">Details for the Software Load</MudAlert>
+</MudPaper>
+
+<LoadDetails LoadId="LoadId"></LoadDetails>
 
 @code {
 
     [Parameter]
     public int LoadId { get; set; }
+    
 }
