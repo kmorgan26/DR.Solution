@@ -199,6 +199,25 @@ public class LoadService : ILoadService
 
         return new List<SpecificLoadVm>();
     }
+    public async Task<IEnumerable<CurrentLoadVm>> GetCurrentLoadVmsByLoadId(int id)
+    {
+        //SELECT * FROM CurrentLoads ---> **--WHERE LoadId = id--**
+        var loadFilter = await new FilterGenerator<CurrentLoad>().GetFilterForPropertyByNameAsync("LoadId", id);
+        var currentLoadResponse = await _currentLoadManager.GetAsync(loadFilter);
+        if (currentLoadResponse.Data is not null)
+            return await MapCurrentLoadsToCurrentLoadVms(currentLoadResponse.Data);
+        return new List<CurrentLoadVm>();
+    }
+
+    public async Task<IEnumerable<SpecificLoadVm>> GetSpecificLoadVmsByLoadId(int id)
+    {
+        //SELECT * FROM CurrentLoads ---> **--WHERE LoadId = id--**
+        var loadFilter = await new FilterGenerator<SpecificLoad>().GetFilterForPropertyByNameAsync("LoadId", id);
+        var specificLoadResponse = await _specificLoadManager.GetAsync(loadFilter);
+        if (specificLoadResponse.Data is not null)
+            return await MapSpecificLoadsToSpecificLoadVms(specificLoadResponse.Data);
+        return new List<SpecificLoadVm>();
+    }
     #endregion
 
     #region --Tasks--
@@ -299,6 +318,8 @@ public class LoadService : ILoadService
         var loadVersionToAdd = new VersionsLoad() { LoadId = loadId, SoftwareVersionId = _appState.SoftwareVersionVm.Id };
         var result = await _versionsLoadManager.InsertAsync(loadVersionToAdd);
     }
+
+    
 
     #endregion
 }
