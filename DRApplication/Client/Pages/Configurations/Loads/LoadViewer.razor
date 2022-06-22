@@ -1,9 +1,10 @@
 ﻿@page "/load/details/{LoadId:int}"
 
-
 <TitleHeader TitleText="Load Details" IconPath="@Icons.Material.Filled.LineWeight" />
 
-
+<MudPaper Class="pa-2 mb-6" Elevation="0">
+    <MudAlert Severity="Severity.Normal">Select a Hardware Version...</MudAlert>
+</MudPaper>
 
 <LoadDetails LoadId="LoadId"></LoadDetails>
 

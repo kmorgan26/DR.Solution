@@ -3,9 +3,9 @@
 @inject IPlatformService PlatformService
 @inject AppState AppState
 
-<MudPaper Class="pa-2 mb-6" Elevation="0">
-    <MudAlert Severity="Severity.Normal">@AppState.LoadVm.Name</MudAlert>
-</MudPaper>
+<MudItem xs="12" sm="9" md="6" lg="3">
+    <HardwareConfigSelect OnHardwareConfigIdChanged="HardwareConfigChanged" />
+</MudItem>
 
 
 @if (!_isbusy)
@@ -44,7 +44,10 @@
     public int LoadId { get; set; }
 
     bool _isbusy;
+    async Task HardwareConfigChanged()
+    {
 
+    }
     async Task SetVersionLoadVmsForLoad()
     {
         if (AppState.LoadVm.Id > 0)
