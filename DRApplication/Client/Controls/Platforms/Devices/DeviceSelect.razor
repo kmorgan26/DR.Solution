@@ -1,6 +1,7 @@
 ﻿@namespace DRApplication.Client.Controls
 @inject IPlatformService PlatformService
 @inject AppState AppState
+@implements IDisposable
 
 @if (!_isBusy)
 {
@@ -25,11 +26,31 @@
         var items = await PlatformService.GetDeviceVmsFromDeviceTypeId(AppState.DeviceTypeVm.Id);
         AppState.UpdateDeviceVms(this, items);
     }
-
+    private async Task AppState_StateChanged(ComponentBase Source, string Property)
+    {
+        if (Source != this)
+        {
+            if (Property == "DeviceTypeVm")
+            {
+                await SetDevices();
+                AppState.UpdateDeviceVm(this, new DeviceVm());
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+    }
+    async void OnStateChanged(ComponentBase componentBase, string property)
+    {
+        await AppState_StateChanged(componentBase, property);
+    }
     protected override async Task OnInitializedAsync()
     {
         _isBusy = true;
+        AppState.StateChanged += OnStateChanged;
         await SetDevices();
         _isBusy = false;
+    }
+    void IDisposable.Dispose()
+    {
+        AppState.StateChanged -= OnStateChanged;
     }
 }
