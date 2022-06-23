@@ -39,6 +39,7 @@ builder.Services.AddTransient<IPlatformService, PlatformService>();
 builder.Services.AddTransient<ILoadService, LoadService>();
 builder.Services.AddTransient<IHardwareService, HardwareService>();
 builder.Services.AddTransient<ISoftwareService, SoftwareService>();
+builder.Services.AddTransient<IIssueService, IssueService>();
 
 builder.Services.AddBlazoredLocalStorage();
 
