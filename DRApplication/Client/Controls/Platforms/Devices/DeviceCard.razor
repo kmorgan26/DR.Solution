@@ -39,7 +39,16 @@
                 </MudTooltip>
             </MudCardContent>
             <MudCardActions>
-                <MudIconButton Icon="@Icons.Material.Filled.Favorite" Color="Color.Default" />
+                <MudLink Href="@($"/maint/entry/{@DeviceVm.Id}")">
+                    <MudTooltip Text="Maintenance Issue Entry" Color="Color.Warning">
+                        <MudIconButton Icon="@Icons.Material.Filled.Build" Color="Color.Warning" />
+                    </MudTooltip>
+                </MudLink>
+                <MudTooltip Text="Test Events" Color="Color.Error">
+                    <MudIconButton Icon="@Icons.Material.Filled.Event" Color="Color.Error" />
+                </MudTooltip>
+
+                <MudIconButton Icon="@Icons.Material.Filled.Share" Color="Color.Default" />
                 <MudIconButton Icon="@Icons.Material.Filled.Share" Color="Color.Default" />
             </MudCardActions>
         </MudCard>
