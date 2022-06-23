@@ -24,6 +24,9 @@ namespace DRApplication.Server
             builder.Services.AddTransient(s => new DapperRepository<DeviceType>(
                 builder.Configuration.GetConnectionString("DRConnectionString")));
 
+            builder.Services.AddTransient(s => new DapperRepository<Dr>(
+                builder.Configuration.GetConnectionString("DRConnectionString")));
+
             builder.Services.AddTransient(s => new DapperRepository<HardwareConfig>(
                 builder.Configuration.GetConnectionString("DRConnectionString")));
 
@@ -36,10 +39,16 @@ namespace DRApplication.Server
             builder.Services.AddTransient(s => new DapperRepository<HardwareVersionsConfig>(
                builder.Configuration.GetConnectionString("DRConnectionString")));
 
+            builder.Services.AddTransient(s => new DapperRepository<Issue>(
+               builder.Configuration.GetConnectionString("DRConnectionString")));
+
             builder.Services.AddTransient(s => new DapperRepository<Load>(
                builder.Configuration.GetConnectionString("DRConnectionString")));
 
             builder.Services.AddTransient(s => new DapperRepository<Maintainer>(
+                builder.Configuration.GetConnectionString("DRConnectionString")));
+
+            builder.Services.AddTransient(s => new DapperRepository<MaintIssue>(
                 builder.Configuration.GetConnectionString("DRConnectionString")));
 
             builder.Services.AddTransient(s => new DapperRepository<SpecificLoad>(
