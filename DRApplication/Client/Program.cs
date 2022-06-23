@@ -34,6 +34,9 @@ builder.Services.AddScoped<SpecificLoadManager>();
 builder.Services.AddScoped<SoftwareSystemManager>();
 builder.Services.AddScoped<SoftwareVersionManager>();
 builder.Services.AddScoped<VersionsLoadManager>();
+builder.Services.AddScoped<IssueManager>();
+builder.Services.AddScoped<MaintIssueManager>();
+builder.Services.AddScoped<DrManager>();
 
 builder.Services.AddTransient<IPlatformService, PlatformService>();
 builder.Services.AddTransient<ILoadService, LoadService>();
