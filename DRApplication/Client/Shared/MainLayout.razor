@@ -10,15 +10,13 @@
 <MudLayout>
     <MudAppBar Elevation="0">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-        <MudSpacer />
-        DevTypeVm.Id: @AppState.DeviceTypeVm.Id ||
+        @*DevTypeVm.Id: @AppState.DeviceTypeVm.Id ||
         HwConfig.Id : @AppState.HardwareConfigVm.Id ||
         SWSystem.Id: @AppState.SoftwareSystemVm.Id ||
         SWVersion.Id: @AppState.SoftwareVersionVm.Id ||
         LoadVm.Id: @AppState.LoadVm.Id ||
-        CurrentLoadVm.Id: @AppState.CurrentLoadVm.Id
+        CurrentLoadVm.Id: @AppState.CurrentLoadVm.Id*@
         <MudSpacer />
-        
         <DeviceTypeMenu OnItemClick="SetPlatform" />
 
         <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Inherit" Link="/user/settings" />
@@ -26,12 +24,12 @@
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" Elevation="3">
         <MudDrawerHeader>
-            <MudText Typo="Typo.h5" Color="Color.Primary" Class="pl-6 mt-2">@AppState?.DeviceTypeVm?.Platform</MudText>
+            <MudText Typo="Typo.h5" Color="Color.Primary" Class="pl-2 mt-2">@AppState?.DeviceTypeVm?.Platform</MudText>
         </MudDrawerHeader>
         <NavMenu />
     </MudDrawer>
     <MudMainContent>
-        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="my-8 pt-4">
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="my-2 pt-4">
             @Body
         </MudContainer>
     </MudMainContent>
