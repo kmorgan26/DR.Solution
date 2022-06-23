@@ -1,0 +1,43 @@
+﻿@namespace DRApplication.Client.Controls
+
+
+<EditForm Model="@_maintenanceIssueInsertVm" OnValidSubmit="@InsertMaintenanceIssue">
+
+    <MudGrid>
+        <MudItem xs="12" sm="12" md="4" lg="3">
+            <MudDatePicker Class="my-6" Label="Issue Date" Variant="Variant.Outlined" @bind-Date="@_maintenanceIssueInsertVm.IssueDate" />
+        </MudItem>
+        <MudItem xs="12" sm="12" md="4" lg="3">
+            <MudPaper Class="pt-8" Elevation="0">
+                <MudCheckBox @bind-Checked="@_isContractor" Label="Contractor?" />
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+    <MudGrid Class="mb-2">
+        <MudItem xs="12" sm="12" md="6" lg="4">
+            <MudTextField T="string" Label="Description" Variant="Variant.Outlined" @bind-Value="@_maintenanceIssueInsertVm.Description" Lines="3" />
+        </MudItem>
+        <MudItem xs="12" sm="12" md="6" lg="4">
+            <MudTextField T="string" Label="Corrective Action" Variant="Variant.Outlined" Lines="3" />
+        </MudItem>
+    </MudGrid>
+
+    <MudPaper Elevation="0">
+        <SubmitButton ButtonText="Enter" />
+    </MudPaper>
+
+    <MudHidden @bind-Value="_maintenanceIssueInsertVm.DeviceId" />
+</EditForm>
+
+@code {
+
+    private MaintenanceIssueInsertVm _maintenanceIssueInsertVm { get; set; } = new();
+
+    bool _isContractor;
+
+    async Task InsertMaintenanceIssue()
+    {
+
+    }
+
+}
