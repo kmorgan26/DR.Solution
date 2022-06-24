@@ -5,7 +5,7 @@
 
 @if (!_isBusy)
 {
-    <MudSelect Variant="Variant.Outlined" T="int" Label="Platform" Value="@AppState.DeviceVm.Id" ValueChanged="@OnDeviceIdChanged">
+    <MudSelect Variant="Variant.Outlined" T="int" Label="Device" Value="@AppState.DeviceVm.Id" ValueChanged="@OnDeviceIdChanged">
         <MudSelectItem Value="0">SELECT Device</MudSelectItem>
         @foreach (var item in @AppState.DeviceVms)
         {

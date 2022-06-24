@@ -6,7 +6,7 @@
 @if (!_isBusy)
 {
     <MudItem xs="12" sm="12" md="4" lg="3">
-        <DeviceSelect OnDeviceIdChanged="ChangeDevice" />
+        <DeviceSelect OnDeviceIdChanged="SetDevice" />
     </MudItem>
 
     <MaintenanceIssueForm></MaintenanceIssueForm>
@@ -19,7 +19,7 @@
 
     bool _isBusy;
 
-    async Task ChangeDevice(int id)
+    async Task SetDevice(int id)
     {
         var deviceVm = await PlatformService.GetDeviceVmById(id);
         DeviceId = deviceVm.Id;
@@ -31,7 +31,7 @@
         {
             if (Property == "asdf")
             {
-                await ChangeDevice(DeviceId);
+                await SetDevice(DeviceId);
                 await InvokeAsync(StateHasChanged);
             }
         }
@@ -46,7 +46,7 @@
         AppState.StateChanged += OnStateChanged;
         if (DeviceId != @AppState.DeviceVm.Id)
         {
-            await ChangeDevice(DeviceId);
+            await SetDevice(DeviceId);
         }
 
         _isBusy = false;

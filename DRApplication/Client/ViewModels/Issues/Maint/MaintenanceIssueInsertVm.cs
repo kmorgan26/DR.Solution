@@ -3,8 +3,9 @@
 namespace DRApplication.Client.ViewModels;
 public class MaintenanceIssueInsertVm
 {
-    public int DrTypeId { get; set; }
-    public int SimStatusId { get; set; } = 0;
+    public bool IsDeferred { get; set; } = false;
+
+    public bool IsContractor { get; set; } = false;
 
     [Required]
     public string Description { get; set; } = string.Empty;

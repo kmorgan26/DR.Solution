@@ -15,6 +15,9 @@ namespace DRApplication.Server
                 o.MemoryBufferThreshold = int.MaxValue;
             });
 
+            builder.Services.AddTransient(s => new DapperRepository<CorrectiveAction>(
+               builder.Configuration.GetConnectionString("DRConnectionString")));
+
             builder.Services.AddTransient(s => new DapperRepository<CurrentLoad>(
                builder.Configuration.GetConnectionString("DRConnectionString")));
 
