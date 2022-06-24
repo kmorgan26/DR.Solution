@@ -21,6 +21,8 @@ public class MaintenanceIssueInsertVm
     [Required]
     public string Pid { get; set; } = string.Empty;
 
+    [Required]
+    public string ActionTaken { get; set; } = string.Empty;
 
     public int CorrectiveActionId { get; set; } = 0;
 }
