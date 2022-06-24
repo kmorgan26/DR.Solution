@@ -15,16 +15,16 @@ namespace DRApplication.Client.Services
         /// <param name="propertyName"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<QueryFilter<TEntity>> GetFilterForPropertyByNameAsync(string propertyName, int id)
+        public async Task<QueryFilter<TEntity>> GetFilterWherePropertyEqualsValueAsync(string propertyName, int id)
         {
             var filter = new QueryFilter<TEntity>();
             var filterProperties = new List<FilterProperty>();
-            filterProperties.Add(new FilterProperty()
+            await Task.Run(() => filterProperties.Add(new FilterProperty()
             {
                 Name = propertyName,
                 Value = id.ToString(),
                 Operator = FilterQueryOperator.Equals
-            });
+            }));
             filter.OrderByDescending = true;
             filter.OrderByPropertyName = "Id";
             filter.PaginationFilter = null;
@@ -33,18 +33,18 @@ namespace DRApplication.Client.Services
 
             return filter;
         }
-        public async Task<QueryFilter<TEntity>> GetFilterForPropertiesByNamesAsync(string propertyName, List<string> ids)
+        public async Task<QueryFilter<TEntity>> GetFilterWherePropertyEqualsValuesAsync(string propertyName, List<string> ids)
         {
             var filter = new QueryFilter<TEntity>();
             var filterProperties = new List<FilterProperty>();
             foreach (var i in ids)
             {
-                filterProperties.Add(new FilterProperty()
+                await Task.Run(() =>filterProperties.Add(new FilterProperty()
                 {
                     Name = propertyName,
                     Value = i,
                     Operator = FilterQueryOperator.Equals
-                });
+                }));
             }
             filter.OrderByDescending = true;
             filter.OrderByPropertyName = "Id";
@@ -52,6 +52,8 @@ namespace DRApplication.Client.Services
             filter.FilterProperties = filterProperties;
             return filter;
         }
+        
+        //TODO: Use a List<string> as parameter
         public async Task<QueryFilter<TEntity>> GetFilterForPropertyByListOfIdsAsync(string properyName, string csvIds)
         {
             var filter = new QueryFilter<TEntity>();
