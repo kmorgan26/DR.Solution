@@ -1,23 +1,19 @@
 ﻿using DRApplication.Client.Interfaces;
 using DRApplication.Client.ViewModels;
+using DRApplication.Client.Helpers;
+using DRApplication.Shared.Models;
 
 namespace DRApplication.Client.Services
 {
     public class IssueService : IIssueService
     {
         private readonly IPlatformService _platformService;
-        private readonly CorrectiveActionManager _correctiveActionManager;
-        private readonly IssueManager _issueManager;
-        private readonly DrManager _drManager;
-        private readonly MaintainerManager _maintainerManager;
+        private readonly ManagerService _managerService;
 
-        public IssueService(IPlatformService platformService, CorrectiveActionManager correctiveActionManager, IssueManager issueManager, DrManager drManager, MaintainerManager maintainerManager)
+        public IssueService(IPlatformService platformService, ManagerService managerService)
         {
             _platformService = platformService;
-            _correctiveActionManager = correctiveActionManager;
-            _issueManager = issueManager;
-            _drManager = drManager;
-            _maintainerManager = maintainerManager;
+            _managerService = managerService;
         }
 
         public Task<int> InsertDrAsync()
@@ -25,18 +21,40 @@ namespace DRApplication.Client.Services
             throw new NotImplementedException();
         }
 
-        public Task<int> InsertIssueAsync()
+        public async Task<int> InsertIssueAsync(IssueInsertVm issueInsertVm)
         {
-            throw new NotImplementedException();
+            var issueToInsert = IssueHelpers.GetIssueFromIssueInsertVm(issueInsertVm);
+
+            var issue = await _managerService.IssueManager().InsertAsync(issueToInsert);
+            return issue.Id;
         }
 
-        public Task<int> InsertMaintenanceIssueAsync(MaintenanceIssueInsertVm maintenanceIssueInsertVm)
+        public async Task<int> InsertMaintenanceIssueAsync(MaintenanceIssueInsertVm maintenanceIssueInsertVm)
         {
-            throw new NotImplementedException();
+            //Before Inserting a Maintenance Issue, we need an IssueId after an Issue Insert
+            var issueInsertVm = IssueHelpers.GetIssueInsertVmFromMaintenanceIssueVm(maintenanceIssueInsertVm);
+            var issueId = await InsertIssueAsync(issueInsertVm);
+
+            //we have the IssueId. Now insert the Maintenance Issue
+            var maintIssueToInsert = new MaintIssue
+            {
+                ActionTaken = maintenanceIssueInsertVm.ActionTaken,
+                CorrectiveActionId = maintenanceIssueInsertVm.CorrectiveActionId,
+                IssueId = issueId,
+                Pid = maintenanceIssueInsertVm.Pid
+            };
+            var maintIssue = await _managerService.MaintIssueManager().InsertAsync(maintIssueToInsert);
+
+            //Need TO Insert into DeviceDiscovered
+
+            await InsertDeviceDiscoveredAsync(maintenanceIssueInsertVm.DeviceId, issueId);
+
+            return maintIssue.Id;
+
         }
         public async Task<IEnumerable<CorrectiveActionVm>> GetCorrectiveActionVmsAsync()
         {
-            var correctiveActions = await _correctiveActionManager.GetAllAsync();
+            var correctiveActions = await _managerService.CorrectiveActionManager().GetAllAsync();
 
             var vms = correctiveActions.Select(c => new CorrectiveActionVm
             {
@@ -45,6 +63,18 @@ namespace DRApplication.Client.Services
             }).OrderBy(i => i.Name);
 
             return vms;
+        }
+
+        public async Task<int> InsertDeviceDiscoveredAsync(int deviceId, int issueId)
+        {
+            var deviceDiscoveredToInsert = new DeviceDiscovered
+            {
+                DeviceId = deviceId,
+                IssueId = issueId
+            };
+            var deviceDiscovered = await _managerService.DeviceDiscoveredManager().InsertAsync(deviceDiscoveredToInsert);
+
+            return deviceDiscovered.Id;
         }
     }
 }
