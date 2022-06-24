@@ -72,7 +72,7 @@ public class PlatformService : IPlatformService
     public async Task<IEnumerable<DeviceVm>> GetDeviceVmsFromDeviceTypeId(int id)
     {
         //Filter = FROM Devices WHERE DeviceTypeId = id 
-        var deviceTypeFilter = await new FilterGenerator<Device>().GetFilterForPropertyByNameAsync("DeviceTypeId", id);
+        var deviceTypeFilter = await new FilterGenerator<Device>().GetFilterWherePropertyEqualsValueAsync("DeviceTypeId", id);
         var devices = await _deviceManager.GetAsync(deviceTypeFilter);
 
         return Mapping.Mapper.Map<IEnumerable<DeviceVm>>(devices.Data).OrderBy(i => i.Device);
@@ -80,7 +80,7 @@ public class PlatformService : IPlatformService
     public async Task<IEnumerable<DeviceTypeVm>> GetDeviceTypeVmsByMaintainerId(int id)
     {
         //Filter = FROM DeviceTypes WHERE MaintainerId = id 
-        var maintainerFilter = await new FilterGenerator<DeviceType>().GetFilterForPropertyByNameAsync("MaintainerId", id);
+        var maintainerFilter = await new FilterGenerator<DeviceType>().GetFilterWherePropertyEqualsValueAsync("MaintainerId", id);
         var deviceTypes = await _deviceTypeManager.GetAsync(maintainerFilter);
         var maintainers = await _maintainerManager.GetAllAsync();
 
