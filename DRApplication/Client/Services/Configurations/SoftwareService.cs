@@ -55,13 +55,13 @@ public class SoftwareService : ISoftwareService
 
     public async Task<IEnumerable<SoftwareSystemVm>> GetSoftwareSystemVmsByHardwareConfigId(int id)
     {
-        var filter = await new FilterGenerator<SoftwareSystem>().GetFilterForPropertyByNameAsync("HardwareConfigId", id);
+        var filter = await new FilterGenerator<SoftwareSystem>().GetFilterWherePropertyEqualsValueAsync("HardwareConfigId", id);
         var softwareSystems = await _softwareSystemManager.GetAsync(filter);
         return Mapping.Mapper.Map<IEnumerable<SoftwareSystemVm>>(softwareSystems.Data).OrderBy(i => i.Name);
     }
     public async Task<IEnumerable<SoftwareVersionVm>> GetSoftwareVersionVmsBySoftwareSystemId(int id)
     {
-        var softwareSystemFilter = await new FilterGenerator<SoftwareVersion>().GetFilterForPropertyByNameAsync("SoftwareSystemId", id);
+        var softwareSystemFilter = await new FilterGenerator<SoftwareVersion>().GetFilterWherePropertyEqualsValueAsync("SoftwareSystemId", id);
         var softwareVersionResponse = await _softwareVersionManager.GetAsync(softwareSystemFilter);
 
         if (softwareVersionResponse.Data is not null)
@@ -71,7 +71,7 @@ public class SoftwareService : ISoftwareService
     }
     public async Task<IEnumerable<SoftwareVersionVm>> GetSoftwareVersionVmsByLoadId(int id)
     {
-        var versionLoadFilter = await new FilterGenerator<VersionsLoad>().GetFilterForPropertyByNameAsync("LoadId", id);
+        var versionLoadFilter = await new FilterGenerator<VersionsLoad>().GetFilterWherePropertyEqualsValueAsync("LoadId", id);
         var versionLoadResponse = await _versionsLoadManager.GetAsync(versionLoadFilter);
 
         List<string> softwareVersionIdList = new List<string>();
@@ -80,7 +80,7 @@ public class SoftwareService : ISoftwareService
         {
             softwareVersionIdList.Add(item.SoftwareVersionId.ToString());
         }
-        var softVersionFilter = await new FilterGenerator<SoftwareVersion>().GetFilterForPropertiesByNamesAsync("SoftwareVersion", softwareVersionIdList);
+        var softVersionFilter = await new FilterGenerator<SoftwareVersion>().GetFilterWherePropertyEqualsValuesAsync("SoftwareVersion", softwareVersionIdList);
         var softwareVersionResponse = await _softwareVersionManager.GetAsync(softVersionFilter);
 
         return Mapping.Mapper.Map<IEnumerable<SoftwareVersionVm>>(softwareVersionResponse.Data);
@@ -88,7 +88,7 @@ public class SoftwareService : ISoftwareService
     }
     public async Task<IEnumerable<VersionsLoad>> GetVersionLoadsByLoadId(int id)
     {
-        var versionLoadsFilter = await new FilterGenerator<VersionsLoad>().GetFilterForPropertyByNameAsync("LoadId", id);
+        var versionLoadsFilter = await new FilterGenerator<VersionsLoad>().GetFilterWherePropertyEqualsValueAsync("LoadId", id);
         var versionLoadresponse = await _versionsLoadManager.GetAsync(versionLoadsFilter);
         if (versionLoadresponse.Data is not null)
         {

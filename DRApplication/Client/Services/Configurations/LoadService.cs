@@ -89,7 +89,7 @@ public class LoadService : ILoadService
     {
         try
         {
-            var versionLoadsFilter = await new FilterGenerator<VersionsLoad>().GetFilterForPropertyByNameAsync("LoadId", id);
+            var versionLoadsFilter = await new FilterGenerator<VersionsLoad>().GetFilterWherePropertyEqualsValueAsync("LoadId", id);
             var versionLoadresponse = await _versionsLoadManager.GetAsync(versionLoadsFilter);
             var mappedVersionLoads = Mapping.Mapper.Map<IEnumerable<VersionsLoadVm>>(versionLoadresponse.Data);
 
@@ -202,7 +202,7 @@ public class LoadService : ILoadService
     public async Task<IEnumerable<CurrentLoadVm>> GetCurrentLoadVmsByLoadId(int id)
     {
         //SELECT * FROM CurrentLoads ---> **--WHERE LoadId = id--**
-        var loadFilter = await new FilterGenerator<CurrentLoad>().GetFilterForPropertyByNameAsync("LoadId", id);
+        var loadFilter = await new FilterGenerator<CurrentLoad>().GetFilterWherePropertyEqualsValueAsync("LoadId", id);
         var currentLoadResponse = await _currentLoadManager.GetAsync(loadFilter);
         if (currentLoadResponse.Data is not null)
             return await MapCurrentLoadsToCurrentLoadVms(currentLoadResponse.Data);
@@ -212,7 +212,7 @@ public class LoadService : ILoadService
     public async Task<IEnumerable<SpecificLoadVm>> GetSpecificLoadVmsByLoadId(int id)
     {
         //SELECT * FROM CurrentLoads ---> **--WHERE LoadId = id--**
-        var loadFilter = await new FilterGenerator<SpecificLoad>().GetFilterForPropertyByNameAsync("LoadId", id);
+        var loadFilter = await new FilterGenerator<SpecificLoad>().GetFilterWherePropertyEqualsValueAsync("LoadId", id);
         var specificLoadResponse = await _specificLoadManager.GetAsync(loadFilter);
         if (specificLoadResponse.Data is not null)
             return await MapSpecificLoadsToSpecificLoadVms(specificLoadResponse.Data);
