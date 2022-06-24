@@ -23,6 +23,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddScoped<AppState>();
 builder.Services.AddScoped<CorrectiveActionManager>();
 builder.Services.AddScoped<CurrentLoadManager>();
+builder.Services.AddScoped<DeviceDiscoveredManager>();
 builder.Services.AddScoped<DeviceManager>();
 builder.Services.AddScoped<DeviceTypeManager>();
 builder.Services.AddScoped<DrManager>();
@@ -38,6 +39,8 @@ builder.Services.AddScoped<SoftwareVersionManager>();
 builder.Services.AddScoped<VersionsLoadManager>();
 builder.Services.AddScoped<IssueManager>();
 builder.Services.AddScoped<MaintIssueManager>();
+
+builder.Services.AddScoped<ManagerService>();
 
 builder.Services.AddTransient<IPlatformService, PlatformService>();
 builder.Services.AddTransient<ILoadService, LoadService>();
