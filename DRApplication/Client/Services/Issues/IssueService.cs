@@ -9,13 +9,16 @@ namespace DRApplication.Client.Services
     {
         private readonly IPlatformService _platformService;
         private readonly ManagerService _managerService;
+        private readonly AppState _appState;
 
-        public IssueService(IPlatformService platformService, ManagerService managerService)
+        public IssueService(IPlatformService platformService, ManagerService managerService, AppState appState)
         {
             _platformService = platformService;
             _managerService = managerService;
+            _appState = appState;
         }
 
+        #region ---Inserts---
         public Task<int> InsertDrAsync()
         {
             throw new NotImplementedException();
@@ -52,6 +55,20 @@ namespace DRApplication.Client.Services
             return maintIssue.Id;
 
         }
+        public async Task<int> InsertDeviceDiscoveredAsync(int deviceId, int issueId)
+        {
+            var deviceDiscoveredToInsert = new DeviceDiscovered
+            {
+                DeviceId = deviceId,
+                IssueId = issueId
+            };
+            var deviceDiscovered = await _managerService.DeviceDiscoveredManager().InsertAsync(deviceDiscoveredToInsert);
+
+            return deviceDiscovered.Id;
+        }
+
+        #endregion
+
         public async Task<IEnumerable<CorrectiveActionVm>> GetCorrectiveActionVmsAsync()
         {
             var correctiveActions = await _managerService.CorrectiveActionManager().GetAllAsync();
@@ -65,16 +82,26 @@ namespace DRApplication.Client.Services
             return vms;
         }
 
-        public async Task<int> InsertDeviceDiscoveredAsync(int deviceId, int issueId)
+        /// <summary>
+        /// This method is used to get the latest 5 issues inserted for the selected Device on the Maint Issues Entry Page
+        /// </summary>
+        public async Task<IEnumerable<MaintenanceIssueVm>> GetMaintenanceIssueVmsForEntryTableAsync()
         {
-            var deviceDiscoveredToInsert = new DeviceDiscovered
-            {
-                DeviceId = deviceId,
-                IssueId = issueId
-            };
-            var deviceDiscovered = await _managerService.DeviceDiscoveredManager().InsertAsync(deviceDiscoveredToInsert);
+            //first get the selected DeviceVm
+            var deviceVm = _appState.DeviceVm;
 
-            return deviceDiscovered.Id;
+            //first get the Maintenance Issues
+            var maintIssueFilter = await new FilterGenerator<MaintIssue>().GetFilterWherePropertyEqualsValueAsync("Id", deviceVm.Id);
+            var maintIssuesResponse = await _managerService.MaintIssueManager().GetAsync(maintIssueFilter);
+            var maintIssues = maintIssuesResponse.Data;
+
+            //get the IssueIds from the maint issues
+            var issueIds = maintIssues.Select(i => i.IssueId).ToList();
+            var deviceCsv = string.Join(",", issueIds);
+
+            var issueFilter = await new FilterGenerator<Issue>().GetFilterForPropertyByListOfIdsAsync("Id", deviceCsv);
+
+            throw new NotImplementedException();
         }
     }
 }
