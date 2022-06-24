@@ -1,5 +1,6 @@
 ﻿@namespace DRApplication.Client.Controls
 @inject IIssueService IssueService
+@inject AppState AppState
 
 <EditForm Model="@_maintenanceIssueInsertVm" OnValidSubmit="@InsertMaintenanceIssue">
 
@@ -54,6 +55,7 @@
     }
     async Task InsertMaintenanceIssue()
     {
+        _maintenanceIssueInsertVm.DeviceId = AppState.DeviceVm.Id;
         await IssueService.InsertMaintenanceIssueAsync(_maintenanceIssueInsertVm);
     }
 
