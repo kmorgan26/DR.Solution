@@ -42,7 +42,7 @@
     private async Task InsertDevice()
     {
         _deviceInsertVm.DeviceTypeId = AppState.DeviceTypeVm.Id;
-        var device = Mapping.Mapper.Map<Device>(_deviceInsertVm);
+        var device = await PlatformService.GetDeviceFromDeviceInsertVm(_deviceInsertVm);
         await DeviceManager.InsertAsync(device);
         navigation.NavigateTo("/devices");
     }
