@@ -57,8 +57,8 @@
     {
         _isBusy = true;
         var device = await DeviceManager.GetByIdAsync(DeviceId);
-        var vm = Mapping.Mapper.Map<DeviceVm>(device);
-        AppState.UpdateDeviceVm(this, vm);
+        var deviceVm = await PlatformService.GetDeviceVmFromDeviceAsync(device);
+        AppState.UpdateDeviceVm(this, deviceVm);
         _isBusy = false;
     }
 
