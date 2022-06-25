@@ -49,6 +49,7 @@ builder.Services.AddTransient<ILoadService, LoadService>();
 builder.Services.AddTransient<IHardwareService, HardwareService>();
 builder.Services.AddTransient<ISoftwareService, SoftwareService>();
 builder.Services.AddTransient<IIssueService, IssueService>();
+builder.Services.AddTransient<IMapperService, MapperService>();
 
 builder.Services.AddBlazoredLocalStorage();
 
