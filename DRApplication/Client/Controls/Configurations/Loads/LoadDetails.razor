@@ -70,7 +70,7 @@
             var currentLoadVms = await LoadService.GetCurrentLoadVmsByLoadId(AppState.LoadVm.Id);
             ids.AddRange(specificLoadVms.Select(i => i.DeviceId.ToString()).ToList());
             ids.AddRange(currentLoadVms.Select(i => i.DeviceId.ToString()).ToList());
-            var deviceVms = await PlatformService.GetDeviceVmsByCsvOfIds(ids);
+            var deviceVms = await PlatformService.GetDeviceVmsByListOfIds(ids);
             AppState.UpdateDeviceVms(this, deviceVms);
         }
     }
