@@ -65,13 +65,12 @@
     {
         if (AppState.LoadVm.Id > 0)
         {
-            List<int> ids = new();
+            List<string> ids = new();
             var specificLoadVms = await LoadService.GetSpecificLoadVmsByLoadId(AppState.LoadVm.Id);
             var currentLoadVms = await LoadService.GetCurrentLoadVmsByLoadId(AppState.LoadVm.Id);
-            ids.AddRange(specificLoadVms.Select(i => i.DeviceId).ToList());
-            ids.AddRange(currentLoadVms.Select(i => i.DeviceId).ToList());
-            var deviceCsv = string.Join(",", ids.Select(i => i.ToString()).ToArray());
-            var deviceVms = await PlatformService.GetDeviceVmsByCsvOfIds(deviceCsv);
+            ids.AddRange(specificLoadVms.Select(i => i.DeviceId.ToString()).ToList());
+            ids.AddRange(currentLoadVms.Select(i => i.DeviceId.ToString()).ToList());
+            var deviceVms = await PlatformService.GetDeviceVmsByCsvOfIds(ids);
             AppState.UpdateDeviceVms(this, deviceVms);
         }
     }

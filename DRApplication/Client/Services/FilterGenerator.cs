@@ -54,8 +54,9 @@ namespace DRApplication.Client.Services
         }
         
         //TODO: Use a List<string> as parameter
-        public async Task<QueryFilter<TEntity>> GetFilterForPropertyByListOfIdsAsync(string properyName, string csvIds)
+        public async Task<QueryFilter<TEntity>> GetFilterForPropertyByListOfIdsAsync(string properyName, List<string> ids)
         {
+            var csvIds = string.Join(",", ids);
             var filter = new QueryFilter<TEntity>();
             var filterProperties = new List<FilterProperty>();
             filterProperties.Add(new FilterProperty()

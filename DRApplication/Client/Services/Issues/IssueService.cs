@@ -96,10 +96,9 @@ namespace DRApplication.Client.Services
             var maintIssues = maintIssuesResponse.Data;
 
             //get the IssueIds from the maint issues
-            var issueIds = maintIssues.Select(i => i.IssueId).ToList();
-            var deviceCsv = string.Join(",", issueIds);
+            var issueIds = maintIssues.Select(i => i.IssueId.ToString()).ToList();
 
-            var issueFilter = await new FilterGenerator<Issue>().GetFilterForPropertyByListOfIdsAsync("Id", deviceCsv);
+            var issueFilter = await new FilterGenerator<Issue>().GetFilterForPropertyByListOfIdsAsync("Id", issueIds);
 
             throw new NotImplementedException();
         }

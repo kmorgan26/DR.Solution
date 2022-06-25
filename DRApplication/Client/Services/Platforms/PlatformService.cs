@@ -97,7 +97,7 @@ public class PlatformService : IPlatformService
     }
     
     //TODO: Get the Platform property set in this method 
-    public async Task<IEnumerable<DeviceVm>> GetDeviceVmsByCsvOfIds(string ids)
+    public async Task<IEnumerable<DeviceVm>> GetDeviceVmsByCsvOfIds(List<string> ids)
     {
         var deviceFilter = await new FilterGenerator<Device>().GetFilterForPropertyByListOfIdsAsync("Id", ids);
         var deviceResponse = await _deviceManager.GetAsync(deviceFilter);

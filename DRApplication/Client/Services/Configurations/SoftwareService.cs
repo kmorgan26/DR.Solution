@@ -51,7 +51,7 @@ public class SoftwareService : ISoftwareService
 
     #endregion
 
-    #region Collection Methods---
+    #region ---Collection Methods---
 
     public async Task<IEnumerable<SoftwareSystemVm>> GetSoftwareSystemVmsByHardwareConfigId(int id)
     {
@@ -96,30 +96,22 @@ public class SoftwareService : ISoftwareService
         }
         return new List<VersionsLoad>();
     }
-
     public async Task<IEnumerable<SoftwareSystem>> GetSoftwareSystemsByIds(List<string> ids)
     {
-        var systemCsv = string.Join(",", ids);
-
-        var systemFilter = await new FilterGenerator<SoftwareSystem>().GetFilterForPropertyByListOfIdsAsync("Id", systemCsv);
+        var systemFilter = await new FilterGenerator<SoftwareSystem>().GetFilterForPropertyByListOfIdsAsync("Id", ids);
         var systemResponse = await _softwareSystemManager.GetAsync(systemFilter);
         if (systemResponse.Data is not null)
             return systemResponse.Data;
         return new List<SoftwareSystem>();
     }
-
     public async Task<IEnumerable<SoftwareVersion>> GetSoftwareVersionsByIds(List<string> ids)
     {
-        var versionCsv = string.Join(",", ids);
-
-        var versionFilter = await new FilterGenerator<SoftwareVersion>().GetFilterForPropertyByListOfIdsAsync("Id", versionCsv);
+        var versionFilter = await new FilterGenerator<SoftwareVersion>().GetFilterForPropertyByListOfIdsAsync("Id", ids);
         var versionResponse = await _softwareVersionManager.GetAsync(versionFilter);
         if(versionResponse.Data is not null)
               return versionResponse.Data;
         return new List<SoftwareVersion>();
     }
-
-    
 
     #endregion
 

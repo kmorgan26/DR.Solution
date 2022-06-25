@@ -40,7 +40,6 @@ public class LoadService : ILoadService
 
     #endregion
 
-
     #region ---Collection Object Methods---
     public async Task<IEnumerable<LoadVm>> GetLoadVmByDeviceTypeId(int id)
     {
@@ -119,11 +118,9 @@ public class LoadService : ILoadService
     {
         //first, get a list of devices for the DeviceTypeID (ID)
         var deviceVms = await _platformService.GetDeviceVmsFromDeviceTypeId(id);
+        var deviceIds = deviceVms.Select(x => x.Id.ToString()).ToList();
 
-        var deviceIds = deviceVms.Select(x => x.Id).ToList();
-        var deviceCsv = string.Join(",", deviceIds);
-
-        var currentLoadFilter = await new FilterGenerator<CurrentLoad>().GetFilterForPropertyByListOfIdsAsync("DeviceId", deviceCsv);
+        var currentLoadFilter = await new FilterGenerator<CurrentLoad>().GetFilterForPropertyByListOfIdsAsync("DeviceId", deviceIds);
         var currentLoadResponse = await _currentLoadManager.GetAsync(currentLoadFilter);
 
         if(currentLoadResponse is not null && currentLoadResponse.Data is not null)
@@ -134,13 +131,12 @@ public class LoadService : ILoadService
     public async Task<IEnumerable<CurrentLoadVm>> MapCurrentLoadsToCurrentLoadVms(IEnumerable<CurrentLoad> currentLoads)
     {
         //Get the Loads for the currentLoads
-        var currentLoadCsv = string.Join(",", currentLoads.Select(id => id.LoadId).ToList());
-        var loadFilter = await new FilterGenerator<Load>().GetFilterForPropertyByListOfIdsAsync("Id", currentLoadCsv);
+        var currentLoadIds = currentLoads.Select(x => x.LoadId.ToString()).ToList();
+        var loadFilter = await new FilterGenerator<Load>().GetFilterForPropertyByListOfIdsAsync("Id", currentLoadIds);
         var loadResponse = await _loadManager.GetAsync(loadFilter);
 
         //Get the Devices for the currentLoads
-        var deviceCsv = string.Join(",", currentLoads.Select(id => id.DeviceId).ToList());
-        var deviceVms = await _platformService.GetDeviceVmsByCsvOfIds(deviceCsv);
+        var deviceVms = await _platformService.GetDeviceVmsByCsvOfIds(currentLoadIds);
 
         if (loadResponse.Data is not null)
         {
@@ -162,10 +158,9 @@ public class LoadService : ILoadService
         //first, get a list of devices for the DeviceTypeID (ID)
         var deviceVms = await _platformService.GetDeviceVmsFromDeviceTypeId(id);
 
-        var deviceIds = deviceVms.Select(x => x.Id).ToList();
-        var deviceCsv = string.Join(",", deviceIds);
+        var deviceIds = deviceVms.Select(x => x.Id.ToString()).ToList();
 
-        var specificLoadFilter = await new FilterGenerator<SpecificLoad>().GetFilterForPropertyByListOfIdsAsync("DeviceId", deviceCsv);
+        var specificLoadFilter = await new FilterGenerator<SpecificLoad>().GetFilterForPropertyByListOfIdsAsync("DeviceId", deviceIds);
         var specificLoadResponse = await _specificLoadManager.GetAsync(specificLoadFilter);
 
         if (specificLoadResponse is not null && specificLoadResponse.Data is not null)
@@ -176,13 +171,12 @@ public class LoadService : ILoadService
     public async Task<IEnumerable<SpecificLoadVm>> MapSpecificLoadsToSpecificLoadVms(IEnumerable<SpecificLoad> specificLoads)
     {
         //Get the Loads for the currentLoads
-        var specificLoadCsv = string.Join(",", specificLoads.Select(id => id.LoadId).ToList());
-        var loadFilter = await new FilterGenerator<Load>().GetFilterForPropertyByListOfIdsAsync("Id", specificLoadCsv);
+        var specificLoadIds = specificLoads.Select(x => x.LoadId.ToString()).ToList();
+        var loadFilter = await new FilterGenerator<Load>().GetFilterForPropertyByListOfIdsAsync("Id", specificLoadIds);
         var loadResponse = await _loadManager.GetAsync(loadFilter);
 
         //Get the Devices for the currentLoads
-        var deviceCsv = string.Join(",", specificLoads.Select(id => id.DeviceId).ToList());
-        var deviceVms = await _platformService.GetDeviceVmsByCsvOfIds(deviceCsv);
+        var deviceVms = await _platformService.GetDeviceVmsByCsvOfIds(specificLoadIds);
 
         if (loadResponse.Data is not null)
         {
@@ -208,7 +202,6 @@ public class LoadService : ILoadService
             return await MapCurrentLoadsToCurrentLoadVms(currentLoadResponse.Data);
         return new List<CurrentLoadVm>();
     }
-
     public async Task<IEnumerable<SpecificLoadVm>> GetSpecificLoadVmsByLoadId(int id)
     {
         //SELECT * FROM CurrentLoads ---> **--WHERE LoadId = id--**
@@ -319,7 +312,6 @@ public class LoadService : ILoadService
         var result = await _versionsLoadManager.InsertAsync(loadVersionToAdd);
     }
 
-    
-
     #endregion
+
 }

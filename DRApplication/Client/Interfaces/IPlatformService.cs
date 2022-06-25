@@ -8,7 +8,7 @@ public interface IPlatformService
 {
     Task<IEnumerable<MaintainerVm>> GetMaintainerVmsAsync();
     Task<IEnumerable<DeviceVm>> GetDeviceVmsFromDeviceTypeId(int id);
-    Task<IEnumerable<DeviceVm>> GetDeviceVmsByCsvOfIds(string csvids);
+    Task<IEnumerable<DeviceVm>> GetDeviceVmsByCsvOfIds(List<string> csvids);
     Task<IEnumerable<DeviceVm>> GetDeviceVmsFromDeviceListAsync(IEnumerable<Device> devices);
     Task<IEnumerable<DeviceTypeVm>> GetDeviceTypeVmsAsync();    
     Task<IEnumerable<DeviceTypeVm>> GetDeviceTypeVmsByMaintainerId(int id);
