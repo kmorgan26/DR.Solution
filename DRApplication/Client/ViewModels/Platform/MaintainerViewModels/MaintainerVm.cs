@@ -1,6 +1,6 @@
 ﻿namespace DRApplication.Client.ViewModels;
 
-public class MaintainerVm : IMaintainerViewModel
+public class MaintainerVm
 {
     public int Id { get; set; }
 

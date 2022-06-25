@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 namespace DRApplication.Client.ViewModels;
 
-public class DeviceTypeVm : IDeviceTypeVm
+public class DeviceTypeVm
 {
     public int Id { get; set; } = 0;
 
