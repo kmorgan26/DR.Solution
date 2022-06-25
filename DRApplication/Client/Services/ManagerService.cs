@@ -27,6 +27,10 @@
         {
             return new DeviceManager(_httpClient);
         }
+        public DeviceTypeManager DeviceTypeManager()
+        {
+            return new DeviceTypeManager(_httpClient);
+        }
         public DrManager DrManager()
         {
             return new DrManager(_httpClient);
@@ -38,6 +42,10 @@
         public LoadManager LoadManager()
         {
             return new LoadManager(_httpClient);
+        }
+        public MaintainerManager MaintainerManager()
+        {
+            return new MaintainerManager(_httpClient);
         }
         public MaintIssueManager MaintIssueManager()
         {
