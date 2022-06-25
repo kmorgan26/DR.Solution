@@ -135,21 +135,6 @@ public class PlatformService : IPlatformService
         };
         return vm;
     }
-    public async Task<DeviceVm> GetDeviceVmFromDeviceAsync(Device device)
-    {
-        var platform = await Task.Run(() =>_platformHelpers.GetDeviceTypeNameFromDeviceTypeId(device.DeviceTypeId));
-
-        var deviceVm = new DeviceVm
-        {
-            Id = device.Id,
-            Device = device.Name,
-            DeviceTypeId = device.DeviceTypeId,
-            IsActive = device.IsActive,
-            Platform = platform
-        };
-
-        return deviceVm;
-    }
     public async Task<DeviceTypeVm> GetDeviceTypeVmById(int id)
     {
         var deviceType = await _managerService.DeviceTypeManager().GetByIdAsync(id);
@@ -183,17 +168,7 @@ public class PlatformService : IPlatformService
         };
         return await Task.Run(() => deviceType);
     }
-    public async Task<Device> GetDeviceFromDeviceVm(DeviceVm deviceVm)
-    {
-        var device = new Device()
-        {
-            Id = deviceVm.Id,
-            IsActive = deviceVm.IsActive,
-            DeviceTypeId = deviceVm.DeviceTypeId,
-            Name = deviceVm.Device
-        };
-        return await Task.Run(() => device);
-    }
+    
     public async Task<Device> GetDeviceFromDeviceInsertVm(DeviceInsertVm deviceInsertVm)
     {
         var device = new Device()
