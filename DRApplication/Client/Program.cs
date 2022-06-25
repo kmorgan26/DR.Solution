@@ -1,5 +1,6 @@
 using Blazored.LocalStorage;
 using DRApplication.Client;
+using DRApplication.Client.Helpers;
 using DRApplication.Client.Interfaces;
 using DRApplication.Client.Services;
 using Microsoft.AspNetCore.Components.Web;
@@ -39,6 +40,7 @@ builder.Services.AddScoped<SoftwareVersionManager>();
 builder.Services.AddScoped<VersionsLoadManager>();
 builder.Services.AddScoped<IssueManager>();
 builder.Services.AddScoped<MaintIssueManager>();
+builder.Services.AddScoped<PlatformHelpers>();
 
 builder.Services.AddScoped<ManagerService>();
 
