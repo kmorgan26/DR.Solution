@@ -19,6 +19,7 @@ public class PlatformService : IPlatformService
         _managerService = managerService;
         _platformHelpers = platformHelpers;
     }
+    
     #endregion
 
     #region ---collections---
@@ -72,9 +73,13 @@ public class PlatformService : IPlatformService
     {
         //Filter = FROM Devices WHERE DeviceTypeId = id 
         var deviceTypeFilter = await new FilterGenerator<Device>().GetFilterWherePropertyEqualsValueAsync("DeviceTypeId", id);
-        var devices = await _managerService.DeviceManager().GetAsync(deviceTypeFilter);
+        var deviceResponse = await _managerService.DeviceManager().GetAsync(deviceTypeFilter);
+        var devices = deviceResponse.Data;
 
-        return Mapping.Mapper.Map<IEnumerable<DeviceVm>>(devices.Data).OrderBy(i => i.Device);
+        if(devices is not null)
+            return await GetDeviceVmsFromDeviceListAsync(devices.OrderBy(i => i.Name));
+
+        return new List<DeviceVm>();
     }
     public async Task<IEnumerable<DeviceTypeVm>> GetDeviceTypeVmsByMaintainerId(int id)
     {
@@ -96,7 +101,7 @@ public class PlatformService : IPlatformService
     }
     
     //TODO: Get the Platform property set in this method 
-    public async Task<IEnumerable<DeviceVm>> GetDeviceVmsByCsvOfIds(List<string> ids)
+    public async Task<IEnumerable<DeviceVm>> GetDeviceVmsByListOfIds(List<string> ids)
     {
         var deviceFilter = await new FilterGenerator<Device>().GetFilterForPropertyByListOfIdsAsync("Id", ids);
         var deviceResponse = await _managerService.DeviceManager().GetAsync(deviceFilter);
@@ -105,7 +110,7 @@ public class PlatformService : IPlatformService
             Device = i.Name,
             DeviceTypeId = i.DeviceTypeId,
             Id = i.Id,
-            IsActive = i.IsActive,
+            IsActive = i.IsActive
         });
         if (deviceVms is not null)
             return deviceVms;
@@ -241,9 +246,6 @@ public class PlatformService : IPlatformService
             throw;
         }
     }
-
-
-
 
     #endregion
 
