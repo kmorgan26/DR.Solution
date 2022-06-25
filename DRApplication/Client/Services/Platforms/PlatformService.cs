@@ -2,6 +2,7 @@
 using DRApplication.Client.Interfaces;
 using DRApplication.Client.ViewModels;
 using DRApplication.Shared.Models;
+using DRApplication.Client.Helpers;
 
 namespace DRApplication.Client.Services;
 
@@ -11,10 +12,12 @@ public class PlatformService : IPlatformService
     #region --fields and constructor----
 
     private readonly ManagerService _managerService;
+    private readonly PlatformHelpers _platformHelpers;
 
-    public PlatformService(ManagerService managerService)
+    public PlatformService(ManagerService managerService, PlatformHelpers platformHelpers)
     {
         _managerService = managerService;
+        _platformHelpers = platformHelpers;
     }
     #endregion
 
@@ -127,6 +130,21 @@ public class PlatformService : IPlatformService
         };
         return vm;
     }
+    public async Task<DeviceVm> GetDeviceVmFromDeviceAsync(Device device)
+    {
+        var platform = await Task.Run(() =>_platformHelpers.GetDeviceTypeNameFromDeviceTypeId(device.DeviceTypeId));
+
+        var deviceVm = new DeviceVm
+        {
+            Id = device.Id,
+            Device = device.Name,
+            DeviceTypeId = device.DeviceTypeId,
+            IsActive = device.IsActive,
+            Platform = platform
+        };
+
+        return deviceVm;
+    }
     public async Task<DeviceTypeVm> GetDeviceTypeVmById(int id)
     {
         var deviceType = await _managerService.DeviceTypeManager().GetByIdAsync(id);
@@ -168,6 +186,16 @@ public class PlatformService : IPlatformService
             IsActive = deviceVm.IsActive,
             DeviceTypeId = deviceVm.DeviceTypeId,
             Name = deviceVm.Device
+        };
+        return await Task.Run(() => device);
+    }
+    public async Task<Device> GetDeviceFromDeviceInsertVm(DeviceInsertVm deviceInsertVm)
+    {
+        var device = new Device()
+        {
+            IsActive = deviceInsertVm.IsActive,
+            DeviceTypeId = deviceInsertVm.DeviceTypeId,
+            Name = deviceInsertVm.Name
         };
         return await Task.Run(() => device);
     }
@@ -213,6 +241,7 @@ public class PlatformService : IPlatformService
             throw;
         }
     }
+
 
 
 
