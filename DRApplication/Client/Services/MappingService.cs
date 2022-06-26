@@ -72,7 +72,17 @@ namespace DRApplication.Client.Services
         }
         public async Task<DeviceTypeVm> DeviceTypeVmFromDeviceTypeAsync(DeviceType deviceType)
         {
-            throw new NotImplementedException();
+            var maintainer = await _managerService.MaintainerManager().GetByIdAsync(deviceType.MaintainerId);
+
+            var deviceTypeVm = new DeviceTypeVm
+            {
+                Id = deviceType.Id,
+                IsActive = deviceType.IsActive,
+                MaintainerId = deviceType.MaintainerId,
+                Platform = deviceType.Name,
+                Maintainer = maintainer.Name
+            };
+            return await Task.Run(() => deviceTypeVm);
         }
         public async Task<Maintainer> MaintainerFromMaintainerVmAsync(MaintainerVm maintainerVm)
         {
@@ -93,7 +103,7 @@ namespace DRApplication.Client.Services
             };
             return await Task.Run(() => maintainerVm);
         }
-        
+
         public async Task<IEnumerable<DeviceVm>> DeviceVmsFromDevicesAsync(IEnumerable<Device> devices)
         {
             var deviceTypes = await _managerService.DeviceTypeManager().GetAllAsync();
