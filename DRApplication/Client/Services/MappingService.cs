@@ -57,5 +57,23 @@ namespace DRApplication.Client.Services
 
             return deviceVm;
         }
+
+
+
+        public async Task<IEnumerable<DeviceVm>> DeviceVmsFromDevices(IEnumerable<Device> devices)
+        {
+            var deviceTypes = await _managerService.DeviceTypeManager().GetAllAsync();
+
+            var vms = devices.Select(m => new DeviceVm
+            {
+                Id = m.Id,
+                Device = m.Name,
+                DeviceTypeId = m.DeviceTypeId,
+                Platform = deviceTypes.Where(a => a.Id == m.DeviceTypeId).FirstOrDefault().Name,
+                IsActive = m.IsActive
+            }).OrderBy(i => i.Device); ;
+
+            return vms;
+        }
     }
 }

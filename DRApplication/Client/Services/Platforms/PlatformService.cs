@@ -13,11 +13,13 @@ public class PlatformService : IPlatformService
 
     private readonly ManagerService _managerService;
     private readonly PlatformHelpers _platformHelpers;
+    private readonly IMapperService _mapperService;
 
-    public PlatformService(ManagerService managerService, PlatformHelpers platformHelpers)
+    public PlatformService(ManagerService managerService, PlatformHelpers platformHelpers, IMapperService mapperService)
     {
         _managerService = managerService;
         _platformHelpers = platformHelpers;
+        _mapperService = mapperService;
     }
 
     #endregion
@@ -54,30 +56,15 @@ public class PlatformService : IPlatformService
 
         return vms;
     }
-    public async Task<IEnumerable<DeviceVm>> GetDeviceVmsFromDeviceListAsync(IEnumerable<Device> devices)
-    {
-        var deviceTypes = await _managerService.DeviceTypeManager().GetAllAsync();
-
-        var vms = devices.Select(m => new DeviceVm
-        {
-            Id = m.Id,
-            Device = m.Name,
-            DeviceTypeId = m.DeviceTypeId,
-            Platform = deviceTypes.Where(a => a.Id == m.DeviceTypeId).FirstOrDefault().Name,
-            IsActive = m.IsActive
-        }).OrderBy(i => i.Device); ;
-
-        return vms;
-    }
     public async Task<IEnumerable<DeviceVm>> GetDeviceVmsFromDeviceTypeId(int id)
     {
         //Filter = FROM Devices WHERE DeviceTypeId = id 
         var deviceTypeFilter = await new FilterGenerator<Device>().GetFilterWherePropertyEqualsValueAsync("DeviceTypeId", id);
         var deviceResponse = await _managerService.DeviceManager().GetAsync(deviceTypeFilter);
-        var devices = deviceResponse.Data;
+        var devices = deviceResponse.Data.OrderBy(i => i.Name);
 
         if (devices is not null)
-            return await GetDeviceVmsFromDeviceListAsync(devices.OrderBy(i => i.Name));
+            return await _mapperService.DeviceVmsFromDevices(devices);
 
         return new List<DeviceVm>();
     }
