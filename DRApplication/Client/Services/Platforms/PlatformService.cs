@@ -19,7 +19,7 @@ public class PlatformService : IPlatformService
         _managerService = managerService;
         _platformHelpers = platformHelpers;
     }
-    
+
     #endregion
 
     #region ---collections---
@@ -76,7 +76,7 @@ public class PlatformService : IPlatformService
         var deviceResponse = await _managerService.DeviceManager().GetAsync(deviceTypeFilter);
         var devices = deviceResponse.Data;
 
-        if(devices is not null)
+        if (devices is not null)
             return await GetDeviceVmsFromDeviceListAsync(devices.OrderBy(i => i.Name));
 
         return new List<DeviceVm>();
@@ -99,7 +99,7 @@ public class PlatformService : IPlatformService
 
         return result;
     }
-    
+
     //TODO: Get the Platform property set in this method 
     public async Task<IEnumerable<DeviceVm>> GetDeviceVmsByListOfIds(List<string> ids)
     {
@@ -120,7 +120,7 @@ public class PlatformService : IPlatformService
     #endregion
 
     #region ---Object Methods---
-    
+
     public async Task<DeviceVm> GetDeviceVmById(int id)
     {
         var device = await _managerService.DeviceManager().GetByIdAsync(id);
@@ -157,18 +157,6 @@ public class PlatformService : IPlatformService
         };
         return maintainerVm;
     }
-    public async Task<DeviceType> GetDeviceTypeFromDeviceTypeVm(DeviceTypeVm deviceTypeVm)
-    {
-        var deviceType = new DeviceType()
-        {
-            Id = deviceTypeVm.Id,
-            IsActive = deviceTypeVm.IsActive,
-            MaintainerId = deviceTypeVm.MaintainerId,
-            Name = deviceTypeVm.Platform
-        };
-        return await Task.Run(() => deviceType);
-    }
-    
     public async Task<Device> GetDeviceFromDeviceInsertVm(DeviceInsertVm deviceInsertVm)
     {
         var device = new Device()
