@@ -25,6 +25,23 @@ namespace DRApplication.Client.Services
             return await Task.Run(() => device);
         }
 
+        public async Task<DeviceType> DeviceTypeFromDeviceTypeVmAsync(DeviceTypeVm deviceTypeVm)
+        {
+            var deviceType = new DeviceType()
+            {
+                Id = deviceTypeVm.Id,
+                IsActive = deviceTypeVm.IsActive,
+                MaintainerId = deviceTypeVm.MaintainerId,
+                Name = deviceTypeVm.Platform
+            };
+            return await Task.Run(() => deviceType);
+        }
+
+        public Task<DeviceTypeVm> DeviceTypeVmFromDeviceTypeAsync(DeviceType deviceType)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<DeviceVm> DeviceVmFromDeviceAsync(Device device)
         {
             var deviceType = await _managerService.DeviceTypeManager().GetByIdAsync(device.Id);
