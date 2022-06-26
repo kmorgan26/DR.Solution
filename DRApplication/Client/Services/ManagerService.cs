@@ -7,10 +7,6 @@
         {
             _httpClient = httpClient;
         }
-        public AppState AppState()
-        {
-            return new AppState();
-        }
         public CurrentLoadManager CurrentLoadManager()
         {
             return new CurrentLoadManager(_httpClient);
@@ -34,6 +30,18 @@
         public DrManager DrManager()
         {
             return new DrManager(_httpClient);
+        }
+        public HardwareSystemManager HardwareSystemManager()
+        {
+            return new HardwareSystemManager(_httpClient);
+        }
+        public HardwareVersionManager HardwareVersionManager()
+        {
+            return new HardwareVersionManager(_httpClient);
+        }
+        public HardwareConfigManager HardwareConfigManager()
+        {
+            return new HardwareConfigManager(_httpClient);
         }
         public IssueManager IssueManager()
         {
