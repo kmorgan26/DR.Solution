@@ -45,7 +45,7 @@ public class PlatformService : IPlatformService
     public async Task<IEnumerable<MaintainerVm>> GetMaintainerVmsAsync()
     {
         var maintainers = await _managerService.MaintainerManager().GetAllAsync();
-        return await _mapperService.MaintainerVmsFromMaintainers(maintainers);
+        return await _mapperService.MaintainerVmsFromMaintainersAsync(maintainers);
     }
     public async Task<IEnumerable<DeviceVm>> GetDeviceVmsFromDeviceTypeId(int id)
     {
@@ -55,7 +55,7 @@ public class PlatformService : IPlatformService
         var devices = deviceResponse.Data?.OrderBy(i => i.Name);
 
         if (devices is not null)
-            return await _mapperService.DeviceVmsFromDevices(devices);
+            return await _mapperService.DeviceVmsFromDevicesAsync(devices);
 
         return new List<DeviceVm>();
     }
@@ -63,35 +63,23 @@ public class PlatformService : IPlatformService
     {
         //Filter = FROM DeviceTypes WHERE MaintainerId = id 
         var maintainerFilter = await new FilterGenerator<DeviceType>().GetFilterWherePropertyEqualsValueAsync("MaintainerId", id);
-        var deviceTypes = await _managerService.DeviceTypeManager().GetAsync(maintainerFilter);
-        var maintainers = await _managerService.MaintainerManager().GetAllAsync();
+        var deviceTypeResponse = await _managerService.DeviceTypeManager().GetAsync(maintainerFilter);
+        var deviceTypes = deviceTypeResponse.Data;
 
-        var result = deviceTypes.Data.Select(i => new DeviceTypeVm()
-        {
-            Id = i.Id,
-            IsActive = i.IsActive,
-            MaintainerId = i.MaintainerId,
-            Platform = i.Name,
-            Maintainer = maintainers.Where(m => m.Id == i.MaintainerId).FirstOrDefault().Name
-        }).OrderBy(i => i.Platform); ;
+        if (deviceTypes is not null)
+            return await _mapperService.DeviceTypeVmsFromDeviceTypesAsync(deviceTypes);
 
-        return result;
+        return new List<DeviceTypeVm>();
     }
-
-    //TODO: Get the Platform property set in this method 
     public async Task<IEnumerable<DeviceVm>> GetDeviceVmsByListOfIds(List<string> ids)
     {
         var deviceFilter = await new FilterGenerator<Device>().GetFilterForPropertyByListOfIdsAsync("Id", ids);
         var deviceResponse = await _managerService.DeviceManager().GetAsync(deviceFilter);
-        var deviceVms = deviceResponse.Data.Select(i => new DeviceVm()
-        {
-            Device = i.Name,
-            DeviceTypeId = i.DeviceTypeId,
-            Id = i.Id,
-            IsActive = i.IsActive
-        });
-        if (deviceVms is not null)
-            return deviceVms;
+        var devices = deviceResponse.Data;
+
+        if (devices is not null)
+            return await _mapperService.DeviceVmsFromDevicesAsync(devices);
+
         return new List<DeviceVm>();
     }
 
