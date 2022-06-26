@@ -13,6 +13,17 @@ namespace DRApplication.Client.Services
             _managerService = managerService;
         }
 
+        public async Task<Device> DeviceFromDeviceInserVm(DeviceInsertVm deviceInsertVm)
+        {
+            var device = new Device()
+            {
+                IsActive = deviceInsertVm.IsActive,
+                DeviceTypeId = deviceInsertVm.DeviceTypeId,
+                Name = deviceInsertVm.Name
+            };
+            return await Task.Run(() => device);
+        }
+
         public async Task<Device> DeviceFromDeviceVmAsync(DeviceVm deviceVm)
         {
             var device = new Device()
@@ -74,6 +85,17 @@ namespace DRApplication.Client.Services
             }).OrderBy(i => i.Device); ;
 
             return vms;
+        }
+
+        public async Task<IEnumerable<MaintainerVm>> MaintainerVmsFromMaintainers(IEnumerable<Maintainer> maintainers)
+        {
+            var maintainerVms = maintainers.Select(m => new MaintainerVm
+            {
+                Id = m.Id,
+                Maintainer = m.Name,
+            });
+
+            return await Task.Run(() => maintainerVms);
         }
     }
 }

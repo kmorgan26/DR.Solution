@@ -7,8 +7,10 @@ public interface IMapperService
 {
     Task<DeviceVm> DeviceVmFromDeviceAsync(Device device);
     Task<Device> DeviceFromDeviceVmAsync(DeviceVm deviceVm);
-    Task<IEnumerable<DeviceVm>> DeviceVmsFromDevices(IEnumerable<Device> devices);
+    Task<Device> DeviceFromDeviceInserVm(DeviceInsertVm deviceInsertVm);
     Task<DeviceTypeVm> DeviceTypeVmFromDeviceTypeAsync(DeviceType deviceType);
     Task<DeviceType> DeviceTypeFromDeviceTypeVmAsync(DeviceTypeVm deviceTypeVm);
 
+    Task<IEnumerable<DeviceVm>> DeviceVmsFromDevices(IEnumerable<Device> devices);
+    Task<IEnumerable<MaintainerVm>> MaintainerVmsFromMaintainers(IEnumerable<Maintainer> maintainers);
 }

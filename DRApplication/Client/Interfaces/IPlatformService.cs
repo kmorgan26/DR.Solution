@@ -14,7 +14,6 @@ public interface IPlatformService
     Task<DeviceTypeVm> GetDeviceTypeVmById(int id);
     Task<DeviceVm> GetDeviceVmById(int id);
     Task<MaintainerVm> GetMaintainerVmById(int id);
-    Task<Device> GetDeviceFromDeviceInsertVm(DeviceInsertVm deviceInsertVm);
     Task<int> InsertDeviceTypeFromDeviceTypeInsertVm(DeviceTypeInsertVm deviceTypeInsertVm);
     Task<bool> EditMaintainerFromMaintainerVm(MaintainerVm maintainerVm);
 }

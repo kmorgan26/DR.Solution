@@ -12,13 +12,11 @@ public class PlatformService : IPlatformService
     #region --fields and constructor----
 
     private readonly ManagerService _managerService;
-    private readonly PlatformHelpers _platformHelpers;
     private readonly IMapperService _mapperService;
 
-    public PlatformService(ManagerService managerService, PlatformHelpers platformHelpers, IMapperService mapperService)
+    public PlatformService(ManagerService managerService, IMapperService mapperService)
     {
         _managerService = managerService;
-        _platformHelpers = platformHelpers;
         _mapperService = mapperService;
     }
 
@@ -31,7 +29,7 @@ public class PlatformService : IPlatformService
         var deviceTypes = await _managerService.DeviceTypeManager().GetAllAsync();
         var maintainers = await _managerService.MaintainerManager().GetAllAsync();
 
-        var vms = deviceTypes.Select(dt => new DeviceTypeVm
+        var deviceTypeVms = deviceTypes.Select(dt => new DeviceTypeVm
         {
             Id = dt.Id,
             Platform = dt.Name,
@@ -42,26 +40,19 @@ public class PlatformService : IPlatformService
                     .FirstOrDefault().Name
         }).OrderBy(i => i.Platform);
 
-        return vms;
+        return deviceTypeVms;
     }
     public async Task<IEnumerable<MaintainerVm>> GetMaintainerVmsAsync()
     {
         var maintainers = await _managerService.MaintainerManager().GetAllAsync();
-
-        var vms = maintainers.Select(m => new MaintainerVm
-        {
-            Id = m.Id,
-            Maintainer = m.Name,
-        });
-
-        return vms;
+        return await _mapperService.MaintainerVmsFromMaintainers(maintainers);
     }
     public async Task<IEnumerable<DeviceVm>> GetDeviceVmsFromDeviceTypeId(int id)
     {
         //Filter = FROM Devices WHERE DeviceTypeId = id 
         var deviceTypeFilter = await new FilterGenerator<Device>().GetFilterWherePropertyEqualsValueAsync("DeviceTypeId", id);
         var deviceResponse = await _managerService.DeviceManager().GetAsync(deviceTypeFilter);
-        var devices = deviceResponse.Data.OrderBy(i => i.Name);
+        var devices = deviceResponse.Data?.OrderBy(i => i.Name);
 
         if (devices is not null)
             return await _mapperService.DeviceVmsFromDevices(devices);
@@ -143,16 +134,6 @@ public class PlatformService : IPlatformService
             Maintainer = maintainer.Name
         };
         return maintainerVm;
-    }
-    public async Task<Device> GetDeviceFromDeviceInsertVm(DeviceInsertVm deviceInsertVm)
-    {
-        var device = new Device()
-        {
-            IsActive = deviceInsertVm.IsActive,
-            DeviceTypeId = deviceInsertVm.DeviceTypeId,
-            Name = deviceInsertVm.Name
-        };
-        return await Task.Run(() => device);
     }
     public async Task<int> InsertDeviceTypeFromDeviceTypeInsertVm(DeviceTypeInsertVm deviceTypeInsertVm)
     {
