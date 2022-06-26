@@ -68,27 +68,27 @@ public class MappingProfile : Profile
         CreateMap<VersionsLoad, VersionsLoadInsertVm>().ReverseMap();
         CreateMap<VersionsLoad, VersionsLoadEditVm>().ReverseMap();
 
-        CreateMap<DeviceType, GenericListVm>().ReverseMap();
-        CreateMap<DeviceType, DeviceTypeEditVm>().ReverseMap();
+        //CreateMap<DeviceType, GenericListVm>().ReverseMap();
+        //CreateMap<DeviceType, DeviceTypeEditVm>().ReverseMap();
 
-        CreateMap<DeviceType, DeviceTypeVm>().ReverseMap();
+        //CreateMap<DeviceType, DeviceTypeVm>().ReverseMap();
 
-        CreateMap<Device, DeviceEditVm>().ReverseMap();
-        CreateMap<Device, DeviceVm>()
-            .ForMember(dest => dest.Device,
-                opts => opts.MapFrom(src => src.Name));
-        CreateMap<DeviceVm, Device>()
-            .ForMember(dest => dest.Name,
-                opts => opts.MapFrom(src => src.Device));
-        CreateMap<DeviceInsertVm, Device>();
+        //CreateMap<Device, DeviceEditVm>().ReverseMap();
+        //CreateMap<Device, DeviceVm>()
+        //    .ForMember(dest => dest.Device,
+        //        opts => opts.MapFrom(src => src.Name));
+        //CreateMap<DeviceVm, Device>()
+        //    .ForMember(dest => dest.Name,
+        //        opts => opts.MapFrom(src => src.Device));
+        //CreateMap<DeviceInsertVm, Device>();
 
 
-        CreateMap<Maintainer, GenericListVm>();
-        CreateMap<Maintainer, MaintainerVm>()
-            .ForMember(dest => dest.Maintainer,
-                opts => opts.MapFrom(src => src.Name))
-            .ReverseMap();
-        CreateMap<Maintainer, MaintainerEditVm>().ReverseMap();
+        //CreateMap<Maintainer, GenericListVm>();
+        //CreateMap<Maintainer, MaintainerVm>()
+        //    .ForMember(dest => dest.Maintainer,
+        //        opts => opts.MapFrom(src => src.Name))
+        //    .ReverseMap();
+        //CreateMap<Maintainer, MaintainerEditVm>().ReverseMap();
 
     }
 }
