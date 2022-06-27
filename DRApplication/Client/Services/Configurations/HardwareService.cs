@@ -44,7 +44,10 @@ public class HardwareService : IHardwareService
     public async Task<IEnumerable<HardwareSystemVm>> GetHardwareSystemVms()
     {
         var hardwareSystems = await _managerService.HardwareSystemManager().GetAllAsync();
-        return await _mapperService.HardwareSystemVmsFromHardwareSystemsAsync(hardwareSystems);
+        if(hardwareSystems is not null)
+            return await _mapperService.HardwareSystemVmsFromHardwareSystemsAsync(hardwareSystems);
+
+        return new List<HardwareSystemVm>();
     }
     public async Task<IEnumerable<HardwareVersionVm>> GetHardwareVersionVmsByHardwareSystemId(int id)
     {
@@ -65,7 +68,7 @@ public class HardwareService : IHardwareService
         var hardwareConfigResponse = await _managerService.HardwareConfigManager().GetAsync(deviceTypeFilter);
         var hardwareConfigs = hardwareConfigResponse.Data;
 
-        if (hardwareConfigResponse.Data is not null)
+        if (hardwareConfigs is not null)
             return await _mapperService.HardwareConfigVmsFromHardwareConfigsAsync(hardwareConfigs);
 
         return new List<HardwareConfigVm>();
