@@ -59,6 +59,14 @@
         {
             return new MaintIssueManager(_httpClient);
         }
+        public SoftwareSystemManager SoftwareSystemManager()
+        {
+            return new SoftwareSystemManager(_httpClient);
+        }
+        public SoftwareVersionManager SoftwareVersionManager()
+        {
+            return new SoftwareVersionManager(_httpClient);
+        }
         public SpecificLoadManager SpecificLoadManager()
         {
             return new SpecificLoadManager(_httpClient);
