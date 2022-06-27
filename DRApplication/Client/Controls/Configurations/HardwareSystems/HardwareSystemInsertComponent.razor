@@ -1,6 +1,7 @@
 ﻿@namespace DRApplication.Client.Controls
 @inject HardwareSystemManager manager
 @inject NavigationManager navigation
+@inject IMapperService MapperService
 
 @if (@_harwareSystemInsertVm != null)
 {
@@ -14,4 +15,15 @@
 
         </EditForm>
     </MudItem>
+}
+
+@code {
+
+    private HardwareSystemInsertVm _harwareSystemInsertVm { get; set; } = new();
+    private async Task InsertHardwareSystem()
+    {
+        var hardwareSystem = await MapperService.HardwareSystemFromHardwareSystemInsertVm(_harwareSystemInsertVm);
+        await manager.InsertAsync(hardwareSystem);
+        navigation.NavigateTo("/hardwaresystem");
+    }
 }

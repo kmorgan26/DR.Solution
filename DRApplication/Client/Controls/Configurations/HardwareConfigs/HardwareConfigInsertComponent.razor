@@ -1,8 +1,8 @@
 ﻿@namespace DRApplication.Client.Controls
-
 @inject AppState AppState
 @inject HardwareConfigManager HardwareConfigManager
 @inject NavigationManager navigation
+@inject IMapperService MapperService
 
 @if (@_hardwareConfigInsertVm != null)
 {
@@ -38,7 +38,7 @@
     private async Task InsertHardwareConfig()
     {
         _hardwareConfigInsertVm.DeviceTypeId = AppState.DeviceTypeVm.Id;
-        var hardwareConfig = Mapping.Mapper.Map<HardwareConfig>(_hardwareConfigInsertVm);
+        var hardwareConfig = await MapperService.HardwareConfigFromHardwareConfigInsertVmAsync(_hardwareConfigInsertVm);
         await HardwareConfigManager.InsertAsync(hardwareConfig);
         navigation.NavigateTo("/hardwareconfig");
     }

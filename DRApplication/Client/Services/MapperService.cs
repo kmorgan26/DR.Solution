@@ -103,6 +103,25 @@ namespace DRApplication.Client.Services
             };
             return await Task.Run(() => maintainerVm);
         }
+        public async Task<HardwareSystem> HardwareSystemFromHardwareSystemVmAsync(HardwareSystemVm hardwareSystemVm)
+        {
+            var hardwareSystem = new HardwareSystem
+            {
+                Id = hardwareSystemVm.Id,
+                Name = hardwareSystemVm.Name
+            };
+
+            return await Task.Run(() => hardwareSystem);
+        }
+        public async Task<HardwareSystem> HardwareSystemFromHardwareSystemInsertVm(HardwareSystemInsertVm hardwareSystemInsertVm)
+        {
+            var hardwareSystem = new HardwareSystem
+            {
+                Name = hardwareSystemInsertVm.Name,
+            };
+
+            return await Task.Run(() => hardwareSystem);
+        }
         public async Task<HardwareSystemVm> HardwareSystemVmFromHardwareSystemAsync(HardwareSystem hardwareSystem)
         {
             var hardwareSystemVm = new HardwareSystemVm
@@ -123,7 +142,29 @@ namespace DRApplication.Client.Services
             };
             return await Task.Run(() => hardwareConfigVm);
         }
+        public async Task<HardwareConfig> HardwareConfigFromHardwareConfigInsertVmAsync(HardwareConfigInsertVm hardwareConfigInsertVm)
+        {
+            var hardwareConfig = new HardwareConfig
+            {
+                Name = hardwareConfigInsertVm.Name,
+                DeviceTypeId = hardwareConfigInsertVm.DeviceTypeId
+            };
 
+            return await Task.Run(() => hardwareConfig);
+        }
+        public async Task<HardwareVersionVm> HardwareVersionVmFromHardwareVersionsAsync(HardwareVersion hardwareVersion)
+        {
+            var hardwareVersionVm = new HardwareVersionVm
+            {
+                Id = hardwareVersion.Id,
+                Name = hardwareVersion.Name,
+                HardwareSystemId = hardwareVersion.HardwareSystemId,
+                VersionDate = hardwareVersion.VersionDate,
+                VersionDateString = hardwareVersion.VersionDate.ToShortDateString()
+            };
+
+            return await Task.Run(() => hardwareVersionVm);
+        }
         public async Task<IEnumerable<DeviceVm>> DeviceVmsFromDevicesAsync(IEnumerable<Device> devices)
         {
             var deviceTypes = await _managerService.DeviceTypeManager().GetAllAsync();
@@ -195,6 +236,40 @@ namespace DRApplication.Client.Services
             });
 
             return await Task.Run(() => hardwareConfigVms);
+        }
+        public async Task<HardwareConfig> HardwareConfigFromHardwareConfigVmAsync(HardwareConfigVm hardwareConfigVm)
+        {
+            var hardwareConfig = new HardwareConfig
+            {
+                Id = hardwareConfigVm.Id,
+                Name = hardwareConfigVm.Name,
+                DeviceTypeId = hardwareConfigVm.DeviceTypeId
+            };
+
+            return await Task.Run(() => hardwareConfig);
+        }
+        public async Task<HardwareVersion> HardwareVersionFromHardwareVersionVmAsync(HardwareVersionVm hardwareVersionVm)
+        {
+            var hardwareVersion = new HardwareVersion
+            {
+                Id = hardwareVersionVm.Id,
+                Name = hardwareVersionVm.Name,
+                VersionDate = (DateTime)hardwareVersionVm.VersionDate,
+                HardwareSystemId = hardwareVersionVm.HardwareSystemId
+            };
+
+            return await Task.Run(() => hardwareVersion);
+        }
+        public async Task<HardwareVersion> HardwareVersionFromHardwareVersionInsertVmAsync(HardwareVersionInsertVm hardwareVersionInsertVm)
+        {
+            var hardwareVersion = new HardwareVersion
+            {
+                Name = hardwareVersionInsertVm.Name,
+                HardwareSystemId = hardwareVersionInsertVm.HardwareSystemId,
+                VersionDate = (DateTime)hardwareVersionInsertVm.VersionDate
+            };
+
+            return await Task.Run(() => hardwareVersion);
         }
     }
 }
