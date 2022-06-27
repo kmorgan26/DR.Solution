@@ -103,6 +103,26 @@ namespace DRApplication.Client.Services
             };
             return await Task.Run(() => maintainerVm);
         }
+        public async Task<HardwareSystemVm> HardwareSystemVmFromHardwareSystemAsync(HardwareSystem hardwareSystem)
+        {
+            var hardwareSystemVm = new HardwareSystemVm
+            {
+                Id = hardwareSystem.Id,
+                Name = hardwareSystem.Name
+            };
+
+            return await Task.Run(() => hardwareSystemVm);
+        }
+        public async Task<HardwareConfigVm> HardwareConfigVmFromHardwareConfigAsync(HardwareConfig hardwareConfig)
+        {
+            var hardwareConfigVm = new HardwareConfigVm
+            {
+                Id = hardwareConfig.Id,
+                Name = hardwareConfig.Name,
+                DeviceTypeId = hardwareConfig.DeviceTypeId
+            };
+            return await Task.Run(() => hardwareConfigVm);
+        }
 
         public async Task<IEnumerable<DeviceVm>> DeviceVmsFromDevicesAsync(IEnumerable<Device> devices)
         {
@@ -143,6 +163,38 @@ namespace DRApplication.Client.Services
             });
 
             return await Task.Run(() => maintainerVms);
+        }
+        public async Task<IEnumerable<HardwareSystemVm>> HardwareSystemVmsFromHardwareSystemsAsync(IEnumerable<HardwareSystem> hardwareSystems)
+        {
+            var hardwareSystemVms = hardwareSystems.Select(hws => new HardwareSystemVm
+            {
+                Id = hws.Id,
+                Name = hws.Name
+            });
+            return await Task.Run(() => hardwareSystemVms);
+        }
+        public async Task<IEnumerable<HardwareVersionVm>> HardwareVersionVmsFromHardwareVersionsAsync(IEnumerable<HardwareVersion> hardwareVersions)
+        {
+            var hardwareVersionVms = hardwareVersions.Select(hwv => new HardwareVersionVm
+            {
+                Id = hwv.Id,
+                Name = hwv.Name,
+                VersionDate = hwv.VersionDate,
+                HardwareSystemId = hwv.HardwareSystemId,
+                VersionDateString = hwv.VersionDate.ToShortDateString()
+            });
+            return await Task.Run(()=> hardwareVersionVms);
+        }
+        public async Task<IEnumerable<HardwareConfigVm>> HardwareConfigVmsFromHardwareConfigsAsync(IEnumerable<HardwareConfig> hardwareConfigs)
+        {
+            var hardwareConfigVms = hardwareConfigs.Select(hwc => new HardwareConfigVm
+            {
+                Id = hwc.Id,
+                Name = hwc.Name,
+                DeviceTypeId = hwc.DeviceTypeId
+            });
+
+            return await Task.Run(() => hardwareConfigVms);
         }
     }
 }

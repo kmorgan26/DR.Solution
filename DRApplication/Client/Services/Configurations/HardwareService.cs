@@ -9,10 +9,12 @@ public class HardwareService : IHardwareService
 
     #region ---Fields and Constructor ---
     private readonly ManagerService _managerService;
+    private readonly IMapperService _mapperService;
 
-    public HardwareService(ManagerService managerService)
+    public HardwareService(ManagerService managerService, IMapperService mapperService)
     {
         _managerService = managerService;
+        _mapperService = mapperService;
     }
     #endregion
 
@@ -21,15 +23,18 @@ public class HardwareService : IHardwareService
     public async Task<HardwareSystemVm> GetHardwareSystemVmById(int id)
     {
         var hardwareSystem = await _managerService.HardwareSystemManager().GetByIdAsync(id);
-        return Mapping.Mapper.Map<HardwareSystemVm>(hardwareSystem);
+        if (hardwareSystem is not null)
+            return await _mapperService.HardwareSystemVmFromHardwareSystemAsync(hardwareSystem);
+
+        return new HardwareSystemVm();
     }
     public async Task<HardwareConfigVm> GetHardwareConfigVmById(int id)
     {
-        var hardwareConfigVm = await _managerService.HardwareConfigManager().GetByIdAsync(id);
-        if (hardwareConfigVm == null)
-            return new HardwareConfigVm();
+        var hardwareConfig = await _managerService.HardwareConfigManager().GetByIdAsync(id);
+        if (hardwareConfig is not null)
+            return await _mapperService.HardwareConfigVmFromHardwareConfigAsync(hardwareConfig);
 
-        return Mapping.Mapper.Map<HardwareConfigVm>(hardwareConfigVm);
+        return new HardwareConfigVm();
     }
 
     #endregion
@@ -39,16 +44,17 @@ public class HardwareService : IHardwareService
     public async Task<IEnumerable<HardwareSystemVm>> GetHardwareSystemVms()
     {
         var hardwareSystems = await _managerService.HardwareSystemManager().GetAllAsync();
-        return Mapping.Mapper.Map<IEnumerable<HardwareSystemVm>>(hardwareSystems);
+        return await _mapperService.HardwareSystemVmsFromHardwareSystemsAsync(hardwareSystems);
     }
     public async Task<IEnumerable<HardwareVersionVm>> GetHardwareVersionVmsByHardwareSystemId(int id)
     {
         //Filter: FROM HardwareVersions WHERE HardwareSystemId = id
         var hardwareSystemFilter = await new FilterGenerator<HardwareVersion>().GetFilterWherePropertyEqualsValueAsync("HardwareSystemId", id);
         var hardwareVerionResponse = await _managerService.HardwareVersionManager().GetAsync(hardwareSystemFilter);
+        var hardwareVersionVms = hardwareVerionResponse.Data;
 
-        if (hardwareVerionResponse.Data is not null)
-            return Mapping.Mapper.Map<IEnumerable<HardwareVersionVm>>(hardwareVerionResponse.Data);
+        if (hardwareVersionVms is not null)
+            return await _mapperService.HardwareVersionVmsFromHardwareVersionsAsync(hardwareVersionVms);
 
         return new List<HardwareVersionVm>();
     }
@@ -57,9 +63,10 @@ public class HardwareService : IHardwareService
         //Filter: FROM HardwareConfigs WHERE DeviceTypeId = id
         var deviceTypeFilter = await new FilterGenerator<HardwareConfig>().GetFilterWherePropertyEqualsValueAsync("DeviceTypeId", id);
         var hardwareConfigResponse = await _managerService.HardwareConfigManager().GetAsync(deviceTypeFilter);
+        var hardwareConfigs = hardwareConfigResponse.Data;
 
         if (hardwareConfigResponse.Data is not null)
-            return Mapping.Mapper.Map<IEnumerable<HardwareConfigVm>>(hardwareConfigResponse.Data);
+            return await _mapperService.HardwareConfigVmsFromHardwareConfigsAsync(hardwareConfigs);
 
         return new List<HardwareConfigVm>();
     }
