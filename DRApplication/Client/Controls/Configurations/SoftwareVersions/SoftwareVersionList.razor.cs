@@ -19,7 +19,7 @@ public partial class SoftwareVersionList
             selectedRowNumber = -1;
             return string.Empty;
         }
-        else if (mudTable.SelectedItem != null && mudTable.SelectedItem.Equals(element))
+        else if (mudTable.SelectedItem != null && mudTable.SelectedItem.Id == element.Id)
         {
             AppState.UpdateSoftwareVersionVm(this, element);
             selectedRowNumber = rowNumber;

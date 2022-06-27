@@ -51,7 +51,7 @@
             AppState.UpdateLoadVm(this, new LoadVm());
             return string.Empty;
         }
-        else if (mudTable.SelectedItem != null && mudTable.SelectedItem.Equals(element))
+        else if (mudTable.SelectedItem != null && mudTable.SelectedItem.Id == element.Id)
         {
             AppState.UpdateLoadVm(this, element);
             selectedRowNumber = rowNumber;
