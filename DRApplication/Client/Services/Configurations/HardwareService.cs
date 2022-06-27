@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using DRApplication.Client.Interfaces;
+﻿using DRApplication.Client.Interfaces;
 using DRApplication.Client.ViewModels;
 using DRApplication.Shared.Models;
 namespace DRApplication.Client.Services;

@@ -53,6 +53,7 @@
 	  <Compile Remove="Services\ApiEfRepository.cs" />
 	  <Compile Remove="Services\ListServices\ForeignKeyListService.cs" />
 	  <Compile Remove="Services\ListServices\GenericListService.cs" />
+	  <Compile Remove="Services\Mapping.cs" />
 	  <Compile Remove="Services\NavigationManagerExtensions.cs" />
 	  <Compile Remove="Services\TableService.cs" />
 	  <Compile Remove="Services\TemplateService.cs" />
@@ -83,7 +84,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
 		<PackageReference Include="Blazored.LocalStorage" Version="4.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="6.0.5" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.5" />
