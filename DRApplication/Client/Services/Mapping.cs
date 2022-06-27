@@ -24,25 +24,25 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<HardwareSystem, HardwareSystemVm>().ReverseMap();
-        CreateMap<HardwareSystem, HardwareSystemInsertVm>().ReverseMap();
-        CreateMap<HardwareSystem, GenericListVm>().ReverseMap();
+        //CreateMap<HardwareSystem, HardwareSystemVm>().ReverseMap();
+        //CreateMap<HardwareSystem, HardwareSystemInsertVm>().ReverseMap();
+        //CreateMap<HardwareSystem, GenericListVm>().ReverseMap();
 
-        CreateMap<HardwareVersionVm, HardwareVersion>();
-        CreateMap<HardwareVersion, HardwareVersionInsertVm>().ReverseMap();
-        CreateMap<HardwareVersion, GenericListVm>().ReverseMap();
-        CreateMap<HardwareVersion, HardwareVersionVm>()
-            .ForMember(dest => dest.VersionDateString,
-                opts => opts.MapFrom(src => src.VersionDate.ToShortDateString()));
+        //CreateMap<HardwareVersionVm, HardwareVersion>();
+        //CreateMap<HardwareVersion, HardwareVersionInsertVm>().ReverseMap();
+        //CreateMap<HardwareVersion, GenericListVm>().ReverseMap();
+        //CreateMap<HardwareVersion, HardwareVersionVm>()
+        //    .ForMember(dest => dest.VersionDateString,
+        //        opts => opts.MapFrom(src => src.VersionDate.ToShortDateString()));
 
-        CreateMap<HardwareConfig, HardwareConfigEditVm>().ReverseMap();
-        CreateMap<HardwareConfig, HardwareConfigVm>().ReverseMap();
-        CreateMap<HardwareConfig, GenericListVm>().ReverseMap();
-        CreateMap<HardwareConfig, HardwareConfigInsertVm>().ReverseMap();
+        //CreateMap<HardwareConfig, HardwareConfigEditVm>().ReverseMap();
+        //CreateMap<HardwareConfig, HardwareConfigVm>().ReverseMap();
+        //CreateMap<HardwareConfig, GenericListVm>().ReverseMap();
+        //CreateMap<HardwareConfig, HardwareConfigInsertVm>().ReverseMap();
 
-        CreateMap<HardwareVersionsConfig, HardwareVersionsConfigVm>().ReverseMap();
-        CreateMap<HardwareVersionsConfig, HardwareVersionsConfigInsertVm>().ReverseMap();
-        CreateMap<HardwareVersionsConfig, HardwareVersionsConfigEditVm>().ReverseMap();
+        //CreateMap<HardwareVersionsConfig, HardwareVersionsConfigVm>().ReverseMap();
+        //CreateMap<HardwareVersionsConfig, HardwareVersionsConfigInsertVm>().ReverseMap();
+        //CreateMap<HardwareVersionsConfig, HardwareVersionsConfigEditVm>().ReverseMap();
 
         CreateMap<SoftwareSystem, SoftwareSystemInsertVm>().ReverseMap();
         CreateMap<SoftwareSystem, SoftwareSystemEditVm>().ReverseMap();
