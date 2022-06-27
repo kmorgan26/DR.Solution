@@ -387,6 +387,7 @@ namespace DRApplication.Client.Services
             {
                 Id = vl.Id,
                 LoadId = vl.LoadId,
+                SoftwareVersionId = vl.SoftwareVersionId,
                 SoftwareVersionName = softwareVersions.Where(i => i.Id == vl.SoftwareVersionId).FirstOrDefault().Name,
                 SoftwareSystemName = softwareSystems
                     .Where(ss => ss.Id == softwareVersions
