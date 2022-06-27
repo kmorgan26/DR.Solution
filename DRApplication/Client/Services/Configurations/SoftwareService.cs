@@ -10,10 +10,12 @@ public class SoftwareService : ISoftwareService
     #region ---Fields and Constructor ---
 
     private readonly ManagerService _managerService;
+    private readonly IMapperService _mapperService;
 
-    public SoftwareService(ManagerService managerService)
+    public SoftwareService(ManagerService managerService, IMapperService mapperService)
     {
         _managerService = managerService;
+        _mapperService = mapperService;
     }
 
     #endregion
@@ -23,10 +25,10 @@ public class SoftwareService : ISoftwareService
     public async Task<SoftwareSystemVm> GetSoftwareSystemVmById(int id)
     {
         var softwareSystem = await _managerService.SoftwareSystemManager().GetByIdAsync(id);
-        if (softwareSystem == null)
-            return new SoftwareSystemVm();
+        if (softwareSystem is not null)
+            return await _mapperService.SoftwareSystemVmFromSoftwareSystemAsync(softwareSystem);
 
-        return Mapping.Mapper.Map<SoftwareSystemVm>(softwareSystem);
+        return new SoftwareSystemVm();
     }
     public async Task<SoftwareVersionVm> GetSoftwareVersionVmById(int id)
     {
@@ -104,8 +106,8 @@ public class SoftwareService : ISoftwareService
     {
         var versionFilter = await new FilterGenerator<SoftwareVersion>().GetFilterForPropertyByListOfIdsAsync("Id", ids);
         var versionResponse = await _managerService.SoftwareVersionManager().GetAsync(versionFilter);
-        if(versionResponse.Data is not null)
-              return versionResponse.Data;
+        if (versionResponse.Data is not null)
+            return versionResponse.Data;
         return new List<SoftwareVersion>();
     }
 

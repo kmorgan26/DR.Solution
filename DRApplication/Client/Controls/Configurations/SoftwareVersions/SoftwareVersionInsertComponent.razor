@@ -1,5 +1,5 @@
 ﻿@namespace DRApplication.Client.Controls
-
+@inject IMapperService MapperService
 @inject AppState AppState
 @inject SoftwareVersionManager SoftwareVersionManager
 @inject NavigationManager navigation
@@ -35,11 +35,10 @@
         }
 
     }
-
     private async Task InsertSoftwareVersion()
     {
         _softwareVersionInsertVm.SoftwareSystemId = AppState.SoftwareSystemVm.Id;
-        var softwareVersion = Mapping.Mapper.Map<SoftwareVersion>(_softwareVersionInsertVm);
+        var softwareVersion = await MapperService.SoftwareVersionFromSoftwareVersionsInsertVmAsync(_softwareVersionInsertVm);
         await SoftwareVersionManager.InsertAsync(softwareVersion);
         navigation.NavigateTo("/softwareversion");
     }

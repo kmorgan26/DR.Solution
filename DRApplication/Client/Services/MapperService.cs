@@ -271,5 +271,75 @@ namespace DRApplication.Client.Services
 
             return await Task.Run(() => hardwareVersion);
         }
+        public async Task<SoftwareSystem> SoftwareSystemFromSoftwareSystemVmAsync(SoftwareSystemVm softwareSystemVm)
+        {
+            var softwareSystem = new SoftwareSystem
+            {
+                Name = softwareSystemVm.Name,
+                HardwareConfigId = softwareSystemVm.HardwareConfigId,
+                Id = softwareSystemVm.Id
+            };
+
+            return await Task.Run(() => softwareSystem);
+        }
+        public async Task<SoftwareSystemVm> SoftwareSystemVmFromSoftwareSystemAsync(SoftwareSystem softwareSystem)
+        {
+            var hardwareConfig = await _managerService.HardwareConfigManager().GetByIdAsync(softwareSystem.HardwareConfigId);
+
+            var softwareSystemVm = new SoftwareSystemVm
+            {
+                Id = softwareSystem.Id,
+                Name = softwareSystem.Name,
+                HardwareConfigId = softwareSystem.HardwareConfigId,
+                HardwareConfig = hardwareConfig.Name
+            };
+
+            return await Task.Run(() => softwareSystemVm);
+        }
+        public async Task<SoftwareSystem> SoftwareSystemFromSoftwareSystemInsertVmAsync(SoftwareSystemInsertVm softwareSystemInsertVm)
+        {
+            var softwareSystem = new SoftwareSystem
+            {
+                Name = softwareSystemInsertVm.Name,
+                HardwareConfigId = softwareSystemInsertVm.HardwareConfigId
+            };
+
+            return await Task.Run(() => softwareSystem);
+        }
+        public async Task<SoftwareVersionVm> SoftwareVersionVmFromSoftwareVersionsAsync(SoftwareVersion softwareVersion)
+        {
+            var softwareVersionVm = new SoftwareVersionVm
+            {
+                Id = softwareVersion.Id,
+                Name = softwareVersion.Name,
+                SoftwareSystemId = softwareVersion.SoftwareSystemId,
+                VersionDate = softwareVersion.VersionDate,
+                VersionDateString = softwareVersion.VersionDate.ToShortDateString()
+            };
+
+            return await Task.Run(() => softwareVersionVm);
+        }
+        public async Task<SoftwareVersion> SoftwareVersionFromSoftwareVersionsInsertVmAsync(SoftwareVersionInsertVm softwareVersionInsertVm)
+        {
+            var softwareVersion = new SoftwareVersion
+            {
+                Name = softwareVersionInsertVm.Name,
+                SoftwareSystemId = softwareVersionInsertVm.SoftwareSystemId,
+                VersionDate = (DateTime)softwareVersionInsertVm.VersionDate
+            };
+
+            return await Task.Run(() => softwareVersion);
+        }
+        public async Task<SoftwareVersion> SoftwareVersionFromSoftwareVersionVmAsync(SoftwareVersionVm softwareVersionVm)
+        {
+            var softwareVersion = new SoftwareVersion
+            {
+                Name = softwareVersionVm.Name,
+                SoftwareSystemId = softwareVersionVm.SoftwareSystemId,
+                VersionDate = (DateTime)softwareVersionVm.VersionDate
+            };
+
+            return await Task.Run(() => softwareVersion);
+        }
     }
 }

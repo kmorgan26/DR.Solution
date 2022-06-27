@@ -3,6 +3,7 @@
 @inject NavigationManager navigation
 @inject SoftwareSystemManager SoftwareSystemManager
 @inject IHardwareService HardwareService
+@inject IMapperService MapperService
 @inject ISnackbar Snackbar
 
 @if (!_isBusy)
@@ -43,7 +44,7 @@
 
     protected async Task UpdateSoftwareSystem()
     {
-        var softwareSystem = Mapping.Mapper.Map<SoftwareSystem>(AppState.SoftwareSystemVm);
+        var softwareSystem = await MapperService.SoftwareSystemFromSoftwareSystemVmAsync(AppState.SoftwareSystemVm);
         await SoftwareSystemManager.UpdateAsync(softwareSystem);
         Snackbar.Add($"Software System was updated", Severity.Success);
         navigation.NavigateTo("/softwaresystem");
@@ -52,9 +53,8 @@
     protected override async Task OnInitializedAsync()
     {
         _isBusy = true;
-
         var softwareSystem = await SoftwareSystemManager.GetByIdAsync(SoftwareSystemId);
-        var softwareSystemVm = Mapping.Mapper.Map<SoftwareSystemVm>(softwareSystem);
+        var softwareSystemVm = await MapperService.SoftwareSystemVmFromSoftwareSystemAsync(softwareSystem);
         AppState.UpdateSoftwareSystemVm(this, softwareSystemVm);
         _isBusy = false;
     }
