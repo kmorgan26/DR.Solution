@@ -3,6 +3,7 @@ using DRApplication.Client.ViewModels;
 using DRApplication.Shared.Filters;
 using DRApplication.Shared.Enums;
 using DRApplication.Shared.Models;
+using DRApplication.Client.Helpers;
 
 namespace DRApplication.Client.Services;
 
@@ -16,17 +17,24 @@ public class LoadService : ILoadService
     private readonly ManagerService _managerService;
     private readonly AppState _appState;
 
+    private readonly ILoadHelpers _loadHelpers;
+    private readonly IMapperService _mapperService;
+
     public LoadService(
             IPlatformService platformService,
             ISoftwareService softwareService,
             ManagerService managerService,
-            AppState appState
+            AppState appState,
+            ILoadHelpers loadHelpers,
+            IMapperService mapperService
         )
     {
         _platformService = platformService;
         _softwareService = softwareService;
         _managerService = managerService;
         _appState = appState;
+        _loadHelpers = loadHelpers;
+        _mapperService = mapperService;
     }
 
     #endregion
@@ -46,10 +54,11 @@ public class LoadService : ILoadService
         filter.PaginationFilter = null;
         filter.FilterProperties = filterProperties;
 
-        var response = await _managerService.LoadManager().GetAsync(filter);
+        var loadResponse = await _managerService.LoadManager().GetAsync(filter);
+        var loads = loadResponse.Data;
 
-        if (response is not null)
-            return Mapping.Mapper.Map<IEnumerable<LoadVm>>(response.Data);
+        if (loads is not null)
+            return await _mapperService.LoadVmsFromLoads(loads);
 
         return new List<LoadVm>();
 
@@ -68,10 +77,11 @@ public class LoadService : ILoadService
         filter.PaginationFilter = null;
         filter.FilterProperties = filterProperties;
 
-        var response = await _managerService.LoadManager().GetAsync(filter);
+        var loadResponse = await _managerService.LoadManager().GetAsync(filter);
+        var loads = loadResponse.Data;
 
-        if (response is not null)
-            return Mapping.Mapper.Map<IEnumerable<LoadVm>>(response.Data);
+        if (loads is not null)
+            return await _mapperService.LoadVmsFromLoads(loads);
 
         return new List<LoadVm>();
     }
@@ -79,26 +89,11 @@ public class LoadService : ILoadService
     {
         try
         {
-            var versionLoadsFilter = await new FilterGenerator<VersionsLoad>().GetFilterWherePropertyEqualsValueAsync("LoadId", id);
-            var versionLoadresponse = await _managerService.VersionsLoadManager().GetAsync(versionLoadsFilter);
-            var mappedVersionLoads = Mapping.Mapper.Map<IEnumerable<VersionsLoadVm>>(versionLoadresponse.Data);
+            var versionsLoads = await _loadHelpers.GetVersionsLoadsByLoadIdAsync(id);
 
-            var versionIds = mappedVersionLoads.Select(x => x.SoftwareVersionId.ToString()).ToList();
-            var softwareVersions = await _softwareService.GetSoftwareVersionsByIds(versionIds);
+            var versionLoadsVms = await _mapperService.VersionsLoadVmsFromVersionsLoadAsync(versionsLoads);
+            return versionLoadsVms.OrderBy(i => i.SoftwareSystemName);
 
-            var systemIds = softwareVersions.Select(x => x.SoftwareSystemId.ToString()).ToList();
-
-            var softwareSystems = await _softwareService.GetSoftwareSystemsByIds(systemIds);
-
-            var ids = mappedVersionLoads?.Select(x => x.SoftwareVersionId.ToString()).ToList();
-
-            foreach (var item in mappedVersionLoads)
-            {
-                item.SoftwareVersionName = softwareVersions.Where(i => i.Id == item.SoftwareVersionId).FirstOrDefault().Name;
-                var version = softwareVersions.Where(i => i.Id == item.SoftwareVersionId).FirstOrDefault();
-                item.SoftwareSystemName = softwareSystems.Where(a => a.Id == version.SoftwareSystemId).FirstOrDefault().Name;
-            }
-            return mappedVersionLoads.OrderBy(i => i.SoftwareSystemName);
         }
         catch (Exception ex)
         {
@@ -294,8 +289,7 @@ public class LoadService : ILoadService
             var versionLoadIdToRemove = vms[index].Id;
 
             //THE ID is the same as the SoftwareVersionId?
-
-            //var versionLoad = Mapping.Mapper.Map<VersionsLoad>(versionLoadVmToRemove);
+            
             await _managerService.VersionsLoadManager().DeleteByIdAsync(versionLoadIdToRemove);
         }
 

@@ -7,10 +7,12 @@ namespace DRApplication.Client.Services
     public class MapperService : IMapperService
     {
         private readonly ManagerService _managerService;
+        private readonly ILoadHelpers _loadHelpers;
 
-        public MapperService(ManagerService managerService)
+        public MapperService(ManagerService managerService, ILoadHelpers loadHelpers)
         {
             _managerService = managerService;
+            _loadHelpers = loadHelpers;
         }
         public async Task<Device> DeviceFromDeviceInsertVmAsync(DeviceInsertVm deviceInsertVm)
         {
@@ -340,6 +342,100 @@ namespace DRApplication.Client.Services
             };
 
             return await Task.Run(() => softwareVersion);
+        }
+        public async Task<LoadVm> LoadVmFromLoadAsync(Load load)
+        {
+            var loadVm = new LoadVm
+            {
+                Id = load.Id,
+                HardwareConfigId = load.HardwareConfigId,
+                IsAccepted = load.IsAccepted,
+                Name = load.Name
+            };
+
+            return await Task.Run(() => loadVm);
+        }
+        public async Task<Load> LoadFromLoadVm(LoadVm loadVm)
+        {
+            var load = new Load
+            {
+                Id = loadVm.Id,
+                Name = loadVm.Name,
+                HardwareConfigId = loadVm.HardwareConfigId,
+                IsAccepted = loadVm.IsAccepted
+            };
+
+            return await Task.Run(() => load);
+        }
+        public async Task<Load> LoadFromLoadInsertVm(LoadInsertVm loadInsertVm)
+        {
+            var load = new Load
+            {
+                IsAccepted = loadInsertVm.IsAccepted,
+                Name = loadInsertVm.Name,
+                HardwareConfigId = loadInsertVm.HardwareConfigId,
+            };
+
+            return await Task.Run(() => load);
+        }
+        public async Task<IEnumerable<VersionsLoadVm>> VersionsLoadVmsFromVersionsLoadAsync(IEnumerable<VersionsLoad> versionsLoads)
+        {
+            var softwareVersions = await _loadHelpers.GetSoftwareVersionsFromVersionLoads(versionsLoads);
+            var softwareSystems = await _loadHelpers.GetSoftwareSystemFromSoftwareVersionAsync(softwareVersions);
+
+            var versionsLoadVms = versionsLoads.Select(vl => new VersionsLoadVm
+            {
+                Id = vl.Id,
+                LoadId = vl.LoadId,
+                SoftwareVersionName = softwareVersions.Where(i => i.Id == vl.SoftwareVersionId).FirstOrDefault().Name,
+                SoftwareSystemName = softwareSystems
+                    .Where(ss => ss.Id == softwareVersions
+                    .Where(sv => sv.Id == vl.SoftwareVersionId)
+                    .FirstOrDefault().SoftwareSystemId)
+                    .FirstOrDefault().Name
+            });
+
+            return versionsLoadVms;
+        }
+        public async Task<IEnumerable<LoadVm>> LoadVmsFromLoads(IEnumerable<Load> loads)
+        {
+            var loadVms = loads.Select(l => new LoadVm
+            {
+                Id = l.Id,
+                Name = l.Name,
+                HardwareConfigId = l.HardwareConfigId,
+                IsAccepted = l.IsAccepted
+            });
+
+            return await Task.Run(() => loadVms);
+        }
+        public async Task<IEnumerable<SoftwareVersionVm>> SoftwareVersionVmsFromSoftwareVersionsAsync(IEnumerable<SoftwareVersion> softwareVersions)
+        {
+            var softwareVersionVms = softwareVersions.Select(sv => new SoftwareVersionVm
+            {
+                Id = sv.Id,
+                Name = sv.Name,
+                SoftwareSystemId = sv.SoftwareSystemId,
+                VersionDate = sv.VersionDate,
+                VersionDateString = sv.VersionDate.ToShortDateString()
+            });
+
+            return await Task.Run(()=> softwareVersionVms);
+        }
+
+        public async Task<IEnumerable<SoftwareSystemVm>> SoftwareSystemVmsFromSoftwareSystemsAsync(IEnumerable<SoftwareSystem> softwareSystems)
+        {
+            var hardwareConfigs = await _loadHelpers.GetHardwareConfigsFromSoftwareSystems(softwareSystems);
+
+            var softwareSystemVms = softwareSystems.Select(ss => new SoftwareSystemVm
+            {
+                Id = ss.Id,
+                Name = ss.Name,
+                HardwareConfigId = ss.HardwareConfigId,
+                HardwareConfig = hardwareConfigs.Where(i => i.Id == ss.HardwareConfigId).FirstOrDefault().Name
+            });
+
+            return softwareSystemVms;
         }
     }
 }

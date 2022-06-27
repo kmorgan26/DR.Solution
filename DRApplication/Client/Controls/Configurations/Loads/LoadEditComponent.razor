@@ -1,9 +1,10 @@
 ﻿@namespace DRApplication.Client.Controls
 @inject AppState AppState
 @inject NavigationManager navigation
+@inject ManagerService ManagerService
 @inject IPlatformService PlatformService
 @inject IHardwareService HardwareService
-@inject LoadManager LoadManager
+@inject IMapperService MapperService
 @inject ISnackbar Snackbar
 
 @if (!_isBusy)
@@ -48,8 +49,8 @@
 
     protected async Task UpdateLoad()
     {
-        var load = Mapping.Mapper.Map<Load>(AppState.LoadVm);
-        await LoadManager.UpdateAsync(load);
+        var load = await MapperService.LoadFromLoadVm(AppState.LoadVm);
+        await ManagerService.LoadManager().UpdateAsync(load);
         Snackbar.Add($"Load was updated", Severity.Success);
         navigation.NavigateTo("/load");
     }
@@ -57,8 +58,8 @@
     protected override async Task OnInitializedAsync()
     {
         _isBusy = true;
-        var load = await LoadManager.GetByIdAsync(LoadId);
-        var loadVm = Mapping.Mapper.Map<LoadVm>(load);
+        var load = await ManagerService.LoadManager().GetByIdAsync(LoadId);
+        var loadVm = await MapperService.LoadVmFromLoadAsync(load);
         AppState.UpdateLoadVm(this, loadVm);
         _isBusy = false;
     }

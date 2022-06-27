@@ -44,29 +44,29 @@ public class MappingProfile : Profile
         //CreateMap<HardwareVersionsConfig, HardwareVersionsConfigInsertVm>().ReverseMap();
         //CreateMap<HardwareVersionsConfig, HardwareVersionsConfigEditVm>().ReverseMap();
 
-        CreateMap<SoftwareSystem, SoftwareSystemInsertVm>().ReverseMap();
-        CreateMap<SoftwareSystem, SoftwareSystemEditVm>().ReverseMap();
-        CreateMap<SoftwareSystem, GenericListVm>().ReverseMap();
-        CreateMap<SoftwareSystem, SoftwareSystemVm>().ReverseMap();
+        //CreateMap<SoftwareSystem, SoftwareSystemInsertVm>().ReverseMap();
+        //CreateMap<SoftwareSystem, SoftwareSystemEditVm>().ReverseMap();
+        //CreateMap<SoftwareSystem, GenericListVm>().ReverseMap();
+        //CreateMap<SoftwareSystem, SoftwareSystemVm>().ReverseMap();
 
-        CreateMap<SoftwareVersionVm, SoftwareVersion>();
-        CreateMap<SoftwareVersion, SoftwareVersionInsertVm>().ReverseMap();
-        CreateMap<SoftwareVersion, SoftwareVersionEditVm>().ReverseMap();
-        CreateMap<SoftwareVersion, GenericListVm>().ReverseMap();
-        CreateMap<SoftwareVersion, SoftwareVersionVm>()
-            .ForMember(dest => dest.VersionDateString,
-                opts => opts.MapFrom(src => src.VersionDate.ToShortDateString()));
+        //CreateMap<SoftwareVersionVm, SoftwareVersion>();
+        //CreateMap<SoftwareVersion, SoftwareVersionInsertVm>().ReverseMap();
+        //CreateMap<SoftwareVersion, SoftwareVersionEditVm>().ReverseMap();
+        //CreateMap<SoftwareVersion, GenericListVm>().ReverseMap();
+        //CreateMap<SoftwareVersion, SoftwareVersionVm>()
+        //    .ForMember(dest => dest.VersionDateString,
+        //        opts => opts.MapFrom(src => src.VersionDate.ToShortDateString()));
 
-        CreateMap<Load, LoadVm>().ReverseMap();
-        CreateMap<Load, LoadEditVm>().ReverseMap();
-        CreateMap<Load, LoadInsertVm>().ReverseMap();
-        CreateMap<Load, GenericListVm>().ReverseMap();
+        //CreateMap<Load, LoadVm>().ReverseMap();
+        //CreateMap<Load, LoadEditVm>().ReverseMap();
+        //CreateMap<Load, LoadInsertVm>().ReverseMap();
+        //CreateMap<Load, GenericListVm>().ReverseMap();
 
-        CreateMap<CurrentLoadVm, CurrentLoad>();
+        //CreateMap<CurrentLoadVm, CurrentLoad>();
 
-        CreateMap<VersionsLoad, VersionsLoadVm>().ReverseMap();
-        CreateMap<VersionsLoad, VersionsLoadInsertVm>().ReverseMap();
-        CreateMap<VersionsLoad, VersionsLoadEditVm>().ReverseMap();
+        //CreateMap<VersionsLoad, VersionsLoadVm>().ReverseMap();
+        //CreateMap<VersionsLoad, VersionsLoadInsertVm>().ReverseMap();
+        //CreateMap<VersionsLoad, VersionsLoadEditVm>().ReverseMap();
 
         //CreateMap<DeviceType, GenericListVm>().ReverseMap();
         //CreateMap<DeviceType, DeviceTypeEditVm>().ReverseMap();
