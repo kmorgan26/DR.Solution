@@ -122,7 +122,8 @@ public class LoadService : ILoadService
         var loadResponse = await _managerService.LoadManager().GetAsync(loadFilter);
 
         //Get the Devices for the currentLoads
-        var deviceVms = await _platformService.GetDeviceVmsByListOfIds(currentLoadIds);
+        var deviceIds = currentLoads.Select(x => x.DeviceId.ToString()).ToList();
+        var deviceVms = await _platformService.GetDeviceVmsByListOfIds(deviceIds);
 
         if (loadResponse.Data is not null)
         {
@@ -162,7 +163,8 @@ public class LoadService : ILoadService
         var loadResponse = await _managerService.LoadManager().GetAsync(loadFilter);
 
         //Get the Devices for the currentLoads
-        var deviceVms = await _platformService.GetDeviceVmsByListOfIds(specificLoadIds);
+        var deviceIds = specificLoads.Select(x => x.DeviceId.ToString()).ToList();
+        var deviceVms = await _platformService.GetDeviceVmsByListOfIds(deviceIds);
 
         if (loadResponse.Data is not null)
         {
