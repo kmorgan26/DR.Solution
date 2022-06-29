@@ -37,7 +37,7 @@ namespace DRApplication.Client.Services
         }
         public async Task<DeviceVm> DeviceVmFromDeviceAsync(Device device)
         {
-            var deviceType = await _managerService.DeviceTypeManager().GetByIdAsync(device.Id);
+            var deviceType = await _managerService.DeviceTypeManager().GetByIdAsync(device.DeviceTypeId);
 
             var deviceVm = new DeviceVm
             {
