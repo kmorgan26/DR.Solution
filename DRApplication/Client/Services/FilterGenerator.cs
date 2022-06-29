@@ -33,6 +33,28 @@ namespace DRApplication.Client.Services
 
             return filter;
         }
+        public async Task<QueryFilter<TEntity>> GetPagedFilterWherePropertyEqualValueAsync(string propertyName, int id)
+        {
+            var filter = new QueryFilter<TEntity>();
+            var filterProperties = new List<FilterProperty>();
+            await Task.Run(() => filterProperties.Add(new FilterProperty()
+            {
+                Name = propertyName,
+                Value = id.ToString(),
+                Operator = FilterQueryOperator.Equals
+            }));
+            filter.OrderByDescending = true;
+            filter.OrderByPropertyName = "Id";
+            filter.PaginationFilter = new PaginationFilter()
+            {
+                PageNumber = 1,
+                PageSize = 10
+            };
+
+            filter.FilterProperties = filterProperties;
+
+            return filter;
+        }
         public async Task<QueryFilter<TEntity>> GetFilterWherePropertyEqualsValuesAsync(string propertyName, List<string> ids)
         {
             var filter = new QueryFilter<TEntity>();

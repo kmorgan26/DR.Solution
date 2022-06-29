@@ -90,10 +90,18 @@ namespace DRApplication.Client.Services
             //first get the selected DeviceVm
             var deviceVm = _appState.DeviceVm;
 
-            //first get the Maintenance Issues
+            //Get the DeviceDiscovered DTOs with that DeviceId (previous 10)
+            var deviceDiscoveredFilter = await new FilterGenerator<DeviceDiscovered>().GetFilterWherePropertyEqualsValueAsync("DeviceId", deviceVm.Id);
+            var devicesDiscovered = await _managerService.DeviceDiscoveredManager().GetAllAsync();
+            
+            
+            
+            //get the Maintenance Issues
             var maintIssueFilter = await new FilterGenerator<MaintIssue>().GetFilterWherePropertyEqualsValueAsync("Id", deviceVm.Id);
             var maintIssuesResponse = await _managerService.MaintIssueManager().GetAsync(maintIssueFilter);
             var maintIssues = maintIssuesResponse.Data;
+
+
 
             //get the IssueIds from the maint issues
             var issueIds = maintIssues.Select(i => i.IssueId.ToString()).ToList();
