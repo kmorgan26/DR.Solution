@@ -87,28 +87,54 @@ namespace DRApplication.Client.Services
         /// </summary>
         public async Task<IEnumerable<MaintenanceIssueVm>> GetMaintenanceIssueVmsForEntryTableAsync()
         {
-            //first get the selected DeviceVm
-            var deviceVm = _appState.DeviceVm;
+            try
+            {
 
-            //Get the DeviceDiscovered DTOs with that DeviceId (previous 10)
-            var deviceDiscoveredFilter = await new FilterGenerator<DeviceDiscovered>().GetFilterWherePropertyEqualsValueAsync("DeviceId", deviceVm.Id);
-            var devicesDiscovered = await _managerService.DeviceDiscoveredManager().GetAllAsync();
-            
-            
-            
-            //get the Maintenance Issues
-            var maintIssueFilter = await new FilterGenerator<MaintIssue>().GetFilterWherePropertyEqualsValueAsync("Id", deviceVm.Id);
-            var maintIssuesResponse = await _managerService.MaintIssueManager().GetAsync(maintIssueFilter);
-            var maintIssues = maintIssuesResponse.Data;
+                //first get the selected DeviceVm
+                var deviceVm = _appState.DeviceVm;
+
+                //Get the DeviceDiscovered DTOs with that DeviceId (previous 10)
+                var deviceDiscoveredFilter = await new FilterGenerator<DeviceDiscovered>().GetFilterWherePropertyEqualsValueAsync("DeviceId", deviceVm.Id);
+                var devicesDiscoveredResponse = await _managerService.DeviceDiscoveredManager().GetAsync(deviceDiscoveredFilter);
+                var devicesDiscovered = devicesDiscoveredResponse.Data;
+
+                var issueIds = devicesDiscovered.Select(i => i.IssueId.ToString()).ToList();
+
+                var issueFilter = await new FilterGenerator<Issue>().GetFilterForPropertyByListOfIdsAsync("Id", issueIds);
+                var issueResponse = await _managerService.IssueManager().GetAsync(issueFilter);
+                var issues = issueResponse.Data;
 
 
+                //get the Maintenance Issues
+                var maintIssueFilter = await new FilterGenerator<MaintIssue>().GetFilterForPropertyByListOfIdsAsync("Id", issueIds);
+                var maintIssuesResponse = await _managerService.MaintIssueManager().GetAsync(maintIssueFilter);
+                var maintIssues = maintIssuesResponse.Data;
 
-            //get the IssueIds from the maint issues
-            var issueIds = maintIssues.Select(i => i.IssueId.ToString()).ToList();
 
-            var issueFilter = await new FilterGenerator<Issue>().GetFilterForPropertyByListOfIdsAsync("Id", issueIds);
+                var maintIssueVms = issues.Select(i => new MaintenanceIssueVm
+                {
+                    IssueId = i.Id,
+                    IssueDate = i.IssueDate,
+                    DrType = i.DrTypeId.ToString(),
+                    SimStatus = i.SimStatusId.ToString(),
+                    Description = i.Description,
+                    ActionTaken = maintIssues.Where(m => m.IssueId == i.Id).FirstOrDefault().ActionTaken,
+                    EnteredBy = i.EnteredBy,
+                    Device = deviceVm.Device,
+                    CorrectiveAction = maintIssues.Where(m => m.IssueId == i.Id).FirstOrDefault().CorrectiveActionId.ToString(),
+                    Pid = maintIssues.Where(m => m.IssueId == i.Id).FirstOrDefault().Pid
+                });
 
-            throw new NotImplementedException();
+                if (maintIssueVms is not null)
+                    return maintIssueVms;
+
+                return new List<MaintenanceIssueVm>();
+            }
+            catch (Exception)
+            {
+                return new List<MaintenanceIssueVm>();
+                throw;
+            }
         }
     }
 }

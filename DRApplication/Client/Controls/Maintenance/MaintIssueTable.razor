@@ -1,29 +1,33 @@
 ﻿@namespace DRApplication.Client.Controls
 @inject AppState AppState
 @inject IPlatformService PlatformService
+@inject IIssueService IssueService
 
-<MudTable Items="_maintenanceIssueVms" Class="my-4" Hover="true" Striped="true" Dense="true">
-    <HeaderContent>
-        <MudTh>Issue</MudTh>
-        <MudTh>Type</MudTh>
-        <MudTh>Status</MudTh>
-        <MudTh>Description</MudTh>
-        <MudTh>Issue Date</MudTh>
-        <MudTh>PID</MudTh>
-        <MudTh>Corrective Action</MudTh>
-        <MudTh>Action Taken</MudTh>
-    </HeaderContent>
-    <RowTemplate>
-        <MudTd DataLabel="Id">@context.IssueId</MudTd>
-        <MudTd DataLabel="Type">@context.DrType</MudTd>
-        <MudTd DataLabel="Status">@context.SimStatus</MudTd>
-        <MudTd DataLabel="Description">@context.Description</MudTd>
-        <MudTd DataLabel="Date">@context.IssueDate</MudTd>
-        <MudTd DataLabel="PID">@context.Pid</MudTd>
-        <MudTd DataLabel="Corrective Action">@context.CorrectiveAction</MudTd>
-        <MudTd DataLabel="Action Taken">@context.ActionTaken</MudTd>
-    </RowTemplate>
-</MudTable>
+@if (!_isBusy && _maintenanceIssueVms is not null)
+{
+    <MudTable Items="_maintenanceIssueVms" Class="my-4" Hover="true" Striped="true" Dense="true">
+        <HeaderContent>
+            <MudTh>Issue</MudTh>
+            <MudTh>Type</MudTh>
+            <MudTh>Status</MudTh>
+            <MudTh>Description</MudTh>
+            <MudTh>Issue Date</MudTh>
+            <MudTh>PID</MudTh>
+            <MudTh>Corrective Action</MudTh>
+            <MudTh>Action Taken</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Id">@context.IssueId</MudTd>
+            <MudTd DataLabel="Type">@context.DrType</MudTd>
+            <MudTd DataLabel="Status">@context.SimStatus</MudTd>
+            <MudTd DataLabel="Description">@context.Description</MudTd>
+            <MudTd DataLabel="Date">@context.IssueDate</MudTd>
+            <MudTd DataLabel="PID">@context.Pid</MudTd>
+            <MudTd DataLabel="Corrective Action">@context.CorrectiveAction</MudTd>
+            <MudTd DataLabel="Action Taken">@context.ActionTaken</MudTd>
+        </RowTemplate>
+    </MudTable>
+}
 
 @code {
 
@@ -33,12 +37,12 @@
 
     private async Task SetMaintainers()
     {
-        
+        _maintenanceIssueVms = await IssueService.GetMaintenanceIssueVmsForEntryTableAsync();
     }
     protected override async Task OnInitializedAsync()
     {
         _isBusy = true;
-
+        await SetMaintainers();
         _isBusy = false;
     }
 }
