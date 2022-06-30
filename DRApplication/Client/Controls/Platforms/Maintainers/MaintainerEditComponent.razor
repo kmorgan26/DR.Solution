@@ -7,6 +7,7 @@
 @if (!_isBusy)
 {
     <MudItem xs="12" sm="12" md="4" lg="3">
+
         <EditForm Model="@AppState.MaintainerVm" OnValidSubmit="@UpdateMaintainer">
 
             <MudTextField @bind-Value="AppState.MaintainerVm.Maintainer" Class="my-6" Label="Maintainer Name" Variant="Variant.Outlined"></MudTextField>
@@ -16,6 +17,7 @@
                 <CancelButton Url="maintainers" />
             </MudPaper>
 
+            <ValidationSummary />
         </EditForm>
     </MudItem>
 }
