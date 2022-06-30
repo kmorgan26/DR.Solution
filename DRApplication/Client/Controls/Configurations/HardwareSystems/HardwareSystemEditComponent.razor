@@ -3,6 +3,7 @@
 @inject NavigationManager navigation
 @inject AppState AppState
 @inject ISnackbar Snackbar
+@inject IMapperService MapperService
 
 @if (AppState.HardwareSystemVm.Id > 0)
 {
@@ -25,7 +26,7 @@
 
     protected async Task UpdateHardwareSystem()
     {
-        var hardwareSystem = Mapping.Mapper.Map<HardwareSystem>(AppState.HardwareSystemVm);
+        var hardwareSystem = await MapperService.HardwareSystemFromHardwareSystemVmAsync(AppState.HardwareSystemVm);
         await manager.UpdateAsync(hardwareSystem);
         Snackbar.Add($"Hardware System was updated", Severity.Success);
         navigation.NavigateTo("/hardwaresystem");
@@ -34,7 +35,7 @@
     protected override async Task OnInitializedAsync()
     {
         var hardwareSystem = await manager.GetByIdAsync(HardwareSystemId);
-        var vm = Mapping.Mapper.Map<HardwareSystemVm>(hardwareSystem);
-        AppState.UpdateHardwareSystemVm(this, vm);
+        var hardwareSystemVm = await MapperService.HardwareSystemVmFromHardwareSystemAsync(hardwareSystem);
+        AppState.UpdateHardwareSystemVm(this, hardwareSystemVm);
     }
 }

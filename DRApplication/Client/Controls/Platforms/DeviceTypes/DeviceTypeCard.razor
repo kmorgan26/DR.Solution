@@ -4,10 +4,10 @@
     <MudCard Elevation="5">
         <MudCardHeader>
             <CardHeaderAvatar>
-                <MudAvatar Color="@AvatarColor" Size="Size.Medium">@DeviceTypeVm.Platform.Substring(0,1)</MudAvatar>
+                <MudAvatar Color="@Color.Default" Size="Size.Medium">@DeviceTypeVm.Platform.Substring(0,1)</MudAvatar>
             </CardHeaderAvatar>
             <CardHeaderContent>
-                <MudLink Typo="Typo.h5" Class="ml-6" Color="@HeaderColor" Href="@($"/devices/list/{@DeviceTypeVm.Id}")">@DeviceTypeVm.Platform</MudLink>
+                <MudLink Typo="Typo.h5" Class="ml-6" Color="Color.Primary" Href="@($"/devices/list/{@DeviceTypeVm.Id}")">@DeviceTypeVm.Platform</MudLink>
             </CardHeaderContent>
             <CardHeaderActions>
                 <MudIconButton Icon="@Icons.Material.Filled.Settings" Href="@($"/platform/edit/{@DeviceTypeVm.Id}")" Color="Color.Default" />
@@ -27,12 +27,5 @@
 
     [Parameter]
     public DeviceTypeVm DeviceTypeVm { get; set; } = new();
-
-    [Parameter]
-    public Color AvatarColor { get; set; } = Color.Default;
-
-    [Parameter]
-    public Color HeaderColor { get; set; } = Color.Primary;
-
 
 }

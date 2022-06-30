@@ -4,6 +4,7 @@
 @inject HardwareSystemManager HardwareSystemManager
 @inject NavigationManager navigation
 @inject ISnackbar Snackbar
+@inject IMapperService MapperService
 
 @if (!_isBusy)
 {
@@ -34,8 +35,7 @@
         if (id > 0)
         {
             var hardwareSystem = await HardwareSystemManager.GetByIdAsync(id);
-            var hardwareSystemVm = Mapping.Mapper.Map<HardwareSystemVm>(hardwareSystem);
-
+            var hardwareSystemVm = await MapperService.HardwareSystemVmFromHardwareSystemAsync(hardwareSystem);
             var hardwareVersionVm = AppState.HardwareVersionVm;
             hardwareVersionVm.HardwareSystemId = id;
             AppState.UpdateHardwareSystemVm(this, hardwareSystemVm);
@@ -45,7 +45,7 @@
 
     protected async Task UpdateHardwareVersion()
     {
-        var hardwareVersion = Mapping.Mapper.Map<HardwareVersion>(AppState.HardwareVersionVm);
+        var hardwareVersion = await MapperService.HardwareVersionFromHardwareVersionVmAsync(AppState.HardwareVersionVm);
         await HardwareVersionManager.UpdateAsync(hardwareVersion);
         Snackbar.Add($"Hardware Version was updated", Severity.Success);
         navigation.NavigateTo("/hardwareversion");
@@ -55,8 +55,8 @@
     {
         _isBusy = true;
         var hardwareVersion = await HardwareVersionManager.GetByIdAsync(HardwareVersionId);
-        var vm = Mapping.Mapper.Map<HardwareVersionVm>(hardwareVersion);
-        AppState.UpdateHardwareVersionVm(this, vm);
+        var hardwareVersionVm = await MapperService.HardwareVersionVmFromHardwareVersionsAsync(hardwareVersion);
+        AppState.UpdateHardwareVersionVm(this, hardwareVersionVm);
         _isBusy = false;
     }
 

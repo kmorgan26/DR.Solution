@@ -85,7 +85,7 @@ public class DeviceController : ControllerBase
                 return Ok(new APIEntityResponse<Device>()
                 {
                     Success = false,
-                    ErrorMessages = new List<string>() { "Customer Not Found" },
+                    ErrorMessages = new List<string>() { "Device Not Found" },
                     Data = new Device() { Id = 0 }
                 });
             }
@@ -119,7 +119,7 @@ public class DeviceController : ControllerBase
                 return Ok(new APIEntityResponse<Device>()
                 {
                     Success = false,
-                    ErrorMessages = new List<string>() { "Could not find Device Type after adding it." },
+                    ErrorMessages = new List<string>() { "Could not find Device after adding it." },
                     Data = new Device() { Id = 0 }
                 });
             }
@@ -151,7 +151,7 @@ public class DeviceController : ControllerBase
                 return Ok(new APIEntityResponse<Device>()
                 {
                     Success = false,
-                    ErrorMessages = new List<string>() { "Could not find customer after updating it." },
+                    ErrorMessages = new List<string>() { "Could not find Device after updating it." },
                     Data = new Device() { Id = 0 }
                 });
             }

@@ -1,0 +1,32 @@
+﻿@namespace DRApplication.Client.Controls
+@inject IIssueService IssueService
+
+@if (!_isBusy)
+{
+    <MudRadioGroup SelectedOptionChanged="OnSelectedOptionChanged" >
+        @foreach (var item in _correctiveActionVms)
+        {
+            <MudRadio Option="item.Id" Color="Color.Primary" Size="Size.Small" >@item.Name</MudRadio>
+        }
+    </MudRadioGroup>
+}
+
+@code {
+
+    [Parameter]
+    public EventCallback<int> OnSelectedOptionChanged { get; set; }
+
+    private int SelectedOption { get; set; }
+
+    private bool _isBusy;
+
+    private List<CorrectiveActionVm> _correctiveActionVms = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        var items = await IssueService.GetCorrectiveActionVmsAsync();
+        _correctiveActionVms = items.ToList();
+        _isBusy = false;
+    }
+}

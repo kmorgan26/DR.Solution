@@ -2,6 +2,7 @@
 @inject AppState AppState
 @inject DeviceManager DeviceManager
 @inject IPlatformService PlatformService
+@inject IMapperService MapperService
 @inject NavigationManager navigation
 @inject ISnackbar Snackbar
 
@@ -47,7 +48,7 @@
 
     protected async Task UpdateDevice()
     {
-        var device = await PlatformService.GetDeviceFromDeviceVm(AppState.DeviceVm);
+        var device = await MapperService.DeviceFromDeviceVmAsync(AppState.DeviceVm);
         await DeviceManager.UpdateAsync(device);
         Snackbar.Add($"{device.Name} was updated", Severity.Success);
         navigation.NavigateTo("/devices");
@@ -57,8 +58,8 @@
     {
         _isBusy = true;
         var device = await DeviceManager.GetByIdAsync(DeviceId);
-        var vm = Mapping.Mapper.Map<DeviceVm>(device);
-        AppState.UpdateDeviceVm(this, vm);
+        var deviceVm = await MapperService.DeviceVmFromDeviceAsync(device);
+        AppState.UpdateDeviceVm(this, deviceVm);
         _isBusy = false;
     }
 

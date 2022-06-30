@@ -3,13 +3,13 @@ namespace DRApplication.Client.ViewModels;
 
 public class DeviceVm
 {
-    public int Id { get; set; }
+    public int Id { get; set; } = 0;
     
     public string Device { get; set; } = string.Empty;
 
     public string Platform { get; set; } = string.Empty;
 
-    public int DeviceTypeId { get; set; }
+    public int DeviceTypeId { get; set; } = 0;
 
     public bool IsActive { get; set; }
 

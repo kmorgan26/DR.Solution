@@ -4,6 +4,7 @@
 @inject SoftwareSystemManager SoftwareSystemManager
 @inject NavigationManager navigation
 @inject ISnackbar Snackbar
+@inject IMapperService MapperService
 
 @if (!_isBusy)
 {
@@ -34,18 +35,16 @@
         if (id > 0)
         {
             var softwareSystem = await SoftwareSystemManager.GetByIdAsync(id);
-            var softwareSystemVm = Mapping.Mapper.Map<SoftwareSystemVm>(softwareSystem);
-
+            var softwareSystemVm = await MapperService.SoftwareSystemVmFromSoftwareSystemAsync(softwareSystem);
             var softwareVersionVm = AppState.SoftwareVersionVm;
             softwareVersionVm.SoftwareSystemId = id;
             AppState.UpdateSoftwareSystemVm(this, softwareSystemVm);
             AppState.UpdateSoftwareVersionVm(this, softwareVersionVm);
         }
     }
-
     protected async Task UpdateSoftwareVersion()
     {
-        var softwareVersion = Mapping.Mapper.Map<SoftwareVersion>(AppState.SoftwareVersionVm);
+        var softwareVersion = await MapperService.SoftwareVersionFromSoftwareVersionVmAsync(AppState.SoftwareVersionVm);
         await SoftwareVersionManager.UpdateAsync(softwareVersion);
         Snackbar.Add($"Software Version was updated", Severity.Success);
         navigation.NavigateTo("/softwareversion");
@@ -55,8 +54,8 @@
     {
         _isBusy = true;
         var softwareVersion = await SoftwareVersionManager.GetByIdAsync(SoftwareVersionId);
-        var vm = Mapping.Mapper.Map<SoftwareVersionVm>(softwareVersion);
-        AppState.UpdateSoftwareVersionVm(this, vm);
+        var softwareVersionVm = await MapperService.SoftwareVersionVmFromSoftwareVersionsAsync(softwareVersion);
+        AppState.UpdateSoftwareVersionVm(this, softwareVersionVm);
         _isBusy = false;
     }
 

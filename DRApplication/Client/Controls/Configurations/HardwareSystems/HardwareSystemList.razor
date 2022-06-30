@@ -1,7 +1,7 @@
 ﻿@namespace DRApplication.Client.Controls
-@inject NavigationManager NavigationManager
-@inject HardwareSystemManager manager
+@inject ManagerService ManagerService
 @inject AppState AppState
+@inject IMapperService MapperService
 
 <NewButton Url="/hardwaresystem/create" />
 
@@ -28,9 +28,9 @@
 
     async Task SetHardwareSystems()
     {
-        var items = await manager.GetAllAsync();
-        var vms = Mapping.Mapper.Map<List<HardwareSystemVm>>(items);
-        AppState.UpdateHardwareSystemVms(this, vms);
+        var hardwareSystems = await ManagerService.HardwareSystemManager().GetAllAsync();
+        var hardwareSystemVms = await MapperService.HardwareSystemVmsFromHardwareSystemsAsync(hardwareSystems);
+        AppState.UpdateHardwareSystemVms(this, hardwareSystemVms);
     }
     
     protected override async Task OnInitializedAsync()

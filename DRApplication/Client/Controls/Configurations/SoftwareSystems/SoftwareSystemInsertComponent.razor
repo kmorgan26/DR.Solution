@@ -1,5 +1,5 @@
 ﻿@namespace DRApplication.Client.Controls
-
+@inject IMapperService MapperService
 @inject AppState AppState
 @inject SoftwareSystemManager SoftwareSystemManger
 @inject NavigationManager navigation
@@ -38,7 +38,7 @@
     private async Task InsertSoftwareSystem()
     {
         _softwareConfigInsertVm.HardwareConfigId = AppState.HardwareConfigVm.Id;
-        var softwareSystem = Mapping.Mapper.Map<SoftwareSystem>(_softwareConfigInsertVm);
+        var softwareSystem = await MapperService.SoftwareSystemFromSoftwareSystemInsertVmAsync(_softwareConfigInsertVm);
         await SoftwareSystemManger.InsertAsync(softwareSystem);
         navigation.NavigateTo("/softwaresystem");
     }

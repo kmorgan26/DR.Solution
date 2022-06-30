@@ -1,36 +1,108 @@
 ﻿@namespace DRApplication.Client.Controls
+@inject AppState AppState
+@implements IDisposable
 
-<MudItem xs="12" sm="12" md="6" lg="3">
-    <MudCard Elevation="5">
-        <MudCardHeader>
-            <CardHeaderAvatar>
-                <MudAvatar Color="Color.Default" Size="Size.Medium">@DeviceVm.Device.ToString().Substring(2)</MudAvatar>
-            </CardHeaderAvatar>
-            <CardHeaderContent>
-                <MudLink Typo="Typo.h6" Color="Color.Primary" Href="@($"/device/details/{@DeviceVm.Id}")">@DeviceVm.Device</MudLink>
-            </CardHeaderContent>
-            <CardHeaderActions>
-                <MudIconButton Icon="@Icons.Material.Filled.Settings" Color="Color.Default" />
-            </CardHeaderActions>
-        </MudCardHeader>
-        <MudCardContent>
-            Current Load:
-        </MudCardContent>
-        <MudCardActions>
-            <MudIconButton Icon="@Icons.Material.Filled.Favorite" Color="Color.Default" />
-            <MudIconButton Icon="@Icons.Material.Filled.Share" Color="Color.Default" />
-        </MudCardActions>
-    </MudCard>
-</MudItem>
+@if (!_isBusy)
+{
+    <MudItem xs="12" sm="12" md="6" lg="3">
+        <MudCard Elevation="5">
+            <MudCardHeader>
+                <CardHeaderAvatar>
+                    <MudAvatar Square="true" Color="Color.Tertiary" Size="Size.Large">
+                        @DeviceVm.Device.ToString().Substring(2)
+                    </MudAvatar>
+                </CardHeaderAvatar>
+                <CardHeaderContent>
+                    <MudLink Typo="Typo.h5" Class="px-6" Color="Color.Dark" Href="@($"/device/details/{@DeviceVm.Id}")">
+                        @DeviceVm.Device
+                    </MudLink>
+                </CardHeaderContent>
+                <CardHeaderActions>
+                    <MudIconButton Icon="@Icons.Material.Filled.Settings" Href="@($"/device/edit/{@DeviceVm.Id}")" Color="Color.Info" />
+                </CardHeaderActions>
+            </MudCardHeader>
+            <MudCardContent>
+                <MudTooltip Text="Primary Load" Arrow="true" Placement="Placement.Right" Color="Color.Transparent">
+                    <MudText Typo="Typo.h5">
+                        <MudLink Href="@($"/load/details/{@_currentLoadVm.LoadId}")">
+                            @_currentLoadVm.LoadName
+                        </MudLink>
+                    </MudText>
+                </MudTooltip>
+                <MudDivider />
+                <MudTooltip Text="Device Specific Load" Arrow="true" Placement="Placement.Right" Color="Color.Transparent">
+                    <MudText Typo="Typo.h5">
+                        <MudLink Href="@($"/load/details/{@_specificLoadVm.LoadId}")">
+                            @_specificLoadVm.LoadName
+                        </MudLink>
+                    </MudText>
+                </MudTooltip>
+            </MudCardContent>
+            <MudCardActions>
+                <MudLink Href="@($"/maint/entry/{@DeviceVm.Id}")">
+                    <MudTooltip Text="Maintenance Issue Entry" Color="Color.Warning">
+                        <MudIconButton Icon="@Icons.Material.Filled.Build" Color="Color.Warning" />
+                    </MudTooltip>
+                </MudLink>
+                <MudTooltip Text="Test Events" Color="Color.Error">
+                    <MudIconButton Icon="@Icons.Material.Filled.Event" Color="Color.Error" />
+                </MudTooltip>
+
+                <MudIconButton Icon="@Icons.Material.Filled.Share" Color="Color.Default" />
+                <MudIconButton Icon="@Icons.Material.Filled.Share" Color="Color.Default" />
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+}
 
 @code {
+    bool _isBusy;
 
     [Parameter]
     public DeviceVm DeviceVm { get; set; } = new();
 
-    protected override Task OnInitializedAsync()
-    {
-        return base.OnInitializedAsync();
-    }
+    private CurrentLoadVm _currentLoadVm = new();
+    private SpecificLoadVm _specificLoadVm = new();
 
+    async Task SetCurrentLoadVm()
+    {
+        var currentLoadVm = await Task.Run(() => AppState.CurrentLoadVms.Where(i => i.DeviceId == this.DeviceVm.Id).FirstOrDefault());
+        if (currentLoadVm is not null)
+            _currentLoadVm = currentLoadVm;
+    }
+    async Task SetSpecificLoadVm()
+    {
+        var specificLoadVm = await Task.Run(() => AppState.SpecificLoadVms.Where(i => i.DeviceId == this.DeviceVm.Id).FirstOrDefault());
+        if (specificLoadVm is not null)
+            _specificLoadVm = specificLoadVm;
+    }
+    private async Task AppState_StateChanged(ComponentBase Source, string Property)
+    {
+        if (Source != this)
+        {
+            if (Property == "DeviceVms")
+            {
+                await SetCurrentLoadVm();
+                await SetSpecificLoadVm();
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+    }
+    async void OnStateChanged(ComponentBase componentBase, string property)
+    {
+        await AppState_StateChanged(componentBase, property);
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        AppState.StateChanged += OnStateChanged;
+        await SetCurrentLoadVm();
+        await SetSpecificLoadVm();
+
+        _isBusy = false;
+    }
+    void IDisposable.Dispose()
+    {
+        AppState.StateChanged -= OnStateChanged;
+    }
 }

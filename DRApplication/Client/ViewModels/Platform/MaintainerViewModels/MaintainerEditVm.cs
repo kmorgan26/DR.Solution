@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 namespace DRApplication.Client.ViewModels;
 
-public class MaintainerEditVm : IViewModel
+public class MaintainerEditVm
 {
     public int Id { get; set; }
 

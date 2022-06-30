@@ -24,71 +24,71 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<HardwareSystem, HardwareSystemVm>().ReverseMap();
-        CreateMap<HardwareSystem, HardwareSystemInsertVm>().ReverseMap();
-        CreateMap<HardwareSystem, GenericListVm>().ReverseMap();
+        //CreateMap<HardwareSystem, HardwareSystemVm>().ReverseMap();
+        //CreateMap<HardwareSystem, HardwareSystemInsertVm>().ReverseMap();
+        //CreateMap<HardwareSystem, GenericListVm>().ReverseMap();
 
-        CreateMap<HardwareVersionVm, HardwareVersion>();
-        CreateMap<HardwareVersion, HardwareVersionInsertVm>().ReverseMap();
-        CreateMap<HardwareVersion, GenericListVm>().ReverseMap();
-        CreateMap<HardwareVersion, HardwareVersionVm>()
-            .ForMember(dest => dest.VersionDateString,
-                opts => opts.MapFrom(src => src.VersionDate.ToShortDateString()));
+        //CreateMap<HardwareVersionVm, HardwareVersion>();
+        //CreateMap<HardwareVersion, HardwareVersionInsertVm>().ReverseMap();
+        //CreateMap<HardwareVersion, GenericListVm>().ReverseMap();
+        //CreateMap<HardwareVersion, HardwareVersionVm>()
+        //    .ForMember(dest => dest.VersionDateString,
+        //        opts => opts.MapFrom(src => src.VersionDate.ToShortDateString()));
 
-        CreateMap<HardwareConfig, HardwareConfigEditVm>().ReverseMap();
-        CreateMap<HardwareConfig, HardwareConfigVm>().ReverseMap();
-        CreateMap<HardwareConfig, GenericListVm>().ReverseMap();
-        CreateMap<HardwareConfig, HardwareConfigInsertVm>().ReverseMap();
+        //CreateMap<HardwareConfig, HardwareConfigEditVm>().ReverseMap();
+        //CreateMap<HardwareConfig, HardwareConfigVm>().ReverseMap();
+        //CreateMap<HardwareConfig, GenericListVm>().ReverseMap();
+        //CreateMap<HardwareConfig, HardwareConfigInsertVm>().ReverseMap();
 
-        CreateMap<HardwareVersionsConfig, HardwareVersionsConfigVm>().ReverseMap();
-        CreateMap<HardwareVersionsConfig, HardwareVersionsConfigInsertVm>().ReverseMap();
-        CreateMap<HardwareVersionsConfig, HardwareVersionsConfigEditVm>().ReverseMap();
+        //CreateMap<HardwareVersionsConfig, HardwareVersionsConfigVm>().ReverseMap();
+        //CreateMap<HardwareVersionsConfig, HardwareVersionsConfigInsertVm>().ReverseMap();
+        //CreateMap<HardwareVersionsConfig, HardwareVersionsConfigEditVm>().ReverseMap();
 
-        CreateMap<SoftwareSystem, SoftwareSystemInsertVm>().ReverseMap();
-        CreateMap<SoftwareSystem, SoftwareSystemEditVm>().ReverseMap();
-        CreateMap<SoftwareSystem, GenericListVm>().ReverseMap();
-        CreateMap<SoftwareSystem, SoftwareSystemVm>().ReverseMap();
+        //CreateMap<SoftwareSystem, SoftwareSystemInsertVm>().ReverseMap();
+        //CreateMap<SoftwareSystem, SoftwareSystemEditVm>().ReverseMap();
+        //CreateMap<SoftwareSystem, GenericListVm>().ReverseMap();
+        //CreateMap<SoftwareSystem, SoftwareSystemVm>().ReverseMap();
 
-        CreateMap<SoftwareVersionVm, SoftwareVersion>();
-        CreateMap<SoftwareVersion, SoftwareVersionInsertVm>().ReverseMap();
-        CreateMap<SoftwareVersion, SoftwareVersionEditVm>().ReverseMap();
-        CreateMap<SoftwareVersion, GenericListVm>().ReverseMap();
-        CreateMap<SoftwareVersion, SoftwareVersionVm>()
-            .ForMember(dest => dest.VersionDateString,
-                opts => opts.MapFrom(src => src.VersionDate.ToShortDateString()));
+        //CreateMap<SoftwareVersionVm, SoftwareVersion>();
+        //CreateMap<SoftwareVersion, SoftwareVersionInsertVm>().ReverseMap();
+        //CreateMap<SoftwareVersion, SoftwareVersionEditVm>().ReverseMap();
+        //CreateMap<SoftwareVersion, GenericListVm>().ReverseMap();
+        //CreateMap<SoftwareVersion, SoftwareVersionVm>()
+        //    .ForMember(dest => dest.VersionDateString,
+        //        opts => opts.MapFrom(src => src.VersionDate.ToShortDateString()));
 
-        CreateMap<Load, LoadVm>().ReverseMap();
-        CreateMap<Load, LoadEditVm>().ReverseMap();
-        CreateMap<Load, LoadInsertVm>().ReverseMap();
-        CreateMap<Load, GenericListVm>().ReverseMap();
+        //CreateMap<Load, LoadVm>().ReverseMap();
+        //CreateMap<Load, LoadEditVm>().ReverseMap();
+        //CreateMap<Load, LoadInsertVm>().ReverseMap();
+        //CreateMap<Load, GenericListVm>().ReverseMap();
 
-        CreateMap<CurrentLoadVm, CurrentLoad>();
+        //CreateMap<CurrentLoadVm, CurrentLoad>();
 
-        CreateMap<VersionsLoad, VersionsLoadVm>().ReverseMap();
-        CreateMap<VersionsLoad, VersionsLoadInsertVm>().ReverseMap();
-        CreateMap<VersionsLoad, VersionsLoadEditVm>().ReverseMap();
+        //CreateMap<VersionsLoad, VersionsLoadVm>().ReverseMap();
+        //CreateMap<VersionsLoad, VersionsLoadInsertVm>().ReverseMap();
+        //CreateMap<VersionsLoad, VersionsLoadEditVm>().ReverseMap();
 
-        CreateMap<DeviceType, GenericListVm>().ReverseMap();
-        CreateMap<DeviceType, DeviceTypeEditVm>().ReverseMap();
+        //CreateMap<DeviceType, GenericListVm>().ReverseMap();
+        //CreateMap<DeviceType, DeviceTypeEditVm>().ReverseMap();
 
-        CreateMap<DeviceType, DeviceTypeVm>().ReverseMap();
+        //CreateMap<DeviceType, DeviceTypeVm>().ReverseMap();
 
-        CreateMap<Device, DeviceEditVm>().ReverseMap();
-        CreateMap<Device, DeviceVm>()
-            .ForMember(dest => dest.Device,
-                opts => opts.MapFrom(src => src.Name));
-        CreateMap<DeviceVm, Device>()
-            .ForMember(dest => dest.Name,
-                opts => opts.MapFrom(src => src.Device));
-        CreateMap<DeviceInsertVm, Device>();
+        //CreateMap<Device, DeviceEditVm>().ReverseMap();
+        //CreateMap<Device, DeviceVm>()
+        //    .ForMember(dest => dest.Device,
+        //        opts => opts.MapFrom(src => src.Name));
+        //CreateMap<DeviceVm, Device>()
+        //    .ForMember(dest => dest.Name,
+        //        opts => opts.MapFrom(src => src.Device));
+        //CreateMap<DeviceInsertVm, Device>();
 
 
-        CreateMap<Maintainer, GenericListVm>();
-        CreateMap<Maintainer, MaintainerVm>()
-            .ForMember(dest => dest.Maintainer,
-                opts => opts.MapFrom(src => src.Name))
-            .ReverseMap();
-        CreateMap<Maintainer, MaintainerEditVm>().ReverseMap();
+        //CreateMap<Maintainer, GenericListVm>();
+        //CreateMap<Maintainer, MaintainerVm>()
+        //    .ForMember(dest => dest.Maintainer,
+        //        opts => opts.MapFrom(src => src.Name))
+        //    .ReverseMap();
+        //CreateMap<Maintainer, MaintainerEditVm>().ReverseMap();
 
     }
 }

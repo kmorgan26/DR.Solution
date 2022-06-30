@@ -2,6 +2,7 @@
 @inject AppState AppState
 @inject NavigationManager navigation
 @inject IPlatformService PlatformService
+@inject IMapperService MapperService
 @inject HardwareConfigManager HardwareConfigManager
 @inject ISnackbar Snackbar
 
@@ -43,7 +44,7 @@
 
     protected async Task UpdateHardwareConfig()
     {
-        var hardwareConfig = Mapping.Mapper.Map<HardwareConfig>(AppState.HardwareConfigVm);
+        var hardwareConfig = await MapperService.HardwareConfigFromHardwareConfigVmAsync(AppState.HardwareConfigVm);
         await HardwareConfigManager.UpdateAsync(hardwareConfig);
         Snackbar.Add($"Hardware Configuration was updated", Severity.Success);
         navigation.NavigateTo("/hardwareconfig");
@@ -52,9 +53,8 @@
     protected override async Task OnInitializedAsync()
     {
         _isBusy = true;
-
         var hardwareConfig = await HardwareConfigManager.GetByIdAsync(HardwareConfigId);
-        var hardwareConfigVm = Mapping.Mapper.Map<HardwareConfigVm>(hardwareConfig);
+        var hardwareConfigVm = await MapperService.HardwareConfigVmFromHardwareConfigAsync(hardwareConfig);
         AppState.UpdateHardwareConfigVm(this, hardwareConfigVm);
         _isBusy = false;
     }

@@ -1,7 +1,7 @@
 ﻿@namespace DRApplication.Client.Controls
 
 @inject AppState AppState
-@inject IPlatformService PlatformService
+@inject IMapperService MappingService
 @inject DeviceManager DeviceManager
 @inject NavigationManager navigation
 
@@ -42,7 +42,7 @@
     private async Task InsertDevice()
     {
         _deviceInsertVm.DeviceTypeId = AppState.DeviceTypeVm.Id;
-        var device = Mapping.Mapper.Map<Device>(_deviceInsertVm);
+        var device = await MappingService.DeviceFromDeviceInsertVmAsync(_deviceInsertVm);
         await DeviceManager.InsertAsync(device);
         navigation.NavigateTo("/devices");
     }

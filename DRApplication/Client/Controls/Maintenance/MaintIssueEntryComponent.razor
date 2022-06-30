@@ -1,0 +1,59 @@
+﻿@namespace DRApplication.Client.Controls
+@inject IPlatformService PlatformService
+@inject AppState AppState
+@implements IDisposable
+
+@if (!_isBusy)
+{
+    <MudItem xs="12" sm="12" md="4" lg="3">
+        <DeviceSelect OnDeviceIdChanged="SetDevice" />
+    </MudItem>
+
+    <MaintenanceIssueForm></MaintenanceIssueForm>
+    <MaintIssueTable></MaintIssueTable>
+}
+
+@code {
+
+    [Parameter]
+    public int DeviceId { get; set; }
+
+    bool _isBusy;
+
+    async Task SetDevice(int id)
+    {
+        var deviceVm = await PlatformService.GetDeviceVmById(id);
+        DeviceId = deviceVm.Id;
+        AppState.UpdateDeviceVm(this, deviceVm);
+    }
+    private async Task AppState_StateChanged(ComponentBase Source, string Property)
+    {
+        if (Source != this)
+        {
+            if (Property == "asdf")
+            {
+                await SetDevice(DeviceId);
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+    }
+    async void OnStateChanged(ComponentBase componentBase, string property)
+    {
+        await AppState_StateChanged(componentBase, property);
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        AppState.StateChanged += OnStateChanged;
+        if (DeviceId != @AppState.DeviceVm.Id)
+        {
+            await SetDevice(DeviceId);
+        }
+
+        _isBusy = false;
+    }
+    void IDisposable.Dispose()
+    {
+        AppState.StateChanged -= OnStateChanged;
+    }
+}

@@ -1,5 +1,5 @@
 ﻿@namespace DRApplication.Client.Controls
-
+@inject IMapperService MapperService
 @inject AppState AppState
 @inject LoadManager LoadManager
 @inject NavigationManager navigation
@@ -41,7 +41,7 @@
     private async Task InsertLoad()
     {
         _loadInsertVm.HardwareConfigId = AppState.HardwareConfigVm.Id;
-        var load = Mapping.Mapper.Map<Load>(_loadInsertVm);
+        var load = await MapperService.LoadFromLoadInsertVm(_loadInsertVm);
         await LoadManager.InsertAsync(load);
         navigation.NavigateTo("/load");
     }

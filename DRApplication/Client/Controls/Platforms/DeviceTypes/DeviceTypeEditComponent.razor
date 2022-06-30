@@ -2,6 +2,7 @@
 @inject AppState AppState
 @inject DeviceTypeManager DeviceTypeManager
 @inject IPlatformService PlatformService
+@inject IMapperService MapperService
 @inject NavigationManager navigation
 @inject ISnackbar Snackbar
 
@@ -46,7 +47,7 @@
 
     protected async Task UpdateDeviceType()
     {
-        var deviceType = await PlatformService.GetDeviceTypeFromDeviceTypeVm(AppState.DeviceTypeVm);
+        var deviceType = await MapperService.DeviceTypeFromDeviceTypeVmAsync(AppState.DeviceTypeVm);
         await DeviceTypeManager.UpdateAsync(deviceType);
         Snackbar.Add($"{deviceType.Name} was updated", Severity.Success);
         navigation.NavigateTo("/devicetypes");

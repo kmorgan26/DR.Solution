@@ -1,0 +1,62 @@
+﻿@namespace DRApplication.Client.Controls
+@inject IIssueService IssueService
+@inject AppState AppState
+
+<EditForm Model="@_maintenanceIssueInsertVm" OnValidSubmit="@InsertMaintenanceIssue">
+
+    <MudGrid>
+        <MudItem xs="12" sm="12" md="4" lg="2">
+            <MudDatePicker Class="my-6" Label="Issue Date" Variant="Variant.Outlined" @bind-Date="@_maintenanceIssueInsertVm.IssueDate" />
+        </MudItem>
+        <MudItem xs="12" sm="12" md="4" lg="2">
+            <MudPaper Class="pt-6" Elevation="0">
+                <MudTextField T="string" @bind-Value="@_maintenanceIssueInsertVm.Pid" Label="PID" Variant="Variant.Outlined" />
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="12" md="4" lg="1">
+            <MudPaper Class="pt-8" Elevation="0">
+                <MudCheckBox @bind-Checked="@_maintenanceIssueInsertVm.IsContractor" Label="Contractor?" />
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12" sm="12" md="4" lg="1">
+            <MudPaper Class="pt-8" Elevation="0">
+                <MudCheckBox @bind-Checked="@_maintenanceIssueInsertVm.IsDeferred" Label="Open/Deferred?" />
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+    <MudGrid>
+        <MudItem>
+            <CorrectiveActionRadios OnSelectedOptionChanged="CorrectiveActionChange" />
+        </MudItem>
+    </MudGrid>
+    <MudGrid Class="mb-2">
+        <MudItem xs="12" sm="12" md="6" lg="4">
+            <MudTextField T="string" Label="Description" Variant="Variant.Outlined" @bind-Value="@_maintenanceIssueInsertVm.Description" Lines="3" />
+        </MudItem>
+        <MudItem xs="12" sm="12" md="6" lg="4">
+            <MudTextField T="string" Label="Action Taken" Variant="Variant.Outlined" @bind-Value="@_maintenanceIssueInsertVm.ActionTaken" Lines="3" />
+        </MudItem>
+    </MudGrid>
+    <MudHidden @bind-Value="_maintenanceIssueInsertVm.DeviceId" />
+
+    <MudPaper Elevation="0">
+        <SubmitButton ButtonText="Enter" />
+    </MudPaper>
+
+</EditForm>
+
+@code {
+
+    private MaintenanceIssueInsertVm _maintenanceIssueInsertVm { get; set; } = new();
+
+    async Task CorrectiveActionChange(int id)
+    {
+        await Task.Run(() => _maintenanceIssueInsertVm.CorrectiveActionId = id);
+    }
+    async Task InsertMaintenanceIssue()
+    {
+        _maintenanceIssueInsertVm.DeviceId = AppState.DeviceVm.Id;
+        await IssueService.InsertMaintenanceIssueAsync(_maintenanceIssueInsertVm);
+    }
+
+}

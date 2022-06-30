@@ -6,31 +6,14 @@ namespace DRApplication.Client.Interfaces;
 
 public interface IPlatformService
 {
-    
-    Task<IEnumerable<DeviceTypeVm>> GetDeviceTypeVmsAsync();
-    
     Task<IEnumerable<MaintainerVm>> GetMaintainerVmsAsync();
-
-    Task<IEnumerable<DeviceVm>> GetDeviceVmsFromDeviceListAsync(IEnumerable<Device> devices);
-    
     Task<IEnumerable<DeviceVm>> GetDeviceVmsFromDeviceTypeId(int id);
-
-    Task<DeviceTypeVm> GetDeviceTypeVmFromGenericVm(GenericListVm genericListVm);
-
-    Task<DeviceTypeVm> GetDeviceTypeVmById(int id);
-
-    Task<DeviceVm> GetDeviceVmById(int id);
-
+    Task<IEnumerable<DeviceVm>> GetDeviceVmsByListOfIds(List<string> csvids);
+    Task<IEnumerable<DeviceTypeVm>> GetDeviceTypeVmsAsync();    
     Task<IEnumerable<DeviceTypeVm>> GetDeviceTypeVmsByMaintainerId(int id);
-
+    Task<DeviceTypeVm> GetDeviceTypeVmById(int id);
+    Task<DeviceVm> GetDeviceVmById(int id);
     Task<MaintainerVm> GetMaintainerVmById(int id);
-
-    Task<DeviceType> GetDeviceTypeFromDeviceTypeVm(DeviceTypeVm deviceTypeVm); 
-
-    Task<Device> GetDeviceFromDeviceVm(DeviceVm deviceVm);
-
     Task<int> InsertDeviceTypeFromDeviceTypeInsertVm(DeviceTypeInsertVm deviceTypeInsertVm);
-
     Task<bool> EditMaintainerFromMaintainerVm(MaintainerVm maintainerVm);
-
 }

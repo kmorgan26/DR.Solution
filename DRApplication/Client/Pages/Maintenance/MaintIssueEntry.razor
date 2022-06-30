@@ -1,0 +1,14 @@
+﻿@namespace DRApplication.Client.Pages
+
+@page "/maint/entry/{DeviceId:int}"
+
+<TitleHeader TitleText="Maintenance Issue Entry" IconPath="@Icons.Material.Outlined.Build" />
+
+<MaintIssueEntryComponent DeviceId="@DeviceId" />
+
+@code {
+
+    [Parameter]
+    public int DeviceId { get; set; }
+
+}
