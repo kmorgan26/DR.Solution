@@ -2,6 +2,7 @@
 @inject AppState AppState
 @inject IPlatformService PlatformService
 @inject IIssueService IssueService
+@implements IDisposable
 
 @if (!_isBusy && _maintenanceIssueVms is not null)
 {
@@ -35,14 +36,34 @@
 
     IEnumerable<MaintenanceIssueVm> _maintenanceIssueVms = new List<MaintenanceIssueVm>();
 
-    private async Task SetMaintainers()
+    private async Task SetMaintenanceIssues()
     {
         _maintenanceIssueVms = await IssueService.GetMaintenanceIssueVmsForEntryTableAsync();
+    }
+    private async Task AppState_StateChanged(ComponentBase Source, string Property)
+    {
+        if (Source != this)
+        {
+            if (Property == "DeviceVm")
+            {
+                await SetMaintenanceIssues();
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+    }
+    async void OnStateChanged(ComponentBase componentBase, string property)
+    {
+        await AppState_StateChanged(componentBase, property);
     }
     protected override async Task OnInitializedAsync()
     {
         _isBusy = true;
-        await SetMaintainers();
+        AppState.StateChanged += OnStateChanged;
+        await SetMaintenanceIssues();
         _isBusy = false;
+    }
+    void IDisposable.Dispose()
+    {
+        AppState.StateChanged -= OnStateChanged;
     }
 }
