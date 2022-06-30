@@ -11,8 +11,9 @@ public interface IMapperService
     Task<DeviceType> DeviceTypeFromDeviceTypeVmAsync(DeviceTypeVm deviceTypeVm);
     Task<DeviceType> DeviceTypeFromDeviceTypeInsertVmAsync(DeviceTypeInsertVm deviceTypeInsertVm);
     Task<DeviceTypeVm> DeviceTypeVmFromDeviceTypeAsync(DeviceType deviceType);
-    Task<Maintainer> MaintainerFromMaintainerVmAsync(MaintainerVm maintainerVm);
+    Task<Maintainer> MaintainerFromMaintainerEditVmAsync(MaintainerEditVm maintainerEditVm);
     Task<MaintainerVm> MaintainerVmFromMaintainerAsync(Maintainer maintainer);
+    Task<MaintainerEditVm> MaintainerEditVmFromMaintainerAsync(Maintainer maintainer);
     Task<HardwareSystemVm> HardwareSystemVmFromHardwareSystemAsync(HardwareSystem hardwareSystem);
     Task<HardwareSystem> HardwareSystemFromHardwareSystemVmAsync(HardwareSystemVm hardwareSystemVm);
     Task<HardwareSystem> HardwareSystemFromHardwareSystemInsertVm(HardwareSystemInsertVm hardwareSystemInsertVm);

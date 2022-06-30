@@ -8,9 +8,11 @@
 {
     <MudItem xs="12" sm="12" md="4" lg="3">
 
-        <EditForm Model="@AppState.MaintainerVm" OnValidSubmit="@UpdateMaintainer">
+        <EditForm Model="@_maintainerEditVm" OnValidSubmit="@UpdateMaintainer">
 
-            <MudTextField @bind-Value="AppState.MaintainerVm.Maintainer" Class="my-6" Label="Maintainer Name" Variant="Variant.Outlined"></MudTextField>
+            <FluentValidationValidator DisableAssemblyScanning="true" />
+            
+            <MudTextField @bind-Value="_maintainerEditVm.Name" Class="my-6" Label="Maintainer Name" Variant="Variant.Outlined"></MudTextField>
 
             <MudPaper Elevation="0">
                 <SubmitButton ButtonText="Update" />
@@ -18,6 +20,7 @@
             </MudPaper>
 
             <ValidationSummary />
+
         </EditForm>
     </MudItem>
 }
@@ -28,21 +31,21 @@
     [Parameter]
     public int MaintainerId { get; set; }
 
+    private MaintainerEditVm _maintainerEditVm = new();
+
     protected async Task UpdateMaintainer()
     {
-        var result = await PlatformService.EditMaintainerFromMaintainerVm(AppState.MaintainerVm);
-        
+        var result = await PlatformService.UpdateMaintainerFromMaintainerEditVm(_maintainerEditVm);
+
         if(result)
             Snackbar.Add($"{AppState.MaintainerVm.Maintainer} was updated", Severity.Success);
 
         navigation.NavigateTo("/maintainers");
     }
-
     protected override async Task OnInitializedAsync()
     {
         _isBusy = true;
-        var maintainerVm = await PlatformService.GetMaintainerVmById(MaintainerId);
-        AppState.UpdateMaintainerVm(this, maintainerVm);
+        _maintainerEditVm = await PlatformService.GetMaintainerEditVmById(MaintainerId);
         _isBusy = false;
     }
 }

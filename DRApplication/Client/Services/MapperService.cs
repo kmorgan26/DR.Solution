@@ -86,12 +86,12 @@ namespace DRApplication.Client.Services
             };
             return await Task.Run(() => deviceTypeVm);
         }
-        public async Task<Maintainer> MaintainerFromMaintainerVmAsync(MaintainerVm maintainerVm)
+        public async Task<Maintainer> MaintainerFromMaintainerEditVmAsync(MaintainerEditVm maintainerEditVm)
         {
             var maintainer = new Maintainer()
             {
-                Id = maintainerVm.Id,
-                Name = maintainerVm.Maintainer
+                Id = maintainerEditVm.Id,
+                Name = maintainerEditVm.Name
             };
 
             return await Task.Run(() => maintainer);
@@ -104,6 +104,15 @@ namespace DRApplication.Client.Services
                 Maintainer = maintainer.Name
             };
             return await Task.Run(() => maintainerVm);
+        }
+        public async Task<MaintainerEditVm> MaintainerEditVmFromMaintainerAsync(Maintainer maintainer)
+        {
+            var maintainerEditVm = new MaintainerEditVm()
+            {
+                Id = maintainer.Id,
+                Name = maintainer.Name
+            };
+            return await Task.Run(() => maintainerEditVm);
         }
         public async Task<HardwareSystem> HardwareSystemFromHardwareSystemVmAsync(HardwareSystemVm hardwareSystemVm)
         {
@@ -438,5 +447,6 @@ namespace DRApplication.Client.Services
 
             return softwareSystemVms;
         }
+
     }
 }
