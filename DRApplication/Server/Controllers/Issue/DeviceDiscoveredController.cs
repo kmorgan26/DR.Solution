@@ -36,6 +36,35 @@ public class DeviceDiscoveredController : ControllerBase
         }
     }
 
+    [HttpPost("getwithfilter")]
+    public async Task<ActionResult<PagedResponse<DeviceDiscovered>>> GetWithFilter([FromBody] QueryFilter<DeviceDiscovered> Filter)
+    {
+        try
+        {
+            var result = await _manager.GetAsync(Filter);
+
+            var response = new PagedResponse<DeviceDiscovered>()
+            {
+                Success = true,
+                Data = result.Data,
+                TotalRecords = result.TotalRecords,
+                PageSize = result.PageSize,
+                TotalPages = result.TotalPages,
+                PageNumber = result.PageNumber,
+                PreviousPage = result.PreviousPage,
+                NextPage = result.NextPage
+            };
+
+            return Ok(response);
+
+        }
+        catch (Exception ex)
+        {
+            // log exception here
+            Console.WriteLine(ex.Message);
+            return StatusCode(500);
+        }
+    }
     [HttpGet("{Id}")]
     public async Task<ActionResult<APIEntityResponse<DeviceDiscovered>>> GetById(int Id)
     {
