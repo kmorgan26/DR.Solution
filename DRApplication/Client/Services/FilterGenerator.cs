@@ -33,7 +33,7 @@ namespace DRApplication.Client.Services
 
             return filter;
         }
-        public async Task<QueryFilter<TEntity>> GetPagedFilterWherePropertyEqualValueAsync(string propertyName, int id)
+        public async Task<QueryFilter<TEntity>> GetSinglePageWherePropertyEqualValueAsync(string propertyName, int id)
         {
             var filter = new QueryFilter<TEntity>();
             var filterProperties = new List<FilterProperty>();
@@ -91,7 +91,8 @@ namespace DRApplication.Client.Services
             filter.OrderByPropertyName = "Id";
             filter.PaginationFilter = null;
             filter.FilterProperties = filterProperties;
-            return filter;
+
+            return await Task.Run(() => filter);
         }
     }
     
