@@ -24,5 +24,7 @@ public class MaintenanceIssueInsertVm
     [Required]
     public string ActionTaken { get; set; } = string.Empty;
 
+    [Required]
+    [Range(1, 100, ErrorMessage = "Please Select a Corrective Action")]
     public int CorrectiveActionId { get; set; } = 0;
 }
