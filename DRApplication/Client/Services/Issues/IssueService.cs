@@ -93,6 +93,12 @@ namespace DRApplication.Client.Services
                 //first get the selected DeviceVm
                 var deviceVm = _appState.DeviceVm;
 
+                //get correctiveActions
+                var correctiveActions = await _managerService.CorrectiveActionManager().GetAllAsync();
+
+                //get statuses
+                
+
                 //Get the DeviceDiscovered DTOs with that DeviceId (previous 10)
                 var deviceDiscoveredFilter = await new FilterGenerator<DeviceDiscovered>().GetFilterWherePropertyEqualsValueAsync("DeviceId", deviceVm.Id);
                 var devicesDiscoveredResponse = await _managerService.DeviceDiscoveredManager().GetAsync(deviceDiscoveredFilter);
@@ -115,13 +121,15 @@ namespace DRApplication.Client.Services
                 {
                     IssueId = i.Id,
                     IssueDate = i.IssueDate,
-                    DrType = i.DrTypeId.ToString(),
-                    SimStatus = i.SimStatusId.ToString(),
+                    DrType = i.DrTypeId == 1 ? "GOV" : "CNT",
+                    SimStatus = i.SimStatusId == 12 ? "Deferred" : "Closed",
                     Description = i.Description,
                     ActionTaken = maintIssues.Where(m => m.IssueId == i.Id).FirstOrDefault().ActionTaken,
                     EnteredBy = i.EnteredBy,
                     Device = deviceVm.Device,
-                    CorrectiveAction = maintIssues.Where(m => m.IssueId == i.Id).FirstOrDefault().CorrectiveActionId.ToString(),
+                    CorrectiveAction = correctiveActions
+                        .Where(ca => ca.Id == maintIssues
+                        .Where(m => m.IssueId == i.Id).FirstOrDefault().CorrectiveActionId).FirstOrDefault().Name,
                     Pid = maintIssues.Where(m => m.IssueId == i.Id).FirstOrDefault().Pid
                 });
 
