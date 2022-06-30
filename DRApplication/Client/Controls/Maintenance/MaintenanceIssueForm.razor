@@ -1,6 +1,7 @@
 ﻿@namespace DRApplication.Client.Controls
 @inject IIssueService IssueService
 @inject AppState AppState
+@inject NavigationManager NavigationManager
 
 <EditForm Model="@_maintenanceIssueInsertVm" OnValidSubmit="@InsertMaintenanceIssue">
 
@@ -49,6 +50,17 @@
 
     private MaintenanceIssueInsertVm _maintenanceIssueInsertVm { get; set; } = new();
 
+    void ResetForm()
+    {
+        var enteredDate = _maintenanceIssueInsertVm.IssueDate;
+        var deviceId = _maintenanceIssueInsertVm.DeviceId;
+
+        _maintenanceIssueInsertVm = new MaintenanceIssueInsertVm()
+        {
+            IssueDate = enteredDate,
+            DeviceId = deviceId
+        };
+    }
     async Task CorrectiveActionChange(int id)
     {
         await Task.Run(() => _maintenanceIssueInsertVm.CorrectiveActionId = id);
@@ -57,6 +69,10 @@
     {
         _maintenanceIssueInsertVm.DeviceId = AppState.DeviceVm.Id;
         await IssueService.InsertMaintenanceIssueAsync(_maintenanceIssueInsertVm);
+        ResetForm();
     }
-
+    protected override Task OnInitializedAsync()
+    {
+        return base.OnInitializedAsync();
+    }
 }
