@@ -264,7 +264,7 @@ namespace DRApplication.Client.Services
 
             return await Task.Run(() => hardwareVersion);
         }
-        public async Task<HardwareVersionVm> HardwareVersionVmFromHardwareVersionsAsync(HardwareVersion hardwareVersion)
+        public async Task<HardwareVersionVm> HardwareVersionVmFromHardwareVersionAsync(HardwareVersion hardwareVersion)
         {
             var hardwareVersionVm = new HardwareVersionVm
             {
@@ -285,6 +285,18 @@ namespace DRApplication.Client.Services
                 Name = hardwareVersion.Name,
                 HardwareSystemId = hardwareVersion.HardwareSystemId,
                 VersionDate = hardwareVersion.VersionDate                
+            };
+
+            return await Task.Run(() => hardwareVersionEditVm);
+        }
+        public async Task<HardwareVersionEditVm> HardwareVersionEditVmFromHardwareVersionVmAsync(HardwareVersionVm hardwareVersionVm)
+        {
+            var hardwareVersionEditVm = new HardwareVersionEditVm
+            {
+                Id = hardwareVersionVm.Id,
+                Name = hardwareVersionVm.Name,
+                HardwareSystemId = hardwareVersionVm.HardwareSystemId,
+                VersionDate = hardwareVersionVm.VersionDate
             };
 
             return await Task.Run(() => hardwareVersionEditVm);

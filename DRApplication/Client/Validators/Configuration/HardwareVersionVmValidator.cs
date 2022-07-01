@@ -2,10 +2,15 @@
 using FluentValidation;
 
 namespace DRApplication.Client.Validators;
-
-public class HardwareVersionEditVmValidator : AbstractValidator<HardwareVersionEditVm>
+/// <summary>
+/// The HardwareVersionVm is used on the Insert Form, and converted to 
+/// a HardwareVersionInsertVm prior to insert. The HardwareVersionVm is kept in AppState
+/// so it can be used for Inserts and Edits as well as Reads.
+/// The mapping is a direct 1:1, so no issues
+/// </summary>
+public class HardwareVersionVmValidator: AbstractValidator<HardwareVersionVm>
 {
-    public HardwareVersionEditVmValidator()
+    public HardwareVersionVmValidator()
     {
         RuleFor(m => m.Name)
             .NotEmpty()
@@ -26,6 +31,5 @@ public class HardwareVersionEditVmValidator : AbstractValidator<HardwareVersionE
                 .WithMessage("The Hardware System is required")
             .GreaterThan(0)
                 .WithMessage("The Hardware System is required");
-
     }
 }

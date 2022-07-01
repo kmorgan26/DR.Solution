@@ -5,24 +5,26 @@
 @inject ISnackbar Snackbar
 @inject IMapperService MapperService
 @inject HardwareVersionManager HardwareVersionManager
+@inject ManagerService ManagerService
 
 @if (!_isBusy)
 {
     <MudItem xs="12" sm="12" md="4" lg="3">
-        <EditForm Model="@_hardwareVersionEditVm" OnValidSubmit="@UpdateHardwareVersion">
+
+        <EditForm Model="@AppState.HardwareVersionVm" OnValidSubmit="@UpdateHardwareVersion">
 
             <FluentValidationValidator DisableAssemblyScanning="true" />
 
-            <MudTextField @bind-Value="@_hardwareVersionEditVm.Name" 
+            <MudTextField @bind-Value="@AppState.HardwareVersionVm.Name" 
                 Class="my-6" 
-                For="(() => _hardwareVersionEditVm.Name)"
+                For="(() => AppState.HardwareVersionVm.Name)"
                 Label="Hardware Version" 
                 Variant="Variant.Outlined" />
 
             <HardwareSystemSelect OnHardwareSystemIdChanged="UpdateHardwareSystemId" />
 
-            <MudDatePicker Class="my-6" @bind-Date="@_hardwareVersionEditVm.VersionDate" 
-                For="(() => _hardwareVersionEditVm.VersionDate)"
+            <MudDatePicker Class="my-6" @bind-Date="@AppState.HardwareVersionVm.VersionDate" 
+                For="(() => AppState.HardwareVersionVm.VersionDate)"
                 Label="Version Date" />
 
             <SubmitButton ButtonText="Update" />
@@ -40,16 +42,22 @@
 
     private HardwareVersionEditVm _hardwareVersionEditVm = new();
 
-    void UpdateHardwareSystemId(int id)
+    async Task UpdateHardwareSystemId(int id)
     {
         if (id > 0)
         {
-            _hardwareVersionEditVm.HardwareSystemId = id;
+            var hardwareSystem = await Task.Run(() => ManagerService.HardwareSystemManager().GetByIdAsync(id));
+            var hardwareSystemVm = await MapperService.HardwareSystemVmFromHardwareSystemAsync(hardwareSystem);
+            var hardwareVersionVm = AppState.HardwareVersionVm;
+            hardwareVersionVm.HardwareSystemId = id;
+            AppState.UpdateHardwareSystemVm(this, hardwareSystemVm);
+            AppState.UpdateHardwareVersionVm(this, hardwareVersionVm);
         }
     }
 
     protected async Task UpdateHardwareVersion()
     {
+        _hardwareVersionEditVm = await MapperService.HardwareVersionEditVmFromHardwareVersionVmAsync(AppState.HardwareVersionVm);
         var hardwareVersion = await MapperService.HardwareVersionFromHardwareVersionEditVmAsync(_hardwareVersionEditVm);
         var result = await HardwareVersionManager.UpdateAsync(hardwareVersion);
         Snackbar.Add($"Hardware Version was updated", Severity.Success);
@@ -59,7 +67,8 @@
     protected override async Task OnInitializedAsync()
     {
         _isBusy = true;
-        _hardwareVersionEditVm = await HardwareService.GetHardwareVersionEditVmById(HardwareVersionId);
+        var hardwareVersionVm = await HardwareService.GetHardwareVersionVmById(HardwareVersionId);
+        AppState.UpdateHardwareVersionVm(this, hardwareVersionVm);
         _isBusy = false;
     }
 }

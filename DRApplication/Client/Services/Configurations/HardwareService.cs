@@ -45,14 +45,15 @@ public class HardwareService : IHardwareService
 
         return new HardwareConfigVm();
     }
-    public async Task<HardwareVersionEditVm> GetHardwareVersionEditVmById(int id)
+    public async Task<HardwareVersionVm> GetHardwareVersionVmById(int id)
     {
         var hardwareVersion = await _managerService.HardwareVersionManager().GetByIdAsync(id);
         if (hardwareVersion is not null)
-            return await _mapperService.HardwareVersionEditVmFromHardwareVersionAsync(hardwareVersion);
+            return await _mapperService.HardwareVersionVmFromHardwareVersionAsync(hardwareVersion);
 
-        return new HardwareVersionEditVm();
+        return new HardwareVersionVm();
     }
+    
 
     #endregion
 
@@ -135,6 +136,7 @@ public class HardwareService : IHardwareService
             return 0;
         }
     }
+
 
     #endregion
 
