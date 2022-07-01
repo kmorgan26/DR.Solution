@@ -10,15 +10,21 @@
     <MudItem xs="12" sm="12" md="4" lg="3">
         <EditForm Model="@_deviceTypeInsertVm" OnValidSubmit="@InsertDeviceType">
 
-            <MaintainerSelect OnMaintainerIdChanged="UpdateMaintainer" />
+            <FluentValidationValidator DisableAssemblyScanning="true" />
 
-            <MudTextField @bind-Value="_deviceTypeInsertVm.Name" Class="my-6" Label="Device Name" Variant="Variant.Outlined"></MudTextField>
+            <MudTextField @bind-Value="_deviceTypeInsertVm.Platform" 
+                Variant="Variant.Outlined"
+                For="(() => _deviceTypeInsertVm.Platform)"
+                Label="Platform"
+                Class="my-6" />
+
+            <MaintainerSelect OnMaintainerIdChanged="UpdateMaintainer" />
 
             <MudCheckBox Class="my-6" Label="Active?" @bind-Checked="@_deviceTypeInsertVm.IsActive" />
 
             <MudPaper Elevation="0">
                 <SubmitButton ButtonText="Insert" />
-                <CancelButton Url="devices" />
+                <CancelButton Url="devicetypes" />
             </MudPaper>
         </EditForm>
     </MudItem>
@@ -29,23 +35,27 @@
 
     private DeviceTypeInsertVm _deviceTypeInsertVm { get; set; } = new();
 
-    void UpdateMaintainer(int id)
+    async Task UpdateMaintainer(int id)
     {
         if (id > 0)
         {
-            AppState.MaintainerVm.Id = id;
+            await Task.Run(() => _deviceTypeInsertVm.MaintainerId = id);
         }
 
     }
 
     private async Task InsertDeviceType()
     {
-        _deviceTypeInsertVm.MaintainerId = AppState.MaintainerVm.Id;
         var result = await PlatformService.InsertDeviceTypeFromDeviceTypeInsertVm(_deviceTypeInsertVm);
 
         if(result > 0)
             Snackbar.Add($"The new Platform was Added!", Severity.Success);
-        
+
         navigation.NavigateTo("/devicetypes");
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        if(AppState.MaintainerVm is not null)
+            await Task.Run(() => _deviceTypeInsertVm.MaintainerId = AppState.MaintainerVm.Id);
     }
 }
