@@ -49,7 +49,7 @@
     {
         var deviceType = await MapperService.DeviceTypeFromDeviceTypeEditVmAsync(_deviceTypeEditVm);
         await DeviceTypeManager.UpdateAsync(deviceType);
-        Snackbar.Add($"{deviceType.Name} was updated", Severity.Success);
+        Snackbar.Add($"{_deviceTypeEditVm.Platform} was updated", Severity.Success);
         navigation.NavigateTo("/devicetypes");
     }
 
