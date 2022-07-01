@@ -1,17 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-namespace DRApplication.Client.ViewModels;
+﻿namespace DRApplication.Client.ViewModels;
 
 public class DeviceEditVm
 {
-    public int Id { get; set; }
-    
-    [Required]
-    [MaxLength(20, ErrorMessage = "Device Name cannot be more than 20 characters long")]
-    public string Name { get; set; } = null!;
-
-    [Required]
-    [Range(1, 100, ErrorMessage = "Please Select a Device Type for this Device")]
-    public int DeviceTypeId { get; set; }
-    
+    public int Id { get; set; } = 0;
+    public string Device { get; set; } = string.Empty;
+    public int DeviceTypeId { get; set; } = 0;
     public bool IsActive { get; set; }
 }
