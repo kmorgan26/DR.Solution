@@ -3,8 +3,8 @@ using DRApplication.Client;
 using DRApplication.Client.Helpers;
 using DRApplication.Client.Interfaces;
 using DRApplication.Client.Services;
+using DRApplication.Client.Validators;
 using DRApplication.Client.ViewModels;
-using DRApplication.Shared.Validators;
 using FluentValidation;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -45,8 +45,6 @@ builder.Services.AddScoped<IssueManager>();
 builder.Services.AddScoped<MaintIssueManager>();
 builder.Services.AddScoped<PlatformHelpers>();
 
-
-
 builder.Services.AddScoped<ManagerService>();
 
 builder.Services.AddTransient<IPlatformService, PlatformService>();
@@ -58,6 +56,7 @@ builder.Services.AddTransient<IMapperService, MapperService>();
 builder.Services.AddTransient<ILoadHelpers, LoadHelpers>();
 
 builder.Services.AddTransient<IValidator<MaintainerEditVm>, MaintainerEditVmValidator>();
+builder.Services.AddTransient<IValidator<DeviceTypeEditVm>, DeviceTypeEditVmValidator>();
 
 builder.Services.AddBlazoredLocalStorage();
 
