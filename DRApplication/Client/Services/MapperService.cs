@@ -90,7 +90,7 @@ namespace DRApplication.Client.Services
             {
                 IsActive = deviceTypeInsertVm.IsActive,
                 MaintainerId = deviceTypeInsertVm.MaintainerId,
-                Name = deviceTypeInsertVm.Name
+                Name = deviceTypeInsertVm.Platform
             };
 
             return await Task.Run(() => deviceType);

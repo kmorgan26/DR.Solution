@@ -8,14 +8,14 @@
 @if (!_isBusy)
 {
     <MudItem xs="12" sm="12" md="4" lg="3">
-        <EditForm Model="_deviceTypeEditVm" OnValidSubmit="@UpdateDeviceType">
+        <EditForm Model="@_deviceTypeEditVm" OnValidSubmit="@UpdateDeviceType">
 
             <FluentValidationValidator DisableAssemblyScanning="true" />
 
             <MudTextField @bind-Value="_deviceTypeEditVm.Platform" 
                 Variant="Variant.Outlined" 
                 For="(() => _deviceTypeEditVm.Platform)"
-                Label="Device Type" 
+                Label="Platform" 
                 Class="my-6" />
 
             <MaintainerSelect OnMaintainerIdChanged="UpdateMaintainerId" />
