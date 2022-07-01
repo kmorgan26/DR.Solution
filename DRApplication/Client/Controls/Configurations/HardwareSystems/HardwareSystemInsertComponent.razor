@@ -1,14 +1,22 @@
 ﻿@namespace DRApplication.Client.Controls
-@inject HardwareSystemManager manager
 @inject NavigationManager navigation
 @inject IMapperService MapperService
+@inject ISnackbar Snackbar
+@inject AppState AppState
+@inject IHardwareService HardwareService
 
-@if (@_harwareSystemInsertVm != null)
+@if (_hardwareSystemInsertVm != null)
 {
     <MudItem xs="12" sm="12" md="4" lg="3">
-        <EditForm Model="@_harwareSystemInsertVm" OnValidSubmit="@InsertHardwareSystem">
+        <EditForm Model="@_hardwareSystemInsertVm" OnValidSubmit="@InsertHardwareSystem">
 
-            <MudTextField @bind-Value="_harwareSystemInsertVm.Name" Class="my-6" Label="Hardware System" Variant="Variant.Outlined"></MudTextField>
+            <FluentValidationValidator DisableAssemblyScanning="true" />
+
+            <MudTextField @bind-Value="_hardwareSystemInsertVm.Name"
+                      For="(() => _hardwareSystemInsertVm.Name)"
+                      Class="my-6"
+                      Label="Hardware System"
+                      Variant="Variant.Outlined" />
 
             <SubmitButton ButtonText="Insert" />
             <CancelButton Url="/hardwaresystem" />
@@ -19,11 +27,15 @@
 
 @code {
 
-    private HardwareSystemInsertVm _harwareSystemInsertVm { get; set; } = new();
+    private HardwareSystemInsertVm _hardwareSystemInsertVm = new();
+
     private async Task InsertHardwareSystem()
     {
-        var hardwareSystem = await MapperService.HardwareSystemFromHardwareSystemInsertVm(_harwareSystemInsertVm);
-        await manager.InsertAsync(hardwareSystem);
+        var result = await HardwareService.InsertHardwareSystemFromHardwareSystemInsertVm(_hardwareSystemInsertVm);
+
+        if (result > 0)
+            Snackbar.Add($"The new Hardware System has been added!", Severity.Success);
+
         navigation.NavigateTo("/hardwaresystem");
     }
 }

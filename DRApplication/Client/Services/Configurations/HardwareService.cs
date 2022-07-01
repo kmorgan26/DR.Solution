@@ -99,7 +99,23 @@ public class HardwareService : IHardwareService
             return false;
         }
     }
+    public async Task<int> InsertHardwareSystemFromHardwareSystemInsertVm(HardwareSystemInsertVm hardwareSystemInsertVm)
+    {
+        var hardwareSystem = await _mapperService.HardwareSystemFromHardwareSystemInsertVm(hardwareSystemInsertVm);
 
+        try
+        {
+            var result = await _managerService.HardwareSystemManager().InsertAsync(hardwareSystem);
+            if (result.Id > 0)
+                return result.Id;
+            else
+                return 0;
+        }
+        catch
+        {
+            return 0;
+        }
+    }
 
     #endregion
 
