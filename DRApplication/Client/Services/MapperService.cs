@@ -50,6 +50,18 @@ namespace DRApplication.Client.Services
 
             return deviceVm;
         }
+        public async Task<DeviceEditVm> DeviceEditVmFromDeviceAsync(Device device)
+        {
+            var deviceEditVm = new DeviceEditVm
+            {
+                Id = device.Id,
+                DeviceTypeId = device.DeviceTypeId,
+                IsActive = device.IsActive,
+                Device = device.Name,
+            };
+
+            return await Task.Run(() => deviceEditVm);
+        }
         public async Task<DeviceType> DeviceTypeFromDeviceTypeVmAsync(DeviceTypeVm deviceTypeVm)
         {
             var deviceType = new DeviceType()
@@ -85,6 +97,18 @@ namespace DRApplication.Client.Services
                 Maintainer = maintainer.Name
             };
             return await Task.Run(() => deviceTypeVm);
+        }
+        public async Task<DeviceTypeEditVm> DeviceTypeEditVmFromDeviceTypeAsync(DeviceType deviceType)
+        {
+            var deviceTypeEditVm = new DeviceTypeEditVm
+            {
+                Id = deviceType.Id,
+                IsActive = deviceType.IsActive,
+                MaintainerId = deviceType.MaintainerId,
+                Platform = deviceType.Name
+            };
+
+            return await Task.Run(() => deviceTypeEditVm);
         }
         public async Task<Maintainer> MaintainerFromMaintainerEditVmAsync(MaintainerEditVm maintainerEditVm)
         {
@@ -432,7 +456,6 @@ namespace DRApplication.Client.Services
 
             return await Task.Run(()=> softwareVersionVms);
         }
-
         public async Task<IEnumerable<SoftwareSystemVm>> SoftwareSystemVmsFromSoftwareSystemsAsync(IEnumerable<SoftwareSystem> softwareSystems)
         {
             var hardwareConfigs = await _loadHelpers.GetHardwareConfigsFromSoftwareSystems(softwareSystems);
