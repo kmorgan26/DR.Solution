@@ -1,5 +1,4 @@
 ﻿namespace DRApplication.Client.ViewModels;
-
 public class DeviceEditVm
 {
     public int Id { get; set; } = 0;
