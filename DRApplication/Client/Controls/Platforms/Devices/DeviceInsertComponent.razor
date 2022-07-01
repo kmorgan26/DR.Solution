@@ -1,18 +1,25 @@
 ﻿@namespace DRApplication.Client.Controls
-
+@inject IPlatformService PlatformService
 @inject AppState AppState
 @inject IMapperService MappingService
 @inject DeviceManager DeviceManager
 @inject NavigationManager navigation
+@inject ISnackbar Snackbar
 
 @if (@_deviceInsertVm != null)
 {
     <MudItem xs="12" sm="12" md="4" lg="3">
         <EditForm Model="@_deviceInsertVm" OnValidSubmit="@InsertDevice">
 
-            <DeviceTypeSelect OnDeviceTypeIdChanged="UpdateDeviceType" />
+            <FluentValidationValidator DisableAssemblyScanning="true" />
 
-            <MudTextField @bind-Value="_deviceInsertVm.Device" Class="my-6" Label="Device Name" Variant="Variant.Outlined"></MudTextField>
+            <MudTextField @bind-Value="_deviceInsertVm.Device" 
+                Variant="Variant.Outlined"    
+                For="(() => _deviceInsertVm.Device)"
+                Label="Device Name" 
+                Class="my-6" />
+
+            <DeviceTypeSelect OnDeviceTypeIdChanged="UpdateDeviceType" />
 
             <MudCheckBox Class="my-6" Label="Active?" @bind-Checked="@AppState.DeviceVm.IsActive" />
 
@@ -20,6 +27,7 @@
                 <SubmitButton ButtonText="Insert" />
                 <CancelButton Url="devices" />
             </MudPaper>
+
         </EditForm>
     </MudItem>
 
@@ -33,17 +41,22 @@
     {
         if (id > 0)
         {
-            var deviceTypeVm = AppState.DeviceTypeVm;
-            deviceTypeVm.Id = id;
+            _deviceInsertVm.DeviceTypeId = id;
         }
-
     }
 
     private async Task InsertDevice()
     {
-        _deviceInsertVm.DeviceTypeId = AppState.DeviceTypeVm.Id;
-        var device = await MappingService.DeviceFromDeviceInsertVmAsync(_deviceInsertVm);
-        await DeviceManager.InsertAsync(device);
+        var result = await PlatformService.InsertDeviceFromDeviceInsertVm(_deviceInsertVm);
+
+        if(result > 0)
+            Snackbar.Add($"The new Device was Added!", Severity.Success);
+        
         navigation.NavigateTo("/devices");
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        if (AppState.DeviceTypeVm is not null)
+            await Task.Run(() => _deviceInsertVm.DeviceTypeId = AppState.DeviceTypeVm.Id);
     }
 }
