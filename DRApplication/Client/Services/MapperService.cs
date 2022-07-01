@@ -133,6 +133,16 @@ namespace DRApplication.Client.Services
 
             return await Task.Run(() => deviceTypeEditVm);
         }
+        public async Task<DeviceTypeInsertVm> DeviceTypeInsertVmFromDeviceTypeVm(DeviceTypeVm deviceTypeVm)
+        {
+            var deviceTypeInsertVm = new DeviceTypeInsertVm
+            {
+                IsActive = deviceTypeVm.IsActive,
+                MaintainerId = deviceTypeVm.MaintainerId,
+                Platform = deviceTypeVm.Platform
+            };
+            return await Task.Run(() => deviceTypeInsertVm);
+        }
         public async Task<Maintainer> MaintainerFromMaintainerEditVmAsync(MaintainerEditVm maintainerEditVm)
         {
             var maintainer = new Maintainer()

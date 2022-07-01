@@ -13,7 +13,7 @@
             <FluentValidationValidator DisableAssemblyScanning="true"/>
 
             <MudTextField @bind-Value="@AppState.HardwareVersionVm.Name" 
-                For="(() => _hardwareVersionInsertVm.Name)"
+                For="(() => AppState.HardwareVersionVm.Name)"
                 Class="my-6" 
                 Label="Version Name" 
                 Variant="Variant.Outlined" />

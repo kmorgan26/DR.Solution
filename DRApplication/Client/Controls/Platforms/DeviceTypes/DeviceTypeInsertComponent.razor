@@ -4,11 +4,12 @@
 @inject DeviceTypeManager DeviceTypeManager
 @inject NavigationManager navigation
 @inject ISnackbar Snackbar
+@inject IMapperService MapperService
 
-@if (_deviceTypeInsertVm != null)
+@if (!_isBusy)
 {
     <MudItem xs="12" sm="12" md="4" lg="3">
-        <EditForm Model="@_deviceTypeInsertVm" OnValidSubmit="@InsertDeviceType">
+        <EditForm Model="_deviceTypeInsertVm" OnValidSubmit="@InsertDeviceType">
 
             <FluentValidationValidator DisableAssemblyScanning="true" />
 
@@ -20,7 +21,7 @@
 
             <MaintainerSelect OnMaintainerIdChanged="UpdateMaintainer" />
 
-            <MudCheckBox Class="my-6" Label="Active?" @bind-Checked="@_deviceTypeInsertVm.IsActive" />
+            <MudCheckBox Class="my-6" Label="Active?" @bind-Checked="_deviceTypeInsertVm.IsActive" />
 
             <MudPaper Elevation="0">
                 <SubmitButton ButtonText="Insert" />
@@ -33,29 +34,38 @@
 
 @code {
 
+    bool _isBusy;
+
     private DeviceTypeInsertVm _deviceTypeInsertVm { get; set; } = new();
 
-    async Task UpdateMaintainer(int id)
+    void UpdateMaintainer(int id)
     {
         if (id > 0)
         {
-            await Task.Run(() => _deviceTypeInsertVm.MaintainerId = id);
+            _deviceTypeInsertVm.MaintainerId = id;
+            AppState.DeviceTypeVm.MaintainerId = id;
+            var maintainerVm = AppState.MaintainerVm;
+            maintainerVm.Id = id;
+            AppState.UpdateMaintainerVm(this, maintainerVm);
         }
 
     }
 
     private async Task InsertDeviceType()
     {
-        var result = await PlatformService.InsertDeviceTypeFromDeviceTypeInsertVm(_deviceTypeInsertVm);
-
-        if(result > 0)
-            Snackbar.Add($"The new Platform was Added!", Severity.Success);
+        var deviceType = await MapperService.DeviceTypeFromDeviceTypeInsertVmAsync(_deviceTypeInsertVm);
+        await DeviceTypeManager.InsertAsync(deviceType);
+        Snackbar.Add($"The new Platform was Added!", Severity.Success);
 
         navigation.NavigateTo("/devicetypes");
     }
     protected override async Task OnInitializedAsync()
     {
+        _isBusy = true;
+        
         if(AppState.MaintainerVm is not null)
             await Task.Run(() => _deviceTypeInsertVm.MaintainerId = AppState.MaintainerVm.Id);
+
+        _isBusy = false;
     }
 }
