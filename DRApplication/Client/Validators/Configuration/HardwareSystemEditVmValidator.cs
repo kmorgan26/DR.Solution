@@ -11,8 +11,8 @@ public class HardwareSystemEditVmValidator: AbstractValidator<HardwareSystemEdit
             .NotEmpty()
                 .WithMessage("The Hardware System Name is Required")
             .MaximumLength(25)
-                .WithMessage("The name of the Hardware System Name must be 25 characters or less")
+                .WithMessage("The name of the Hardware System must be 25 characters or less")
             .MinimumLength(3)
-                .WithMessage("The name of the Hardware System Name must be at least 3 characters long");
+                .WithMessage("The name of the Hardware System must be at least 3 characters long");
     }
 }
