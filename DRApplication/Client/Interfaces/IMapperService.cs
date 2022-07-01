@@ -26,7 +26,9 @@ public interface IMapperService
     Task<HardwareConfig> HardwareConfigFromHardwareConfigVmAsync(HardwareConfigVm hardwareConfigVm);
     Task<HardwareConfig> HardwareConfigFromHardwareConfigInsertVmAsync(HardwareConfigInsertVm hardwareConfigInsertVm);
     Task<HardwareVersionVm> HardwareVersionVmFromHardwareVersionsAsync(HardwareVersion hardwareVersion);
+    Task<HardwareVersionEditVm> HardwareVersionEditVmFromHardwareVersionAsync(HardwareVersion hardwareVersion);
     Task<HardwareVersion> HardwareVersionFromHardwareVersionVmAsync(HardwareVersionVm hardwareVersionVm);
+    Task<HardwareVersion> HardwareVersionFromHardwareVersionEditVmAsync(HardwareVersionEditVm hardwareVersionEditVm);
     Task<HardwareVersion> HardwareVersionFromHardwareVersionInsertVmAsync(HardwareVersionInsertVm hardwareVersionInsertVm);
     Task<LoadVm> LoadVmFromLoadAsync(Load load);
     Task<Load> LoadFromLoadVm(LoadVm loadVm);
