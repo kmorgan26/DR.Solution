@@ -12,7 +12,11 @@
 
             <FluentValidationValidator DisableAssemblyScanning="true" />
 
-            <MudTextField @bind-Value="_deviceTypeEditVm.Platform" Class="my-6" Label="Device Type" Variant="Variant.Outlined"></MudTextField>
+            <MudTextField @bind-Value="_deviceTypeEditVm.Platform" 
+                Variant="Variant.Outlined" 
+                For="(() => _deviceTypeEditVm.Platform)"
+                Label="Device Type" 
+                Class="my-6" />
 
             <MaintainerSelect OnMaintainerIdChanged="UpdateMaintainerId" />
 
@@ -22,8 +26,6 @@
                 <SubmitButton ButtonText="Update" />
                 <CancelButton Url="devicetypes" />
             </MudPaper>
-
-            <ValidationSummary />
 
         </EditForm>
     </MudItem>

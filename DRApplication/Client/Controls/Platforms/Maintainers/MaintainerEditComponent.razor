@@ -11,14 +11,16 @@
 
             <FluentValidationValidator DisableAssemblyScanning="true" />
             
-            <MudTextField @bind-Value="_maintainerEditVm.Name" Class="my-6" Label="Maintainer Name" Variant="Variant.Outlined"></MudTextField>
+            <MudTextField @bind-Value="_maintainerEditVm.Name" 
+                Variant="Variant.Outlined"
+                For="(() => _maintainerEditVm.Name)"
+                Label="Maintainer Name"
+                Class="my-6" />
 
             <MudPaper Elevation="0">
                 <SubmitButton ButtonText="Update" />
                 <CancelButton Url="maintainers" />
             </MudPaper>
-
-            <ValidationSummary />
 
         </EditForm>
     </MudItem>
