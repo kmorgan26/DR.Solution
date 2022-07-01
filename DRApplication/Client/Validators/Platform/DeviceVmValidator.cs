@@ -2,9 +2,9 @@
 using FluentValidation;
 
 namespace DRApplication.Client.Validators;
-public class DeviceEditVmValidator: AbstractValidator<DeviceEditVm>
+public class DeviceVmValidator: AbstractValidator<DeviceVm>
 {
-    public DeviceEditVmValidator()
+    public DeviceVmValidator()
     {
         RuleFor(x => x.Device)
         .NotEmpty()
@@ -18,5 +18,8 @@ public class DeviceEditVmValidator: AbstractValidator<DeviceEditVm>
             .NotNull()
             .GreaterThan(0)
                 .WithMessage("You must select a Platform");
+
+        RuleFor(x => x.IsActive)
+            .NotNull();
     }
 }

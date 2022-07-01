@@ -58,7 +58,7 @@ builder.Services.AddTransient<ILoadHelpers, LoadHelpers>();
 builder.Services.AddTransient<IValidator<MaintainerEditVm>, MaintainerEditVmValidator>();
 builder.Services.AddTransient<IValidator<DeviceTypeEditVm>, DeviceTypeEditVmValidator>();
 builder.Services.AddTransient<IValidator<DeviceTypeVm>, DeviceTypeVmValidator>();
-builder.Services.AddTransient<IValidator<DeviceEditVm>, DeviceEditVmValidator>();
+builder.Services.AddTransient<IValidator<DeviceVm>, DeviceVmValidator>();
 builder.Services.AddTransient<IValidator<DeviceInsertVm>, DeviceInsertVmValidator>();
 builder.Services.AddTransient<IValidator<HardwareSystemEditVm>, HardwareSystemEditVmValidator>();
 builder.Services.AddTransient<IValidator<HardwareSystemInsertVm>, HardwareSystemInsertVmValidator>();

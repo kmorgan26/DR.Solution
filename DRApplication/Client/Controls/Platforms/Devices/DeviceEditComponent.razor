@@ -9,19 +9,19 @@
 @if (!_isBusy)
 {
     <MudItem xs="12" sm="12" md="4" lg="3">
-        <EditForm Model="@_deviceEditVm" OnValidSubmit="@UpdateDevice">
+        <EditForm Model="@AppState.DeviceVm" OnValidSubmit="@UpdateDevice">
 
             <FluentValidationValidator DisableAssemblyScanning="true" />
 
-            <MudTextField @bind-Value="_deviceEditVm.Device" 
+            <MudTextField @bind-Value="AppState.DeviceVm.Device" 
                 Class="my-6" 
                 Label="Device" 
                 Variant="Variant.Outlined" 
-                For="@(() => _deviceEditVm.Device)" />
+                For="@(() => AppState.DeviceVm.Device)" />
 
             <DeviceTypeSelect OnDeviceTypeIdChanged="UpdateDeviceTypeId"></DeviceTypeSelect>
 
-            <MudCheckBox Class="my-6" Label="Active?" @bind-Checked="@_deviceEditVm.IsActive" />
+            <MudCheckBox Class="my-6" Label="Active?" @bind-Checked="AppState.DeviceVm.IsActive" />
 
             <MudPaper Elevation="0">
                 <SubmitButton ButtonText="Update" />
@@ -40,16 +40,23 @@
 
     private DeviceEditVm _deviceEditVm = new();
 
-    void UpdateDeviceTypeId(int id)
+    async Task UpdateDeviceTypeId(int id)
     {
         if (id > 0)
         {
-            _deviceEditVm.DeviceTypeId = id;
+            var deviceTypeVm = await PlatformService.GetDeviceTypeVmByIdAsync(id);
+
+            var deviceVm = AppState.DeviceVm;
+            deviceVm.DeviceTypeId = id;
+
+            AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
+            AppState.UpdateDeviceVm(this, deviceVm);
         }
     }
 
     protected async Task UpdateDevice()
     {
+        _deviceEditVm = await MapperService.DeviceEditVmFromDeviceVmAsync(AppState.DeviceVm);
         var device = await MapperService.DeviceFromDeviceEditVmAsync(_deviceEditVm);
         await DeviceManager.UpdateAsync(device);
         Snackbar.Add($"{device.Name} was updated", Severity.Success);
@@ -59,7 +66,8 @@
     protected override async Task OnInitializedAsync()
     {
         _isBusy = true;
-        _deviceEditVm = await PlatformService.GetDeviceEditVmByIdAsync(DeviceId);
+        var deviceVm = await PlatformService.GetDeviceVmById(DeviceId);
+        AppState.UpdateDeviceVm(this, deviceVm);
         _isBusy = false;
     }
 }

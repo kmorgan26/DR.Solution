@@ -73,6 +73,18 @@ namespace DRApplication.Client.Services
 
             return await Task.Run(() => deviceEditVm);
         }
+        public async Task<DeviceEditVm> DeviceEditVmFromDeviceVmAsync(DeviceVm deviceVm)
+        {
+            var deviceEditVm = new DeviceEditVm
+            {
+                Id = deviceVm.Id,
+                DeviceTypeId = deviceVm.DeviceTypeId,
+                IsActive = deviceVm.IsActive,
+                Device = deviceVm.Device,
+            };
+
+            return await Task.Run(() => deviceEditVm);
+        }
         public async Task<DeviceType> DeviceTypeFromDeviceTypeEditVmAsync(DeviceTypeEditVm deviceTypeEditVm)
         {
             var deviceType = new DeviceType()

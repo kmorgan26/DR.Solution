@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace DRApplication.Client.Validators;
 /// <summary>
-/// This is a validator used for both Inserts and Edits.
+/// This is a validator used for Edits.
 /// There are no rules for the Maintainer Property because it won't be used in 
-/// database Inserts or Updates. The InsertVm and EditVms will be mapped prior to database operations
+/// database edits. The EditVms will be mapped prior to database operations
 /// </summary>
 public class DeviceTypeVmValidator : AbstractValidator<DeviceTypeVm>
 {
