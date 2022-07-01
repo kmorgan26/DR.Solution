@@ -12,7 +12,7 @@
 
             <DeviceTypeSelect OnDeviceTypeIdChanged="UpdateDeviceType" />
 
-            <MudTextField @bind-Value="_deviceInsertVm.Name" Class="my-6" Label="Device Name" Variant="Variant.Outlined"></MudTextField>
+            <MudTextField @bind-Value="_deviceInsertVm.Device" Class="my-6" Label="Device Name" Variant="Variant.Outlined"></MudTextField>
 
             <MudCheckBox Class="my-6" Label="Active?" @bind-Checked="@AppState.DeviceVm.IsActive" />
 

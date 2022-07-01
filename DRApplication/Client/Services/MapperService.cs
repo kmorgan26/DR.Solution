@@ -20,7 +20,7 @@ namespace DRApplication.Client.Services
             {
                 IsActive = deviceInsertVm.IsActive,
                 DeviceTypeId = deviceInsertVm.DeviceTypeId,
-                Name = deviceInsertVm.Name
+                Name = deviceInsertVm.Device
             };
             return await Task.Run(() => device);
         }
