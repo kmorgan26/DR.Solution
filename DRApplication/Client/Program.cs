@@ -59,6 +59,7 @@ builder.Services.AddTransient<IValidator<MaintainerEditVm>, MaintainerEditVmVali
 builder.Services.AddTransient<IValidator<DeviceTypeEditVm>, DeviceTypeEditVmValidator>();
 builder.Services.AddTransient<IValidator<DeviceTypeInsertVm>, DeviceTypeInsertVmValidator>();
 builder.Services.AddTransient<IValidator<DeviceEditVm>, DeviceEditVmValidator>();
+builder.Services.AddTransient<IValidator<DeviceInsertVm>, DeviceInsertVmValidator>();
 
 builder.Services.AddBlazoredLocalStorage();
 
