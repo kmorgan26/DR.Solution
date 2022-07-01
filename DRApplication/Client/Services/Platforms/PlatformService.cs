@@ -92,6 +92,11 @@ public class PlatformService : IPlatformService
         var device = await _managerService.DeviceManager().GetByIdAsync(id);
         return await _mapperService.DeviceVmFromDeviceAsync(device);
     }
+    public async Task<DeviceEditVm> GetDeviceEditVmByIdAsync(int id)
+    {
+        var device = await _managerService.DeviceManager().GetByIdAsync(id);
+        return await _mapperService.DeviceEditVmFromDeviceAsync(device);
+    }
     public async Task<DeviceTypeVm> GetDeviceTypeVmById(int id)
     {
         var deviceType = await _managerService.DeviceTypeManager().GetByIdAsync(id);
