@@ -134,6 +134,23 @@ public class PlatformService : IPlatformService
             return 0;
         }
     }
+    public async Task<int> InsertDeviceFromDeviceInsertVm(DeviceInsertVm deviceTypeInsertVm)
+    {
+        var device = await _mapperService.DeviceFromDeviceInsertVmAsync(deviceTypeInsertVm);
+
+        try
+        {
+            var result = await _managerService.DeviceManager().InsertAsync(device);
+            if (result.Id > 0)
+                return result.Id;
+            else
+                return 0;
+        }
+        catch
+        {
+            return 0;
+        }
+    }
     public async Task<bool> UpdateMaintainerFromMaintainerEditVm(MaintainerEditVm maintainerEditVm)
     {
         var maintainer = await _mapperService.MaintainerFromMaintainerEditVmAsync(maintainerEditVm);
@@ -151,8 +168,6 @@ public class PlatformService : IPlatformService
             return false;
         }
     }
-
-
 
     #endregion
 
