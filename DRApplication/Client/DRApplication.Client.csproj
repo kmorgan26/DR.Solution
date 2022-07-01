@@ -57,7 +57,6 @@
 	  <Compile Remove="Services\NavigationManagerExtensions.cs" />
 	  <Compile Remove="Services\TableService.cs" />
 	  <Compile Remove="Services\TemplateService.cs" />
-	  <Compile Remove="ViewModels\ConfigurationViewModels\HardwareSystems\HardwareSystemEditVm.cs" />
 	  <Compile Remove="ViewModels\ConfigurationViewModels\HardwareVersions\HardwareVersionEditVm.cs" />
 	</ItemGroup>
 
