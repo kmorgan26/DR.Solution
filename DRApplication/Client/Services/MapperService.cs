@@ -178,6 +178,26 @@ namespace DRApplication.Client.Services
 
             return await Task.Run(() => hardwareSystemVm);
         }
+        public async Task<HardwareSystemEditVm> HardwareSystemEditVmFromHardwareSystemAsync(HardwareSystem hardwareSystem)
+        {
+            var hardwareSystemEditVm = new HardwareSystemEditVm
+            {
+                Id = hardwareSystem.Id,
+                Name = hardwareSystem.Name
+            };
+
+            return await Task.Run(() => hardwareSystemEditVm);
+        }
+        public async Task<HardwareSystem> HardwareSystemFromHardwareSystemEditVm(HardwareSystemEditVm hardwareSystemEditVm)
+        {
+            var hardwareSystem = new HardwareSystem
+            {
+                Id = hardwareSystemEditVm.Id,
+                Name = hardwareSystemEditVm.Name
+            };
+
+            return await Task.Run(() => hardwareSystem);
+        }
         public async Task<HardwareConfigVm> HardwareConfigVmFromHardwareConfigAsync(HardwareConfig hardwareConfig)
         {
             var hardwareConfigVm = new HardwareConfigVm

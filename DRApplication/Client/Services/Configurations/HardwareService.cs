@@ -7,6 +7,7 @@ public class HardwareService : IHardwareService
 {
 
     #region ---Fields and Constructor ---
+
     private readonly ManagerService _managerService;
     private readonly IMapperService _mapperService;
 
@@ -15,6 +16,7 @@ public class HardwareService : IHardwareService
         _managerService = managerService;
         _mapperService = mapperService;
     }
+
     #endregion
 
     #region ---Single Object Methods---
@@ -26,6 +28,14 @@ public class HardwareService : IHardwareService
             return await _mapperService.HardwareSystemVmFromHardwareSystemAsync(hardwareSystem);
 
         return new HardwareSystemVm();
+    }
+    public async Task<HardwareSystemEditVm> GetHardwareSystemEditVmById(int id)
+    {
+        var hardwareSystem = await _managerService.HardwareSystemManager().GetByIdAsync(id);
+        if (hardwareSystem is not null)
+            return await _mapperService.HardwareSystemEditVmFromHardwareSystemAsync(hardwareSystem);
+
+        return new HardwareSystemEditVm();
     }
     public async Task<HardwareConfigVm> GetHardwareConfigVmById(int id)
     {
@@ -72,6 +82,24 @@ public class HardwareService : IHardwareService
 
         return new List<HardwareConfigVm>();
     }
+    public async Task<bool> UpdateHardwareSystemFromHardwareSystemEditVm(HardwareSystemEditVm hardwareSystemEditVm)
+    {
+        var hardwareSystem = await _mapperService.HardwareSystemFromHardwareSystemEditVm(hardwareSystemEditVm);
+
+        try
+        {
+            var result = await _managerService.HardwareSystemManager().UpdateAsync(hardwareSystem);
+            if (result is not null)
+                return true;
+            else
+                return false;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
 
     #endregion
 
