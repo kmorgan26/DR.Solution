@@ -289,6 +289,17 @@ namespace DRApplication.Client.Services
 
             return await Task.Run(() => hardwareVersionEditVm);
         }
+        public async Task<HardwareVersionInsertVm> HardwareVersionInsertVmFromHardwareVersionVmAsync(HardwareVersionVm hardwareVersionVm)
+        {
+            var hardwareVersionInsertVm = new HardwareVersionInsertVm
+            {
+                HardwareSystemId = hardwareVersionVm.HardwareSystemId,
+                Name = hardwareVersionVm.Name,
+                VersionDate = hardwareVersionVm.VersionDate
+            };
+
+            return await Task.Run(() => hardwareVersionInsertVm);
+        }
         public async Task<IEnumerable<DeviceVm>> DeviceVmsFromDevicesAsync(IEnumerable<Device> devices)
         {
             var deviceTypes = await _managerService.DeviceTypeManager().GetAllAsync();
@@ -525,7 +536,6 @@ namespace DRApplication.Client.Services
 
             return softwareSystemVms;
         }
-
 
     }
 }
