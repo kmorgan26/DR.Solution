@@ -97,7 +97,7 @@ public class PlatformService : IPlatformService
         var device = await _managerService.DeviceManager().GetByIdAsync(id);
         return await _mapperService.DeviceEditVmFromDeviceAsync(device);
     }
-    public async Task<DeviceTypeVm> GetDeviceTypeVmById(int id)
+    public async Task<DeviceTypeVm> GetDeviceTypeVmByIdAsync(int id)
     {
         var deviceType = await _managerService.DeviceTypeManager().GetByIdAsync(id);
         return await _mapperService.DeviceTypeVmFromDeviceTypeAsync(deviceType);
@@ -167,6 +167,11 @@ public class PlatformService : IPlatformService
         {
             return false;
         }
+    }
+
+    public async Task<DeviceTypeEditVm> DeviceTypeEditVmFromDeviceTypeVmAsync(DeviceTypeVm deviceTypeVm)
+    {
+        throw new NotImplementedException();
     }
 
     #endregion

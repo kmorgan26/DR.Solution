@@ -2,10 +2,14 @@
 using FluentValidation;
 
 namespace DRApplication.Client.Validators;
-
-public class DeviceTypeInsertVmValidator : AbstractValidator<DeviceTypeInsertVm>
+/// <summary>
+/// This is a validator used for both Inserts and Edits.
+/// There are no rules for the Maintainer Property because it won't be used in 
+/// database Inserts or Updates. The InsertVm and EditVms will be mapped prior to database operations
+/// </summary>
+public class DeviceTypeVmValidator : AbstractValidator<DeviceTypeVm>
 {
-    public DeviceTypeInsertVmValidator()
+    public DeviceTypeVmValidator()
     {
         RuleFor(x => x.Platform)
         .NotEmpty()

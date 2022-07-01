@@ -4,23 +4,24 @@
 @inject IMapperService MapperService
 @inject NavigationManager navigation
 @inject ISnackbar Snackbar
+@inject AppState AppState
 
 @if (!_isBusy)
 {
     <MudItem xs="12" sm="12" md="4" lg="3">
-        <EditForm Model="@_deviceTypeEditVm" OnValidSubmit="@UpdateDeviceType">
+        <EditForm Model="@AppState.DeviceTypeVm" OnValidSubmit="@UpdateDeviceType">
 
             <FluentValidationValidator DisableAssemblyScanning="true" />
 
-            <MudTextField @bind-Value="_deviceTypeEditVm.Platform" 
+            <MudTextField @bind-Value="AppState.DeviceTypeVm.Platform" 
                 Variant="Variant.Outlined" 
-                For="(() => _deviceTypeEditVm.Platform)"
+                For="(() => AppState.DeviceTypeVm.Platform)"
                 Label="Platform" 
                 Class="my-6" />
 
             <MaintainerSelect OnMaintainerIdChanged="UpdateMaintainerId" />
 
-            <MudCheckBox Class="my-6" Label="Active?" @bind-Checked="@_deviceTypeEditVm.IsActive" />
+            <MudCheckBox Class="my-6" Label="Active?" @bind-Checked="@AppState.DeviceTypeVm.IsActive" />
 
             <MudPaper Elevation="0">
                 <SubmitButton ButtonText="Update" />
@@ -39,16 +40,22 @@
 
     private DeviceTypeEditVm _deviceTypeEditVm = new();
 
-    void UpdateMaintainerId(int id)
+    async Task UpdateMaintainerId(int id)
     {
         if (id > 0)
         {
-            _deviceTypeEditVm.MaintainerId = id;
+            var maintainerVm = await PlatformService.GetMaintainerVmById(id);
+
+            var deviceTypeVm = AppState.DeviceTypeVm;
+            deviceTypeVm.MaintainerId = id;
+            AppState.UpdateMaintainerVm(this, maintainerVm);
+            AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
         }
     }
 
     protected async Task UpdateDeviceType()
     {
+        _deviceTypeEditVm = await MapperService.DeviceTypeEditVmFromDeviceTypeVmAsync(AppState.DeviceTypeVm);
         var deviceType = await MapperService.DeviceTypeFromDeviceTypeEditVmAsync(_deviceTypeEditVm);
         await DeviceTypeManager.UpdateAsync(deviceType);
         Snackbar.Add($"{_deviceTypeEditVm.Platform} was updated", Severity.Success);
@@ -58,7 +65,8 @@
     protected override async Task OnInitializedAsync()
     {
         _isBusy = true;
-        _deviceTypeEditVm = await PlatformService.GetDeviceTypeEditVmByIdAsync(DeviceTypeId);
+        var deviceTypeVm = await PlatformService.GetDeviceTypeVmByIdAsync(DeviceTypeId);
+        AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
         _isBusy = false;
     }
 }

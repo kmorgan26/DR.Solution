@@ -14,7 +14,7 @@
     {
         if (id > 0)
         {
-            var deviceTypeVm = await PlatformService.GetDeviceTypeVmById(id);
+            var deviceTypeVm = await PlatformService.GetDeviceTypeVmByIdAsync(id);
             AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
         }
     }
