@@ -97,6 +97,11 @@ public class PlatformService : IPlatformService
         var deviceType = await _managerService.DeviceTypeManager().GetByIdAsync(id);
         return await _mapperService.DeviceTypeVmFromDeviceTypeAsync(deviceType);
     }
+    public async Task<DeviceTypeEditVm> GetDeviceTypeEditVmByIdAsync(int id)
+    {
+        var deviceType = await _managerService.DeviceTypeManager().GetByIdAsync(id);
+        return await _mapperService.DeviceTypeEditVmFromDeviceTypeAsync(deviceType);
+    }
     public async Task<MaintainerVm> GetMaintainerVmById(int id)
     {
         var maintainer = await _managerService.MaintainerManager().GetByIdAsync(id);
@@ -141,6 +146,7 @@ public class PlatformService : IPlatformService
             return false;
         }
     }
+
 
 
     #endregion
