@@ -1,7 +1,7 @@
 ﻿@namespace DRApplication.Client.Controls
 @inject IPlatformService PlatformService
 @inject AppState AppState
-@inject IMapperService MappingService
+@inject IMapperService MapperService
 @inject DeviceManager DeviceManager
 @inject NavigationManager navigation
 @inject ISnackbar Snackbar
@@ -21,7 +21,7 @@
 
             <DeviceTypeSelect OnDeviceTypeIdChanged="UpdateDeviceType" />
 
-            <MudCheckBox Class="my-6" Label="Active?" @bind-Checked="@AppState.DeviceVm.IsActive" />
+            <MudCheckBox Class="my-6" Label="Active?" @bind-Checked="@_deviceInsertVm.IsActive" />
 
             <MudPaper Elevation="0">
                 <SubmitButton ButtonText="Insert" />
@@ -42,16 +42,18 @@
         if (id > 0)
         {
             _deviceInsertVm.DeviceTypeId = id;
+            AppState.DeviceVm.DeviceTypeId = id;
+            var deviceTypeVm = AppState.DeviceTypeVm;
+            deviceTypeVm.Id = id;
+            AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
         }
     }
 
     private async Task InsertDevice()
     {
-        var result = await PlatformService.InsertDeviceFromDeviceInsertVm(_deviceInsertVm);
-
-        if(result > 0)
-            Snackbar.Add($"The new Device was Added!", Severity.Success);
-        
+        var device = await MapperService.DeviceFromDeviceInsertVmAsync(_deviceInsertVm);
+        await DeviceManager.InsertAsync(device);
+        Snackbar.Add($"The new Device was Added!", Severity.Success);
         navigation.NavigateTo("/devices");
     }
     protected override async Task OnInitializedAsync()
