@@ -1,6 +1,4 @@
-﻿using DRApplication.Client.Interfaces;
-using System.ComponentModel.DataAnnotations;
-namespace DRApplication.Client.ViewModels;
+﻿namespace DRApplication.Client.ViewModels;
 
 public class MaintainerEditVm
 {
