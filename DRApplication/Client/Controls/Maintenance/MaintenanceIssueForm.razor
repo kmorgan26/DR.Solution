@@ -4,14 +4,23 @@
 @inject NavigationManager NavigationManager
 
 <EditForm Model="@_maintenanceIssueInsertVm" OnValidSubmit="@InsertMaintenanceIssue">
+    
+    <FluentValidationValidator DisableAssemblyScanning="true" />
 
     <MudGrid>
         <MudItem xs="12" sm="12" md="4" lg="2">
-            <MudDatePicker Class="my-6" Label="Issue Date" Variant="Variant.Outlined" @bind-Date="@_maintenanceIssueInsertVm.IssueDate" />
+            <MudDatePicker @bind-Date="@_maintenanceIssueInsertVm.IssueDate" 
+                Class="my-6" 
+                For="(() => _maintenanceIssueInsertVm.IssueDate)"
+                Label="Issue Date" 
+                Variant="Variant.Outlined"/>
         </MudItem>
         <MudItem xs="12" sm="12" md="4" lg="2">
             <MudPaper Class="pt-6" Elevation="0">
-                <MudTextField T="string" @bind-Value="@_maintenanceIssueInsertVm.Pid" Label="PID" Variant="Variant.Outlined" />
+                <MudTextField T="string" @bind-Value="@_maintenanceIssueInsertVm.Pid" 
+                    For="(()=> _maintenanceIssueInsertVm.Pid)" 
+                    Label="PID" 
+                    Variant="Variant.Outlined" />
             </MudPaper>
         </MudItem>
         <MudItem xs="12" sm="12" md="4" lg="1">
@@ -28,14 +37,25 @@
     <MudGrid>
         <MudItem>
             <CorrectiveActionRadios OnSelectedOptionChanged="CorrectiveActionChange" />
+            <ValidationMessage For="(() => _maintenanceIssueInsertVm.CorrectiveActionId)" />
         </MudItem>
     </MudGrid>
     <MudGrid Class="mb-2">
         <MudItem xs="12" sm="12" md="6" lg="4">
-            <MudTextField T="string" Label="Description" Variant="Variant.Outlined" @bind-Value="@_maintenanceIssueInsertVm.Description" Lines="3" />
+            <MudTextField @bind-Value="@_maintenanceIssueInsertVm.Description" 
+                For="(()=> _maintenanceIssueInsertVm.Description)"
+                T="string" 
+                Label="Description" 
+                Variant="Variant.Outlined"  
+                Lines="3" />
         </MudItem>
         <MudItem xs="12" sm="12" md="6" lg="4">
-            <MudTextField T="string" Label="Action Taken" Variant="Variant.Outlined" @bind-Value="@_maintenanceIssueInsertVm.ActionTaken" Lines="3" />
+            <MudTextField @bind-Value="@_maintenanceIssueInsertVm.ActionTaken" 
+                For="(()=> _maintenanceIssueInsertVm.ActionTaken)"
+                T="string" 
+                Label="Action Taken" 
+                Variant="Variant.Outlined"  
+                Lines="3" />
         </MudItem>
     </MudGrid>
     <MudHidden @bind-Value="_maintenanceIssueInsertVm.DeviceId" />
@@ -47,6 +67,8 @@
 </EditForm>
 
 @code {
+
+    bool _isBusy;
 
     private MaintenanceIssueInsertVm _maintenanceIssueInsertVm { get; set; } = new();
 
@@ -73,5 +95,11 @@
         _maintenanceIssueInsertVm.DeviceId = AppState.DeviceVm.Id;
         await IssueService.InsertMaintenanceIssueAsync(_maintenanceIssueInsertVm);
         ResetForm();
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        await Task.Run(() => _maintenanceIssueInsertVm.DeviceId = AppState.DeviceVm.Id);
+        _isBusy = false;
     }
 }

@@ -3,7 +3,7 @@
 
 @if (!_isBusy)
 {
-    <MudRadioGroup SelectedOptionChanged="OnSelectedOptionChanged" Required="true" RequiredError="Must select a Corrective Action" >
+    <MudRadioGroup SelectedOptionChanged="OnSelectedOptionChanged" >
         <MudRadio Option="0" Color="Color.Primary" Size="Size.Small" >SELECT</MudRadio>
         @foreach (var item in _correctiveActionVms)
         {
@@ -16,6 +16,9 @@
 
     [Parameter]
     public EventCallback<int> OnSelectedOptionChanged { get; set; }
+
+    [Parameter]
+    public string RequiredError { get; set; }
 
     private int SelectedOption { get; set; }
 
