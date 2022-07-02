@@ -3,7 +3,8 @@
 
 @if (!_isBusy)
 {
-    <MudRadioGroup SelectedOptionChanged="OnSelectedOptionChanged" >
+    <MudRadioGroup SelectedOptionChanged="OnSelectedOptionChanged" Required="true" RequiredError="Must select a Corrective Action" >
+        <MudRadio Option="0" Color="Color.Primary" Size="Size.Small" >SELECT</MudRadio>
         @foreach (var item in _correctiveActionVms)
         {
             <MudRadio Option="item.Id" Color="Color.Primary" Size="Size.Small" >@item.Name</MudRadio>
