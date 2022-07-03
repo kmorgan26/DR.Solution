@@ -53,7 +53,6 @@ public class HardwareService : IHardwareService
 
         return new HardwareVersionVm();
     }
-    
 
     #endregion
 
@@ -67,6 +66,7 @@ public class HardwareService : IHardwareService
 
         return new List<HardwareSystemVm>();
     }
+
     public async Task<IEnumerable<HardwareVersionVm>> GetHardwareVersionVmsByHardwareSystemId(int id)
     {
         //Filter: FROM HardwareVersions WHERE HardwareSystemId = id
@@ -136,7 +136,6 @@ public class HardwareService : IHardwareService
             return 0;
         }
     }
-
 
     #endregion
 
