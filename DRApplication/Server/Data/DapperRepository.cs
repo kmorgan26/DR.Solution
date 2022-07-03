@@ -181,8 +181,9 @@ namespace DRApplication.Server.Data
                     await db.UpdateAsync<TEntity>(entity);
                     return entity;
                 }
-                catch (Exception ex)
+                catch
                 {
+                    //TO: Log Exception
                     return null;
                 }
             }
@@ -196,8 +197,9 @@ namespace DRApplication.Server.Data
                     await db.DeleteAsync<TEntity>(entityToDelete);
                     return true;
                 }
-                catch (Exception ex)
+                catch
                 {
+                    //TODO: Log Exception
                     return false;
                 }
             }

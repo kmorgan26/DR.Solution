@@ -95,8 +95,9 @@ public class LoadService : ILoadService
             return versionLoadsVms.OrderBy(i => i.SoftwareSystemName);
 
         }
-        catch (Exception ex)
+        catch
         {
+            //TODO: Log Error
             return new List<VersionsLoadVm>();
         }
     }
