@@ -7,10 +7,10 @@ namespace DRApplication.Client.Services
 {
     public class IssueService : IIssueService
     {
-        private readonly ManagerService _managerService;
+        private readonly IManagerService _managerService;
         private readonly AppState _appState;
 
-        public IssueService(ManagerService managerService, AppState appState)
+        public IssueService(IManagerService managerService, AppState appState)
         {
             _managerService = managerService;
             _appState = appState;

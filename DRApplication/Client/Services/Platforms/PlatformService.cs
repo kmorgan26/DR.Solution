@@ -11,10 +11,10 @@ public class PlatformService : IPlatformService
 
     #region --fields and constructor----
 
-    private readonly ManagerService _managerService;
+    private readonly IManagerService _managerService;
     private readonly IMapperService _mapperService;
 
-    public PlatformService(ManagerService managerService, IMapperService mapperService)
+    public PlatformService(IManagerService managerService, IMapperService mapperService)
     {
         _managerService = managerService;
         _mapperService = mapperService;

@@ -14,7 +14,7 @@ public class LoadService : ILoadService
 
     private readonly IPlatformService _platformService;
     private readonly ISoftwareService _softwareService;
-    private readonly ManagerService _managerService;
+    private readonly IManagerService _managerService;
     private readonly AppState _appState;
 
     private readonly ILoadHelpers _loadHelpers;
@@ -23,7 +23,7 @@ public class LoadService : ILoadService
     public LoadService(
             IPlatformService platformService,
             ISoftwareService softwareService,
-            ManagerService managerService,
+            IManagerService managerService,
             AppState appState,
             ILoadHelpers loadHelpers,
             IMapperService mapperService

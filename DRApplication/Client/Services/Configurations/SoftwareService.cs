@@ -9,11 +9,11 @@ public class SoftwareService : ISoftwareService
 
     #region ---Fields and Constructor ---
 
-    private readonly ManagerService _managerService;
+    private readonly IManagerService _managerService;
     private readonly IMapperService _mapperService;
     private readonly ILoadHelpers _loadHelpers;
 
-    public SoftwareService(ManagerService managerService, IMapperService mapperService, ILoadHelpers loadHelpers)
+    public SoftwareService(IManagerService managerService, IMapperService mapperService, ILoadHelpers loadHelpers)
     {
         _managerService = managerService;
         _mapperService = mapperService;

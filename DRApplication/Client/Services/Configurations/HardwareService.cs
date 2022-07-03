@@ -8,10 +8,10 @@ public class HardwareService : IHardwareService
 
     #region ---Fields and Constructor ---
 
-    private readonly ManagerService _managerService;
+    private readonly IManagerService _managerService;
     private readonly IMapperService _mapperService;
 
-    public HardwareService(ManagerService managerService, IMapperService mapperService)
+    public HardwareService(IManagerService managerService, IMapperService mapperService)
     {
         _managerService = managerService;
         _mapperService = mapperService;

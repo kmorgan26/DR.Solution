@@ -5,9 +5,9 @@ namespace DRApplication.Client.Helpers;
 
 public class LoadHelpers : ILoadHelpers
 {
-    private readonly ManagerService _managerService;
+    private readonly IManagerService _managerService;
 
-    public LoadHelpers(ManagerService managerService)
+    public LoadHelpers(IManagerService managerService)
     {
         _managerService = managerService;
     }
