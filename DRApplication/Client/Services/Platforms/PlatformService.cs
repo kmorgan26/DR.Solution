@@ -169,11 +169,6 @@ public class PlatformService : IPlatformService
         }
     }
 
-    public async Task<DeviceTypeEditVm> DeviceTypeEditVmFromDeviceTypeVmAsync(DeviceTypeVm deviceTypeVm)
-    {
-        throw new NotImplementedException();
-    }
-
     #endregion
 
 }
