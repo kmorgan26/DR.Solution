@@ -1,6 +1,8 @@
-﻿namespace DRApplication.Client.Services
+﻿using DRApplication.Client.Interfaces;
+
+namespace DRApplication.Client.Services
 {
-    public class ManagerService
+    public class ManagerService : IManagerService
     {
         private readonly HttpClient _httpClient;
         public ManagerService(HttpClient httpClient)
