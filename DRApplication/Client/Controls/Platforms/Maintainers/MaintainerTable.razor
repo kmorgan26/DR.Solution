@@ -4,7 +4,7 @@
 
 <NewButton Url="/maintainer/create" />
 
-@if (AppState.MaintainerVm.Id > 0)
+@if (AppState.MaintainerVm.Id > 0 && !_isBusy)
 {
     <MudTable Items="@AppState.MaintainerVms" Class="my-4" Hover="true" Striped="true" Dense="true">
         <HeaderContent>

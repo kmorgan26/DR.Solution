@@ -5,7 +5,7 @@
 @inject IMapperService MapperService
 @inject IHardwareService HardwareService
 
-@if (_hardwareSystemEditVm.Id > 0)
+@if (_hardwareSystemEditVm.Id > 0 && !_isBusy)
 {
     <MudItem xs="12" sm="12" md="4" lg="3">
         <EditForm Model="_hardwareSystemEditVm" OnValidSubmit="@UpdateHardwareSystem">
