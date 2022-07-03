@@ -6,10 +6,10 @@ namespace DRApplication.Client.Services
 {
     public class MapperService : IMapperService
     {
-        private readonly ManagerService _managerService;
+        private readonly IManagerService _managerService;
         private readonly ILoadHelpers _loadHelpers;
 
-        public MapperService(ManagerService managerService, ILoadHelpers loadHelpers)
+        public MapperService(IManagerService managerService, ILoadHelpers loadHelpers)
         {
             _managerService = managerService;
             _loadHelpers = loadHelpers;
