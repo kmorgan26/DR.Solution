@@ -45,8 +45,7 @@ builder.Services.AddScoped<IssueManager>();
 builder.Services.AddScoped<MaintIssueManager>();
 builder.Services.AddScoped<PlatformHelpers>();
 
-builder.Services.AddScoped<ManagerService>();
-
+builder.Services.AddTransient<IManagerService, ManagerService>();
 builder.Services.AddTransient<IPlatformService, PlatformService>();
 builder.Services.AddTransient<ILoadService, LoadService>();
 builder.Services.AddTransient<IHardwareService, HardwareService>();
