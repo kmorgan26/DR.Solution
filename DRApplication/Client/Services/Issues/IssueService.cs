@@ -94,9 +94,6 @@ namespace DRApplication.Client.Services
                 //get correctiveActions
                 var correctiveActions = await _managerService.CorrectiveActionManager().GetAllAsync();
 
-                //get statuses
-                
-
                 //Get the DeviceDiscovered DTOs with that DeviceId (previous 10)
                 var deviceDiscoveredFilter = await new FilterGenerator<DeviceDiscovered>().GetFilterWherePropertyEqualsValueAsync("DeviceId", deviceVm.Id);
                 var devicesDiscoveredResponse = await _managerService.DeviceDiscoveredManager().GetAsync(deviceDiscoveredFilter);
