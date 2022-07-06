@@ -253,23 +253,23 @@ namespace DRApplication.Client.Services
 
             return await Task.Run(() => hardwareSystem);
         }
-        public async Task<HardwareConfig> HardwareConfigFromHardwareConfigVmAsync(HardwareConfigVm hardwareConfigVm)
-        {
-            var hardwareConfig = new HardwareConfig
-            {
-                Id = hardwareConfigVm.Id,
-                Name = hardwareConfigVm.Name,
-                DeviceTypeId = hardwareConfigVm.DeviceTypeId
-            };
-
-            return await Task.Run(() => hardwareConfig);
-        }
         public async Task<HardwareConfig> HardwareConfigFromHardwareConfigInsertVmAsync(HardwareConfigInsertVm hardwareConfigInsertVm)
         {
             var hardwareConfig = new HardwareConfig
             {
                 Name = hardwareConfigInsertVm.Name,
                 DeviceTypeId = hardwareConfigInsertVm.DeviceTypeId
+            };
+
+            return await Task.Run(() => hardwareConfig);
+        }
+        public async Task<HardwareConfig> HardwareConfigFromHardwareConfigEditVmAsync(HardwareConfigEditVm hardwareConfigEditVm)
+        {
+            var hardwareConfig = new HardwareConfig
+            {
+                Id = hardwareConfigEditVm.Id,
+                Name = hardwareConfigEditVm.Name,
+                DeviceTypeId = hardwareConfigEditVm.DeviceTypeId
             };
 
             return await Task.Run(() => hardwareConfig);
@@ -283,6 +283,16 @@ namespace DRApplication.Client.Services
                 DeviceTypeId = hardwareConfig.DeviceTypeId
             };
             return await Task.Run(() => hardwareConfigVm);
+        }
+        public async Task<HardwareConfigEditVm> HardwareConfigEditVmFromHardwareConfigVmAsync(HardwareConfigVm hardwareConfigVm)
+        {
+            var hardwareConfigEditVm = new HardwareConfigEditVm
+            {
+                Id = hardwareConfigVm.Id,
+                Name = hardwareConfigVm.Name,
+                DeviceTypeId = hardwareConfigVm.DeviceTypeId
+            };
+            return await Task.Run(() => hardwareConfigEditVm);
         }
         public async Task<HardwareVersion> HardwareVersionFromHardwareVersionVmAsync(HardwareVersionVm hardwareVersionVm)
         {
@@ -603,5 +613,7 @@ namespace DRApplication.Client.Services
 
             return softwareSystemVms;
         }
+
+        
     }
 }

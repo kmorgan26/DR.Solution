@@ -1,7 +1,7 @@
 ﻿using DRApplication.Client.ViewModels;
 using FluentValidation;
 
-namespace DRApplication.Client.Validators.Configuration;
+namespace DRApplication.Client.Validators;
 
 public class CurrentLoadEditVmValidator: AbstractValidator<CurrentLoadEditVm>
 {

@@ -9,7 +9,9 @@
 @if (!_isBusy)
 {
     <MudItem xs="12" sm="12" md="4" lg="3">
-        <EditForm Model="@AppState.HardwareVersionVm" OnValidSubmit="@UpdateHardwareConfig">
+        <EditForm Model="@AppState.HardwareConfigVm" OnValidSubmit="@UpdateHardwareConfig">
+
+            <FluentValidationValidator DisableAssemblyScanning="true" />
 
             <DeviceTypeSelect  OnDeviceTypeIdChanged="UpdateDeviceTypeForHardwareConfig"></DeviceTypeSelect>
 
@@ -17,6 +19,8 @@
 
             <SubmitButton ButtonText="Update" />
             <CancelButton Url="hardwareconfig" />
+
+            <ValidationSummary />
 
         </EditForm>
     </MudItem>
@@ -27,6 +31,8 @@
 
     [Parameter]
     public int HardwareConfigId { get; set; }
+
+    private HardwareConfigEditVm _hardwareConfigEditVm = new();
 
     async Task UpdateDeviceTypeForHardwareConfig(int id)
     {
@@ -44,7 +50,8 @@
 
     protected async Task UpdateHardwareConfig()
     {
-        var hardwareConfig = await MapperService.HardwareConfigFromHardwareConfigVmAsync(AppState.HardwareConfigVm);
+        _hardwareConfigEditVm = await MapperService.HardwareConfigEditVmFromHardwareConfigVmAsync(AppState.HardwareConfigVm);
+        var hardwareConfig = await MapperService.HardwareConfigFromHardwareConfigEditVmAsync(_hardwareConfigEditVm);
         await HardwareConfigManager.UpdateAsync(hardwareConfig);
         Snackbar.Add($"Hardware Configuration was updated", Severity.Success);
         navigation.NavigateTo("/hardwareconfig");
