@@ -5,6 +5,8 @@ namespace DRApplication.Client.Interfaces;
 
 public interface IMapperService
 {
+    Task<CurrentLoadEditVm> CurrentLoadEditVmFromCurrentLoadVmAsync(CurrentLoadVm currentLoadVm);
+    Task<CurrentLoad> CurrentLoadFromCurrentLoadEditVm(CurrentLoadEditVm currentLoadEditVm);
     Task<Device> DeviceFromDeviceVmAsync(DeviceVm deviceVm);
     Task<Device> DeviceFromDeviceInsertVmAsync(DeviceInsertVm deviceInsertVm);
     Task<Device> DeviceFromDeviceEditVmAsync(DeviceEditVm deviceEditVm);

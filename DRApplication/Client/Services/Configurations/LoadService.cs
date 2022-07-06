@@ -220,16 +220,7 @@ public class LoadService : ILoadService
         var currentLoad = await _managerService.CurrentLoadManager().GetByIdAsync(id);
         return await this.MapCurrentLoadToCurrentLoadVm(currentLoad);
     }
-    public async Task<CurrentLoad> GetCurrentLoadFromCurrentLoadVm(CurrentLoadVm currentLoadVm)
-    {
-        var currentLoad = new CurrentLoad()
-        {
-            Id = currentLoadVm.Id,
-            DeviceId = currentLoadVm.DeviceId,
-            LoadId = currentLoadVm.LoadId
-        };
-        return await Task.Run(() => currentLoad);
-    }
+    
     public async Task<CurrentLoadVm> MapCurrentLoadToCurrentLoadVm(CurrentLoad currentLoad)
     {
         var device = await _platformService.GetDeviceVmById(currentLoad.Id);

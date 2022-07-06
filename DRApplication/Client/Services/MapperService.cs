@@ -14,6 +14,27 @@ namespace DRApplication.Client.Services
             _managerService = managerService;
             _loadHelpers = loadHelpers;
         }
+        public async Task<CurrentLoadEditVm> CurrentLoadEditVmFromCurrentLoadVmAsync(CurrentLoadVm currentLoadVm)
+        {
+            var currentLoadEditVm = new CurrentLoadEditVm
+            {
+                DeviceId = currentLoadVm.DeviceId,
+                LoadId = currentLoadVm.LoadId,
+                Id = currentLoadVm.Id
+            };
+
+            return await Task.Run(() => currentLoadEditVm);
+        }
+        public async Task<CurrentLoad> CurrentLoadFromCurrentLoadEditVm(CurrentLoadEditVm currentLoadEditVm)
+        {
+            var currentLoad = new CurrentLoad()
+            {
+                Id = currentLoadEditVm.Id,
+                DeviceId = currentLoadEditVm.DeviceId,
+                LoadId = currentLoadEditVm.LoadId
+            };
+            return await Task.Run(() => currentLoad);
+        }
         public async Task<Device> DeviceFromDeviceInsertVmAsync(DeviceInsertVm deviceInsertVm)
         {
             var device = new Device()
@@ -582,6 +603,5 @@ namespace DRApplication.Client.Services
 
             return softwareSystemVms;
         }
-
     }
 }
