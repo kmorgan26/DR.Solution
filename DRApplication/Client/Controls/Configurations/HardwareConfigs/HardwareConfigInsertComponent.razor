@@ -7,14 +7,21 @@
 @if (@_hardwareConfigInsertVm != null)
 {
     <MudItem xs="12" sm="12" md="4" lg="3">
+
         <EditForm Model="@_hardwareConfigInsertVm" OnValidSubmit="@InsertHardwareConfig">
 
+            <FluentValidationValidator DisableAssemblyScanning="true" />
+            
             <DeviceTypeSelect OnDeviceTypeIdChanged="UpdateDeviceType" />
 
-            <MudTextField @bind-Value="_hardwareConfigInsertVm.Name" Class="my-6" Label="Version Name" Variant="Variant.Outlined"></MudTextField>
+            <MudTextField @bind-Value="_hardwareConfigInsertVm.Name" 
+                For="(() => _hardwareConfigInsertVm.Name)" 
+                Class="my-6" Label="Version Name" 
+                Variant="Variant.Outlined" />
 
             <SubmitButton ButtonText="Insert" />
             <CancelButton Url="hardwareconfig" />
+
         </EditForm>
     </MudItem>
 
@@ -28,6 +35,7 @@
     {
         if (id > 0)
         {
+            _hardwareConfigInsertVm.DeviceTypeId = id;
             var deviceTypeVm = AppState.DeviceTypeVm;
             deviceTypeVm.Id = id;
             AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
@@ -41,5 +49,10 @@
         var hardwareConfig = await MapperService.HardwareConfigFromHardwareConfigInsertVmAsync(_hardwareConfigInsertVm);
         await HardwareConfigManager.InsertAsync(hardwareConfig);
         navigation.NavigateTo("/hardwareconfig");
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        if (AppState.DeviceTypeVm is not null)
+            await Task.Run(() => _hardwareConfigInsertVm.DeviceTypeId = AppState.DeviceTypeVm.Id);
     }
 }

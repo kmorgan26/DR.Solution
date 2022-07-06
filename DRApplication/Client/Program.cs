@@ -59,6 +59,8 @@ builder.Services.AddTransient<IValidator<DeviceTypeEditVm>, DeviceTypeEditVmVali
 builder.Services.AddTransient<IValidator<DeviceTypeVm>, DeviceTypeVmValidator>();
 builder.Services.AddTransient<IValidator<DeviceVm>, DeviceVmValidator>();
 builder.Services.AddTransient<IValidator<DeviceInsertVm>, DeviceInsertVmValidator>();
+builder.Services.AddTransient<IValidator<HardwareConfigInsertVm>, HardwareConfigInsertVmValidator>();
+builder.Services.AddTransient<IValidator<HardwareConfigEditVm>, HardwareConfigEditVmValidator>();
 builder.Services.AddTransient<IValidator<HardwareSystemEditVm>, HardwareSystemEditVmValidator>();
 builder.Services.AddTransient<IValidator<HardwareSystemInsertVm>, HardwareSystemInsertVmValidator>();
 builder.Services.AddTransient<IValidator<HardwareVersionVm>, HardwareVersionVmValidator>();
