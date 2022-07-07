@@ -21,7 +21,6 @@ namespace DRApplication.Client.Services
         {
             throw new NotImplementedException();
         }
-
         public async Task<int> InsertIssueAsync(IssueInsertVm issueInsertVm)
         {
             var issueToInsert = IssueHelpers.GetIssueFromIssueInsertVm(issueInsertVm);
@@ -29,7 +28,6 @@ namespace DRApplication.Client.Services
             var issue = await _managerService.IssueManager().InsertAsync(issueToInsert);
             return issue.Id;
         }
-
         public async Task<int> InsertMaintenanceIssueAsync(MaintenanceIssueInsertVm maintenanceIssueInsertVm)
         {
             //Before Inserting a Maintenance Issue, we need an IssueId after an Issue Insert
