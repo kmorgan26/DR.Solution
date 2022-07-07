@@ -44,7 +44,7 @@
     }
     protected async Task UpdateSoftwareVersion()
     {
-        var softwareVersion = await MapperService.SoftwareVersionFromSoftwareVersionVmAsync(AppState.SoftwareVersionVm);
+        var softwareVersion = MapperService.SoftwareVersionFromSoftwareVersionVm(AppState.SoftwareVersionVm);
         await SoftwareVersionManager.UpdateAsync(softwareVersion);
         Snackbar.Add($"Software Version was updated", Severity.Success);
         navigation.NavigateTo("/softwareversion");
@@ -54,7 +54,7 @@
     {
         _isBusy = true;
         var softwareVersion = await SoftwareVersionManager.GetByIdAsync(SoftwareVersionId);
-        var softwareVersionVm = await MapperService.SoftwareVersionVmFromSoftwareVersionsAsync(softwareVersion);
+        var softwareVersionVm = MapperService.SoftwareVersionVmFromSoftwareVersions(softwareVersion);
         AppState.UpdateSoftwareVersionVm(this, softwareVersionVm);
         _isBusy = false;
     }

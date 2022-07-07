@@ -38,7 +38,7 @@
     private async Task InsertSoftwareVersion()
     {
         _softwareVersionInsertVm.SoftwareSystemId = AppState.SoftwareSystemVm.Id;
-        var softwareVersion = await MapperService.SoftwareVersionFromSoftwareVersionsInsertVmAsync(_softwareVersionInsertVm);
+        var softwareVersion = MapperService.SoftwareVersionFromSoftwareVersionsInsertVm(_softwareVersionInsertVm);
         await SoftwareVersionManager.InsertAsync(softwareVersion);
         navigation.NavigateTo("/softwareversion");
     }

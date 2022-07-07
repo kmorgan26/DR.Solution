@@ -19,6 +19,7 @@ public class MapperService : IMapperService
     #endregion
 
     #region --- async Platform Maps ---
+
     public async Task<DeviceVm> DeviceVmFromDeviceAsync(Device device)
     {
         var deviceType = await _managerService.DeviceTypeManager().GetByIdAsync(device.DeviceTypeId);
@@ -46,7 +47,7 @@ public class MapperService : IMapperService
             Platform = deviceType.Name,
             Maintainer = maintainer.Name
         };
-        return await Task.Run(() => deviceTypeVm);
+        return deviceTypeVm;
     }
 
     #endregion
@@ -399,7 +400,7 @@ public class MapperService : IMapperService
 
         return hardwareVersionVm;
     }
-    public HardwareVersionInsertVm HardwareVersionInsertVmFromHardwareVersionVmAsync(HardwareVersionVm hardwareVersionVm)
+    public HardwareVersionInsertVm HardwareVersionInsertVmFromHardwareVersionVm(HardwareVersionVm hardwareVersionVm)
     {
         var hardwareVersionInsertVm = new HardwareVersionInsertVm
         {
@@ -437,18 +438,7 @@ public class MapperService : IMapperService
 
     #endregion
 
-
-    public async Task<SoftwareSystem> SoftwareSystemFromSoftwareSystemVmAsync(SoftwareSystemVm softwareSystemVm)
-    {
-        var softwareSystem = new SoftwareSystem
-        {
-            Name = softwareSystemVm.Name,
-            HardwareConfigId = softwareSystemVm.HardwareConfigId,
-            Id = softwareSystemVm.Id
-        };
-
-        return await Task.Run(() => softwareSystem);
-    }
+    #region ---async Software Maps ---
     public async Task<SoftwareSystemVm> SoftwareSystemVmFromSoftwareSystemAsync(SoftwareSystem softwareSystem)
     {
         var hardwareConfig = await _managerService.HardwareConfigManager().GetByIdAsync(softwareSystem.HardwareConfigId);
@@ -461,9 +451,26 @@ public class MapperService : IMapperService
             HardwareConfig = hardwareConfig.Name
         };
 
-        return await Task.Run(() => softwareSystemVm);
+        return softwareSystemVm;
     }
-    public async Task<SoftwareSystem> SoftwareSystemFromSoftwareSystemInsertVmAsync(SoftwareSystemInsertVm softwareSystemInsertVm)
+
+
+    #endregion
+
+    #region --- Software Maps ---
+
+    public SoftwareSystem SoftwareSystemFromSoftwareSystemVm(SoftwareSystemVm softwareSystemVm)
+    {
+        var softwareSystem = new SoftwareSystem
+        {
+            Name = softwareSystemVm.Name,
+            HardwareConfigId = softwareSystemVm.HardwareConfigId,
+            Id = softwareSystemVm.Id
+        };
+
+        return softwareSystem;
+    }
+    public SoftwareSystem SoftwareSystemFromSoftwareSystemInsertVm(SoftwareSystemInsertVm softwareSystemInsertVm)
     {
         var softwareSystem = new SoftwareSystem
         {
@@ -471,9 +478,9 @@ public class MapperService : IMapperService
             HardwareConfigId = softwareSystemInsertVm.HardwareConfigId
         };
 
-        return await Task.Run(() => softwareSystem);
+        return softwareSystem;
     }
-    public async Task<SoftwareVersionVm> SoftwareVersionVmFromSoftwareVersionsAsync(SoftwareVersion softwareVersion)
+    public SoftwareVersionVm SoftwareVersionVmFromSoftwareVersions(SoftwareVersion softwareVersion)
     {
         var softwareVersionVm = new SoftwareVersionVm
         {
@@ -484,9 +491,9 @@ public class MapperService : IMapperService
             VersionDateString = softwareVersion.VersionDate.ToShortDateString()
         };
 
-        return await Task.Run(() => softwareVersionVm);
+        return softwareVersionVm;
     }
-    public async Task<SoftwareVersion> SoftwareVersionFromSoftwareVersionsInsertVmAsync(SoftwareVersionInsertVm softwareVersionInsertVm)
+    public SoftwareVersion SoftwareVersionFromSoftwareVersionsInsertVm(SoftwareVersionInsertVm softwareVersionInsertVm)
     {
         var softwareVersion = new SoftwareVersion
         {
@@ -495,9 +502,9 @@ public class MapperService : IMapperService
             VersionDate = (DateTime)softwareVersionInsertVm.VersionDate
         };
 
-        return await Task.Run(() => softwareVersion);
+        return softwareVersion;
     }
-    public async Task<SoftwareVersion> SoftwareVersionFromSoftwareVersionVmAsync(SoftwareVersionVm softwareVersionVm)
+    public SoftwareVersion SoftwareVersionFromSoftwareVersionVm(SoftwareVersionVm softwareVersionVm)
     {
         var softwareVersion = new SoftwareVersion
         {
@@ -506,10 +513,14 @@ public class MapperService : IMapperService
             VersionDate = (DateTime)softwareVersionVm.VersionDate
         };
 
-        return await Task.Run(() => softwareVersion);
+        return softwareVersion;
     }
 
-    public async Task<LoadVm> LoadVmFromLoadAsync(Load load)
+    #endregion
+
+    #region --- Load Maps ---
+
+    public LoadVm LoadVmFromLoad(Load load)
     {
         var loadVm = new LoadVm
         {
@@ -519,9 +530,9 @@ public class MapperService : IMapperService
             Name = load.Name
         };
 
-        return await Task.Run(() => loadVm);
+        return loadVm;
     }
-    public async Task<Load> LoadFromLoadVm(LoadVm loadVm)
+    public Load LoadFromLoadVm(LoadVm loadVm)
     {
         var load = new Load
         {
@@ -531,9 +542,9 @@ public class MapperService : IMapperService
             IsAccepted = loadVm.IsAccepted
         };
 
-        return await Task.Run(() => load);
+        return load;
     }
-    public async Task<Load> LoadFromLoadInsertVm(LoadInsertVm loadInsertVm)
+    public Load LoadFromLoadInsertVm(LoadInsertVm loadInsertVm)
     {
         var load = new Load
         {
@@ -542,8 +553,11 @@ public class MapperService : IMapperService
             HardwareConfigId = loadInsertVm.HardwareConfigId,
         };
 
-        return await Task.Run(() => load);
+        return load;
     }
+
+    #endregion
+
     public async Task<IEnumerable<HardwareVersionVm>> HardwareVersionVmsFromHardwareVersionsAsync(IEnumerable<HardwareVersion> hardwareVersions)
     {
         var hardwareVersionVms = hardwareVersions.Select(hwv => new HardwareVersionVm

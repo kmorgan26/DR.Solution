@@ -49,7 +49,7 @@
 
     protected async Task UpdateLoad()
     {
-        var load = await MapperService.LoadFromLoadVm(AppState.LoadVm);
+        var load = MapperService.LoadFromLoadVm(AppState.LoadVm);
         await ManagerService.LoadManager().UpdateAsync(load);
         Snackbar.Add($"Load was updated", Severity.Success);
         navigation.NavigateTo("/load");
@@ -59,7 +59,7 @@
     {
         _isBusy = true;
         var load = await ManagerService.LoadManager().GetByIdAsync(LoadId);
-        var loadVm = await MapperService.LoadVmFromLoadAsync(load);
+        var loadVm = MapperService.LoadVmFromLoad(load);
         AppState.UpdateLoadVm(this, loadVm);
         _isBusy = false;
     }

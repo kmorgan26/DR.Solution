@@ -38,7 +38,7 @@
     private async Task InsertSoftwareSystem()
     {
         _softwareConfigInsertVm.HardwareConfigId = AppState.HardwareConfigVm.Id;
-        var softwareSystem = await MapperService.SoftwareSystemFromSoftwareSystemInsertVmAsync(_softwareConfigInsertVm);
+        var softwareSystem = MapperService.SoftwareSystemFromSoftwareSystemInsertVm(_softwareConfigInsertVm);
         await SoftwareSystemManger.InsertAsync(softwareSystem);
         navigation.NavigateTo("/softwaresystem");
     }
