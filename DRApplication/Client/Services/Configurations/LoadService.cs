@@ -58,7 +58,7 @@ public class LoadService : ILoadService
         var loads = loadResponse.Data;
 
         if (loads is not null)
-            return await _mapperService.LoadVmsFromLoads(loads);
+            return _mapperService.LoadVmsFromLoads(loads);
 
         return new List<LoadVm>();
 
@@ -81,7 +81,7 @@ public class LoadService : ILoadService
         var loads = loadResponse.Data;
 
         if (loads is not null)
-            return await _mapperService.LoadVmsFromLoads(loads);
+            return _mapperService.LoadVmsFromLoads(loads);
 
         return new List<LoadVm>();
     }

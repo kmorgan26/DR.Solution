@@ -53,6 +53,7 @@ public class MapperService : IMapperService
     #endregion
 
     #region ---Platform Maps---
+
     public CurrentLoadEditVm CurrentLoadEditVmFromCurrentLoadVm(CurrentLoadVm currentLoadVm)
     {
         var currentLoadEditVm = new CurrentLoadEditVm
@@ -214,10 +215,6 @@ public class MapperService : IMapperService
         };
         return maintainerEditVm;
     }
-
-    #endregion
-
-    #region --- Platform Collection Maps ---
     public async Task<IEnumerable<DeviceVm>> DeviceVmsFromDevicesAsync(IEnumerable<Device> devices)
     {
         var deviceTypes = await _managerService.DeviceTypeManager().GetAllAsync();
@@ -435,6 +432,38 @@ public class MapperService : IMapperService
 
         return hardwareVersionEditVm;
     }
+    public IEnumerable<HardwareVersionVm> HardwareVersionVmsFromHardwareVersions(IEnumerable<HardwareVersion> hardwareVersions)
+    {
+        var hardwareVersionVms = hardwareVersions.Select(hwv => new HardwareVersionVm
+        {
+            Id = hwv.Id,
+            Name = hwv.Name,
+            VersionDate = hwv.VersionDate,
+            HardwareSystemId = hwv.HardwareSystemId,
+            VersionDateString = hwv.VersionDate.ToShortDateString()
+        });
+        return hardwareVersionVms;
+    }
+    public IEnumerable<HardwareConfigVm> HardwareConfigVmsFromHardwareConfigs(IEnumerable<HardwareConfig> hardwareConfigs)
+    {
+        var hardwareConfigVms = hardwareConfigs.Select(hwc => new HardwareConfigVm
+        {
+            Id = hwc.Id,
+            Name = hwc.Name,
+            DeviceTypeId = hwc.DeviceTypeId
+        });
+
+        return hardwareConfigVms;
+    }
+    public IEnumerable<HardwareSystemVm> HardwareSystemVmsFromHardwareSystems(IEnumerable<HardwareSystem> hardwareSystems)
+    {
+        var hardwareSystemVms = hardwareSystems.Select(hws => new HardwareSystemVm
+        {
+            Id = hws.Id,
+            Name = hws.Name
+        });
+        return hardwareSystemVms;
+    }
 
     #endregion
 
@@ -453,7 +482,20 @@ public class MapperService : IMapperService
 
         return softwareSystemVm;
     }
+    public async Task<IEnumerable<SoftwareSystemVm>> SoftwareSystemVmsFromSoftwareSystemsAsync(IEnumerable<SoftwareSystem> softwareSystems)
+    {
+        var hardwareConfigs = await _loadHelpers.GetHardwareConfigsFromSoftwareSystems(softwareSystems);
 
+        var softwareSystemVms = softwareSystems.Select(ss => new SoftwareSystemVm
+        {
+            Id = ss.Id,
+            Name = ss.Name,
+            HardwareConfigId = ss.HardwareConfigId,
+            HardwareConfig = hardwareConfigs.Where(i => i.Id == ss.HardwareConfigId).FirstOrDefault().Name
+        });
+
+        return softwareSystemVms;
+    }
 
     #endregion
 
@@ -515,6 +557,19 @@ public class MapperService : IMapperService
 
         return softwareVersion;
     }
+    public IEnumerable<SoftwareVersionVm> SoftwareVersionVmsFromSoftwareVersionsAsync(IEnumerable<SoftwareVersion> softwareVersions)
+    {
+        var softwareVersionVms = softwareVersions.Select(sv => new SoftwareVersionVm
+        {
+            Id = sv.Id,
+            Name = sv.Name,
+            SoftwareSystemId = sv.SoftwareSystemId,
+            VersionDate = sv.VersionDate,
+            VersionDateString = sv.VersionDate.ToShortDateString()
+        });
+
+        return softwareVersionVms;
+    }
 
     #endregion
 
@@ -555,41 +610,21 @@ public class MapperService : IMapperService
 
         return load;
     }
+    public IEnumerable<LoadVm> LoadVmsFromLoads(IEnumerable<Load> loads)
+    {
+        var loadVms = loads.Select(l => new LoadVm
+        {
+            Id = l.Id,
+            Name = l.Name,
+            HardwareConfigId = l.HardwareConfigId,
+            IsAccepted = l.IsAccepted
+        });
+
+        return loadVms;
+    }
 
     #endregion
 
-    public async Task<IEnumerable<HardwareVersionVm>> HardwareVersionVmsFromHardwareVersionsAsync(IEnumerable<HardwareVersion> hardwareVersions)
-    {
-        var hardwareVersionVms = hardwareVersions.Select(hwv => new HardwareVersionVm
-        {
-            Id = hwv.Id,
-            Name = hwv.Name,
-            VersionDate = hwv.VersionDate,
-            HardwareSystemId = hwv.HardwareSystemId,
-            VersionDateString = hwv.VersionDate.ToShortDateString()
-        });
-        return await Task.Run(()=> hardwareVersionVms);
-    }
-    public async Task<IEnumerable<HardwareConfigVm>> HardwareConfigVmsFromHardwareConfigsAsync(IEnumerable<HardwareConfig> hardwareConfigs)
-    {
-        var hardwareConfigVms = hardwareConfigs.Select(hwc => new HardwareConfigVm
-        {
-            Id = hwc.Id,
-            Name = hwc.Name,
-            DeviceTypeId = hwc.DeviceTypeId
-        });
-
-        return await Task.Run(() => hardwareConfigVms);
-    }
-    public async Task<IEnumerable<HardwareSystemVm>> HardwareSystemVmsFromHardwareSystemsAsync(IEnumerable<HardwareSystem> hardwareSystems)
-    {
-        var hardwareSystemVms = hardwareSystems.Select(hws => new HardwareSystemVm
-        {
-            Id = hws.Id,
-            Name = hws.Name
-        });
-        return await Task.Run(() => hardwareSystemVms);
-    }
     public async Task<IEnumerable<VersionsLoadVm>> VersionsLoadVmsFromVersionsLoadAsync(IEnumerable<VersionsLoad> versionsLoads)
     {
         var softwareVersions = await _loadHelpers.GetSoftwareVersionsFromVersionLoads(versionsLoads);
@@ -609,45 +644,6 @@ public class MapperService : IMapperService
         });
 
         return versionsLoadVms;
-    }
-    public async Task<IEnumerable<LoadVm>> LoadVmsFromLoads(IEnumerable<Load> loads)
-    {
-        var loadVms = loads.Select(l => new LoadVm
-        {
-            Id = l.Id,
-            Name = l.Name,
-            HardwareConfigId = l.HardwareConfigId,
-            IsAccepted = l.IsAccepted
-        });
-
-        return await Task.Run(() => loadVms);
-    }
-    public async Task<IEnumerable<SoftwareVersionVm>> SoftwareVersionVmsFromSoftwareVersionsAsync(IEnumerable<SoftwareVersion> softwareVersions)
-    {
-        var softwareVersionVms = softwareVersions.Select(sv => new SoftwareVersionVm
-        {
-            Id = sv.Id,
-            Name = sv.Name,
-            SoftwareSystemId = sv.SoftwareSystemId,
-            VersionDate = sv.VersionDate,
-            VersionDateString = sv.VersionDate.ToShortDateString()
-        });
-
-        return await Task.Run(()=> softwareVersionVms);
-    }
-    public async Task<IEnumerable<SoftwareSystemVm>> SoftwareSystemVmsFromSoftwareSystemsAsync(IEnumerable<SoftwareSystem> softwareSystems)
-    {
-        var hardwareConfigs = await _loadHelpers.GetHardwareConfigsFromSoftwareSystems(softwareSystems);
-
-        var softwareSystemVms = softwareSystems.Select(ss => new SoftwareSystemVm
-        {
-            Id = ss.Id,
-            Name = ss.Name,
-            HardwareConfigId = ss.HardwareConfigId,
-            HardwareConfig = hardwareConfigs.Where(i => i.Id == ss.HardwareConfigId).FirstOrDefault().Name
-        });
-
-        return softwareSystemVms;
     }
 
     

@@ -71,7 +71,7 @@ public class SoftwareService : ISoftwareService
         var softwareVersionVms = softwareVersionResponse.Data;
 
         if (softwareVersionResponse.Data is not null)
-            return await _mapperService.SoftwareVersionVmsFromSoftwareVersionsAsync(softwareVersionVms);
+            return _mapperService.SoftwareVersionVmsFromSoftwareVersionsAsync(softwareVersionVms);
 
         return new List<SoftwareVersionVm>();
     }
@@ -80,7 +80,7 @@ public class SoftwareService : ISoftwareService
         var versionsLoads = await _loadHelpers.GetVersionsLoadsByLoadIdAsync(id);
         var sofwareVersions = await _loadHelpers.GetSoftwareVersionsFromVersionsLoads(versionsLoads);
 
-        return await _mapperService.SoftwareVersionVmsFromSoftwareVersionsAsync(sofwareVersions);
+        return _mapperService.SoftwareVersionVmsFromSoftwareVersionsAsync(sofwareVersions);
 
     }
     public async Task<IEnumerable<VersionsLoad>> GetVersionLoadsByLoadId(int id)

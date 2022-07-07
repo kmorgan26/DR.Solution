@@ -29,11 +29,6 @@ public interface IMapperService
     Maintainer MaintainerFromMaintainerEditVm(MaintainerEditVm maintainerEditVm);
     MaintainerVm MaintainerVmFromMaintainer(Maintainer maintainer);
     MaintainerEditVm MaintainerEditVmFromMaintainer(Maintainer maintainer);
-
-    #endregion
-
-    #region --- Platform Collection Maps ---
-
     Task<IEnumerable<DeviceVm>> DeviceVmsFromDevicesAsync(IEnumerable<Device> devices);
     Task<IEnumerable<DeviceTypeVm>> DeviceTypeVmsFromDeviceTypesAsync(IEnumerable<DeviceType> deviceTypes);
     IEnumerable<MaintainerVm> MaintainerVmsFromMaintainers(IEnumerable<Maintainer> maintainers);
@@ -57,11 +52,15 @@ public interface IMapperService
     HardwareVersionInsertVm HardwareVersionInsertVmFromHardwareVersionVm(HardwareVersionVm hardwareVersionVm);
     HardwareVersionEditVm HardwareVersionEditVmFromHardwareVersion(HardwareVersion hardwareVersion);
     HardwareVersionEditVm HardwareVersionEditVmFromHardwareVersionVm(HardwareVersionVm hardwareVersionVm);
+    IEnumerable<HardwareVersionVm> HardwareVersionVmsFromHardwareVersions(IEnumerable<HardwareVersion> hardwareVersions);
+    IEnumerable<HardwareConfigVm> HardwareConfigVmsFromHardwareConfigs(IEnumerable<HardwareConfig> hardwareConfigs);
+    IEnumerable<HardwareSystemVm> HardwareSystemVmsFromHardwareSystems(IEnumerable<HardwareSystem> hardwareSystems);
 
     #endregion
 
-    #region ---async Software Maps ---
+    #region --- async Software Maps ---
     Task<SoftwareSystemVm> SoftwareSystemVmFromSoftwareSystemAsync(SoftwareSystem softwareSystem);
+    Task<IEnumerable<SoftwareSystemVm>> SoftwareSystemVmsFromSoftwareSystemsAsync(IEnumerable<SoftwareSystem> softwareSystems);
 
     #endregion
 
@@ -72,6 +71,7 @@ public interface IMapperService
     SoftwareVersionVm SoftwareVersionVmFromSoftwareVersions(SoftwareVersion softwareVersion);
     SoftwareVersion SoftwareVersionFromSoftwareVersionsInsertVm(SoftwareVersionInsertVm softwareVersionInsertVm);
     SoftwareVersion SoftwareVersionFromSoftwareVersionVm(SoftwareVersionVm softwareVersionVm);
+    IEnumerable<SoftwareVersionVm> SoftwareVersionVmsFromSoftwareVersionsAsync(IEnumerable<SoftwareVersion> softwareVersions);
 
     #endregion
 
@@ -80,14 +80,9 @@ public interface IMapperService
     LoadVm LoadVmFromLoad(Load load);
     Load LoadFromLoadVm(LoadVm loadVm);
     Load LoadFromLoadInsertVm(LoadInsertVm loadInsertVm);
+    IEnumerable<LoadVm> LoadVmsFromLoads(IEnumerable<Load> loads);
 
     #endregion
 
-    Task<IEnumerable<HardwareConfigVm>> HardwareConfigVmsFromHardwareConfigsAsync(IEnumerable<HardwareConfig> hardwareConfigs);
-    Task<IEnumerable<HardwareSystemVm>> HardwareSystemVmsFromHardwareSystemsAsync(IEnumerable<HardwareSystem> hardwareSystems);
-    Task<IEnumerable<HardwareVersionVm>> HardwareVersionVmsFromHardwareVersionsAsync(IEnumerable<HardwareVersion> hardwareVersions);
-    Task<IEnumerable<SoftwareVersionVm>> SoftwareVersionVmsFromSoftwareVersionsAsync(IEnumerable<SoftwareVersion> softwareVersions);
-    Task<IEnumerable<SoftwareSystemVm>> SoftwareSystemVmsFromSoftwareSystemsAsync(IEnumerable<SoftwareSystem> softwareSystems);
     Task<IEnumerable<VersionsLoadVm>> VersionsLoadVmsFromVersionsLoadAsync(IEnumerable<VersionsLoad> versionsLoads);
-    Task<IEnumerable<LoadVm>> LoadVmsFromLoads(IEnumerable<Load> loads);
 }

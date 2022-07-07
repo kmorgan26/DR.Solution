@@ -31,7 +31,7 @@
     async Task SetHardwareSystems()
     {
         var hardwareSystems = await ManagerService.HardwareSystemManager().GetAllAsync();
-        var hardwareSystemVms = await MapperService.HardwareSystemVmsFromHardwareSystemsAsync(hardwareSystems);
+        var hardwareSystemVms = MapperService.HardwareSystemVmsFromHardwareSystems(hardwareSystems);
         AppState.UpdateHardwareSystemVms(this, hardwareSystemVms);
     }
 
