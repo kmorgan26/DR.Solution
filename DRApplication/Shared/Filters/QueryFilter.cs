@@ -51,9 +51,10 @@ namespace DRApplication.Shared.Filters
                 PropertyInfo prop = typeof(TEntity).GetProperty(filterProperty.Name);
 
                 // string
-                if (prop.PropertyType == typeof(string))
+                if (prop is not null && prop.PropertyType == typeof(string))
                 {
                     string value = filterProperty.Value.ToString();
+
                     if (filterProperty.CaseSensitive == false)
                         value = value.ToLower();
 
@@ -84,7 +85,7 @@ namespace DRApplication.Shared.Filters
                             expression = s => s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString().Contains(value);
                 }
                 // Int16
-                else if (prop.PropertyType == typeof(Int16))
+                else if (prop is not null && prop.PropertyType == typeof(Int16))
                 {
                     int value = Convert.ToInt16(filterProperty.Value);
 
@@ -102,7 +103,7 @@ namespace DRApplication.Shared.Filters
                         expression = s => Convert.ToInt16(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) >= value;
                 }
                 // Int32
-                else if (prop.PropertyType == typeof(Int32))
+                else if (prop is not null && prop.PropertyType == typeof(Int32))
                 {
                     int value = Convert.ToInt32(filterProperty.Value);
 
@@ -120,7 +121,7 @@ namespace DRApplication.Shared.Filters
                         expression = s => Convert.ToInt32(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) >= value;
                 }
                 // Int64
-                else if (prop.PropertyType == typeof(Int64))
+                else if (prop is not null && prop.PropertyType == typeof(Int64))
                 {
                     Int64 value = Convert.ToInt64(filterProperty.Value);
 
@@ -138,7 +139,7 @@ namespace DRApplication.Shared.Filters
                         expression = s => Convert.ToInt64(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) >= value;
                 }
                 // UInt16
-                else if (prop.PropertyType == typeof(UInt16))
+                else if (prop is not null && prop.PropertyType == typeof(UInt16))
                 {
                     UInt16 value = Convert.ToUInt16(filterProperty.Value);
 
@@ -156,7 +157,7 @@ namespace DRApplication.Shared.Filters
                         expression = s => Convert.ToUInt16(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) >= value;
                 }
                 // UInt32
-                else if (prop.PropertyType == typeof(UInt32))
+                else if (prop is not null && prop.PropertyType == typeof(UInt32))
                 {
                     UInt32 value = Convert.ToUInt32(filterProperty.Value);
 
@@ -174,7 +175,7 @@ namespace DRApplication.Shared.Filters
                         expression = s => Convert.ToUInt32(s.GetType().GetProperty(filterProperty.Name).GetValue(s)) >= value;
                 }
                 // UInt64
-                else if (prop.PropertyType == typeof(UInt64))
+                else if (prop is not null && prop.PropertyType == typeof(UInt64))
                 {
                     UInt64 value = Convert.ToUInt64(filterProperty.Value);
 
@@ -192,7 +193,7 @@ namespace DRApplication.Shared.Filters
                         expression = s => Convert.ToUInt64(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) >= value;
                 }
                 // DateTime
-                else if (prop.PropertyType == typeof(DateTime))
+                else if (prop is not null && prop.PropertyType == typeof(DateTime))
                 {
                     DateTime value = DateTime.Parse(filterProperty.Value);
 
@@ -210,7 +211,7 @@ namespace DRApplication.Shared.Filters
                         expression = s => DateTime.Parse(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) >= value;
                 }
                 // decimal
-                else if (prop.PropertyType == typeof(decimal))
+                else if (prop is not null && prop.PropertyType == typeof(decimal))
                 {
                     decimal value = Convert.ToDecimal(filterProperty.Value);
 
@@ -228,7 +229,7 @@ namespace DRApplication.Shared.Filters
                         expression = s => Convert.ToDecimal(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) >= value;
                 }
                 // Single
-                else if (prop.PropertyType == typeof(Single))
+                else if (prop is not null && prop.PropertyType == typeof(Single))
                 {
                     Single value = Convert.ToSingle(filterProperty.Value);
 
@@ -246,7 +247,7 @@ namespace DRApplication.Shared.Filters
                         expression = s => Convert.ToSingle(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) >= value;
                 }
                 // Double
-                else if (prop.PropertyType == typeof(Single))
+                else if (prop is not null && prop.PropertyType == typeof(Single))
                 {
                     Double value = Convert.ToDouble(filterProperty.Value);
 
@@ -264,7 +265,7 @@ namespace DRApplication.Shared.Filters
                         expression = s => Convert.ToDouble(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) >= value;
                 }
                 // Boolean
-                else if (prop.PropertyType == typeof(bool))
+                else if (prop is not null && prop.PropertyType == typeof(bool))
                 {
                     bool value = Convert.ToBoolean(filterProperty.Value);
 
@@ -274,7 +275,7 @@ namespace DRApplication.Shared.Filters
                         expression = s => Convert.ToBoolean(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) != value;
                 }
                 // Byte
-                else if (prop.PropertyType == typeof(Byte))
+                else if (prop is not null && prop.PropertyType == typeof(Byte))
                 {
                     Byte value = Convert.ToByte(filterProperty.Value);
 
@@ -292,7 +293,7 @@ namespace DRApplication.Shared.Filters
                         expression = s => Convert.ToByte(s.GetType().GetProperty(filterProperty.Name).GetValue(s).ToString()) >= value;
                 }
                 // Char
-                else if (prop.PropertyType == typeof(Char))
+                else if (prop is not null && prop.PropertyType == typeof(Char))
                 {
                     Char value = Convert.ToChar(filterProperty.Value);
 
@@ -312,7 +313,7 @@ namespace DRApplication.Shared.Filters
                 // Add expression creation code for other data types here.
 
                 // apply the expression
-                query = query.Where(expression);
+                query = query.Where(expression!);
 
             }
 

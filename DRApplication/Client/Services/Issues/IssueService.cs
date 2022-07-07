@@ -99,7 +99,7 @@ namespace DRApplication.Client.Services
                 var devicesDiscoveredResponse = await _managerService.DeviceDiscoveredManager().GetAsync(deviceDiscoveredFilter);
                 var devicesDiscovered = devicesDiscoveredResponse.Data;
 
-                var issueIds = devicesDiscovered.Select(i => i.IssueId.ToString()).ToList();
+                var issueIds = devicesDiscovered?.Select(i => i.IssueId.ToString()).ToList();
 
                 var issueFilter = await new FilterGenerator<Issue>().GetFilterForPropertyByListOfIdsAsync("Id", issueIds);
                 var issueResponse = await _managerService.IssueManager().GetAsync(issueFilter);
