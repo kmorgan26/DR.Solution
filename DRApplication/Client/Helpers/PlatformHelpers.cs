@@ -5,9 +5,9 @@ namespace DRApplication.Client.Helpers;
 
 public class PlatformHelpers
 {
-    private readonly ManagerService _managerService;
+    private readonly IManagerService _managerService;
 
-    public PlatformHelpers(ManagerService managerService)
+    public PlatformHelpers(IManagerService managerService)
     {
         _managerService = managerService;
     }

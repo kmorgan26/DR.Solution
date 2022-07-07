@@ -11,11 +11,17 @@
     <MudItem xs="12" sm="12" md="4" lg="3">
         <EditForm Model="@AppState.DeviceVm" OnValidSubmit="@UpdateDevice">
 
-            <MudTextField @bind-Value="AppState.DeviceVm.Device" Class="my-6" Label="Device" Variant="Variant.Outlined"></MudTextField>
+            <FluentValidationValidator DisableAssemblyScanning="true" />
 
-            <DeviceTypeSelect OnDeviceTypeIdChanged="UpdateDeviceTypeVmForDeviceVm"></DeviceTypeSelect>
+            <MudTextField @bind-Value="AppState.DeviceVm.Device" 
+                Class="my-6" 
+                Label="Device" 
+                Variant="Variant.Outlined" 
+                For="@(() => AppState.DeviceVm.Device)" />
 
-            <MudCheckBox Class="my-6" Label="Active?" @bind-Checked="@AppState.DeviceVm.IsActive" />
+            <DeviceTypeSelect OnDeviceTypeIdChanged="UpdateDeviceTypeId"></DeviceTypeSelect>
+
+            <MudCheckBox Class="my-6" Label="Active?" @bind-Checked="AppState.DeviceVm.IsActive" />
 
             <MudPaper Elevation="0">
                 <SubmitButton ButtonText="Update" />
@@ -32,11 +38,13 @@
     [Parameter]
     public int DeviceId { get; set; }
 
-    async Task UpdateDeviceTypeVmForDeviceVm(int id)
+    private DeviceEditVm _deviceEditVm = new();
+
+    async Task UpdateDeviceTypeId(int id)
     {
         if (id > 0)
         {
-            var deviceTypeVm = await PlatformService.GetDeviceTypeVmById(id);
+            var deviceTypeVm = await PlatformService.GetDeviceTypeVmByIdAsync(id);
 
             var deviceVm = AppState.DeviceVm;
             deviceVm.DeviceTypeId = id;
@@ -48,7 +56,8 @@
 
     protected async Task UpdateDevice()
     {
-        var device = await MapperService.DeviceFromDeviceVmAsync(AppState.DeviceVm);
+        _deviceEditVm = MapperService.DeviceEditVmFromDeviceVm(AppState.DeviceVm);
+        var device = MapperService.DeviceFromDeviceEditVm(_deviceEditVm);
         await DeviceManager.UpdateAsync(device);
         Snackbar.Add($"{device.Name} was updated", Severity.Success);
         navigation.NavigateTo("/devices");
@@ -57,10 +66,8 @@
     protected override async Task OnInitializedAsync()
     {
         _isBusy = true;
-        var device = await DeviceManager.GetByIdAsync(DeviceId);
-        var deviceVm = await MapperService.DeviceVmFromDeviceAsync(device);
+        var deviceVm = await PlatformService.GetDeviceVmById(DeviceId);
         AppState.UpdateDeviceVm(this, deviceVm);
         _isBusy = false;
     }
-
 }

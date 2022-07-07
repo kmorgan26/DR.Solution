@@ -1,25 +1,33 @@
 ﻿@namespace DRApplication.Client.Controls
-
+@inject IPlatformService PlatformService
 @inject AppState AppState
-@inject IMapperService MappingService
+@inject IMapperService MapperService
 @inject DeviceManager DeviceManager
 @inject NavigationManager navigation
+@inject ISnackbar Snackbar
 
 @if (@_deviceInsertVm != null)
 {
     <MudItem xs="12" sm="12" md="4" lg="3">
         <EditForm Model="@_deviceInsertVm" OnValidSubmit="@InsertDevice">
 
+            <FluentValidationValidator DisableAssemblyScanning="true" />
+
+            <MudTextField @bind-Value="_deviceInsertVm.Device" 
+                Variant="Variant.Outlined"    
+                For="(() => _deviceInsertVm.Device)"
+                Label="Device Name" 
+                Class="my-6" />
+
             <DeviceTypeSelect OnDeviceTypeIdChanged="UpdateDeviceType" />
 
-            <MudTextField @bind-Value="_deviceInsertVm.Name" Class="my-6" Label="Device Name" Variant="Variant.Outlined"></MudTextField>
-
-            <MudCheckBox Class="my-6" Label="Active?" @bind-Checked="@AppState.DeviceVm.IsActive" />
+            <MudCheckBox Class="my-6" Label="Active?" @bind-Checked="@_deviceInsertVm.IsActive" />
 
             <MudPaper Elevation="0">
                 <SubmitButton ButtonText="Insert" />
                 <CancelButton Url="devices" />
             </MudPaper>
+
         </EditForm>
     </MudItem>
 
@@ -33,17 +41,24 @@
     {
         if (id > 0)
         {
+            _deviceInsertVm.DeviceTypeId = id;
+            AppState.DeviceVm.DeviceTypeId = id;
             var deviceTypeVm = AppState.DeviceTypeVm;
             deviceTypeVm.Id = id;
+            AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
         }
-
     }
 
     private async Task InsertDevice()
     {
-        _deviceInsertVm.DeviceTypeId = AppState.DeviceTypeVm.Id;
-        var device = await MappingService.DeviceFromDeviceInsertVmAsync(_deviceInsertVm);
+        var device = MapperService.DeviceFromDeviceInsertVm(_deviceInsertVm);
         await DeviceManager.InsertAsync(device);
+        Snackbar.Add($"The new Device was Added!", Severity.Success);
         navigation.NavigateTo("/devices");
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        if (AppState.DeviceTypeVm is not null)
+            await Task.Run(() => _deviceInsertVm.DeviceTypeId = AppState.DeviceTypeVm.Id);
     }
 }

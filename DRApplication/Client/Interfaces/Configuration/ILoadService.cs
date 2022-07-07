@@ -17,6 +17,5 @@ public interface ILoadService
     Task<SpecificLoadVm> GetSpecificLoadVmById(int id);
     Task<CurrentLoadVm> MapCurrentLoadToCurrentLoadVm(CurrentLoad currentLoad);
     Task<CurrentLoadVm> GetCurrentLoadVmById(int id);
-    Task<CurrentLoad> GetCurrentLoadFromCurrentLoadVm(CurrentLoadVm currentLoadVm);
     Task AddSoftwareVersionToLoad();
 }

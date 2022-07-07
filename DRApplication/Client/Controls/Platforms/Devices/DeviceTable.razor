@@ -5,7 +5,7 @@
 
 <NewButton Url="/device/create" />
 
-@if (AppState.DeviceTypeVm.Id > 0)
+@if (AppState.DeviceTypeVm.Id > 0 && !_isBusy)
 {
     <MudTable Items="@AppState.DeviceVms" Class="my-4" Hover="true" Striped="true" Dense="true">
         <HeaderContent>

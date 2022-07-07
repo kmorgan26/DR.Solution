@@ -41,7 +41,7 @@
     private async Task InsertLoad()
     {
         _loadInsertVm.HardwareConfigId = AppState.HardwareConfigVm.Id;
-        var load = await MapperService.LoadFromLoadInsertVm(_loadInsertVm);
+        var load = MapperService.LoadFromLoadInsertVm(_loadInsertVm);
         await LoadManager.InsertAsync(load);
         navigation.NavigateTo("/load");
     }

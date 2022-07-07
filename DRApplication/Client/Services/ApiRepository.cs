@@ -39,7 +39,6 @@ namespace DRApplication.Client.Services
                 return null;
             }
         }
-
         public async Task<PagedResponse<TEntity>> GetAsync(QueryFilter<TEntity> Expression)
         {
             try
@@ -62,7 +61,6 @@ namespace DRApplication.Client.Services
                 return null;
             }
         }
-
         public async Task<TEntity> GetByIdAsync(object id)
         {
             try
@@ -85,7 +83,6 @@ namespace DRApplication.Client.Services
                 return null;
             }
         }
-
         public async Task<TEntity> InsertAsync(TEntity entity)
         {
             try
@@ -106,7 +103,6 @@ namespace DRApplication.Client.Services
                 return null;
             }
         }
-
         public async Task<TEntity> UpdateAsync(TEntity entityToUpdate)
         {
             try
@@ -127,7 +123,6 @@ namespace DRApplication.Client.Services
                 return null;
             }
         }
-
         public async Task<bool> DeleteAsync(TEntity entityToDelete)
         {
             try
@@ -149,7 +144,6 @@ namespace DRApplication.Client.Services
                 return false;
             }
         }
-
         public async Task<bool> DeleteByIdAsync(object id)
         {
             try
@@ -165,12 +159,10 @@ namespace DRApplication.Client.Services
                 return false;
             }
         }
-
         public Task DeleteAllAsync()
         {
             throw new NotImplementedException();
         }
-
         
     }
 }

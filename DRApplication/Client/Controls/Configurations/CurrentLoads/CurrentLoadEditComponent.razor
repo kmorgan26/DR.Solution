@@ -4,12 +4,15 @@
 @inject CurrentLoadManager CurrentLoadManager
 @inject IHardwareService HardwareService
 @inject ILoadService LoadBuilderService
+@inject IMapperService MapperService
 @inject ISnackbar Snackbar
 
 @if (!_isBusy)
 {
     <MudItem xs="12" sm="12" md="4" lg="3">
         <EditForm Model="@AppState.CurrentLoadVm" OnValidSubmit="@UpdateCurrentLoad">
+
+            <FluentValidationValidator DisableAssemblyScanning="true" />
 
             <MudField Label="Device" Variant="Variant.Outlined">@AppState.CurrentLoadVm.Device</MudField>
 
@@ -29,6 +32,8 @@
     [Parameter]
     public int CurrentLoadId { get; set; }
 
+    private CurrentLoadEditVm _currentLoadEditVm = new();
+
     async Task UpdateLoadIdForCurrentLoad(int id)
     {
         //When the Load Select Value Changes, the LoadId needs to be updated
@@ -45,7 +50,8 @@
 
     protected async Task UpdateCurrentLoad()
     {
-        var currentLoad = await LoadBuilderService.GetCurrentLoadFromCurrentLoadVm(AppState.CurrentLoadVm);
+        _currentLoadEditVm = MapperService.CurrentLoadEditVmFromCurrentLoadVm(AppState.CurrentLoadVm);
+        var currentLoad = MapperService.CurrentLoadFromCurrentLoadEditVm(_currentLoadEditVm);
         await CurrentLoadManager.UpdateAsync(currentLoad);
         Snackbar.Add($"Current Load was updated", Severity.Success);
         NavigationManager.NavigateTo("/currentload");

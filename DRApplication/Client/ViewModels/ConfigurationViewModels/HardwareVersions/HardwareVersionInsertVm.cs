@@ -1,18 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-namespace DRApplication.Client.ViewModels;
+﻿namespace DRApplication.Client.ViewModels;
 
 public class HardwareVersionInsertVm
 {
-    [Required]
-    [Range(1, 50, ErrorMessage = "Hardware Version Name cannot be more than 50 characters long")]
-    public string Name { get; set; } = null!;
-
-    [Required]
-    [Range(1, 100, ErrorMessage = "Please Select a Hardware System")]
-    public int HardwareSystemId { get; set; }
-
-    [Required]
-    [DataType(DataType.Date)]
-    [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
+    public string Name { get; set; } = string.Empty;
+    public int HardwareSystemId { get; set; } = 0;
     public DateTime? VersionDate { get; set; } = DateTime.Today;
 }

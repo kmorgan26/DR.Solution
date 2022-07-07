@@ -3,6 +3,9 @@ using DRApplication.Client;
 using DRApplication.Client.Helpers;
 using DRApplication.Client.Interfaces;
 using DRApplication.Client.Services;
+using DRApplication.Client.Validators;
+using DRApplication.Client.ViewModels;
+using FluentValidation;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
@@ -42,8 +45,7 @@ builder.Services.AddScoped<IssueManager>();
 builder.Services.AddScoped<MaintIssueManager>();
 builder.Services.AddScoped<PlatformHelpers>();
 
-builder.Services.AddScoped<ManagerService>();
-
+builder.Services.AddTransient<IManagerService, ManagerService>();
 builder.Services.AddTransient<IPlatformService, PlatformService>();
 builder.Services.AddTransient<ILoadService, LoadService>();
 builder.Services.AddTransient<IHardwareService, HardwareService>();
@@ -51,6 +53,18 @@ builder.Services.AddTransient<ISoftwareService, SoftwareService>();
 builder.Services.AddTransient<IIssueService, IssueService>();
 builder.Services.AddTransient<IMapperService, MapperService>();
 builder.Services.AddTransient<ILoadHelpers, LoadHelpers>();
+
+builder.Services.AddTransient<IValidator<MaintainerEditVm>, MaintainerEditVmValidator>();
+builder.Services.AddTransient<IValidator<DeviceTypeEditVm>, DeviceTypeEditVmValidator>();
+builder.Services.AddTransient<IValidator<DeviceTypeVm>, DeviceTypeVmValidator>();
+builder.Services.AddTransient<IValidator<DeviceVm>, DeviceVmValidator>();
+builder.Services.AddTransient<IValidator<DeviceInsertVm>, DeviceInsertVmValidator>();
+builder.Services.AddTransient<IValidator<HardwareConfigInsertVm>, HardwareConfigInsertVmValidator>();
+builder.Services.AddTransient<IValidator<HardwareConfigEditVm>, HardwareConfigEditVmValidator>();
+builder.Services.AddTransient<IValidator<HardwareSystemEditVm>, HardwareSystemEditVmValidator>();
+builder.Services.AddTransient<IValidator<HardwareSystemInsertVm>, HardwareSystemInsertVmValidator>();
+builder.Services.AddTransient<IValidator<HardwareVersionVm>, HardwareVersionVmValidator>();
+builder.Services.AddTransient<IValidator<MaintenanceIssueInsertVm>, MaintenanceIssueInsertVmValidator>();
 
 builder.Services.AddBlazoredLocalStorage();
 

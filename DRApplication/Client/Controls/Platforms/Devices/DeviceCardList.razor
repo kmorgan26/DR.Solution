@@ -21,7 +21,7 @@
 
     async Task SetDeviceTypeVm()
     {
-        var deviceTypeVm = await PlatformService.GetDeviceTypeVmById(DeviceTypeId);
+        var deviceTypeVm = await PlatformService.GetDeviceTypeVmByIdAsync(DeviceTypeId);
         AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
     }
     async Task SetCurrentLoads()

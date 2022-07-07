@@ -1,16 +1,22 @@
 ﻿@namespace DRApplication.Client.Controls
-@inject HardwareSystemManager manager
 @inject NavigationManager navigation
 @inject AppState AppState
 @inject ISnackbar Snackbar
 @inject IMapperService MapperService
+@inject IHardwareService HardwareService
 
-@if (AppState.HardwareSystemVm.Id > 0)
+@if (_hardwareSystemEditVm.Id > 0 && !_isBusy)
 {
     <MudItem xs="12" sm="12" md="4" lg="3">
-        <EditForm Model="AppState.HardwareSystemVm" OnValidSubmit="@UpdateHardwareSystem">
+        <EditForm Model="_hardwareSystemEditVm" OnValidSubmit="@UpdateHardwareSystem">
 
-            <MudTextField @bind-Value="AppState.HardwareSystemVm.Name" Class="my-6" Label="Hardware System" Variant="Variant.Outlined"></MudTextField>
+            <FluentValidationValidator DisableAssemblyScanning="true" />
+
+            <MudTextField @bind-Value="_hardwareSystemEditVm.Name" 
+                For="(() => _hardwareSystemEditVm.Name)"
+                Class="my-6" 
+                Label="Hardware System" 
+                Variant="Variant.Outlined" />
 
             <SubmitButton ButtonText="Update" />
             <CancelButton Url="/hardwaresystem" />
@@ -20,22 +26,27 @@
 }
 
 @code {
+    bool _isBusy;
 
     [Parameter]
     public int HardwareSystemId { get; set; }
 
+    private HardwareSystemEditVm _hardwareSystemEditVm = new();
+
     protected async Task UpdateHardwareSystem()
     {
-        var hardwareSystem = await MapperService.HardwareSystemFromHardwareSystemVmAsync(AppState.HardwareSystemVm);
-        await manager.UpdateAsync(hardwareSystem);
-        Snackbar.Add($"Hardware System was updated", Severity.Success);
+        var result = await HardwareService.UpdateHardwareSystemFromHardwareSystemEditVm(_hardwareSystemEditVm);
+
+        if (result)
+            Snackbar.Add($"{_hardwareSystemEditVm.Name} was updated", Severity.Success);
+
         navigation.NavigateTo("/hardwaresystem");
     }
 
     protected override async Task OnInitializedAsync()
     {
-        var hardwareSystem = await manager.GetByIdAsync(HardwareSystemId);
-        var hardwareSystemVm = await MapperService.HardwareSystemVmFromHardwareSystemAsync(hardwareSystem);
-        AppState.UpdateHardwareSystemVm(this, hardwareSystemVm);
+        _isBusy = true;
+        _hardwareSystemEditVm = await HardwareService.GetHardwareSystemEditVmById(HardwareSystemId);
+        _isBusy = false;
     }
 }

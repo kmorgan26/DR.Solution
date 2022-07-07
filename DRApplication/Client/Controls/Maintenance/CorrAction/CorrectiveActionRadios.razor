@@ -4,6 +4,7 @@
 @if (!_isBusy)
 {
     <MudRadioGroup SelectedOptionChanged="OnSelectedOptionChanged" >
+        <MudRadio Option="0" Color="Color.Primary" Size="Size.Small" >SELECT</MudRadio>
         @foreach (var item in _correctiveActionVms)
         {
             <MudRadio Option="item.Id" Color="Color.Primary" Size="Size.Small" >@item.Name</MudRadio>
@@ -15,6 +16,9 @@
 
     [Parameter]
     public EventCallback<int> OnSelectedOptionChanged { get; set; }
+
+    [Parameter]
+    public string RequiredError { get; set; }
 
     private int SelectedOption { get; set; }
 

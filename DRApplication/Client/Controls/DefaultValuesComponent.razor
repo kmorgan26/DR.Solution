@@ -14,7 +14,7 @@
     {
         if (AppState.DeviceTypeVm.Id == 0)
         {
-            var deviceTypeVm = await Service.GetDeviceTypeVmById(1);
+            var deviceTypeVm = await Service.GetDeviceTypeVmByIdAsync(1);
             AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
             var maintainerVm = await Service.GetMaintainerVmById(deviceTypeVm.Id);
             AppState.UpdateMaintainerVm(this, maintainerVm);

@@ -1,10 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-namespace DRApplication.Client.ViewModels;
+﻿namespace DRApplication.Client.ViewModels;
 public class HardwareSystemEditVm
 {
-    public int Id { get; set; }
-
-    [Required]
-    [Range(1, 50, ErrorMessage = "Hardware System cannot be more than 50 characters long")]
+    public int Id { get; set; } = 0;
     public string Name { get; set; } = string.Empty;
 }

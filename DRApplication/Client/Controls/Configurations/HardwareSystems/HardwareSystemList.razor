@@ -1,26 +1,28 @@
 ﻿@namespace DRApplication.Client.Controls
-@inject ManagerService ManagerService
+@inject IManagerService ManagerService
 @inject AppState AppState
 @inject IMapperService MapperService
 
 <NewButton Url="/hardwaresystem/create" />
-
-<MudTable Items="@AppState.HardwareSystemVms" Hover="true" Striped="true" Dense="true" Class="my-4">
-    <HeaderContent>
-        <MudTh>ID</MudTh>
-        <MudTh>Name</MudTh>
-        <MudTh>Edit</MudTh>
-    </HeaderContent>
-    <RowTemplate>
-        <MudTd DataLabel="Id">@context.Id</MudTd>
-        <MudTd DataLabel="Name">@context.Name</MudTd>
-        <MudTd DataLabel="Edit">
-            <a href="/hardwaresystem/edit/@context.Id" role="button">
-                <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>
-            </a>
-        </MudTd>
-    </RowTemplate>
-</MudTable>
+@if (!_isBusy)
+{
+    <MudTable Items="@AppState.HardwareSystemVms" Hover="true" Striped="true" Dense="true" Class="my-4">
+        <HeaderContent>
+            <MudTh>ID</MudTh>
+            <MudTh>Name</MudTh>
+            <MudTh>Edit</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Id">@context.Id</MudTd>
+            <MudTd DataLabel="Name">@context.Name</MudTd>
+            <MudTd DataLabel="Edit">
+                <a href="/hardwaresystem/edit/@context.Id" role="button">
+                    <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>
+                </a>
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+}
 
 @code {
 
@@ -29,10 +31,10 @@
     async Task SetHardwareSystems()
     {
         var hardwareSystems = await ManagerService.HardwareSystemManager().GetAllAsync();
-        var hardwareSystemVms = await MapperService.HardwareSystemVmsFromHardwareSystemsAsync(hardwareSystems);
+        var hardwareSystemVms = MapperService.HardwareSystemVmsFromHardwareSystems(hardwareSystems);
         AppState.UpdateHardwareSystemVms(this, hardwareSystemVms);
     }
-    
+
     protected override async Task OnInitializedAsync()
     {
         _isBusy = true;

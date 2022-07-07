@@ -1,19 +1,26 @@
 ﻿@namespace DRApplication.Client.Controls
 @inject IMapperService MapperService
-@inject AppState AppState
+@inject ISnackbar Snackbar
 @inject HardwareVersionManager HardwareVersionManager
 @inject NavigationManager navigation
+@inject AppState AppState
 
-@if (@_hardwareVersionInsertVm != null)
+@if (!_isBusy)
 {
     <MudItem xs="12" sm="12" md="4" lg="3">
-        <EditForm Model="@_hardwareVersionInsertVm" OnValidSubmit="@InsertHardwareVersion">
+        <EditForm Model="@AppState.HardwareVersionVm" OnValidSubmit="@InsertHardwareVersion">
 
-            <MudTextField @bind-Value="_hardwareVersionInsertVm.Name" Class="my-6" Label="Version Name" Variant="Variant.Outlined"></MudTextField>
+            <FluentValidationValidator DisableAssemblyScanning="true"/>
+
+            <MudTextField @bind-Value="@AppState.HardwareVersionVm.Name" 
+                For="(() => AppState.HardwareVersionVm.Name)"
+                Class="my-6" 
+                Label="Version Name" 
+                Variant="Variant.Outlined" />
 
             <HardwareSystemSelect OnHardwareSystemIdChanged="UpdateHardwareSystem" />
 
-            <MudDatePicker Class="my-6" Label="Version Date" @bind-Date="_hardwareVersionInsertVm.VersionDate" />
+            <MudDatePicker Class="my-6" Label="Version Date" @bind-Date="@AppState.HardwareVersionVm.VersionDate" />
 
             <SubmitButton ButtonText="Insert" />
             <CancelButton Url="hardwareversion" />
@@ -22,6 +29,7 @@
 }
 
 @code {
+    bool _isBusy;
 
     private HardwareVersionInsertVm _hardwareVersionInsertVm { get; set; } = new();
 
@@ -29,18 +37,26 @@
     {
         if (id > 0)
         {
+            AppState.HardwareVersionVm.HardwareSystemId = id;
             var hardwareSystemVm = AppState.HardwareSystemVm;
             hardwareSystemVm.Id = id;
             AppState.UpdateHardwareSystemVm(this, hardwareSystemVm);
         }
-
     }
 
     private async Task InsertHardwareVersion()
     {
-        _hardwareVersionInsertVm.HardwareSystemId = AppState.HardwareSystemVm.Id;
-        var hardwareVersion = await MapperService.HardwareVersionFromHardwareVersionInsertVmAsync(_hardwareVersionInsertVm);
+        _hardwareVersionInsertVm = MapperService.HardwareVersionInsertVmFromHardwareVersionVm(AppState.HardwareVersionVm);
+        var hardwareVersion = MapperService.HardwareVersionFromHardwareVersionInsertVm(_hardwareVersionInsertVm);
         await HardwareVersionManager.InsertAsync(hardwareVersion);
+        Snackbar.Add($"The Hardware System has been created. Don't believe me? Look at the table", Severity.Success);
+
         navigation.NavigateTo("/hardwareversion");
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        _isBusy = true;
+        await Task.Run(() => _hardwareVersionInsertVm.HardwareSystemId = AppState.HardwareSystemVm.Id);
+        _isBusy = false;
     }
 }

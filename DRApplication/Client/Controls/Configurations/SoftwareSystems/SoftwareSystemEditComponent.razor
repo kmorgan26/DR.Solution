@@ -44,7 +44,7 @@
 
     protected async Task UpdateSoftwareSystem()
     {
-        var softwareSystem = await MapperService.SoftwareSystemFromSoftwareSystemVmAsync(AppState.SoftwareSystemVm);
+        var softwareSystem = MapperService.SoftwareSystemFromSoftwareSystemVm(AppState.SoftwareSystemVm);
         await SoftwareSystemManager.UpdateAsync(softwareSystem);
         Snackbar.Add($"Software System was updated", Severity.Success);
         navigation.NavigateTo("/softwaresystem");

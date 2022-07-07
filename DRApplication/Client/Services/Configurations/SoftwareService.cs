@@ -9,11 +9,11 @@ public class SoftwareService : ISoftwareService
 
     #region ---Fields and Constructor ---
 
-    private readonly ManagerService _managerService;
+    private readonly IManagerService _managerService;
     private readonly IMapperService _mapperService;
     private readonly ILoadHelpers _loadHelpers;
 
-    public SoftwareService(ManagerService managerService, IMapperService mapperService, ILoadHelpers loadHelpers)
+    public SoftwareService(IManagerService managerService, IMapperService mapperService, ILoadHelpers loadHelpers)
     {
         _managerService = managerService;
         _mapperService = mapperService;
@@ -55,7 +55,7 @@ public class SoftwareService : ISoftwareService
 
     public async Task<IEnumerable<SoftwareSystemVm>> GetSoftwareSystemVmsByHardwareConfigId(int id)
     {
-        var filter = await new FilterGenerator<SoftwareSystem>().GetFilterWherePropertyEqualsValueAsync("HardwareConfigId", id);
+        var filter = new FilterGenerator<SoftwareSystem>().GetFilterWherePropertyEqualsValue("HardwareConfigId", id);
         var softwareSystemResponse = await _managerService.SoftwareSystemManager().GetAsync(filter);
         var softwareSystems = softwareSystemResponse.Data;
 
@@ -66,12 +66,12 @@ public class SoftwareService : ISoftwareService
     }
     public async Task<IEnumerable<SoftwareVersionVm>> GetSoftwareVersionVmsBySoftwareSystemId(int id)
     {
-        var softwareSystemFilter = await new FilterGenerator<SoftwareVersion>().GetFilterWherePropertyEqualsValueAsync("SoftwareSystemId", id);
+        var softwareSystemFilter = new FilterGenerator<SoftwareVersion>().GetFilterWherePropertyEqualsValue("SoftwareSystemId", id);
         var softwareVersionResponse = await _managerService.SoftwareVersionManager().GetAsync(softwareSystemFilter);
         var softwareVersionVms = softwareVersionResponse.Data;
 
         if (softwareVersionResponse.Data is not null)
-            return await _mapperService.SoftwareVersionVmsFromSoftwareVersionsAsync(softwareVersionVms);
+            return _mapperService.SoftwareVersionVmsFromSoftwareVersionsAsync(softwareVersionVms);
 
         return new List<SoftwareVersionVm>();
     }
@@ -80,12 +80,12 @@ public class SoftwareService : ISoftwareService
         var versionsLoads = await _loadHelpers.GetVersionsLoadsByLoadIdAsync(id);
         var sofwareVersions = await _loadHelpers.GetSoftwareVersionsFromVersionsLoads(versionsLoads);
 
-        return await _mapperService.SoftwareVersionVmsFromSoftwareVersionsAsync(sofwareVersions);
+        return _mapperService.SoftwareVersionVmsFromSoftwareVersionsAsync(sofwareVersions);
 
     }
     public async Task<IEnumerable<VersionsLoad>> GetVersionLoadsByLoadId(int id)
     {
-        var versionLoadsFilter = await new FilterGenerator<VersionsLoad>().GetFilterWherePropertyEqualsValueAsync("LoadId", id);
+        var versionLoadsFilter = new FilterGenerator<VersionsLoad>().GetFilterWherePropertyEqualsValue("LoadId", id);
         var versionLoadresponse = await _managerService.VersionsLoadManager().GetAsync(versionLoadsFilter);
         if (versionLoadresponse.Data is not null)
         {
@@ -95,7 +95,7 @@ public class SoftwareService : ISoftwareService
     }
     public async Task<IEnumerable<SoftwareSystem>> GetSoftwareSystemsByIds(List<string> ids)
     {
-        var systemFilter = await new FilterGenerator<SoftwareSystem>().GetFilterForPropertyByListOfIdsAsync("Id", ids);
+        var systemFilter = new FilterGenerator<SoftwareSystem>().GetFilterForPropertyByListOfIds("Id", ids);
         var systemResponse = await _managerService.SoftwareSystemManager().GetAsync(systemFilter);
         if (systemResponse.Data is not null)
             return systemResponse.Data;
@@ -103,7 +103,7 @@ public class SoftwareService : ISoftwareService
     }
     public async Task<IEnumerable<SoftwareVersion>> GetSoftwareVersionsByIds(List<string> ids)
     {
-        var versionFilter = await new FilterGenerator<SoftwareVersion>().GetFilterForPropertyByListOfIdsAsync("Id", ids);
+        var versionFilter = new FilterGenerator<SoftwareVersion>().GetFilterForPropertyByListOfIds("Id", ids);
         var versionResponse = await _managerService.SoftwareVersionManager().GetAsync(versionFilter);
         if (versionResponse.Data is not null)
             return versionResponse.Data;

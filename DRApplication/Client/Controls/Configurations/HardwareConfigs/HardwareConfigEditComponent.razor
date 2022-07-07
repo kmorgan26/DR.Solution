@@ -9,7 +9,9 @@
 @if (!_isBusy)
 {
     <MudItem xs="12" sm="12" md="4" lg="3">
-        <EditForm Model="@AppState.HardwareVersionVm" OnValidSubmit="@UpdateHardwareConfig">
+        <EditForm Model="@AppState.HardwareConfigVm" OnValidSubmit="@UpdateHardwareConfig">
+
+            <FluentValidationValidator DisableAssemblyScanning="true" />
 
             <DeviceTypeSelect  OnDeviceTypeIdChanged="UpdateDeviceTypeForHardwareConfig"></DeviceTypeSelect>
 
@@ -17,6 +19,8 @@
 
             <SubmitButton ButtonText="Update" />
             <CancelButton Url="hardwareconfig" />
+
+            <ValidationSummary />
 
         </EditForm>
     </MudItem>
@@ -28,11 +32,13 @@
     [Parameter]
     public int HardwareConfigId { get; set; }
 
+    private HardwareConfigEditVm _hardwareConfigEditVm = new();
+
     async Task UpdateDeviceTypeForHardwareConfig(int id)
     {
         if (id > 0)
         {
-            var deviceTypeVm = await PlatformService.GetDeviceTypeVmById(id);
+            var deviceTypeVm = await PlatformService.GetDeviceTypeVmByIdAsync(id);
 
             var hardwareConfigvm = AppState.HardwareConfigVm;
             hardwareConfigvm.DeviceTypeId = id;
@@ -44,7 +50,8 @@
 
     protected async Task UpdateHardwareConfig()
     {
-        var hardwareConfig = await MapperService.HardwareConfigFromHardwareConfigVmAsync(AppState.HardwareConfigVm);
+        _hardwareConfigEditVm = MapperService.HardwareConfigEditVmFromHardwareConfigVm(AppState.HardwareConfigVm);
+        var hardwareConfig = MapperService.HardwareConfigFromHardwareConfigEditVm(_hardwareConfigEditVm);
         await HardwareConfigManager.UpdateAsync(hardwareConfig);
         Snackbar.Add($"Hardware Configuration was updated", Severity.Success);
         navigation.NavigateTo("/hardwareconfig");
@@ -54,7 +61,7 @@
     {
         _isBusy = true;
         var hardwareConfig = await HardwareConfigManager.GetByIdAsync(HardwareConfigId);
-        var hardwareConfigVm = await MapperService.HardwareConfigVmFromHardwareConfigAsync(hardwareConfig);
+        var hardwareConfigVm = MapperService.HardwareConfigVmFromHardwareConfig(hardwareConfig);
         AppState.UpdateHardwareConfigVm(this, hardwareConfigVm);
         _isBusy = false;
     }

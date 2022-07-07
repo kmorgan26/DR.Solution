@@ -69,7 +69,6 @@ namespace DRApplication.Server
             builder.Services.AddTransient(s => new DapperRepository<VersionsLoad>(
                builder.Configuration.GetConnectionString("DRConnectionString")));
 
-            //builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddControllers()
                 .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 

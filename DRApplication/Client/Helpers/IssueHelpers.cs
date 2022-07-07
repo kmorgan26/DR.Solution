@@ -4,6 +4,7 @@ using DRApplication.Shared.Models;
 namespace DRApplication.Client.Helpers;
 public static class IssueHelpers
 {
+    // Gets the values for the Issues Table from the MI-View Model
     public static IssueInsertVm GetIssueInsertVmFromMaintenanceIssueVm(MaintenanceIssueInsertVm maintenanceIssueInsertVm)
     {
         var issue = new IssueInsertVm
@@ -16,7 +17,7 @@ public static class IssueHelpers
         };
         return issue;
     }
-
+    // Gets the values for the Issues Table
     public static Issue GetIssueFromIssueInsertVm(IssueInsertVm issueInsertVm)
     {
         return new Issue
