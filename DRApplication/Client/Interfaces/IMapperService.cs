@@ -5,23 +5,42 @@ namespace DRApplication.Client.Interfaces;
 
 public interface IMapperService
 {
-    Task<CurrentLoadEditVm> CurrentLoadEditVmFromCurrentLoadVmAsync(CurrentLoadVm currentLoadVm);
-    Task<CurrentLoad> CurrentLoadFromCurrentLoadEditVm(CurrentLoadEditVm currentLoadEditVm);
-    Task<Device> DeviceFromDeviceVmAsync(DeviceVm deviceVm);
-    Task<Device> DeviceFromDeviceInsertVmAsync(DeviceInsertVm deviceInsertVm);
-    Task<Device> DeviceFromDeviceEditVmAsync(DeviceEditVm deviceEditVm);
+
+    #region --- async Platform Maps---
+    
     Task<DeviceVm> DeviceVmFromDeviceAsync(Device device);
-    Task<DeviceEditVm> DeviceEditVmFromDeviceAsync(Device device);
-    Task<DeviceEditVm> DeviceEditVmFromDeviceVmAsync(DeviceVm deviceVm);
-    Task<DeviceType> DeviceTypeFromDeviceTypeInsertVmAsync(DeviceTypeInsertVm deviceTypeInsertVm);
-    Task<DeviceType> DeviceTypeFromDeviceTypeEditVmAsync(DeviceTypeEditVm deviceTypeEditVm);
     Task<DeviceTypeVm> DeviceTypeVmFromDeviceTypeAsync(DeviceType deviceType);
-    Task<DeviceTypeEditVm> DeviceTypeEditVmFromDeviceTypeAsync(DeviceType deviceType);
-    Task<DeviceTypeEditVm> DeviceTypeEditVmFromDeviceTypeVmAsync(DeviceTypeVm deviceTypeVm);
-    Task<DeviceTypeInsertVm> DeviceTypeInsertVmFromDeviceTypeVm(DeviceTypeVm deviceTypeVm);
-    Task<Maintainer> MaintainerFromMaintainerEditVmAsync(MaintainerEditVm maintainerEditVm);
-    Task<MaintainerVm> MaintainerVmFromMaintainerAsync(Maintainer maintainer);
-    Task<MaintainerEditVm> MaintainerEditVmFromMaintainerAsync(Maintainer maintainer);
+
+    #endregion
+
+    #region --- Platform Maps ---
+    CurrentLoadEditVm CurrentLoadEditVmFromCurrentLoadVm(CurrentLoadVm currentLoadVm);
+    CurrentLoad CurrentLoadFromCurrentLoadEditVm(CurrentLoadEditVm currentLoadEditVm);
+    Device DeviceFromDeviceVm(DeviceVm deviceVm);
+    Device DeviceFromDeviceInsertVm(DeviceInsertVm deviceInsertVm);
+    Device DeviceFromDeviceEditVm(DeviceEditVm deviceEditVm);
+    DeviceEditVm DeviceEditVmFromDevice(Device device);
+    DeviceEditVm DeviceEditVmFromDeviceVm(DeviceVm deviceVm);
+    DeviceType DeviceTypeFromDeviceTypeEditVm(DeviceTypeEditVm deviceTypeEditVm);
+    DeviceType DeviceTypeFromDeviceTypeInsertVm(DeviceTypeInsertVm deviceTypeInsertVm);
+    DeviceTypeEditVm DeviceTypeEditVmFromDeviceType(DeviceType deviceType);
+    DeviceTypeEditVm DeviceTypeEditVmFromDeviceTypeVm(DeviceTypeVm deviceTypeVm);
+    DeviceTypeInsertVm DeviceTypeInsertVmFromDeviceTypeVm(DeviceTypeVm deviceTypeVm);
+    Maintainer MaintainerFromMaintainerEditVm(MaintainerEditVm maintainerEditVm);
+    MaintainerVm MaintainerVmFromMaintainer(Maintainer maintainer);
+    MaintainerEditVm MaintainerEditVmFromMaintainer(Maintainer maintainer);
+
+    #endregion
+
+    #region --- Platform Collection Maps ---
+
+    Task<IEnumerable<DeviceVm>> DeviceVmsFromDevicesAsync(IEnumerable<Device> devices);
+    Task<IEnumerable<DeviceTypeVm>> DeviceTypeVmsFromDeviceTypesAsync(IEnumerable<DeviceType> deviceTypes);
+    IEnumerable<MaintainerVm> MaintainerVmsFromMaintainersAsync(IEnumerable<Maintainer> maintainers);
+
+    #endregion
+
+
     Task<HardwareSystemVm> HardwareSystemVmFromHardwareSystemAsync(HardwareSystem hardwareSystem);
     Task<HardwareSystemEditVm> HardwareSystemEditVmFromHardwareSystemAsync(HardwareSystem hardwareSystem);
     Task<HardwareSystem> HardwareSystemFromHardwareSystemVmAsync(HardwareSystemVm hardwareSystemVm);
@@ -48,9 +67,6 @@ public interface IMapperService
     Task<SoftwareVersion> SoftwareVersionFromSoftwareVersionsInsertVmAsync(SoftwareVersionInsertVm softwareVersionInsertVm);
     Task<SoftwareVersion> SoftwareVersionFromSoftwareVersionVmAsync(SoftwareVersionVm softwareVersionVm);
 
-    Task<IEnumerable<DeviceVm>> DeviceVmsFromDevicesAsync(IEnumerable<Device> devices);
-    Task<IEnumerable<MaintainerVm>> MaintainerVmsFromMaintainersAsync(IEnumerable<Maintainer> maintainers);
-    Task<IEnumerable<DeviceTypeVm>> DeviceTypeVmsFromDeviceTypesAsync(IEnumerable<DeviceType> deviceTypes);
     Task<IEnumerable<HardwareConfigVm>> HardwareConfigVmsFromHardwareConfigsAsync(IEnumerable<HardwareConfig> hardwareConfigs);
     Task<IEnumerable<HardwareSystemVm>> HardwareSystemVmsFromHardwareSystemsAsync(IEnumerable<HardwareSystem> hardwareSystems);
     Task<IEnumerable<HardwareVersionVm>> HardwareVersionVmsFromHardwareVersionsAsync(IEnumerable<HardwareVersion> hardwareVersions);

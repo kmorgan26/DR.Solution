@@ -56,8 +56,8 @@
 
     protected async Task UpdateDevice()
     {
-        _deviceEditVm = await MapperService.DeviceEditVmFromDeviceVmAsync(AppState.DeviceVm);
-        var device = await MapperService.DeviceFromDeviceEditVmAsync(_deviceEditVm);
+        _deviceEditVm = MapperService.DeviceEditVmFromDeviceVm(AppState.DeviceVm);
+        var device = MapperService.DeviceFromDeviceEditVm(_deviceEditVm);
         await DeviceManager.UpdateAsync(device);
         Snackbar.Add($"{device.Name} was updated", Severity.Success);
         navigation.NavigateTo("/devices");

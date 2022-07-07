@@ -38,14 +38,14 @@ namespace DRApplication.TestProject
         }
 
         [Fact]
-        public async void DeviceFromDeviceInsertVmAsync_Should_Return_Device_Object()
+        public void DeviceFromDeviceInsertVmAsync_Should_Return_Device_Object()
         {
             // Arrange
             var mapperService = new MapperService(_managerServiceMock.Object, _loadHelpersMock.Object);
             var deviceInsertVm = new DeviceInsertVm();
             
             // Act
-            var device = await mapperService.DeviceFromDeviceInsertVmAsync(deviceInsertVm);
+            var device = mapperService.DeviceFromDeviceInsertVm(deviceInsertVm);
 
             // Assert
             Assert.NotNull(device);

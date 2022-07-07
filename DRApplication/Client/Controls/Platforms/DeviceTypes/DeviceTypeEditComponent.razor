@@ -55,8 +55,8 @@
 
     protected async Task UpdateDeviceType()
     {
-        _deviceTypeEditVm = await MapperService.DeviceTypeEditVmFromDeviceTypeVmAsync(AppState.DeviceTypeVm);
-        var deviceType = await MapperService.DeviceTypeFromDeviceTypeEditVmAsync(_deviceTypeEditVm);
+        _deviceTypeEditVm = MapperService.DeviceTypeEditVmFromDeviceTypeVm(AppState.DeviceTypeVm);
+        var deviceType = MapperService.DeviceTypeFromDeviceTypeEditVm(_deviceTypeEditVm);
         await DeviceTypeManager.UpdateAsync(deviceType);
         Snackbar.Add($"{_deviceTypeEditVm.Platform} was updated", Severity.Success);
         navigation.NavigateTo("/devicetypes");

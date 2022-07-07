@@ -53,7 +53,7 @@
 
     private async Task InsertDeviceType()
     {
-        var deviceType = await MapperService.DeviceTypeFromDeviceTypeInsertVmAsync(_deviceTypeInsertVm);
+        var deviceType = MapperService.DeviceTypeFromDeviceTypeInsertVm(_deviceTypeInsertVm);
         await DeviceTypeManager.InsertAsync(deviceType);
         Snackbar.Add($"The new Platform was Added!", Severity.Success);
 

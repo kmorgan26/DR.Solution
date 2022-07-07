@@ -51,7 +51,7 @@
 
     private async Task InsertDevice()
     {
-        var device = await MapperService.DeviceFromDeviceInsertVmAsync(_deviceInsertVm);
+        var device = MapperService.DeviceFromDeviceInsertVm(_deviceInsertVm);
         await DeviceManager.InsertAsync(device);
         Snackbar.Add($"The new Device was Added!", Severity.Success);
         navigation.NavigateTo("/devices");

@@ -50,8 +50,8 @@
 
     protected async Task UpdateCurrentLoad()
     {
-        _currentLoadEditVm = await MapperService.CurrentLoadEditVmFromCurrentLoadVmAsync(AppState.CurrentLoadVm);
-        var currentLoad = await MapperService.CurrentLoadFromCurrentLoadEditVm(_currentLoadEditVm);
+        _currentLoadEditVm = MapperService.CurrentLoadEditVmFromCurrentLoadVm(AppState.CurrentLoadVm);
+        var currentLoad = MapperService.CurrentLoadFromCurrentLoadEditVm(_currentLoadEditVm);
         await CurrentLoadManager.UpdateAsync(currentLoad);
         Snackbar.Add($"Current Load was updated", Severity.Success);
         NavigationManager.NavigateTo("/currentload");

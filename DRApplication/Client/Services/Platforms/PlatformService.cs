@@ -45,7 +45,7 @@ public class PlatformService : IPlatformService
     public async Task<IEnumerable<MaintainerVm>> GetMaintainerVmsAsync()
     {
         var maintainers = await _managerService.MaintainerManager().GetAllAsync();
-        return await _mapperService.MaintainerVmsFromMaintainersAsync(maintainers);
+        return _mapperService.MaintainerVmsFromMaintainersAsync(maintainers);
     }
     public async Task<IEnumerable<DeviceVm>> GetDeviceVmsFromDeviceTypeId(int id)
     {
@@ -95,7 +95,7 @@ public class PlatformService : IPlatformService
     public async Task<DeviceEditVm> GetDeviceEditVmByIdAsync(int id)
     {
         var device = await _managerService.DeviceManager().GetByIdAsync(id);
-        return await _mapperService.DeviceEditVmFromDeviceAsync(device);
+        return _mapperService.DeviceEditVmFromDevice(device);
     }
     public async Task<DeviceTypeVm> GetDeviceTypeVmByIdAsync(int id)
     {
@@ -105,21 +105,21 @@ public class PlatformService : IPlatformService
     public async Task<DeviceTypeEditVm> GetDeviceTypeEditVmByIdAsync(int id)
     {
         var deviceType = await _managerService.DeviceTypeManager().GetByIdAsync(id);
-        return await _mapperService.DeviceTypeEditVmFromDeviceTypeAsync(deviceType);
+        return _mapperService.DeviceTypeEditVmFromDeviceType(deviceType);
     }
     public async Task<MaintainerVm> GetMaintainerVmById(int id)
     {
         var maintainer = await _managerService.MaintainerManager().GetByIdAsync(id);
-        return await _mapperService.MaintainerVmFromMaintainerAsync(maintainer);
+        return _mapperService.MaintainerVmFromMaintainer(maintainer);
     }
     public async Task<MaintainerEditVm> GetMaintainerEditVmById(int id)
     {
         var maintainer = await _managerService.MaintainerManager().GetByIdAsync(id);
-        return await _mapperService.MaintainerEditVmFromMaintainerAsync(maintainer);
+        return _mapperService.MaintainerEditVmFromMaintainer(maintainer);
     }
     public async Task<int> InsertDeviceTypeFromDeviceTypeInsertVm(DeviceTypeInsertVm deviceTypeInsertVm)
     {
-        var deviceType = await _mapperService.DeviceTypeFromDeviceTypeInsertVmAsync(deviceTypeInsertVm);
+        var deviceType = _mapperService.DeviceTypeFromDeviceTypeInsertVm(deviceTypeInsertVm);
 
         try
         {
@@ -136,7 +136,7 @@ public class PlatformService : IPlatformService
     }
     public async Task<int> InsertDeviceFromDeviceInsertVm(DeviceInsertVm deviceTypeInsertVm)
     {
-        var device = await _mapperService.DeviceFromDeviceInsertVmAsync(deviceTypeInsertVm);
+        var device = _mapperService.DeviceFromDeviceInsertVm(deviceTypeInsertVm);
 
         try
         {
@@ -153,7 +153,7 @@ public class PlatformService : IPlatformService
     }
     public async Task<bool> UpdateMaintainerFromMaintainerEditVm(MaintainerEditVm maintainerEditVm)
     {
-        var maintainer = await _mapperService.MaintainerFromMaintainerEditVmAsync(maintainerEditVm);
+        var maintainer = _mapperService.MaintainerFromMaintainerEditVm(maintainerEditVm);
         
         try
         {
