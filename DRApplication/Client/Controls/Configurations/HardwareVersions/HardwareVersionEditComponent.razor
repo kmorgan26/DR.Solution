@@ -47,7 +47,7 @@
         if (id > 0)
         {
             var hardwareSystem = await Task.Run(() => ManagerService.HardwareSystemManager().GetByIdAsync(id));
-            var hardwareSystemVm = await MapperService.HardwareSystemVmFromHardwareSystemAsync(hardwareSystem);
+            var hardwareSystemVm = MapperService.HardwareSystemVmFromHardwareSystem(hardwareSystem);
             var hardwareVersionVm = AppState.HardwareVersionVm;
             hardwareVersionVm.HardwareSystemId = id;
             AppState.UpdateHardwareSystemVm(this, hardwareSystemVm);
@@ -57,8 +57,8 @@
 
     protected async Task UpdateHardwareVersion()
     {
-        _hardwareVersionEditVm = await MapperService.HardwareVersionEditVmFromHardwareVersionVmAsync(AppState.HardwareVersionVm);
-        var hardwareVersion = await MapperService.HardwareVersionFromHardwareVersionEditVmAsync(_hardwareVersionEditVm);
+        _hardwareVersionEditVm = MapperService.HardwareVersionEditVmFromHardwareVersionVm(AppState.HardwareVersionVm);
+        var hardwareVersion = MapperService.HardwareVersionFromHardwareVersionEditVm(_hardwareVersionEditVm);
         var result = await HardwareVersionManager.UpdateAsync(hardwareVersion);
         Snackbar.Add($"Hardware Version was updated", Severity.Success);
         navigation.NavigateTo("/hardwareversion");

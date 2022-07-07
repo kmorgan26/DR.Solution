@@ -46,8 +46,8 @@
 
     private async Task InsertHardwareVersion()
     {
-        _hardwareVersionInsertVm = await MapperService.HardwareVersionInsertVmFromHardwareVersionVmAsync(AppState.HardwareVersionVm);
-        var hardwareVersion = await MapperService.HardwareVersionFromHardwareVersionInsertVmAsync(_hardwareVersionInsertVm);
+        _hardwareVersionInsertVm = MapperService.HardwareVersionInsertVmFromHardwareVersionVmAsync(AppState.HardwareVersionVm);
+        var hardwareVersion = MapperService.HardwareVersionFromHardwareVersionInsertVm(_hardwareVersionInsertVm);
         await HardwareVersionManager.InsertAsync(hardwareVersion);
         Snackbar.Add($"The Hardware System has been created. Don't believe me? Look at the table", Severity.Success);
 

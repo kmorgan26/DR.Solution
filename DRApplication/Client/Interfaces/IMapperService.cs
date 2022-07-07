@@ -36,37 +36,47 @@ public interface IMapperService
 
     Task<IEnumerable<DeviceVm>> DeviceVmsFromDevicesAsync(IEnumerable<Device> devices);
     Task<IEnumerable<DeviceTypeVm>> DeviceTypeVmsFromDeviceTypesAsync(IEnumerable<DeviceType> deviceTypes);
-    IEnumerable<MaintainerVm> MaintainerVmsFromMaintainersAsync(IEnumerable<Maintainer> maintainers);
+    IEnumerable<MaintainerVm> MaintainerVmsFromMaintainers(IEnumerable<Maintainer> maintainers);
 
     #endregion
 
+    #region --- Hardware Maps ---
+    HardwareConfig HardwareConfigFromHardwareConfigInsertVm(HardwareConfigInsertVm hardwareConfigInsertVm);
+    HardwareConfig HardwareConfigFromHardwareConfigEditVm(HardwareConfigEditVm hardwareConfigEditVm);
+    HardwareConfigVm HardwareConfigVmFromHardwareConfig(HardwareConfig hardwareConfig);
+    HardwareConfigEditVm HardwareConfigEditVmFromHardwareConfigVm(HardwareConfigVm hardwareConfigVm);
+    HardwareSystem HardwareSystemFromHardwareSystemVm(HardwareSystemVm hardwareSystemVm);
+    HardwareSystem HardwareSystemFromHardwareSystemInsertVm(HardwareSystemInsertVm hardwareSystemInsertVm);
+    HardwareSystem HardwareSystemFromHardwareSystemEditVm(HardwareSystemEditVm hardwareSystemEditVm);
+    HardwareSystemVm HardwareSystemVmFromHardwareSystem(HardwareSystem hardwareSystem);
+    HardwareSystemEditVm HardwareSystemEditVmFromHardwareSystem(HardwareSystem hardwareSystem);
+    HardwareVersion HardwareVersionFromHardwareVersionVm(HardwareVersionVm hardwareVersionVm);
+    HardwareVersion HardwareVersionFromHardwareVersionInsertVm(HardwareVersionInsertVm hardwareVersionInsertVm);
+    HardwareVersion HardwareVersionFromHardwareVersionEditVm(HardwareVersionEditVm hardwareVersionEditVm);
+    HardwareVersionVm HardwareVersionVmFromHardwareVersion(HardwareVersion hardwareVersion);
+    HardwareVersionInsertVm HardwareVersionInsertVmFromHardwareVersionVmAsync(HardwareVersionVm hardwareVersionVm);
+    HardwareVersionEditVm HardwareVersionEditVmFromHardwareVersion(HardwareVersion hardwareVersion);
+    HardwareVersionEditVm HardwareVersionEditVmFromHardwareVersionVm(HardwareVersionVm hardwareVersionVm);
 
-    Task<HardwareSystemVm> HardwareSystemVmFromHardwareSystemAsync(HardwareSystem hardwareSystem);
-    Task<HardwareSystemEditVm> HardwareSystemEditVmFromHardwareSystemAsync(HardwareSystem hardwareSystem);
-    Task<HardwareSystem> HardwareSystemFromHardwareSystemVmAsync(HardwareSystemVm hardwareSystemVm);
-    Task<HardwareSystem> HardwareSystemFromHardwareSystemInsertVm(HardwareSystemInsertVm hardwareSystemInsertVm);
-    Task<HardwareSystem> HardwareSystemFromHardwareSystemEditVm(HardwareSystemEditVm hardwareSystemEditVm);
-    Task<HardwareConfigVm> HardwareConfigVmFromHardwareConfigAsync(HardwareConfig hardwareConfig);
-    Task<HardwareConfigEditVm> HardwareConfigEditVmFromHardwareConfigVmAsync(HardwareConfigVm hardwareConfigVm);
-    Task<HardwareConfig> HardwareConfigFromHardwareConfigInsertVmAsync(HardwareConfigInsertVm hardwareConfigInsertVm);
-    Task<HardwareConfig> HardwareConfigFromHardwareConfigEditVmAsync(HardwareConfigEditVm hardwareConfigEditVm);
-    Task<HardwareVersionVm> HardwareVersionVmFromHardwareVersionAsync(HardwareVersion hardwareVersion);
-    Task<HardwareVersionEditVm> HardwareVersionEditVmFromHardwareVersionAsync(HardwareVersion hardwareVersion);
-    Task<HardwareVersionEditVm> HardwareVersionEditVmFromHardwareVersionVmAsync(HardwareVersionVm hardwareVersionVm);
-    Task<HardwareVersion> HardwareVersionFromHardwareVersionVmAsync(HardwareVersionVm hardwareVersionVm);
-    Task<HardwareVersionInsertVm> HardwareVersionInsertVmFromHardwareVersionVmAsync(HardwareVersionVm hardwareVersionVm);
-    Task<HardwareVersion> HardwareVersionFromHardwareVersionEditVmAsync(HardwareVersionEditVm hardwareVersionEditVm);
-    Task<HardwareVersion> HardwareVersionFromHardwareVersionInsertVmAsync(HardwareVersionInsertVm hardwareVersionInsertVm);
-    Task<LoadVm> LoadVmFromLoadAsync(Load load);
-    Task<Load> LoadFromLoadVm(LoadVm loadVm);
-    Task<Load> LoadFromLoadInsertVm(LoadInsertVm loadInsertVm);
+    #endregion
+
+    #region --- Software Maps ---
     Task<SoftwareSystem> SoftwareSystemFromSoftwareSystemVmAsync(SoftwareSystemVm softwareSystemVm);
     Task<SoftwareSystem> SoftwareSystemFromSoftwareSystemInsertVmAsync(SoftwareSystemInsertVm softwareSystemInsertVm);
     Task<SoftwareSystemVm> SoftwareSystemVmFromSoftwareSystemAsync(SoftwareSystem softwareSystem);
-    Task<SoftwareVersionVm> SoftwareVersionVmFromSoftwareVersionsAsync(SoftwareVersion softwareVersion);
-    Task<SoftwareVersion> SoftwareVersionFromSoftwareVersionsInsertVmAsync(SoftwareVersionInsertVm softwareVersionInsertVm);
     Task<SoftwareVersion> SoftwareVersionFromSoftwareVersionVmAsync(SoftwareVersionVm softwareVersionVm);
+    Task<SoftwareVersion> SoftwareVersionFromSoftwareVersionsInsertVmAsync(SoftwareVersionInsertVm softwareVersionInsertVm);
+    Task<SoftwareVersionVm> SoftwareVersionVmFromSoftwareVersionsAsync(SoftwareVersion softwareVersion);
 
+
+
+
+
+    #endregion
+
+    Task<LoadVm> LoadVmFromLoadAsync(Load load);
+    Task<Load> LoadFromLoadVm(LoadVm loadVm);
+    Task<Load> LoadFromLoadInsertVm(LoadInsertVm loadInsertVm);
     Task<IEnumerable<HardwareConfigVm>> HardwareConfigVmsFromHardwareConfigsAsync(IEnumerable<HardwareConfig> hardwareConfigs);
     Task<IEnumerable<HardwareSystemVm>> HardwareSystemVmsFromHardwareSystemsAsync(IEnumerable<HardwareSystem> hardwareSystems);
     Task<IEnumerable<HardwareVersionVm>> HardwareVersionVmsFromHardwareVersionsAsync(IEnumerable<HardwareVersion> hardwareVersions);

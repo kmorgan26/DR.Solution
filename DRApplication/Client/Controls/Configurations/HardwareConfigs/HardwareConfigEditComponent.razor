@@ -50,8 +50,8 @@
 
     protected async Task UpdateHardwareConfig()
     {
-        _hardwareConfigEditVm = await MapperService.HardwareConfigEditVmFromHardwareConfigVmAsync(AppState.HardwareConfigVm);
-        var hardwareConfig = await MapperService.HardwareConfigFromHardwareConfigEditVmAsync(_hardwareConfigEditVm);
+        _hardwareConfigEditVm = MapperService.HardwareConfigEditVmFromHardwareConfigVm(AppState.HardwareConfigVm);
+        var hardwareConfig = MapperService.HardwareConfigFromHardwareConfigEditVm(_hardwareConfigEditVm);
         await HardwareConfigManager.UpdateAsync(hardwareConfig);
         Snackbar.Add($"Hardware Configuration was updated", Severity.Success);
         navigation.NavigateTo("/hardwareconfig");
@@ -61,7 +61,7 @@
     {
         _isBusy = true;
         var hardwareConfig = await HardwareConfigManager.GetByIdAsync(HardwareConfigId);
-        var hardwareConfigVm = await MapperService.HardwareConfigVmFromHardwareConfigAsync(hardwareConfig);
+        var hardwareConfigVm = MapperService.HardwareConfigVmFromHardwareConfig(hardwareConfig);
         AppState.UpdateHardwareConfigVm(this, hardwareConfigVm);
         _isBusy = false;
     }

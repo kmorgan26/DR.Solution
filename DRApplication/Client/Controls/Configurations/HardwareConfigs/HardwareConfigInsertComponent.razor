@@ -46,7 +46,7 @@
     private async Task InsertHardwareConfig()
     {
         _hardwareConfigInsertVm.DeviceTypeId = AppState.DeviceTypeVm.Id;
-        var hardwareConfig = await MapperService.HardwareConfigFromHardwareConfigInsertVmAsync(_hardwareConfigInsertVm);
+        var hardwareConfig = MapperService.HardwareConfigFromHardwareConfigInsertVm(_hardwareConfigInsertVm);
         await HardwareConfigManager.InsertAsync(hardwareConfig);
         navigation.NavigateTo("/hardwareconfig");
     }

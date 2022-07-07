@@ -45,7 +45,7 @@ public class PlatformService : IPlatformService
     public async Task<IEnumerable<MaintainerVm>> GetMaintainerVmsAsync()
     {
         var maintainers = await _managerService.MaintainerManager().GetAllAsync();
-        return _mapperService.MaintainerVmsFromMaintainersAsync(maintainers);
+        return _mapperService.MaintainerVmsFromMaintainers(maintainers);
     }
     public async Task<IEnumerable<DeviceVm>> GetDeviceVmsFromDeviceTypeId(int id)
     {

@@ -247,7 +247,7 @@ public class MapperService : IMapperService
 
         return deviceTypeVms;
     }
-    public IEnumerable<MaintainerVm> MaintainerVmsFromMaintainersAsync(IEnumerable<Maintainer> maintainers)
+    public IEnumerable<MaintainerVm> MaintainerVmsFromMaintainers(IEnumerable<Maintainer> maintainers)
     {
         var maintainerVms = maintainers.Select(m => new MaintainerVm
         {
@@ -260,56 +260,8 @@ public class MapperService : IMapperService
 
     #endregion
 
-    public async Task<HardwareSystem> HardwareSystemFromHardwareSystemVmAsync(HardwareSystemVm hardwareSystemVm)
-    {
-        var hardwareSystem = new HardwareSystem
-        {
-            Id = hardwareSystemVm.Id,
-            Name = hardwareSystemVm.Name
-        };
-
-        return await Task.Run(() => hardwareSystem);
-    }
-    public async Task<HardwareSystem> HardwareSystemFromHardwareSystemInsertVm(HardwareSystemInsertVm hardwareSystemInsertVm)
-    {
-        var hardwareSystem = new HardwareSystem
-        {
-            Name = hardwareSystemInsertVm.Name,
-        };
-
-        return await Task.Run(() => hardwareSystem);
-    }
-    public async Task<HardwareSystemVm> HardwareSystemVmFromHardwareSystemAsync(HardwareSystem hardwareSystem)
-    {
-        var hardwareSystemVm = new HardwareSystemVm
-        {
-            Id = hardwareSystem.Id,
-            Name = hardwareSystem.Name
-        };
-
-        return await Task.Run(() => hardwareSystemVm);
-    }
-    public async Task<HardwareSystemEditVm> HardwareSystemEditVmFromHardwareSystemAsync(HardwareSystem hardwareSystem)
-    {
-        var hardwareSystemEditVm = new HardwareSystemEditVm
-        {
-            Id = hardwareSystem.Id,
-            Name = hardwareSystem.Name
-        };
-
-        return await Task.Run(() => hardwareSystemEditVm);
-    }
-    public async Task<HardwareSystem> HardwareSystemFromHardwareSystemEditVm(HardwareSystemEditVm hardwareSystemEditVm)
-    {
-        var hardwareSystem = new HardwareSystem
-        {
-            Id = hardwareSystemEditVm.Id,
-            Name = hardwareSystemEditVm.Name
-        };
-
-        return await Task.Run(() => hardwareSystem);
-    }
-    public async Task<HardwareConfig> HardwareConfigFromHardwareConfigInsertVmAsync(HardwareConfigInsertVm hardwareConfigInsertVm)
+    #region --- Hardware Maps ---
+    public HardwareConfig HardwareConfigFromHardwareConfigInsertVm(HardwareConfigInsertVm hardwareConfigInsertVm)
     {
         var hardwareConfig = new HardwareConfig
         {
@@ -317,9 +269,9 @@ public class MapperService : IMapperService
             DeviceTypeId = hardwareConfigInsertVm.DeviceTypeId
         };
 
-        return await Task.Run(() => hardwareConfig);
+        return hardwareConfig;
     }
-    public async Task<HardwareConfig> HardwareConfigFromHardwareConfigEditVmAsync(HardwareConfigEditVm hardwareConfigEditVm)
+    public HardwareConfig HardwareConfigFromHardwareConfigEditVm(HardwareConfigEditVm hardwareConfigEditVm)
     {
         var hardwareConfig = new HardwareConfig
         {
@@ -328,9 +280,9 @@ public class MapperService : IMapperService
             DeviceTypeId = hardwareConfigEditVm.DeviceTypeId
         };
 
-        return await Task.Run(() => hardwareConfig);
+        return hardwareConfig;
     }
-    public async Task<HardwareConfigVm> HardwareConfigVmFromHardwareConfigAsync(HardwareConfig hardwareConfig)
+    public HardwareConfigVm HardwareConfigVmFromHardwareConfig(HardwareConfig hardwareConfig)
     {
         var hardwareConfigVm = new HardwareConfigVm
         {
@@ -338,9 +290,9 @@ public class MapperService : IMapperService
             Name = hardwareConfig.Name,
             DeviceTypeId = hardwareConfig.DeviceTypeId
         };
-        return await Task.Run(() => hardwareConfigVm);
+        return hardwareConfigVm;
     }
-    public async Task<HardwareConfigEditVm> HardwareConfigEditVmFromHardwareConfigVmAsync(HardwareConfigVm hardwareConfigVm)
+    public HardwareConfigEditVm HardwareConfigEditVmFromHardwareConfigVm(HardwareConfigVm hardwareConfigVm)
     {
         var hardwareConfigEditVm = new HardwareConfigEditVm
         {
@@ -348,9 +300,58 @@ public class MapperService : IMapperService
             Name = hardwareConfigVm.Name,
             DeviceTypeId = hardwareConfigVm.DeviceTypeId
         };
-        return await Task.Run(() => hardwareConfigEditVm);
+        return hardwareConfigEditVm;
     }
-    public async Task<HardwareVersion> HardwareVersionFromHardwareVersionVmAsync(HardwareVersionVm hardwareVersionVm)
+    public HardwareSystem HardwareSystemFromHardwareSystemVm(HardwareSystemVm hardwareSystemVm)
+    {
+        var hardwareSystem = new HardwareSystem
+        {
+            Id = hardwareSystemVm.Id,
+            Name = hardwareSystemVm.Name
+        };
+
+        return hardwareSystem;
+    }
+    public HardwareSystem HardwareSystemFromHardwareSystemInsertVm(HardwareSystemInsertVm hardwareSystemInsertVm)
+    {
+        var hardwareSystem = new HardwareSystem
+        {
+            Name = hardwareSystemInsertVm.Name,
+        };
+
+        return hardwareSystem;
+    }
+    public HardwareSystem HardwareSystemFromHardwareSystemEditVm(HardwareSystemEditVm hardwareSystemEditVm)
+    {
+        var hardwareSystem = new HardwareSystem
+        {
+            Id = hardwareSystemEditVm.Id,
+            Name = hardwareSystemEditVm.Name
+        };
+
+        return hardwareSystem;
+    }
+    public HardwareSystemVm HardwareSystemVmFromHardwareSystem(HardwareSystem hardwareSystem)
+    {
+        var hardwareSystemVm = new HardwareSystemVm
+        {
+            Id = hardwareSystem.Id,
+            Name = hardwareSystem.Name
+        };
+
+        return hardwareSystemVm;
+    }
+    public HardwareSystemEditVm HardwareSystemEditVmFromHardwareSystem(HardwareSystem hardwareSystem)
+    {
+        var hardwareSystemEditVm = new HardwareSystemEditVm
+        {
+            Id = hardwareSystem.Id,
+            Name = hardwareSystem.Name
+        };
+
+        return hardwareSystemEditVm;
+    }
+    public HardwareVersion HardwareVersionFromHardwareVersionVm(HardwareVersionVm hardwareVersionVm)
     {
         var hardwareVersion = new HardwareVersion
         {
@@ -360,9 +361,9 @@ public class MapperService : IMapperService
             HardwareSystemId = hardwareVersionVm.HardwareSystemId
         };
 
-        return await Task.Run(() => hardwareVersion);
+        return hardwareVersion;
     }
-    public async Task<HardwareVersion> HardwareVersionFromHardwareVersionInsertVmAsync(HardwareVersionInsertVm hardwareVersionInsertVm)
+    public HardwareVersion HardwareVersionFromHardwareVersionInsertVm(HardwareVersionInsertVm hardwareVersionInsertVm)
     {
         var hardwareVersion = new HardwareVersion
         {
@@ -371,9 +372,9 @@ public class MapperService : IMapperService
             VersionDate = (DateTime)hardwareVersionInsertVm.VersionDate
         };
 
-        return await Task.Run(() => hardwareVersion);
+        return hardwareVersion;
     }
-    public async Task<HardwareVersion> HardwareVersionFromHardwareVersionEditVmAsync(HardwareVersionEditVm hardwareVersionEditVm)
+    public HardwareVersion HardwareVersionFromHardwareVersionEditVm(HardwareVersionEditVm hardwareVersionEditVm)
     {
         var hardwareVersion = new HardwareVersion
         {
@@ -383,9 +384,9 @@ public class MapperService : IMapperService
             VersionDate = (DateTime)hardwareVersionEditVm.VersionDate
         };
 
-        return await Task.Run(() => hardwareVersion);
+        return hardwareVersion;
     }
-    public async Task<HardwareVersionVm> HardwareVersionVmFromHardwareVersionAsync(HardwareVersion hardwareVersion)
+    public HardwareVersionVm HardwareVersionVmFromHardwareVersion(HardwareVersion hardwareVersion)
     {
         var hardwareVersionVm = new HardwareVersionVm
         {
@@ -396,9 +397,20 @@ public class MapperService : IMapperService
             VersionDateString = hardwareVersion.VersionDate.ToShortDateString()
         };
 
-        return await Task.Run(() => hardwareVersionVm);
+        return hardwareVersionVm;
     }
-    public async Task<HardwareVersionEditVm> HardwareVersionEditVmFromHardwareVersionAsync(HardwareVersion hardwareVersion)
+    public HardwareVersionInsertVm HardwareVersionInsertVmFromHardwareVersionVmAsync(HardwareVersionVm hardwareVersionVm)
+    {
+        var hardwareVersionInsertVm = new HardwareVersionInsertVm
+        {
+            HardwareSystemId = hardwareVersionVm.HardwareSystemId,
+            Name = hardwareVersionVm.Name,
+            VersionDate = hardwareVersionVm.VersionDate
+        };
+
+        return hardwareVersionInsertVm;
+    }
+    public HardwareVersionEditVm HardwareVersionEditVmFromHardwareVersion(HardwareVersion hardwareVersion)
     {
         var hardwareVersionEditVm = new HardwareVersionEditVm
         {
@@ -408,9 +420,9 @@ public class MapperService : IMapperService
             VersionDate = hardwareVersion.VersionDate                
         };
 
-        return await Task.Run(() => hardwareVersionEditVm);
+        return hardwareVersionEditVm;
     }
-    public async Task<HardwareVersionEditVm> HardwareVersionEditVmFromHardwareVersionVmAsync(HardwareVersionVm hardwareVersionVm)
+    public HardwareVersionEditVm HardwareVersionEditVmFromHardwareVersionVm(HardwareVersionVm hardwareVersionVm)
     {
         var hardwareVersionEditVm = new HardwareVersionEditVm
         {
@@ -420,51 +432,12 @@ public class MapperService : IMapperService
             VersionDate = hardwareVersionVm.VersionDate
         };
 
-        return await Task.Run(() => hardwareVersionEditVm);
+        return hardwareVersionEditVm;
     }
-    public async Task<HardwareVersionInsertVm> HardwareVersionInsertVmFromHardwareVersionVmAsync(HardwareVersionVm hardwareVersionVm)
-    {
-        var hardwareVersionInsertVm = new HardwareVersionInsertVm
-        {
-            HardwareSystemId = hardwareVersionVm.HardwareSystemId,
-            Name = hardwareVersionVm.Name,
-            VersionDate = hardwareVersionVm.VersionDate
-        };
 
-        return await Task.Run(() => hardwareVersionInsertVm);
-    }
-    public async Task<IEnumerable<HardwareSystemVm>> HardwareSystemVmsFromHardwareSystemsAsync(IEnumerable<HardwareSystem> hardwareSystems)
-    {
-        var hardwareSystemVms = hardwareSystems.Select(hws => new HardwareSystemVm
-        {
-            Id = hws.Id,
-            Name = hws.Name
-        });
-        return await Task.Run(() => hardwareSystemVms);
-    }
-    public async Task<IEnumerable<HardwareVersionVm>> HardwareVersionVmsFromHardwareVersionsAsync(IEnumerable<HardwareVersion> hardwareVersions)
-    {
-        var hardwareVersionVms = hardwareVersions.Select(hwv => new HardwareVersionVm
-        {
-            Id = hwv.Id,
-            Name = hwv.Name,
-            VersionDate = hwv.VersionDate,
-            HardwareSystemId = hwv.HardwareSystemId,
-            VersionDateString = hwv.VersionDate.ToShortDateString()
-        });
-        return await Task.Run(()=> hardwareVersionVms);
-    }
-    public async Task<IEnumerable<HardwareConfigVm>> HardwareConfigVmsFromHardwareConfigsAsync(IEnumerable<HardwareConfig> hardwareConfigs)
-    {
-        var hardwareConfigVms = hardwareConfigs.Select(hwc => new HardwareConfigVm
-        {
-            Id = hwc.Id,
-            Name = hwc.Name,
-            DeviceTypeId = hwc.DeviceTypeId
-        });
+    #endregion
 
-        return await Task.Run(() => hardwareConfigVms);
-    }
+
     public async Task<SoftwareSystem> SoftwareSystemFromSoftwareSystemVmAsync(SoftwareSystemVm softwareSystemVm)
     {
         var softwareSystem = new SoftwareSystem
@@ -535,6 +508,7 @@ public class MapperService : IMapperService
 
         return await Task.Run(() => softwareVersion);
     }
+
     public async Task<LoadVm> LoadVmFromLoadAsync(Load load)
     {
         var loadVm = new LoadVm
@@ -569,6 +543,38 @@ public class MapperService : IMapperService
         };
 
         return await Task.Run(() => load);
+    }
+    public async Task<IEnumerable<HardwareVersionVm>> HardwareVersionVmsFromHardwareVersionsAsync(IEnumerable<HardwareVersion> hardwareVersions)
+    {
+        var hardwareVersionVms = hardwareVersions.Select(hwv => new HardwareVersionVm
+        {
+            Id = hwv.Id,
+            Name = hwv.Name,
+            VersionDate = hwv.VersionDate,
+            HardwareSystemId = hwv.HardwareSystemId,
+            VersionDateString = hwv.VersionDate.ToShortDateString()
+        });
+        return await Task.Run(()=> hardwareVersionVms);
+    }
+    public async Task<IEnumerable<HardwareConfigVm>> HardwareConfigVmsFromHardwareConfigsAsync(IEnumerable<HardwareConfig> hardwareConfigs)
+    {
+        var hardwareConfigVms = hardwareConfigs.Select(hwc => new HardwareConfigVm
+        {
+            Id = hwc.Id,
+            Name = hwc.Name,
+            DeviceTypeId = hwc.DeviceTypeId
+        });
+
+        return await Task.Run(() => hardwareConfigVms);
+    }
+    public async Task<IEnumerable<HardwareSystemVm>> HardwareSystemVmsFromHardwareSystemsAsync(IEnumerable<HardwareSystem> hardwareSystems)
+    {
+        var hardwareSystemVms = hardwareSystems.Select(hws => new HardwareSystemVm
+        {
+            Id = hws.Id,
+            Name = hws.Name
+        });
+        return await Task.Run(() => hardwareSystemVms);
     }
     public async Task<IEnumerable<VersionsLoadVm>> VersionsLoadVmsFromVersionsLoadAsync(IEnumerable<VersionsLoad> versionsLoads)
     {
