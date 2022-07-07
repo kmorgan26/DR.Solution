@@ -95,19 +95,19 @@ namespace DRApplication.Client.Services
                 var correctiveActions = await _managerService.CorrectiveActionManager().GetAllAsync();
 
                 //Get the DeviceDiscovered DTOs with that DeviceId (previous 10)
-                var deviceDiscoveredFilter = await new FilterGenerator<DeviceDiscovered>().GetFilterWherePropertyEqualsValueAsync("DeviceId", deviceVm.Id);
+                var deviceDiscoveredFilter = new FilterGenerator<DeviceDiscovered>().GetFilterWherePropertyEqualsValue("DeviceId", deviceVm.Id);
                 var devicesDiscoveredResponse = await _managerService.DeviceDiscoveredManager().GetAsync(deviceDiscoveredFilter);
                 var devicesDiscovered = devicesDiscoveredResponse.Data;
 
                 var issueIds = devicesDiscovered?.Select(i => i.IssueId.ToString()).ToList();
 
-                var issueFilter = await new FilterGenerator<Issue>().GetFilterForPropertyByListOfIdsAsync("Id", issueIds);
+                var issueFilter = new FilterGenerator<Issue>().GetFilterForPropertyByListOfIds("Id", issueIds);
                 var issueResponse = await _managerService.IssueManager().GetAsync(issueFilter);
                 var issues = issueResponse.Data;
 
 
                 //get the Maintenance Issues
-                var maintIssueFilter = await new FilterGenerator<MaintIssue>().GetFilterForPropertyByListOfIdsAsync("Id", issueIds);
+                var maintIssueFilter = new FilterGenerator<MaintIssue>().GetFilterForPropertyByListOfIds("Id", issueIds);
                 var maintIssuesResponse = await _managerService.MaintIssueManager().GetAsync(maintIssueFilter);
                 var maintIssues = maintIssuesResponse.Data;
 

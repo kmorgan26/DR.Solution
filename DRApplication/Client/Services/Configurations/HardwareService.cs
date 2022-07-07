@@ -70,7 +70,7 @@ public class HardwareService : IHardwareService
     public async Task<IEnumerable<HardwareVersionVm>> GetHardwareVersionVmsByHardwareSystemId(int id)
     {
         //Filter: FROM HardwareVersions WHERE HardwareSystemId = id
-        var hardwareSystemFilter = await new FilterGenerator<HardwareVersion>().GetFilterWherePropertyEqualsValueAsync("HardwareSystemId", id);
+        var hardwareSystemFilter = new FilterGenerator<HardwareVersion>().GetFilterWherePropertyEqualsValue("HardwareSystemId", id);
         var hardwareVerionResponse = await _managerService.HardwareVersionManager().GetAsync(hardwareSystemFilter);
         var hardwareVersionVms = hardwareVerionResponse.Data;
 
@@ -82,7 +82,7 @@ public class HardwareService : IHardwareService
     public async Task<IEnumerable<HardwareConfigVm>> GetHardwareConfigVmsByDeviceTypeIdAsync(int id)
     {
         //Filter: FROM HardwareConfigs WHERE DeviceTypeId = id
-        var deviceTypeFilter = await new FilterGenerator<HardwareConfig>().GetFilterWherePropertyEqualsValueAsync("DeviceTypeId", id);
+        var deviceTypeFilter = new FilterGenerator<HardwareConfig>().GetFilterWherePropertyEqualsValue("DeviceTypeId", id);
         var hardwareConfigResponse = await _managerService.HardwareConfigManager().GetAsync(deviceTypeFilter);
         var hardwareConfigs = hardwareConfigResponse.Data;
 

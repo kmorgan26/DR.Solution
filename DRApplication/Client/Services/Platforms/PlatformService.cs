@@ -50,7 +50,7 @@ public class PlatformService : IPlatformService
     public async Task<IEnumerable<DeviceVm>> GetDeviceVmsFromDeviceTypeId(int id)
     {
         //Filter = FROM Devices WHERE DeviceTypeId = id 
-        var deviceTypeFilter = await new FilterGenerator<Device>().GetFilterWherePropertyEqualsValueAsync("DeviceTypeId", id);
+        var deviceTypeFilter = new FilterGenerator<Device>().GetFilterWherePropertyEqualsValue("DeviceTypeId", id);
         var deviceResponse = await _managerService.DeviceManager().GetAsync(deviceTypeFilter);
         var devices = deviceResponse.Data?.OrderBy(i => i.Name);
 
@@ -62,7 +62,7 @@ public class PlatformService : IPlatformService
     public async Task<IEnumerable<DeviceTypeVm>> GetDeviceTypeVmsByMaintainerId(int id)
     {
         //Filter = FROM DeviceTypes WHERE MaintainerId = id 
-        var maintainerFilter = await new FilterGenerator<DeviceType>().GetFilterWherePropertyEqualsValueAsync("MaintainerId", id);
+        var maintainerFilter = new FilterGenerator<DeviceType>().GetFilterWherePropertyEqualsValue("MaintainerId", id);
         var deviceTypeResponse = await _managerService.DeviceTypeManager().GetAsync(maintainerFilter);
         var deviceTypes = deviceTypeResponse.Data;
 
@@ -73,7 +73,7 @@ public class PlatformService : IPlatformService
     }
     public async Task<IEnumerable<DeviceVm>> GetDeviceVmsByListOfIds(List<string> ids)
     {
-        var deviceFilter = await new FilterGenerator<Device>().GetFilterForPropertyByListOfIdsAsync("Id", ids);
+        var deviceFilter = new FilterGenerator<Device>().GetFilterForPropertyByListOfIds("Id", ids);
         var deviceResponse = await _managerService.DeviceManager().GetAsync(deviceFilter);
         var devices = deviceResponse.Data;
 

@@ -15,7 +15,7 @@ public class LoadHelpers : ILoadHelpers
     public async Task<IEnumerable<SoftwareVersion>> GetSoftwareVersionsFromVersionLoads(IEnumerable<VersionsLoad> versionsLoads)
     {
         var softwareVersionIds = versionsLoads.Select(x => x.SoftwareVersionId.ToString()).ToList();
-        var softwareVersionFilter = await new FilterGenerator<SoftwareVersion>().GetFilterForPropertyByListOfIdsAsync("Id", softwareVersionIds);
+        var softwareVersionFilter = new FilterGenerator<SoftwareVersion>().GetFilterForPropertyByListOfIds("Id", softwareVersionIds);
         var softwareVersionResponse = await _managerService.SoftwareVersionManager().GetAsync(softwareVersionFilter);
         var softwareVersions = softwareVersionResponse.Data;
 
@@ -28,7 +28,7 @@ public class LoadHelpers : ILoadHelpers
     public async Task<IEnumerable<SoftwareSystem>> GetSoftwareSystemFromSoftwareVersionAsync(IEnumerable<SoftwareVersion> softwareVersions)
     {
         var softwareSystemIds = softwareVersions.Select(x => x.SoftwareSystemId.ToString()).ToList();
-        var softwareSystemFilter = await new FilterGenerator<SoftwareSystem>().GetFilterForPropertyByListOfIdsAsync("Id", softwareSystemIds);
+        var softwareSystemFilter = new FilterGenerator<SoftwareSystem>().GetFilterForPropertyByListOfIds("Id", softwareSystemIds);
         var softwareSystemResponse = await _managerService.SoftwareSystemManager().GetAsync(softwareSystemFilter);
         var softwareSystem = softwareSystemResponse.Data;
 
@@ -40,7 +40,7 @@ public class LoadHelpers : ILoadHelpers
 
     public async Task<IEnumerable<VersionsLoad>> GetVersionsLoadsByLoadIdAsync(int id)
     {
-        var versionLoadsFilter = await new FilterGenerator<VersionsLoad>().GetFilterWherePropertyEqualsValueAsync("LoadId", id);
+        var versionLoadsFilter = new FilterGenerator<VersionsLoad>().GetFilterWherePropertyEqualsValue("LoadId", id);
         var versionLoadresponse = await _managerService.VersionsLoadManager().GetAsync(versionLoadsFilter);
         var versionLoads = versionLoadresponse.Data;
 
@@ -53,7 +53,7 @@ public class LoadHelpers : ILoadHelpers
     public async Task<IEnumerable<HardwareConfig>> GetHardwareConfigsFromSoftwareSystems(IEnumerable<SoftwareSystem> softwareSystems)
     {
         var hardwareConfigIds = softwareSystems.Select(i => i.HardwareConfigId.ToString()).ToList();
-        var hardwareConfigFilter = await new FilterGenerator<HardwareConfig>().GetFilterForPropertyByListOfIdsAsync("Id", hardwareConfigIds);
+        var hardwareConfigFilter = new FilterGenerator<HardwareConfig>().GetFilterForPropertyByListOfIds("Id", hardwareConfigIds);
         var hardwareConfigresponse = await _managerService.HardwareConfigManager().GetAsync(hardwareConfigFilter);
         var hardwareConfig = hardwareConfigresponse.Data;
 
@@ -66,7 +66,7 @@ public class LoadHelpers : ILoadHelpers
     public async Task<IEnumerable<SoftwareVersion>> GetSoftwareVersionsFromVersionsLoads(IEnumerable<VersionsLoad> versionsLoads)
     {
         var softwareVersionIds = versionsLoads.Select(i => i.SoftwareVersionId.ToString()).ToList();
-        var softVersionFilter = await new FilterGenerator<SoftwareVersion>().GetFilterWherePropertyEqualsValuesAsync("SoftwareVersion", softwareVersionIds);
+        var softVersionFilter = new FilterGenerator<SoftwareVersion>().GetFilterWherePropertyEqualsValues("SoftwareVersion", softwareVersionIds);
         var softwareVersionResponse = await _managerService.SoftwareVersionManager().GetAsync(softVersionFilter);
         var softwareVersions = softwareVersionResponse.Data;
 
