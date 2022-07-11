@@ -102,7 +102,7 @@ public class LoadService : ILoadService
             return new List<VersionsLoadVm>();
         }
     }
-    public async Task<IEnumerable<CurrentLoadVm>> GetAdHocCurrentLoadVmsByDeviceTypeId(int id)
+    public async Task<IEnumerable<CurrentLoadVm>> GetCurrentLoadVmsByDeviceTypeId(int id)
     {
         AdhocRequest adhocRequest = new AdhocRequest
         {

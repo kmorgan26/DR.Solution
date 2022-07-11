@@ -11,7 +11,7 @@ public interface ILoadService
     Task<IEnumerable<SpecificLoadVm>> GetSpecificLoadVmsByDeviceTypeId(int id);
     Task<IEnumerable<CurrentLoadVm>> GetCurrentLoadVmsByLoadId(int id);
     
-    Task<IEnumerable<CurrentLoadVm>> GetAdHocCurrentLoadVmsByDeviceTypeId(int id);
+    Task<IEnumerable<CurrentLoadVm>> GetCurrentLoadVmsByDeviceTypeId(int id);
 
     Task<IEnumerable<SpecificLoadVm>> GetSpecificLoadVmsByLoadId(int id);
     Task<IEnumerable<CurrentLoadVm>> MapCurrentLoadsToCurrentLoadVms(IEnumerable<CurrentLoad> currentLoads);
