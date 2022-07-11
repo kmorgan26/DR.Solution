@@ -5,7 +5,9 @@ namespace DRApplication.Client.Interfaces;
 public interface IManagerService
 {
     DeviceTypeVmManager DeviceTypeVmManager();
+    DeviceVmManager DeviceVmManager();
     CorrectiveActionManager CorrectiveActionManager();
+    CurrentLoadVmManager CurrentLoadVmManager();
     CurrentLoadManager CurrentLoadManager();
     DeviceDiscoveredManager DeviceDiscoveredManager();
     DeviceManager DeviceManager();

@@ -13,6 +13,10 @@ namespace DRApplication.Client.Services
         {
             return new DeviceTypeVmManager(_httpClient);
         }
+        public CurrentLoadVmManager CurrentLoadVmManager()
+        {
+            return new CurrentLoadVmManager(_httpClient);
+        }
         public CurrentLoadManager CurrentLoadManager()
         {
             return new CurrentLoadManager(_httpClient);
@@ -28,6 +32,10 @@ namespace DRApplication.Client.Services
         public DeviceManager DeviceManager()
         {
             return new DeviceManager(_httpClient);
+        }
+        public DeviceVmManager DeviceVmManager()
+        {
+            return new DeviceVmManager(_httpClient);
         }
         public DeviceTypeManager DeviceTypeManager()
         {
@@ -81,5 +89,7 @@ namespace DRApplication.Client.Services
         {
             return new VersionsLoadManager(_httpClient);
         }
+
+        
     }
 }

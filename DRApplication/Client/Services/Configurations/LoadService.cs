@@ -4,6 +4,7 @@ using DRApplication.Shared.Filters;
 using DRApplication.Shared.Enums;
 using DRApplication.Shared.Models;
 using DRApplication.Client.Helpers;
+using DRApplication.Shared.Requests;
 
 namespace DRApplication.Client.Services;
 
@@ -101,8 +102,24 @@ public class LoadService : ILoadService
             return new List<VersionsLoadVm>();
         }
     }
+    public async Task<IEnumerable<CurrentLoadVm>> GetAdHocCurrentLoadVmsByDeviceTypeId(int id)
+    {
+        AdhocRequest adhocRequest = new AdhocRequest
+        {
+            Url = "adhoc/listofvms",
+            Query = $"SELECT cl.Id, cl.LoadId, cl.DeviceId, l.Name[LoadName], d.Name[Device] " + 
+                $"FROM CurrentLoads cl " + 
+                $"INNER JOIN Devices d ON d.Id = cl.DeviceId " + 
+                $"INNER JOIN Loads l ON l.Id = cl.LoadId " + 
+                $"INNER JOIN HardwareConfigs h ON h.Id = l.HardwareConfigId " +
+                $"WHERE h.DeviceTypeId = @DeviceTypeId",
+            Parameters = new Dictionary<string, int> { { "DeviceTypeId", _appState.DeviceTypeVm.Id } }
+        };
+        return await _managerService.CurrentLoadVmManager().Get(adhocRequest);
+    }
     public async Task<IEnumerable<CurrentLoadVm>> GetCurrentLoadVmsByDeviceTypeId(int id)
     {
+        //TODO: Use Ad Hoc
         //first, get a list of devices for the DeviceTypeID (ID)
         var deviceVms = await _platformService.GetDeviceVmsFromDeviceTypeId(id);
         var deviceIds = deviceVms.Select(x => x.Id.ToString()).ToList();
@@ -143,6 +160,7 @@ public class LoadService : ILoadService
     }
     public async Task<IEnumerable<SpecificLoadVm>> GetSpecificLoadVmsByDeviceTypeId(int id)
     {
+        //TODO: Use Ad Hoc Dapper
         //first, get a list of devices for the DeviceTypeID (ID)
         var deviceVms = await _platformService.GetDeviceVmsFromDeviceTypeId(id);
 

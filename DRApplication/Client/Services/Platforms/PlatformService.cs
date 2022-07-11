@@ -34,9 +34,22 @@ public class PlatformService : IPlatformService
                         $"FROM DeviceTypes d " +
                         $"INNER JOIN Maintainers m ON m.Id = d.MaintainerId " +
                         $"WHERE d.MaintainerId = @maintainerId",
-            Parameters = new Dictionary<string, int>{{ "MaintainerId" , _appState.MaintainerVm.Id }}
+            Parameters = new Dictionary<string, int> { { "MaintainerId", _appState.MaintainerVm.Id } }
         };
         return await _managerService.DeviceTypeVmManager().Get(adhocRequest);
+    }
+    public async Task<IEnumerable<DeviceVm>> GetAdHockDeviceVmByDeviceTypeIdAsync(int id)
+    {
+        AdhocRequest adhocRequest = new AdhocRequest
+        {
+            Url = "adhoc/listofvms",
+            Query = $"SELECT d.Id, d.Name[Device], dt.Name[Platform], d.IsActive " +
+                $"FROM Devices d " +
+                $"INNER JOIN DeviceTypes dt ON dt.Id = d.DeviceTypeId " +
+                $"WHERE d.DeviceTypeId = @deviceTypeId",
+            Parameters = new Dictionary<string, int> { { "DeviceTypeId", _appState.DeviceTypeVm.Id } }
+        };
+        return await _managerService.DeviceVmManager().Get(adhocRequest);
     }
     public async Task<IEnumerable<DeviceTypeVm>> GetDeviceTypeVmsAsync()
     {
@@ -168,7 +181,7 @@ public class PlatformService : IPlatformService
     public async Task<bool> UpdateMaintainerFromMaintainerEditVm(MaintainerEditVm maintainerEditVm)
     {
         var maintainer = _mapperService.MaintainerFromMaintainerEditVm(maintainerEditVm);
-        
+
         try
         {
             var result = await _managerService.MaintainerManager().UpdateAsync(maintainer);
@@ -182,6 +195,7 @@ public class PlatformService : IPlatformService
             return false;
         }
     }
+
 
     #endregion
 
