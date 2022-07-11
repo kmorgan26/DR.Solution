@@ -187,12 +187,17 @@ public class LoadService : ILoadService
     }
     public async Task<IEnumerable<CurrentLoadVm>> GetCurrentLoadVmsByLoadId(int id)
     {
-        //SELECT * FROM CurrentLoads ---> **--WHERE LoadId = id--**
-        var loadFilter = new FilterGenerator<CurrentLoad>().GetFilterWherePropertyEqualsValue("LoadId", id);
-        var currentLoadResponse = await _managerService.CurrentLoadManager().GetAsync(loadFilter);
-        if (currentLoadResponse.Data is not null)
-            return await MapCurrentLoadsToCurrentLoadVms(currentLoadResponse.Data);
-        return new List<CurrentLoadVm>();
+        AdhocRequest adhocRequest = new AdhocRequest
+        {
+            Url = "adhoc/listofvms",
+            Query = $"SELECT cl.Id, cl.LoadId, cl.DeviceId, l.Name[LoadName], d.Name[Device] " +
+                $"FROM CurrentLoads cl " +
+                $"INNER JOIN Devices d ON d.Id = cl.DeviceId " +
+                $"INNER JOIN Loads l ON l.Id = cl.LoadId " +
+                $"WHERE cl.LoadId = @LoadId",
+            Parameters = new Dictionary<string, int> { { "LoadId", _appState.LoadVm.Id } }
+        };
+        return await _managerService.CurrentLoadVmManager().Get(adhocRequest);
     }
     public async Task<IEnumerable<SpecificLoadVm>> GetSpecificLoadVmsByLoadId(int id)
     {
