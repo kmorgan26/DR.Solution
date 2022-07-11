@@ -1,8 +1,7 @@
-﻿using DRApplication.Shared.Enums;
-using DRApplication.Client.Interfaces;
+﻿using DRApplication.Client.Interfaces;
 using DRApplication.Client.ViewModels;
 using DRApplication.Shared.Models;
-using DRApplication.Client.Helpers;
+using DRApplication.Shared.Requests;
 
 namespace DRApplication.Client.Services;
 
@@ -13,17 +12,32 @@ public class PlatformService : IPlatformService
 
     private readonly IManagerService _managerService;
     private readonly IMapperService _mapperService;
+    private readonly AppState _appState;
 
-    public PlatformService(IManagerService managerService, IMapperService mapperService)
+    public PlatformService(IManagerService managerService, IMapperService mapperService, AppState appState)
     {
         _managerService = managerService;
         _mapperService = mapperService;
+        _appState = appState;
     }
 
     #endregion
 
     #region ---collections---
 
+    public async Task<IEnumerable<DeviceTypeVm>> GetAdHockDeviceTypeVmsAsync()
+    {
+        AdhocRequest adhocRequest = new AdhocRequest
+        {
+            Url = "adhoc/listofvms",
+            Query = $"SELECT d.Id, d.Name[Platform], m.Name[Maintainer], d.IsActive " +
+                        $"FROM DeviceTypes d " +
+                        $"INNER JOIN Maintainers m ON m.Id = d.MaintainerId " +
+                        $"WHERE d.MaintainerId = @maintainerId",
+            Parameters = new Dictionary<string, int>{{ "MaintainerId" , _appState.MaintainerVm.Id }}
+        };
+        return await _managerService.DeviceTypeVmManager().Get(adhocRequest);
+    }
     public async Task<IEnumerable<DeviceTypeVm>> GetDeviceTypeVmsAsync()
     {
         var deviceTypes = await _managerService.DeviceTypeManager().GetAllAsync();

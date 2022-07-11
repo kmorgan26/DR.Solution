@@ -9,6 +9,10 @@ namespace DRApplication.Client.Services
         {
             _httpClient = httpClient;
         }
+        public DeviceTypeVmManager DeviceTypeVmManager()
+        {
+            return new DeviceTypeVmManager(_httpClient);
+        }
         public CurrentLoadManager CurrentLoadManager()
         {
             return new CurrentLoadManager(_httpClient);

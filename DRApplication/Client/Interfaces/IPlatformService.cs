@@ -6,6 +6,7 @@ namespace DRApplication.Client.Interfaces;
 
 public interface IPlatformService
 {
+    Task<IEnumerable<DeviceTypeVm>> GetAdHockDeviceTypeVmsAsync();
     Task<IEnumerable<MaintainerVm>> GetMaintainerVmsAsync();
     Task<IEnumerable<DeviceVm>> GetDeviceVmsFromDeviceTypeId(int id);
     Task<IEnumerable<DeviceVm>> GetDeviceVmsByListOfIds(List<string> csvids);
