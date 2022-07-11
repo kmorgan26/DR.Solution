@@ -74,6 +74,7 @@ namespace DRApplication.Server
 
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
+            builder.Services.AddSwaggerGen();
 
             return builder;
         }
