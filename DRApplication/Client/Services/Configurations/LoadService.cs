@@ -117,21 +117,6 @@ public class LoadService : ILoadService
         };
         return await _managerService.CurrentLoadVmManager().Get(adhocRequest);
     }
-    public async Task<IEnumerable<CurrentLoadVm>> GetCurrentLoadVmsByDeviceTypeId(int id)
-    {
-        //TODO: Use Ad Hoc
-        //first, get a list of devices for the DeviceTypeID (ID)
-        var deviceVms = await _platformService.GetDeviceVmsFromDeviceTypeId(id);
-        var deviceIds = deviceVms.Select(x => x.Id.ToString()).ToList();
-
-        var currentLoadFilter = new FilterGenerator<CurrentLoad>().GetFilterForPropertyByListOfIds("DeviceId", deviceIds);
-        var currentLoadResponse = await _managerService.CurrentLoadManager().GetAsync(currentLoadFilter);
-
-        if(currentLoadResponse is not null && currentLoadResponse.Data is not null)
-            return await this.MapCurrentLoadsToCurrentLoadVms(currentLoadResponse.Data);
-        
-        return new List<CurrentLoadVm>();
-    }
     public async Task<IEnumerable<CurrentLoadVm>> MapCurrentLoadsToCurrentLoadVms(IEnumerable<CurrentLoad> currentLoads)
     {
         //Get the Loads for the currentLoads
