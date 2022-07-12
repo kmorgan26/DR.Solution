@@ -21,7 +21,7 @@
 
     async Task SetDevice(int id)
     {
-        var deviceVm = await PlatformService.GetDeviceVmById(id);
+        var deviceVm = await PlatformService.GetDeviceVmByIdAsync(id);
         DeviceId = deviceVm.Id;
         AppState.UpdateDeviceVm(this, deviceVm);
     }

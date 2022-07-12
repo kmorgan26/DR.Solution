@@ -84,10 +84,18 @@ public class PlatformService : IPlatformService
 
     #region ---Object Methods---
 
-    public async Task<DeviceVm> GetDeviceVmById(int id)
+    public async Task<DeviceVm> GetDeviceVmByIdAsync(int id)
     {
-        var device = await _managerService.DeviceManager().GetByIdAsync(id);
-        return await _mapperService.DeviceVmFromDeviceAsync(device);
+        AdhocRequest adhocRequest = new AdhocRequest
+        {
+            Url = "adhoc",
+            Query = $"SELECT d.Id, d.Name[Device], d.DeviceTypeId, d.IsActive, v.Name[Platform] " +
+                $"FROM Devices d " +
+                $"INNER JOIN DeviceTypes v ON v.Id = d.DeviceTypeId " +
+                $"WHERE d.Id = @deviceId",
+            Parameters = new Dictionary<string, int> { { "deviceId", id } }
+        };
+        return await _managerService.DeviceVmManager().GetByIdAsync(id, adhocRequest);
     }
     public async Task<DeviceEditVm> GetDeviceEditVmByIdAsync(int id)
     {
