@@ -41,28 +41,34 @@ public class LoadService : ILoadService
     #endregion
 
     #region ---Collection Object Methods---
-    public async Task<IEnumerable<LoadVm>> GetLoadVmByDeviceTypeId(int id)
+    public async Task<IEnumerable<CurrentLoadVm>> GetCurrentLoadVmsByLoadId(int id)
     {
-        var filter = new QueryFilter<Load>();
-        var filterProperties = new List<FilterProperty>();
-        filterProperties.Add(new FilterProperty()
+        AdhocRequest adhocRequest = new AdhocRequest
         {
-            Name = "DeviceTypeId",
-            Value = id.ToString(),
-            Operator = FilterQueryOperator.Equals
-        });
-        filter.OrderByDescending = true;
-        filter.PaginationFilter = null;
-        filter.FilterProperties = filterProperties;
-
-        var loadResponse = await _managerService.LoadManager().GetAsync(filter);
-        var loads = loadResponse.Data;
-
-        if (loads is not null)
-            return _mapperService.LoadVmsFromLoads(loads);
-
-        return new List<LoadVm>();
-
+            Url = "adhoc/listofvms",
+            Query = $"SELECT cl.Id, cl.LoadId, cl.DeviceId, l.Name[LoadName], d.Name[Device] " +
+                $"FROM CurrentLoads cl " +
+                $"INNER JOIN Devices d ON d.Id = cl.DeviceId " +
+                $"INNER JOIN Loads l ON l.Id = cl.LoadId " +
+                $"WHERE cl.LoadId = @LoadId",
+            Parameters = new Dictionary<string, int> { { "LoadId", _appState.LoadVm.Id } }
+        };
+        return await _managerService.CurrentLoadVmManager().Get(adhocRequest);
+    }
+    public async Task<IEnumerable<CurrentLoadVm>> GetCurrentLoadVmsByDeviceTypeId(int id)
+    {
+        AdhocRequest adhocRequest = new AdhocRequest
+        {
+            Url = "adhoc/listofvms",
+            Query = $"SELECT cl.Id, cl.LoadId, cl.DeviceId, l.Name[LoadName], d.Name[Device] " + 
+                $"FROM CurrentLoads cl " + 
+                $"INNER JOIN Devices d ON d.Id = cl.DeviceId " + 
+                $"INNER JOIN Loads l ON l.Id = cl.LoadId " + 
+                $"INNER JOIN HardwareConfigs h ON h.Id = l.HardwareConfigId " +
+                $"WHERE h.DeviceTypeId = @DeviceTypeId",
+            Parameters = new Dictionary<string, int> { { "DeviceTypeId", _appState.DeviceTypeVm.Id } }
+        };
+        return await _managerService.CurrentLoadVmManager().Get(adhocRequest);
     }
     public async Task<IEnumerable<LoadVm>> GetLoadVmsByHardwareConfigId(int id)
     {
@@ -86,6 +92,7 @@ public class LoadService : ILoadService
 
         return new List<LoadVm>();
     }
+    
     public async Task<IEnumerable<VersionsLoadVm>> GetVersionsLoadVmsByLoadId(int id)
     {
         try
@@ -101,35 +108,6 @@ public class LoadService : ILoadService
             //TODO: Log Error
             return new List<VersionsLoadVm>();
         }
-    }
-    public async Task<IEnumerable<CurrentLoadVm>> GetCurrentLoadVmsByDeviceTypeId(int id)
-    {
-        AdhocRequest adhocRequest = new AdhocRequest
-        {
-            Url = "adhoc/listofvms",
-            Query = $"SELECT cl.Id, cl.LoadId, cl.DeviceId, l.Name[LoadName], d.Name[Device] " + 
-                $"FROM CurrentLoads cl " + 
-                $"INNER JOIN Devices d ON d.Id = cl.DeviceId " + 
-                $"INNER JOIN Loads l ON l.Id = cl.LoadId " + 
-                $"INNER JOIN HardwareConfigs h ON h.Id = l.HardwareConfigId " +
-                $"WHERE h.DeviceTypeId = @DeviceTypeId",
-            Parameters = new Dictionary<string, int> { { "DeviceTypeId", _appState.DeviceTypeVm.Id } }
-        };
-        return await _managerService.CurrentLoadVmManager().Get(adhocRequest);
-    }
-    public async Task<IEnumerable<CurrentLoadVm>> GetCurrentLoadVmsByLoadId(int id)
-    {
-        AdhocRequest adhocRequest = new AdhocRequest
-        {
-            Url = "adhoc/listofvms",
-            Query = $"SELECT cl.Id, cl.LoadId, cl.DeviceId, l.Name[LoadName], d.Name[Device] " +
-                $"FROM CurrentLoads cl " +
-                $"INNER JOIN Devices d ON d.Id = cl.DeviceId " +
-                $"INNER JOIN Loads l ON l.Id = cl.LoadId " +
-                $"WHERE cl.LoadId = @LoadId",
-            Parameters = new Dictionary<string, int> { { "LoadId", _appState.LoadVm.Id } }
-        };
-        return await _managerService.CurrentLoadVmManager().Get(adhocRequest);
     }
     public async Task<IEnumerable<SpecificLoadVm>> GetSpecificLoadVmsByDeviceTypeId(int id)
     {
