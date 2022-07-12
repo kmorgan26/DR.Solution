@@ -154,18 +154,17 @@ public class LoadService : ILoadService
     #region --Tasks--
     public async Task<LoadVm> GetLoadVmById(int id)
     {
-        var load = await _managerService.LoadManager().GetByIdAsync(id);
-        var loadVm = new LoadVm()
+        AdhocRequest adhocRequest = new AdhocRequest
         {
-            Id = load.Id,
-            HardwareConfigId = load.HardwareConfigId,
-            IsAccepted = load.IsAccepted,
-            Name = load.Name
+            Url = "adhoc",
+            Query = $"SELECT l.Id, l.Name, l.HardwareConfigId, l.IsAccepted " +
+                $"FROM Loads l " +
+                $"WHERE l.Id = @LoadId",
+            Parameters = new Dictionary<string, int> { { "LoadId", id } }
         };
-        return loadVm;
+        return await _managerService.LoadVmManager().GetByIdAsync(id, adhocRequest);
     }
-    
-    public async Task<CurrentLoadVm> GetAdHocCurrentLoadVmById(int id)
+    public async Task<CurrentLoadVm> GetCurrentLoadVmById(int id)
     {
         AdhocRequest adhocRequest = new AdhocRequest
         {

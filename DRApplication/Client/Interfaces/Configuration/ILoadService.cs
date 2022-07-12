@@ -13,7 +13,7 @@ public interface ILoadService
     Task<IEnumerable<SpecificLoadVm>> GetSpecificLoadVmsByLoadId(int id);
     Task<IEnumerable<VersionsLoadVm>> GetVersionsLoadVmsByLoadId(int id);
 
-    Task<CurrentLoadVm> GetAdHocCurrentLoadVmById(int id);
+    Task<CurrentLoadVm> GetCurrentLoadVmById(int id);
     Task<LoadVm> GetLoadVmById(int id);
     Task<SpecificLoad> GetSpecificLoadFromSpecificLoadVm(SpecificLoadVm specificLoadVm);
     Task<SpecificLoadVm> GetSpecificLoadVmById(int id);
