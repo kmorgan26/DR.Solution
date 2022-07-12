@@ -26,7 +26,9 @@ namespace DRApplication.Server.Controllers
                 string query = adhocRequest.Query;
                 var parameters = adhocRequest.Parameters;
                 var dbArgs = new DynamicParameters();
-                foreach (var pair in parameters) dbArgs.Add(pair.Key, pair.Value);
+                
+                if(parameters is not null)
+                    foreach (var pair in parameters) dbArgs.Add(pair.Key, pair.Value);
 
                 var deviceTypeVms = await connection.QueryAsync<dynamic>(query, dbArgs);
 
