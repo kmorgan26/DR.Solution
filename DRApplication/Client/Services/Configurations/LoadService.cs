@@ -143,9 +143,22 @@ public class LoadService : ILoadService
 
         return new List<CurrentLoadVm>();
     }
+    public async Task<IEnumerable<CurrentLoadVm>> GetCurrentLoadVmsByLoadId(int id)
+    {
+        AdhocRequest adhocRequest = new AdhocRequest
+        {
+            Url = "adhoc/listofvms",
+            Query = $"SELECT cl.Id, cl.LoadId, cl.DeviceId, l.Name[LoadName], d.Name[Device] " +
+                $"FROM CurrentLoads cl " +
+                $"INNER JOIN Devices d ON d.Id = cl.DeviceId " +
+                $"INNER JOIN Loads l ON l.Id = cl.LoadId " +
+                $"WHERE cl.LoadId = @LoadId",
+            Parameters = new Dictionary<string, int> { { "LoadId", _appState.LoadVm.Id } }
+        };
+        return await _managerService.CurrentLoadVmManager().Get(adhocRequest);
+    }
     public async Task<IEnumerable<SpecificLoadVm>> GetSpecificLoadVmsByDeviceTypeId(int id)
     {
-        //TODO: Use Ad Hoc Dapper
         //first, get a list of devices for the DeviceTypeID (ID)
         var deviceVms = await _platformService.GetDeviceVmsFromDeviceTypeId(id);
 
@@ -185,20 +198,6 @@ public class LoadService : ILoadService
 
         return new List<SpecificLoadVm>();
     }
-    public async Task<IEnumerable<CurrentLoadVm>> GetCurrentLoadVmsByLoadId(int id)
-    {
-        AdhocRequest adhocRequest = new AdhocRequest
-        {
-            Url = "adhoc/listofvms",
-            Query = $"SELECT cl.Id, cl.LoadId, cl.DeviceId, l.Name[LoadName], d.Name[Device] " +
-                $"FROM CurrentLoads cl " +
-                $"INNER JOIN Devices d ON d.Id = cl.DeviceId " +
-                $"INNER JOIN Loads l ON l.Id = cl.LoadId " +
-                $"WHERE cl.LoadId = @LoadId",
-            Parameters = new Dictionary<string, int> { { "LoadId", _appState.LoadVm.Id } }
-        };
-        return await _managerService.CurrentLoadVmManager().Get(adhocRequest);
-    }
     public async Task<IEnumerable<SpecificLoadVm>> GetSpecificLoadVmsByLoadId(int id)
     {
         //SELECT * FROM CurrentLoads ---> **--WHERE LoadId = id--**
@@ -229,6 +228,20 @@ public class LoadService : ILoadService
         return await this.MapCurrentLoadToCurrentLoadVm(currentLoad);
     }
     
+    public async Task<CurrentLoadVm> GetAdHocCurrentLoadVmById(int id)
+    {
+        AdhocRequest adhocRequest = new AdhocRequest
+        {
+            Url = "adhoc",
+            Query = $"SELECT cl.Id, cl.LoadId, cl.DeviceId, l.Name[LoadName], d.Name[Device] " +
+                $"FROM CurrentLoads cl " +
+                $"INNER JOIN Devices d ON d.Id = cl.DeviceId " +
+                $"INNER JOIN Loads l ON l.Id = cl.LoadId " +
+                $"WHERE cl.Id = @Id",
+            Parameters = new Dictionary<string, int> { { "Id", id } }
+        };
+        return await _managerService.CurrentLoadVmManager().GetByIdAsync(id, adhocRequest);
+    }
     public async Task<CurrentLoadVm> MapCurrentLoadToCurrentLoadVm(CurrentLoad currentLoad)
     {
         var device = await _platformService.GetDeviceVmById(currentLoad.Id);

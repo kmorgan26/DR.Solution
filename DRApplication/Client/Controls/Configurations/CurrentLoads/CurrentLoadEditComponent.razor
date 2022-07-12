@@ -60,7 +60,8 @@
     protected override async Task OnInitializedAsync()
     {
         _isBusy = true;
-        var currentLoadVm = await LoadBuilderService.GetCurrentLoadVmById(CurrentLoadId);
+        //var currentLoadVm = await LoadBuilderService.GetCurrentLoadVmById(CurrentLoadId);
+        var currentLoadVm = await LoadBuilderService.GetAdHocCurrentLoadVmById(CurrentLoadId);
         AppState.UpdateCurrentLoadVm(this, currentLoadVm);
 
         var loadVm = await LoadBuilderService.GetLoadVmById(currentLoadVm.LoadId);

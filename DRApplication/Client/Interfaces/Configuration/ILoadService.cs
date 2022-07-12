@@ -10,14 +10,16 @@ public interface ILoadService
 
     Task<IEnumerable<SpecificLoadVm>> GetSpecificLoadVmsByDeviceTypeId(int id);
     Task<IEnumerable<CurrentLoadVm>> GetCurrentLoadVmsByLoadId(int id);
+
     Task<IEnumerable<CurrentLoadVm>> GetCurrentLoadVmsByDeviceTypeId(int id);
+    Task<IEnumerable<CurrentLoadVm>> MapCurrentLoadsToCurrentLoadVms(IEnumerable<CurrentLoad> currentLoads);
+    Task<CurrentLoadVm> GetCurrentLoadVmById(int id);
+    Task<CurrentLoadVm> GetAdHocCurrentLoadVmById(int id);
+    Task<CurrentLoadVm> MapCurrentLoadToCurrentLoadVm(CurrentLoad currentLoad);
 
     Task<IEnumerable<SpecificLoadVm>> GetSpecificLoadVmsByLoadId(int id);
-    Task<IEnumerable<CurrentLoadVm>> MapCurrentLoadsToCurrentLoadVms(IEnumerable<CurrentLoad> currentLoads);
     Task<LoadVm> GetLoadVmById(int id);
     Task<SpecificLoad> GetSpecificLoadFromSpecificLoadVm(SpecificLoadVm specificLoadVm);
     Task<SpecificLoadVm> GetSpecificLoadVmById(int id);
-    Task<CurrentLoadVm> MapCurrentLoadToCurrentLoadVm(CurrentLoad currentLoad);
-    Task<CurrentLoadVm> GetCurrentLoadVmById(int id);
     Task AddSoftwareVersionToLoad();
 }
