@@ -29,6 +29,7 @@ namespace DRApplication.Server.Controllers
                 foreach (var pair in parameters) dbArgs.Add(pair.Key, pair.Value);
 
                 var deviceTypeVms = await connection.QueryAsync<dynamic>(query, dbArgs);
+
                 return Ok(new APIListOfEntityResponse<dynamic>()
                 {
                     Success = true,
@@ -43,5 +44,45 @@ namespace DRApplication.Server.Controllers
             
 
         }
+
+        [HttpPost("{Id}")]
+        public async Task<ActionResult<APIEntityResponse<dynamic>>> GetById(int Id, AdhocRequest adhocRequest)
+        {
+            try
+            {
+                using var connection = new SqlConnection(_configuration.GetConnectionString("DRConnectionString"));
+                string query = adhocRequest.Query;
+                var parameters = adhocRequest.Parameters;
+                var dbArgs = new DynamicParameters();
+                foreach (var pair in parameters) dbArgs.Add(pair.Key, pair.Value);
+                
+                var vm = await connection.QuerySingleAsync<dynamic>(query, dbArgs);
+
+                if (vm != null)
+                {
+                    return Ok(new APIEntityResponse<dynamic>()
+                    {
+                        Success = true,
+                        Data = vm
+                    });
+                }
+                else
+                {
+                    return Ok(new APIEntityResponse<dynamic>()
+                    {
+                        Success = false,
+                        ErrorMessages = new List<string>() { "Object Not Found" },
+                        Data = null
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                // log exception here
+                Console.WriteLine(ex.Message);
+                return StatusCode(500);
+            }
+        }
+
     }
 }
