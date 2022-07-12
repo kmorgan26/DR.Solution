@@ -21,3 +21,23 @@ public class LoadVmManager : AdHocRepository<LoadVm>
         _httpClient = httpClient;
     }
 }
+
+public class VersionsLoadVmManager : AdHocRepository<VersionsLoadVm>
+{
+    private readonly HttpClient _httpClient;
+
+    public VersionsLoadVmManager(HttpClient httpClient) : base(httpClient)
+    {
+        _httpClient = httpClient;
+    }
+}
+
+public class SpecificLoadVmManager : AdHocRepository<SpecificLoadVm>
+{
+    private readonly HttpClient _httpClient;
+
+    public SpecificLoadVmManager(HttpClient httpClient) : base(httpClient)
+    {
+        _httpClient = httpClient;
+    }
+}

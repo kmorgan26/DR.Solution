@@ -82,37 +82,34 @@ public class LoadService : ILoadService
         };
         return await _managerService.LoadVmManager().Get(adhocRequest);
     }
-    
     public async Task<IEnumerable<VersionsLoadVm>> GetVersionsLoadVmsByLoadId(int id)
     {
-        try
+        AdhocRequest adhocRequest = new AdhocRequest
         {
-            var versionsLoads = await _loadHelpers.GetVersionsLoadsByLoadIdAsync(id);
-
-            var versionLoadsVms = await _mapperService.VersionsLoadVmsFromVersionsLoadAsync(versionsLoads);
-            return versionLoadsVms.OrderBy(i => i.SoftwareSystemName);
-
-        }
-        catch
-        {
-            //TODO: Log Error
-            return new List<VersionsLoadVm>();
-        }
+            Url = "adhoc/listofvms",
+            Query = $"SELECT v.Id, v.LoadId, v.SoftwareVersionId, sv.Name[SoftwareVersionName], ss.Name[SoftwareSystemName] " +
+                $"FROM VersionsLoads v " +
+                $"INNER JOIN SoftwareVersions sv ON sv.Id = v.SoftwareVersionId " +
+                $"INNER JOIN SoftwareSystems ss ON ss.Id = sv.SoftwareSystemId " +
+                $"WHERE v.LoadId = @LoadId",
+            Parameters = new Dictionary<string, int> { { "LoadId", id } }
+        };
+        return await _managerService.VersionsLoadVmManager().Get(adhocRequest);
     }
     public async Task<IEnumerable<SpecificLoadVm>> GetSpecificLoadVmsByDeviceTypeId(int id)
     {
-        //first, get a list of devices for the DeviceTypeID (ID)
-        var deviceVms = await _platformService.GetDeviceVmsFromDeviceTypeId(id);
-
-        var deviceIds = deviceVms.Select(x => x.Id.ToString()).ToList();
-
-        var specificLoadFilter = new FilterGenerator<SpecificLoad>().GetFilterForPropertyByListOfIds("DeviceId", deviceIds);
-        var specificLoadResponse = await _managerService.SpecificLoadManager().GetAsync(specificLoadFilter);
-
-        if (specificLoadResponse is not null && specificLoadResponse.Data is not null)
-            return await this.MapSpecificLoadsToSpecificLoadVms(specificLoadResponse.Data);
-
-        return new List<SpecificLoadVm>();
+        AdhocRequest adhocRequest = new AdhocRequest
+        {
+            Url = "adhoc/listofvms",
+            Query = $"SELECT sl.Id, sl.LoadId, sl.DeviceId, l.Name[LoadName], d.Name[Device] " +
+                $"FROM SpecificLoads sl " +
+                $"INNER JOIN Devices d ON d.Id = sl.DeviceId " +
+                $"INNER JOIN Loads l ON l.Id = sl.LoadId " +
+                $"INNER JOIN HardwareConfigs h ON h.Id = l.HardwareConfigId " +
+                $"WHERE h.DeviceTypeId = @DeviceTypeId",
+            Parameters = new Dictionary<string, int> { { "DeviceTypeId", _appState.DeviceTypeVm.Id } }
+        };
+        return await _managerService.SpecificLoadVmManager().Get(adhocRequest);
     }
     public async Task<IEnumerable<SpecificLoadVm>> MapSpecificLoadsToSpecificLoadVms(IEnumerable<SpecificLoad> specificLoads)
     {
