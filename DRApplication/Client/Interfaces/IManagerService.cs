@@ -24,5 +24,7 @@ public interface IManagerService
     SoftwareSystemManager SoftwareSystemManager();
     SoftwareVersionManager SoftwareVersionManager();
     SpecificLoadManager SpecificLoadManager();
+    SpecificLoadVmManager SpecificLoadVmManager();
     VersionsLoadManager VersionsLoadManager();
+    VersionsLoadVmManager VersionsLoadVmManager();
 }

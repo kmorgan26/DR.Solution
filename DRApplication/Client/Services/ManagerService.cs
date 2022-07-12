@@ -89,11 +89,18 @@ namespace DRApplication.Client.Services
         {
             return new SpecificLoadManager(_httpClient);
         }
+        public SpecificLoadVmManager SpecificLoadVmManager()
+        {
+            return new SpecificLoadVmManager(_httpClient);
+        }
         public VersionsLoadManager VersionsLoadManager()
         {
             return new VersionsLoadManager(_httpClient);
         }
+        public VersionsLoadVmManager VersionsLoadVmManager()
+        {
+            return new VersionsLoadVmManager(_httpClient);
+        }
 
-        
     }
 }
