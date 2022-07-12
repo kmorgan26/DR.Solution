@@ -117,32 +117,6 @@ public class LoadService : ILoadService
         };
         return await _managerService.CurrentLoadVmManager().Get(adhocRequest);
     }
-    public async Task<IEnumerable<CurrentLoadVm>> MapCurrentLoadsToCurrentLoadVms(IEnumerable<CurrentLoad> currentLoads)
-    {
-        //Get the Loads for the currentLoads
-        var currentLoadIds = currentLoads.Select(x => x.LoadId.ToString()).ToList();
-        var loadFilter = new FilterGenerator<Load>().GetFilterForPropertyByListOfIds("Id", currentLoadIds);
-        var loadResponse = await _managerService.LoadManager().GetAsync(loadFilter);
-
-        //Get the Devices for the currentLoads
-        var deviceIds = currentLoads.Select(x => x.DeviceId.ToString()).ToList();
-        var deviceVms = await _platformService.GetDeviceVmsByListOfIds(deviceIds);
-
-        if (loadResponse.Data is not null)
-        {
-            var currentLoadVms = currentLoads.Select(load => new CurrentLoadVm
-            {
-                Id = load.Id,
-                LoadId = load.LoadId,
-                DeviceId = load.DeviceId,
-                LoadName = loadResponse.Data.FirstOrDefault(i => i.Id == load.LoadId).Name,
-                Device = deviceVms.FirstOrDefault(i => i.Id == load.DeviceId).Device
-            });
-            return currentLoadVms;
-        }
-
-        return new List<CurrentLoadVm>();
-    }
     public async Task<IEnumerable<CurrentLoadVm>> GetCurrentLoadVmsByLoadId(int id)
     {
         AdhocRequest adhocRequest = new AdhocRequest
@@ -221,11 +195,6 @@ public class LoadService : ILoadService
             Name = load.Name
         };
         return loadVm;
-    }
-    public async Task<CurrentLoadVm> GetCurrentLoadVmById(int id)
-    {
-        var currentLoad = await _managerService.CurrentLoadManager().GetByIdAsync(id);
-        return await this.MapCurrentLoadToCurrentLoadVm(currentLoad);
     }
     
     public async Task<CurrentLoadVm> GetAdHocCurrentLoadVmById(int id)
