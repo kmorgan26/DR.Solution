@@ -11,3 +11,13 @@ public class CurrentLoadVmManager : AdHocRepository<CurrentLoadVm>
         _httpClient = httpClient;
     }
 }
+
+public class LoadVmManager : AdHocRepository<LoadVm>
+{
+    private readonly HttpClient _httpClient;
+
+    public LoadVmManager(HttpClient httpClient) : base(httpClient)
+    {
+        _httpClient = httpClient;
+    }
+}

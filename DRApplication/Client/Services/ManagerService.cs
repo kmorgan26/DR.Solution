@@ -65,6 +65,10 @@ namespace DRApplication.Client.Services
         {
             return new LoadManager(_httpClient);
         }
+        public LoadVmManager LoadVmManager()
+        {
+            return new LoadVmManager(_httpClient);
+        }
         public MaintainerManager MaintainerManager()
         {
             return new MaintainerManager(_httpClient);

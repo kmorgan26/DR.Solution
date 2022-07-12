@@ -72,25 +72,15 @@ public class LoadService : ILoadService
     }
     public async Task<IEnumerable<LoadVm>> GetLoadVmsByHardwareConfigId(int id)
     {
-        var filter = new QueryFilter<Load>();
-        var filterProperties = new List<FilterProperty>();
-        filterProperties.Add(new FilterProperty()
+        AdhocRequest adhocRequest = new AdhocRequest
         {
-            Name = "HardwareConfigId",
-            Value = id.ToString(),
-            Operator = FilterQueryOperator.Equals
-        });
-        filter.OrderByDescending = true;
-        filter.PaginationFilter = null;
-        filter.FilterProperties = filterProperties;
-
-        var loadResponse = await _managerService.LoadManager().GetAsync(filter);
-        var loads = loadResponse.Data;
-
-        if (loads is not null)
-            return _mapperService.LoadVmsFromLoads(loads);
-
-        return new List<LoadVm>();
+            Url = "adhoc/listofvms",
+            Query = $"SELECT l.Id, l.Name, l.HardwareConfigId, l.IsAccepted " +
+                $"FROM Loads l " +
+                $"WHERE l.HardwareConfigId = @HardwareConfigId",
+            Parameters = new Dictionary<string, int> { { "HardwareConfigId", id } }
+        };
+        return await _managerService.LoadVmManager().Get(adhocRequest);
     }
     
     public async Task<IEnumerable<VersionsLoadVm>> GetVersionsLoadVmsByLoadId(int id)
