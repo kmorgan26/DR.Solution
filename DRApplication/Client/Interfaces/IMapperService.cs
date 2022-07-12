@@ -16,7 +16,6 @@ public interface IMapperService
     #region --- Platform Maps ---
     CurrentLoadEditVm CurrentLoadEditVmFromCurrentLoadVm(CurrentLoadVm currentLoadVm);
     CurrentLoad CurrentLoadFromCurrentLoadEditVm(CurrentLoadEditVm currentLoadEditVm);
-    Device DeviceFromDeviceVm(DeviceVm deviceVm);
     Device DeviceFromDeviceInsertVm(DeviceInsertVm deviceInsertVm);
     Device DeviceFromDeviceEditVm(DeviceEditVm deviceEditVm);
     DeviceEditVm DeviceEditVmFromDevice(Device device);
@@ -25,7 +24,6 @@ public interface IMapperService
     DeviceType DeviceTypeFromDeviceTypeInsertVm(DeviceTypeInsertVm deviceTypeInsertVm);
     DeviceTypeEditVm DeviceTypeEditVmFromDeviceType(DeviceType deviceType);
     DeviceTypeEditVm DeviceTypeEditVmFromDeviceTypeVm(DeviceTypeVm deviceTypeVm);
-    DeviceTypeInsertVm DeviceTypeInsertVmFromDeviceTypeVm(DeviceTypeVm deviceTypeVm);
     Maintainer MaintainerFromMaintainerEditVm(MaintainerEditVm maintainerEditVm);
     MaintainerVm MaintainerVmFromMaintainer(Maintainer maintainer);
     MaintainerEditVm MaintainerEditVmFromMaintainer(Maintainer maintainer);
@@ -81,7 +79,6 @@ public interface IMapperService
     Load LoadFromLoadVm(LoadVm loadVm);
     Load LoadFromLoadInsertVm(LoadInsertVm loadInsertVm);
     SpecificLoad SpecificLoadFromSpecificLoadVm(SpecificLoadVm specificLoadVm);
-    IEnumerable<LoadVm> LoadVmsFromLoads(IEnumerable<Load> loads);
 
 
     #endregion

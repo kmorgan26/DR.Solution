@@ -75,17 +75,6 @@ public class MapperService : IMapperService
         };
         return currentLoad;
     }
-    public Device DeviceFromDeviceVm(DeviceVm deviceVm)
-    {
-        var device = new Device()
-        {
-            Id = deviceVm.Id,
-            IsActive = deviceVm.IsActive,
-            DeviceTypeId = deviceVm.DeviceTypeId,
-            Name = deviceVm.Device
-        };
-        return device;
-    }
     public Device DeviceFromDeviceInsertVm(DeviceInsertVm deviceInsertVm)
     {
         var device = new Device()
@@ -176,16 +165,6 @@ public class MapperService : IMapperService
         };
 
         return deviceTypeEditVm;
-    }
-    public DeviceTypeInsertVm DeviceTypeInsertVmFromDeviceTypeVm(DeviceTypeVm deviceTypeVm)
-    {
-        var deviceTypeInsertVm = new DeviceTypeInsertVm
-        {
-            IsActive = deviceTypeVm.IsActive,
-            MaintainerId = deviceTypeVm.MaintainerId,
-            Platform = deviceTypeVm.Platform
-        };
-        return deviceTypeInsertVm;
     }
     public Maintainer MaintainerFromMaintainerEditVm(MaintainerEditVm maintainerEditVm)
     {
@@ -609,18 +588,6 @@ public class MapperService : IMapperService
         };
 
         return load;
-    }
-    public IEnumerable<LoadVm> LoadVmsFromLoads(IEnumerable<Load> loads)
-    {
-        var loadVms = loads.Select(l => new LoadVm
-        {
-            Id = l.Id,
-            Name = l.Name,
-            HardwareConfigId = l.HardwareConfigId,
-            IsAccepted = l.IsAccepted
-        });
-
-        return loadVms;
     }
     public SpecificLoad SpecificLoadFromSpecificLoadVm(SpecificLoadVm specificLoadVm)
     {
