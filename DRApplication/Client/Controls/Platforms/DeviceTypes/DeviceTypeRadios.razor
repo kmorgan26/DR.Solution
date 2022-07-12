@@ -25,8 +25,7 @@
     protected override async Task OnInitializedAsync()
     {
         _isBusy = true;
-        //var items = await PlatformService.GetDeviceTypeVmsAsync();
-        var items = await PlatformService.GetAdHockDeviceTypeVmsAsync();
+        var items = await PlatformService.GetDeviceTypeVmsAsync();
         _deviceTypeVms = items.ToList();
         _isBusy = false;
     }

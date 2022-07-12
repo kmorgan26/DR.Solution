@@ -23,7 +23,7 @@
 
     private async Task SetDevices()
     {
-        var items = await PlatformService.GetDeviceVmsFromDeviceTypeId(AppState.DeviceTypeVm.Id);
+        var items = await PlatformService.GetDeviceVmByDeviceTypeIdAsync(AppState.DeviceTypeVm.Id);
         AppState.UpdateDeviceVms(this, items);
     }
     private async Task AppState_StateChanged(ComponentBase Source, string Property)

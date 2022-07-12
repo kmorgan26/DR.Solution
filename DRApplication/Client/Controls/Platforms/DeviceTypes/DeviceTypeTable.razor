@@ -33,7 +33,7 @@
 
     private async Task SetDeviceTypes()
     {
-        var deviceTypeVms = await PlatformService.GetAdHockDeviceTypeVmsAsync();
+        var deviceTypeVms = await PlatformService.GetDeviceTypeVmsAsync();
         AppState.UpdateDeviceTypeVms(this, deviceTypeVms);
     }
     private async Task AppState_StateChanged(ComponentBase Source, string Property)
