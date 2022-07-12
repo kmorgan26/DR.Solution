@@ -107,45 +107,25 @@ public class LoadService : ILoadService
                 $"INNER JOIN Loads l ON l.Id = sl.LoadId " +
                 $"INNER JOIN HardwareConfigs h ON h.Id = l.HardwareConfigId " +
                 $"WHERE h.DeviceTypeId = @DeviceTypeId",
-            Parameters = new Dictionary<string, int> { { "DeviceTypeId", _appState.DeviceTypeVm.Id } }
+            Parameters = new Dictionary<string, int> { { "DeviceTypeId", id } }
         };
         return await _managerService.SpecificLoadVmManager().Get(adhocRequest);
     }
-    public async Task<IEnumerable<SpecificLoadVm>> MapSpecificLoadsToSpecificLoadVms(IEnumerable<SpecificLoad> specificLoads)
-    {
-        //Get the Loads for the currentLoads
-        var specificLoadIds = specificLoads.Select(x => x.LoadId.ToString()).ToList();
-        var loadFilter = new FilterGenerator<Load>().GetFilterForPropertyByListOfIds("Id", specificLoadIds);
-        var loadResponse = await _managerService.LoadManager().GetAsync(loadFilter);
-
-        //Get the Devices for the currentLoads
-        var deviceIds = specificLoads.Select(x => x.DeviceId.ToString()).ToList();
-        var deviceVms = await _platformService.GetDeviceVmsByListOfIds(deviceIds);
-
-        if (loadResponse.Data is not null)
-        {
-            var specificLoadVms = specificLoads.Select(load => new SpecificLoadVm
-            {
-                Id = load.Id,
-                LoadId = load.LoadId,
-                DeviceId = load.DeviceId,
-                LoadName = loadResponse.Data.FirstOrDefault(i => i.Id == load.LoadId).Name,
-                Device = deviceVms.FirstOrDefault(i => i.Id == load.DeviceId).Device
-            });
-            return specificLoadVms;
-        }
-
-        return new List<SpecificLoadVm>();
-    }
     public async Task<IEnumerable<SpecificLoadVm>> GetSpecificLoadVmsByLoadId(int id)
     {
-        //SELECT * FROM CurrentLoads ---> **--WHERE LoadId = id--**
-        var loadFilter = new FilterGenerator<SpecificLoad>().GetFilterWherePropertyEqualsValue("LoadId", id);
-        var specificLoadResponse = await _managerService.SpecificLoadManager().GetAsync(loadFilter);
-        if (specificLoadResponse.Data is not null)
-            return await MapSpecificLoadsToSpecificLoadVms(specificLoadResponse.Data);
-        return new List<SpecificLoadVm>();
+        AdhocRequest adhocRequest = new AdhocRequest
+        {
+            Url = "adhoc/listofvms",
+            Query = $"SELECT sl.Id, sl.LoadId, sl.DeviceId, l.Name[LoadName], d.Name[Device] " +
+                $"FROM SpecificLoads sl " +
+                $"INNER JOIN Devices d ON d.Id = sl.DeviceId " +
+                $"INNER JOIN Loads l ON l.Id = sl.LoadId " +
+                $"WHERE sl.LoadId = @LoadId",
+            Parameters = new Dictionary<string, int> { { "LoadId", id } }
+        };
+        return await _managerService.SpecificLoadVmManager().Get(adhocRequest);
     }
+    
     #endregion
 
     #region --Tasks--

@@ -8,7 +8,6 @@ public interface ILoadService
     Task<IEnumerable<CurrentLoadVm>> GetCurrentLoadVmsByLoadId(int id);
     Task<IEnumerable<CurrentLoadVm>> GetCurrentLoadVmsByDeviceTypeId(int id);
     Task<IEnumerable<LoadVm>> GetLoadVmsByHardwareConfigId(int id);
-
     Task<IEnumerable<SpecificLoadVm>> GetSpecificLoadVmsByDeviceTypeId(int id);
     Task<IEnumerable<SpecificLoadVm>> GetSpecificLoadVmsByLoadId(int id);
     Task<IEnumerable<VersionsLoadVm>> GetVersionsLoadVmsByLoadId(int id);
