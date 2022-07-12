@@ -169,16 +169,6 @@ public class LoadService : ILoadService
         };
         return await _managerService.SpecificLoadVmManager().GetByIdAsync(id, adhocRequest);
     }
-    public async Task<SpecificLoad> GetSpecificLoadFromSpecificLoadVm(SpecificLoadVm specificLoadVm)
-    {
-        var specificLoad = new SpecificLoad()
-        {
-            Id = specificLoadVm.Id,
-            DeviceId = specificLoadVm.DeviceId,
-            LoadId = specificLoadVm.LoadId
-        };
-        return await Task.Run(() => specificLoad);
-    }
     public async Task AddSoftwareVersionToLoad()
     {
         var loadId = _appState.LoadVm.Id;

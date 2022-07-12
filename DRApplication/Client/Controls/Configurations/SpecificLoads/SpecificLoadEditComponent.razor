@@ -4,6 +4,7 @@
 @inject SpecificLoadManager SpecificLoadManager
 @inject IHardwareService HardwareService
 @inject ILoadService LoadBuilderService
+@inject IMapperService MapperService
 @inject ISnackbar Snackbar
 
 @if (!_isBusy)
@@ -45,7 +46,7 @@
 
     protected async Task UpdateSpecificLoad()
     {
-        var specificLoad = await LoadBuilderService.GetSpecificLoadFromSpecificLoadVm(AppState.SpecificLoadVm);
+        var specificLoad = MapperService.SpecificLoadFromSpecificLoadVm(AppState.SpecificLoadVm);
         await SpecificLoadManager.UpdateAsync(specificLoad);
         Snackbar.Add($"Device Specific Load was updated", Severity.Success);
         NavigationManager.NavigateTo("/specificload");

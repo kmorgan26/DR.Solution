@@ -80,7 +80,9 @@ public interface IMapperService
     LoadVm LoadVmFromLoad(Load load);
     Load LoadFromLoadVm(LoadVm loadVm);
     Load LoadFromLoadInsertVm(LoadInsertVm loadInsertVm);
+    SpecificLoad SpecificLoadFromSpecificLoadVm(SpecificLoadVm specificLoadVm);
     IEnumerable<LoadVm> LoadVmsFromLoads(IEnumerable<Load> loads);
+
 
     #endregion
 

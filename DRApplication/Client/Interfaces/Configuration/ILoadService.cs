@@ -13,7 +13,6 @@ public interface ILoadService
     Task<IEnumerable<VersionsLoadVm>> GetVersionsLoadVmsByLoadId(int id);
     Task<CurrentLoadVm> GetCurrentLoadVmById(int id);
     Task<LoadVm> GetLoadVmById(int id);
-    Task<SpecificLoad> GetSpecificLoadFromSpecificLoadVm(SpecificLoadVm specificLoadVm);
     Task<SpecificLoadVm> GetSpecificLoadVmById(int id);
     Task AddSoftwareVersionToLoad();
 }

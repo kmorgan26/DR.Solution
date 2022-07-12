@@ -622,6 +622,16 @@ public class MapperService : IMapperService
 
         return loadVms;
     }
+    public SpecificLoad SpecificLoadFromSpecificLoadVm(SpecificLoadVm specificLoadVm)
+    {
+        var specificLoad = new SpecificLoad()
+        {
+            Id = specificLoadVm.Id,
+            DeviceId = specificLoadVm.DeviceId,
+            LoadId = specificLoadVm.LoadId
+        };
+        return specificLoad;
+    }
 
     #endregion
 
@@ -646,5 +656,4 @@ public class MapperService : IMapperService
         return versionsLoadVms;
     }
 
-    
 }
