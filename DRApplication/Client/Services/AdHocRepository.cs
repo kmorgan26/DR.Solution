@@ -3,6 +3,7 @@ using DRApplication.Shared.Interfaces;
 using DRApplication.Shared.Requests;
 using DRApplication.Shared.Responses;
 using Newtonsoft.Json;
+using System.Net;
 using System.Net.Http.Json;
 
 namespace DRApplication.Client.Services
@@ -42,9 +43,27 @@ namespace DRApplication.Client.Services
             throw new NotImplementedException();
         }
 
-        public Task<TEntity> GetByIdAsync(object Id)
+        public async Task<TEntity> GetByIdAsync(object id, AdhocRequest adhocRequest)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var arg = WebUtility.HtmlEncode(id.ToString());
+                string url = adhocRequest.Url + "/" + arg;
+                var result = await _http.PostAsJsonAsync(url, adhocRequest);
+                result.EnsureSuccessStatusCode();
+                string responseBody = await result.Content.ReadAsStringAsync();
+                var response = JsonConvert.DeserializeObject<APIEntityResponse<TEntity>>(responseBody);
+
+                if (response is not null && response.Success)
+                    return response.Data;
+                else
+                    return null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
         }
     }
 }

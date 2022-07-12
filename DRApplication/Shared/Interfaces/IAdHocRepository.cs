@@ -13,6 +13,6 @@ public interface IAdHocRepository<TEntity> where TEntity : class
 {
     Task<PagedResponse<TEntity>> GetAsync(QueryFilter<TEntity> Filter);
     Task<IEnumerable<TEntity>> Get(AdhocRequest adhocRequest);
-    Task<TEntity> GetByIdAsync(object Id);
+    Task<TEntity> GetByIdAsync(object Id, AdhocRequest adhocRequest);
 
 }
