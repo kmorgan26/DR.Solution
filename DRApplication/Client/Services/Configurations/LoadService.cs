@@ -157,8 +157,17 @@ public class LoadService : ILoadService
     }
     public async Task<SpecificLoadVm> GetSpecificLoadVmById(int id)
     {
-        var specificLoad = await _managerService.SpecificLoadManager().GetByIdAsync(id);
-        return await this.MapSpecificLoadToSpecificLoadVm(specificLoad);
+        AdhocRequest adhocRequest = new AdhocRequest
+        {
+            Url = "adhoc",
+            Query = $"SELECT sl.Id, sl.LoadId, sl.DeviceId, l.Name[LoadName], d.Name[Device] " +
+                $"FROM SpecificLoads sl " +
+                $"INNER JOIN Devices d ON d.Id = sl.DeviceId " +
+                $"INNER JOIN Loads l ON l.Id = sl.LoadId " +
+                $"WHERE sl.Id = @Id",
+            Parameters = new Dictionary<string, int> { { "Id", id } }
+        };
+        return await _managerService.SpecificLoadVmManager().GetByIdAsync(id, adhocRequest);
     }
     public async Task<SpecificLoad> GetSpecificLoadFromSpecificLoadVm(SpecificLoadVm specificLoadVm)
     {
@@ -169,20 +178,6 @@ public class LoadService : ILoadService
             LoadId = specificLoadVm.LoadId
         };
         return await Task.Run(() => specificLoad);
-    }
-    public async Task<SpecificLoadVm> MapSpecificLoadToSpecificLoadVm(SpecificLoad specificLoad)
-    {
-        var device = await _platformService.GetDeviceVmById(specificLoad.Id);
-        var load = await _managerService.LoadManager().GetByIdAsync(specificLoad.LoadId);
-        var specificLoadVm = new SpecificLoadVm()
-        {
-            Id = specificLoad.Id,
-            LoadId = specificLoad.LoadId,
-            DeviceId = specificLoad.DeviceId,
-            Device = device.Device,
-            LoadName = load.Name
-        };
-        return specificLoadVm;
     }
     public async Task AddSoftwareVersionToLoad()
     {
