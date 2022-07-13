@@ -56,6 +56,15 @@ public class DeviceVmManager : AdHocRepository<DeviceVm>
         _http = http;
     }
 }
+public class HardwareSystemVmManager : AdHocRepository<HardwareSystemVm>
+{
+    private readonly HttpClient _http;
+
+    public HardwareSystemVmManager(HttpClient http) : base(http)
+    {
+        _http = http;
+    }
+}
 public class HardwareVersionVmManager: AdHocRepository<HardwareVersionVm>
 {
     private readonly HttpClient _http;

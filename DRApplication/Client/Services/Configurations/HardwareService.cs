@@ -22,14 +22,17 @@ public class HardwareService : IHardwareService
     #endregion
 
     #region ---Single Object Methods---
-
     public async Task<HardwareSystemVm> GetHardwareSystemVmById(int id)
     {
-        var hardwareSystem = await _managerService.HardwareSystemManager().GetByIdAsync(id);
-        if (hardwareSystem is not null)
-            return _mapperService.HardwareSystemVmFromHardwareSystem(hardwareSystem);
-
-        return new HardwareSystemVm();
+        AdhocRequest adhocRequest = new AdhocRequest
+        {
+            Url = "adhoc",
+            Query = $"SELECT h.Id, h.Name " +
+                        $"FROM HardwareSystems h " +
+                        $"WHERE h.Id = @hardwareSystemId ",
+            Parameters = new Dictionary<string, int> { { "hardwareSystemId", id } }
+        };
+        return await _managerService.HardwareSystemVmManager().GetByIdAsync(id, adhocRequest);
     }
     public async Task<HardwareSystemEditVm> GetHardwareSystemEditVmById(int id)
     {

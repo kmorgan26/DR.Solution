@@ -49,6 +49,10 @@ namespace DRApplication.Client.Services
         {
             return new HardwareSystemManager(_httpClient);
         }
+        public HardwareSystemVmManager HardwareSystemVmManager()
+        {
+            return new HardwareSystemVmManager(_httpClient);
+        }
         public HardwareVersionManager HardwareVersionManager()
         {
             return new HardwareVersionManager(_httpClient);

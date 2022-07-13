@@ -15,6 +15,7 @@ public interface IManagerService
     DrManager DrManager();
     HardwareConfigManager HardwareConfigManager();
     HardwareSystemManager HardwareSystemManager();
+    HardwareSystemVmManager HardwareSystemVmManager();
     HardwareVersionManager HardwareVersionManager();
     HardwareVersionVmManager HardwareVersionVmManager();
     IssueManager IssueManager();
