@@ -46,7 +46,6 @@
         {
             _deviceTypeEditVm.MaintainerId = id;
             var maintainerVm = await PlatformService.GetMaintainerVmById(id);
-            AppState.MaintainerVm.Id = id;
             AppState.UpdateMaintainerVm(this, maintainerVm);
     }
     }

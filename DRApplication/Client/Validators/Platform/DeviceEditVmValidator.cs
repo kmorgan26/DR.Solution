@@ -2,13 +2,13 @@
 using FluentValidation;
 
 namespace DRApplication.Client.Validators;
-public class DeviceVmValidator: AbstractValidator<DeviceVm>
+public class DeviceEditVmValidator: AbstractValidator<DeviceEditVm>
 {
-    public DeviceVmValidator()
+    public DeviceEditVmValidator()
     {
         RuleFor(x => x.Device)
         .NotEmpty()
-            .WithMessage("The Device Name is required. We gotta call them soemthing!")
+            .WithMessage("The Device Name is required. We gotta call them something!")
         .MaximumLength(20)
             .WithMessage("The Device Name cannot be more than 20 characters in length")
         .MinimumLength(4)
