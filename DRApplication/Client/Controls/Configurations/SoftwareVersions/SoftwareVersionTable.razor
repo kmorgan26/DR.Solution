@@ -17,7 +17,7 @@
         <RowTemplate>
             <MudTd DataLabel="Id">@context.Id</MudTd>
             <MudTd DataLabel="Version">@context.Name</MudTd>
-            <MudTd DataLabel="Version Date">@context.VersionDateString</MudTd>
+            <MudTd DataLabel="Version Date">@context.VersionDate.Value.ToShortDateString()</MudTd>
             <MudTd DataLabel="SELECT">
                 <a href="/softwareversion/edit/@context.Id" role="button">
                     <MudIcon Icon="@Icons.Material.Filled.Edit" Color="Color.Warning"></MudIcon>

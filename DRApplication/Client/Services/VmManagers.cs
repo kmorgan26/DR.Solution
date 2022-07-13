@@ -1,7 +1,6 @@
 ﻿using DRApplication.Client.ViewModels;
 
 namespace DRApplication.Client.Services;
-
 public class CurrentLoadVmManager : AdHocRepository<CurrentLoadVm>
 {
     private readonly HttpClient _httpClient;
@@ -11,7 +10,6 @@ public class CurrentLoadVmManager : AdHocRepository<CurrentLoadVm>
         _httpClient = httpClient;
     }
 }
-
 public class LoadVmManager : AdHocRepository<LoadVm>
 {
     private readonly HttpClient _httpClient;
@@ -21,7 +19,6 @@ public class LoadVmManager : AdHocRepository<LoadVm>
         _httpClient = httpClient;
     }
 }
-
 public class VersionsLoadVmManager : AdHocRepository<VersionsLoadVm>
 {
     private readonly HttpClient _httpClient;
@@ -31,7 +28,6 @@ public class VersionsLoadVmManager : AdHocRepository<VersionsLoadVm>
         _httpClient = httpClient;
     }
 }
-
 public class SpecificLoadVmManager : AdHocRepository<SpecificLoadVm>
 {
     private readonly HttpClient _httpClient;
@@ -39,5 +35,33 @@ public class SpecificLoadVmManager : AdHocRepository<SpecificLoadVm>
     public SpecificLoadVmManager(HttpClient httpClient) : base(httpClient)
     {
         _httpClient = httpClient;
+    }
+}
+public class DeviceTypeVmManager : AdHocRepository<DeviceTypeVm>
+{
+    private readonly HttpClient _httpClient;
+
+    public DeviceTypeVmManager(HttpClient httpClient) : base(httpClient)
+    {
+        _httpClient = httpClient;
+    }
+}
+
+public class DeviceVmManager : AdHocRepository<DeviceVm>
+{
+    private readonly HttpClient _http;
+
+    public DeviceVmManager(HttpClient http) : base(http)
+    {
+        _http = http;
+    }
+}
+public class HardwareVersionVmManager: AdHocRepository<HardwareVersionVm>
+{
+    private readonly HttpClient _http;
+
+    public HardwareVersionVmManager(HttpClient http) : base(http)
+    {
+        _http = http;
     }
 }

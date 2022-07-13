@@ -371,7 +371,6 @@ public class MapperService : IMapperService
             Name = hardwareVersion.Name,
             HardwareSystemId = hardwareVersion.HardwareSystemId,
             VersionDate = hardwareVersion.VersionDate,
-            VersionDateString = hardwareVersion.VersionDate.ToShortDateString()
         };
 
         return hardwareVersionVm;
@@ -410,18 +409,6 @@ public class MapperService : IMapperService
         };
 
         return hardwareVersionEditVm;
-    }
-    public IEnumerable<HardwareVersionVm> HardwareVersionVmsFromHardwareVersions(IEnumerable<HardwareVersion> hardwareVersions)
-    {
-        var hardwareVersionVms = hardwareVersions.Select(hwv => new HardwareVersionVm
-        {
-            Id = hwv.Id,
-            Name = hwv.Name,
-            VersionDate = hwv.VersionDate,
-            HardwareSystemId = hwv.HardwareSystemId,
-            VersionDateString = hwv.VersionDate.ToShortDateString()
-        });
-        return hardwareVersionVms;
     }
     public IEnumerable<HardwareConfigVm> HardwareConfigVmsFromHardwareConfigs(IEnumerable<HardwareConfig> hardwareConfigs)
     {
@@ -508,8 +495,7 @@ public class MapperService : IMapperService
             Id = softwareVersion.Id,
             Name = softwareVersion.Name,
             SoftwareSystemId = softwareVersion.SoftwareSystemId,
-            VersionDate = softwareVersion.VersionDate,
-            VersionDateString = softwareVersion.VersionDate.ToShortDateString()
+            VersionDate = softwareVersion.VersionDate
         };
 
         return softwareVersionVm;
@@ -543,8 +529,7 @@ public class MapperService : IMapperService
             Id = sv.Id,
             Name = sv.Name,
             SoftwareSystemId = sv.SoftwareSystemId,
-            VersionDate = sv.VersionDate,
-            VersionDateString = sv.VersionDate.ToShortDateString()
+            VersionDate = sv.VersionDate
         });
 
         return softwareVersionVms;

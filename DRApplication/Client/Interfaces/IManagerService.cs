@@ -16,6 +16,7 @@ public interface IManagerService
     HardwareConfigManager HardwareConfigManager();
     HardwareSystemManager HardwareSystemManager();
     HardwareVersionManager HardwareVersionManager();
+    HardwareVersionVmManager HardwareVersionVmManager();
     IssueManager IssueManager();
     LoadManager LoadManager();
     LoadVmManager LoadVmManager();

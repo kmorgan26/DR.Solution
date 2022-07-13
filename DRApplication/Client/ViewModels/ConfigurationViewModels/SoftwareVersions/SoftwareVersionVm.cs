@@ -10,6 +10,4 @@ public class SoftwareVersionVm
 
     public DateTime? VersionDate { get; set; }
 
-    public string VersionDateString { get; set; } = string.Empty;
-
 }

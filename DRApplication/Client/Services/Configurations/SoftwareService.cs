@@ -43,8 +43,7 @@ public class SoftwareService : ISoftwareService
             Id = id,
             Name = softwareVersion.Name,
             SoftwareSystemId = softwareVersion.SoftwareSystemId,
-            VersionDate = softwareVersion.VersionDate,
-            VersionDateString = softwareVersion.VersionDate.ToShortDateString()
+            VersionDate = softwareVersion.VersionDate
         };
 
     }

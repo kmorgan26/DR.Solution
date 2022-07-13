@@ -1,6 +1,8 @@
 ﻿using DRApplication.Client.Interfaces;
 using DRApplication.Client.ViewModels;
 using DRApplication.Shared.Models;
+using DRApplication.Shared.Requests;
+
 namespace DRApplication.Client.Services;
 
 public class HardwareService : IHardwareService
@@ -69,15 +71,15 @@ public class HardwareService : IHardwareService
 
     public async Task<IEnumerable<HardwareVersionVm>> GetHardwareVersionVmsByHardwareSystemId(int id)
     {
-        //Filter: FROM HardwareVersions WHERE HardwareSystemId = id
-        var hardwareSystemFilter = new FilterGenerator<HardwareVersion>().GetFilterWherePropertyEqualsValue("HardwareSystemId", id);
-        var hardwareVerionResponse = await _managerService.HardwareVersionManager().GetAsync(hardwareSystemFilter);
-        var hardwareVersionVms = hardwareVerionResponse.Data;
-
-        if (hardwareVersionVms is not null)
-            return _mapperService.HardwareVersionVmsFromHardwareVersions(hardwareVersionVms);
-
-        return new List<HardwareVersionVm>();
+        AdhocRequest adhocRequest = new AdhocRequest
+        {
+            Url = "adhoc/listofvms",
+            Query = $"SELECT h.Id, h.Name, h.HardwareSystemId, h.VersionDate " +
+                        $"FROM HardwareVersions h " +
+                        $"WHERE h.HardwareSystemId = @hardwareSystemId " ,
+            Parameters = new Dictionary<string, int> { { "hardwareSystemId", id } }
+        };
+        return await _managerService.HardwareVersionVmManager().Get(adhocRequest);
     }
     public async Task<IEnumerable<HardwareConfigVm>> GetHardwareConfigVmsByDeviceTypeIdAsync(int id)
     {
