@@ -8,9 +8,9 @@ namespace DRApplication.Client.Validators;
 /// so it can be used for Inserts and Edits as well as Reads.
 /// The mapping is a direct 1:1, so no issues
 /// </summary>
-public class HardwareVersionVmValidator: AbstractValidator<HardwareVersionVm>
+public class HardwareVersionEditVmValidator: AbstractValidator<HardwareVersionEditVm>
 {
-    public HardwareVersionVmValidator()
+    public HardwareVersionEditVmValidator()
     {
         RuleFor(m => m.Name)
             .NotEmpty()
