@@ -1,9 +1,8 @@
-﻿using DRApplication.Shared.Enums;
-using DRApplication.Client.ViewModels;
-using DRApplication.Shared.Models;
+﻿using DRApplication.Client.ViewModels;
 
 namespace DRApplication.Client.Interfaces;
 
+//TODO: Modify the DeviceVmsByListOfIds to use SQL Statement with IN clause
 public interface IPlatformService
 {
     Task<IEnumerable<DeviceTypeVm>> GetDeviceTypeVmsAsync();
