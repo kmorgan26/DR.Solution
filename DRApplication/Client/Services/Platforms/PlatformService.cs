@@ -62,7 +62,7 @@ public class PlatformService : IPlatformService
             Parameters = new Dictionary<string, int> { { "DeviceTypeId", _appState.DeviceTypeVm.Id } }
         };
         return await _managerService.DeviceVmManager().Get(adhocRequest);
-    }
+    }    
     public async Task<IEnumerable<MaintainerVm>> GetMaintainerVmsAsync()
     {
         var maintainers = await _managerService.MaintainerManager().GetAllAsync();
