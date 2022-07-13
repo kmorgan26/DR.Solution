@@ -4,6 +4,7 @@
 @inject ISnackbar Snackbar
 @inject IMapperService MapperService
 @inject IHardwareService HardwareService
+@inject IManagerService ManagerService
 
 @if (_hardwareSystemEditVm.Id > 0 && !_isBusy)
 {
@@ -35,9 +36,10 @@
 
     protected async Task UpdateHardwareSystem()
     {
-        var result = await HardwareService.UpdateHardwareSystemFromHardwareSystemEditVm(_hardwareSystemEditVm);
+        var hardwareSystem = MapperService.HardwareSystemFromHardwareSystemEditVm(_hardwareSystemEditVm);
+        var result = await ManagerService.HardwareSystemManager().UpdateAsync(hardwareSystem);
 
-        if (result)
+        if (result is not null)
             Snackbar.Add($"{_hardwareSystemEditVm.Name} was updated", Severity.Success);
 
         navigation.NavigateTo("/hardwaresystem");
@@ -46,7 +48,8 @@
     protected override async Task OnInitializedAsync()
     {
         _isBusy = true;
-        _hardwareSystemEditVm = await HardwareService.GetHardwareSystemEditVmById(HardwareSystemId);
+        var hardwareSystem = await ManagerService.HardwareSystemManager().GetByIdAsync(HardwareSystemId);
+        _hardwareSystemEditVm = MapperService.HardwareSystemEditVmFromHardwareSystem(hardwareSystem);
         _isBusy = false;
     }
 }

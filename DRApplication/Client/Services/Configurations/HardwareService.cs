@@ -96,34 +96,6 @@ public class HardwareService : IHardwareService
 
         return new List<HardwareConfigVm>();
     }
-    public async Task<bool> UpdateHardwareSystemFromHardwareSystemEditVm(HardwareSystemEditVm hardwareSystemEditVm)
-    {
-        var hardwareSystem = _mapperService.HardwareSystemFromHardwareSystemEditVm(hardwareSystemEditVm);
-
-        try
-        {
-            var result = await _managerService.HardwareSystemManager().UpdateAsync(hardwareSystem);
-            return result is not null;
-        }
-        catch
-        {
-            return false;
-        }
-    }
-    public async Task<bool> UpdateHardwareVersionFromHardwareVersionEditVmAsync(HardwareVersionEditVm hardwareVersionEditVm)
-    {
-        var hardwareVersion = _mapperService.HardwareVersionFromHardwareVersionEditVm(hardwareVersionEditVm);
-
-        try
-        {
-            var result = await _managerService.HardwareVersionManager().UpdateAsync(hardwareVersion);
-            return result is not null;
-        }
-        catch
-        {
-            return false;
-        }
-    }
     public async Task<int> InsertHardwareSystemFromHardwareSystemInsertVm(HardwareSystemInsertVm hardwareSystemInsertVm)
     {
         var hardwareSystem = _mapperService.HardwareSystemFromHardwareSystemInsertVm(hardwareSystemInsertVm);
