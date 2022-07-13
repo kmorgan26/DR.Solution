@@ -9,19 +9,19 @@
 @if (!_isBusy)
 {
     <MudItem xs="12" sm="12" md="4" lg="3">
-        <EditForm Model="@AppState.DeviceTypeVm" OnValidSubmit="@UpdateDeviceType">
+        <EditForm Model="_deviceTypeEditVm" OnValidSubmit="@UpdateDeviceType">
 
             <FluentValidationValidator DisableAssemblyScanning="true" />
 
-            <MudTextField @bind-Value="AppState.DeviceTypeVm.Platform" 
+            <MudTextField @bind-Value="_deviceTypeEditVm.Platform" 
                 Variant="Variant.Outlined" 
-                For="(() => AppState.DeviceTypeVm.Platform)"
+                For="(() => _deviceTypeEditVm.Platform)"
                 Label="Platform" 
                 Class="my-6" />
 
             <MaintainerSelect OnMaintainerIdChanged="UpdateMaintainerId" />
 
-            <MudCheckBox Class="my-6" Label="Active?" @bind-Checked="@AppState.DeviceTypeVm.IsActive" />
+            <MudCheckBox Class="my-6" Label="Active?" @bind-Checked="_deviceTypeEditVm.IsActive" />
 
             <MudPaper Elevation="0">
                 <SubmitButton ButtonText="Update" />
@@ -44,18 +44,15 @@
     {
         if (id > 0)
         {
+            _deviceTypeEditVm.MaintainerId = id;
             var maintainerVm = await PlatformService.GetMaintainerVmById(id);
-
-            var deviceTypeVm = AppState.DeviceTypeVm;
-            deviceTypeVm.MaintainerId = id;
+            AppState.MaintainerVm.Id = id;
             AppState.UpdateMaintainerVm(this, maintainerVm);
-            AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
-        }
+    }
     }
 
     protected async Task UpdateDeviceType()
     {
-        _deviceTypeEditVm = MapperService.DeviceTypeEditVmFromDeviceTypeVm(AppState.DeviceTypeVm);
         var deviceType = MapperService.DeviceTypeFromDeviceTypeEditVm(_deviceTypeEditVm);
         await DeviceTypeManager.UpdateAsync(deviceType);
         Snackbar.Add($"{_deviceTypeEditVm.Platform} was updated", Severity.Success);
@@ -66,6 +63,7 @@
     {
         _isBusy = true;
         var deviceTypeVm = await PlatformService.GetDeviceTypeVmByIdAsync(DeviceTypeId);
+        _deviceTypeEditVm = MapperService.DeviceTypeEditVmFromDeviceTypeVm(deviceTypeVm);
         AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
         _isBusy = false;
     }
