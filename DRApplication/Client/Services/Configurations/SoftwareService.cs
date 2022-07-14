@@ -56,14 +56,16 @@ public class SoftwareService : ISoftwareService
 
     public async Task<IEnumerable<SoftwareSystemVm>> GetSoftwareSystemVmsByHardwareConfigId(int id)
     {
-        var filter = new FilterGenerator<SoftwareSystem>().GetFilterWherePropertyEqualsValue("HardwareConfigId", id);
-        var softwareSystemResponse = await _managerService.SoftwareSystemManager().GetAsync(filter);
-        var softwareSystems = softwareSystemResponse.Data;
-
-        if (softwareSystems is not null)
-            return await _mapperService.SoftwareSystemVmsFromSoftwareSystemsAsync(softwareSystems.OrderBy(i => i.Name));
-
-        return new List<SoftwareSystemVm>();
+        AdhocRequest adhocRequest = new AdhocRequest
+        {
+            Url = "adhoc/listofvms",
+            Query = $"SELECT s.Id, s.Name, s.HardwareConfigId, h.Name[HardwareConfig] " +
+                        $"FROM SoftwareSystems s " +
+                        $"INNER JOIN HardwareConfigs h ON h.Id = s.HardwareConfigId " +
+                        $"WHERE s.HardwareConfigId = @hardwareConfigId ",
+            Parameters = new Dictionary<string, int> { { "hardwareConfigId", id } }
+        };
+        return await _managerService.SoftwareSystemVmManager().Get(adhocRequest);
     }
     public async Task<IEnumerable<SoftwareVersionVm>> GetSoftwareVersionVmsBySoftwareSystemId(int id)
     {
