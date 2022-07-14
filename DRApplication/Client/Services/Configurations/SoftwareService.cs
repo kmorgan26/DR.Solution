@@ -79,33 +79,6 @@ public class SoftwareService : ISoftwareService
         };
         return await _managerService.SoftwareVersionVmManager().Get(adhocRequest);
     }
-    
-    public async Task<IEnumerable<VersionsLoad>> GetVersionLoadsByLoadId(int id)
-    {
-        var versionLoadsFilter = new FilterGenerator<VersionsLoad>().GetFilterWherePropertyEqualsValue("LoadId", id);
-        var versionLoadresponse = await _managerService.VersionsLoadManager().GetAsync(versionLoadsFilter);
-        if (versionLoadresponse.Data is not null)
-        {
-            return versionLoadresponse.Data;
-        }
-        return new List<VersionsLoad>();
-    }
-    public async Task<IEnumerable<SoftwareSystem>> GetSoftwareSystemsByIds(List<string> ids)
-    {
-        var systemFilter = new FilterGenerator<SoftwareSystem>().GetFilterForPropertyByListOfIds("Id", ids);
-        var systemResponse = await _managerService.SoftwareSystemManager().GetAsync(systemFilter);
-        if (systemResponse.Data is not null)
-            return systemResponse.Data;
-        return new List<SoftwareSystem>();
-    }
-    public async Task<IEnumerable<SoftwareVersion>> GetSoftwareVersionsByIds(List<string> ids)
-    {
-        var versionFilter = new FilterGenerator<SoftwareVersion>().GetFilterForPropertyByListOfIds("Id", ids);
-        var versionResponse = await _managerService.SoftwareVersionManager().GetAsync(versionFilter);
-        if (versionResponse.Data is not null)
-            return versionResponse.Data;
-        return new List<SoftwareVersion>();
-    }
 
     #endregion
 
