@@ -1,6 +1,7 @@
 ﻿@namespace DRApplication.Client.Controls
 @inject ILoadService LoadService
 @inject IPlatformService PlatformService
+@inject IHardwareService HardwareService
 @inject AppState AppState
 
 <MudItem xs="12" sm="9" md="6" lg="3">
@@ -44,9 +45,13 @@
     public int LoadId { get; set; }
 
     bool _isbusy;
-    async Task HardwareConfigChanged()
+    async Task HardwareConfigChanged(int id)
     {
-
+        if(id > 0)
+        {
+            var vm = await HardwareService.GetHardwareConfigVmById(id);
+            AppState.UpdateHardwareConfigVm(this, vm);
+        }
     }
     async Task SetVersionLoadVmsForLoad()
     {
