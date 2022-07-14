@@ -65,11 +65,14 @@ public class HardwareService : IHardwareService
 
     public async Task<IEnumerable<HardwareSystemVm>> GetHardwareSystemVms()
     {
-        var hardwareSystems = await _managerService.HardwareSystemManager().GetAllAsync();
-        if(hardwareSystems is not null)
-            return _mapperService.HardwareSystemVmsFromHardwareSystems(hardwareSystems);
-
-        return new List<HardwareSystemVm>();
+        AdhocRequest adhocRequest = new AdhocRequest
+        {
+            Url = "adhoc/listofvms",
+            Query = $"SELECT h.Id, h.Name " +
+                        $"FROM HardwareSystems h ",
+            Parameters = null
+        };
+        return await _managerService.HardwareSystemVmManager().Get(adhocRequest);
     }
 
     public async Task<IEnumerable<HardwareVersionVm>> GetHardwareVersionVmsByHardwareSystemId(int id)
