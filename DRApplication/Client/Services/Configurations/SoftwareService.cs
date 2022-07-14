@@ -39,18 +39,15 @@ public class SoftwareService : ISoftwareService
     }
     public async Task<SoftwareVersionVm> GetSoftwareVersionVmById(int id)
     {
-        var softwareVersion = await _managerService.SoftwareVersionManager().GetByIdAsync(id);
-        if (softwareVersion == null)
-            return new SoftwareVersionVm();
-
-        return new SoftwareVersionVm()
+        AdhocRequest adhocRequest = new AdhocRequest
         {
-            Id = id,
-            Name = softwareVersion.Name,
-            SoftwareSystemId = softwareVersion.SoftwareSystemId,
-            VersionDate = softwareVersion.VersionDate
+            Url = "adhoc",
+            Query = $"SELECT s.Id, s.Name, s.SoftwareSystemId, s.VersionDate " +
+                        $"FROM SoftwareVersions s " +
+                        $"WHERE s.Id = @softwareVersionId ",
+            Parameters = new Dictionary<string, int> { { "softwareVersionId", id } }
         };
-
+        return await _managerService.SoftwareVersionVmManager().GetByIdAsync(id, adhocRequest);
     }
 
     #endregion
