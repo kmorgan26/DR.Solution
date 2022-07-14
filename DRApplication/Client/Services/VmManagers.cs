@@ -103,3 +103,12 @@ public class SoftwareVersionVmManager : AdHocRepository<SoftwareVersionVm>
         _http = http;
     }
 }
+public class MaintIssueVmManager : AdHocRepository<MaintenanceIssueVm>
+{
+    private readonly HttpClient _http;
+
+    public MaintIssueVmManager(HttpClient http) :base(http)
+    {
+        _http = http;
+    }
+}

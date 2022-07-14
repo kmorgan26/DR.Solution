@@ -2,6 +2,7 @@
 using DRApplication.Client.ViewModels;
 using DRApplication.Client.Helpers;
 using DRApplication.Shared.Models;
+using DRApplication.Shared.Requests;
 
 namespace DRApplication.Client.Services
 {
@@ -77,65 +78,29 @@ namespace DRApplication.Client.Services
 
             return vms;
         }
-
         /// <summary>
-        /// This method is used to get the latest 5 issues inserted for the selected Device on the Maint Issues Entry Page
+        /// This is the View Model for the Maintenance Entry Form used by Operations
+        /// This is the Table that is displayed below the form and shows the most recent 5
+        /// entries so users can see data populate as they make entries
         /// </summary>
+        /// <returns></returns>
         public async Task<IEnumerable<MaintenanceIssueVm>> GetMaintenanceIssueVmsForEntryTableAsync()
         {
-            try
+            AdhocRequest adhocRequest = new AdhocRequest
             {
-
-                //first get the selected DeviceVm
-                var deviceVm = _appState.DeviceVm;
-
-                //get correctiveActions
-                var correctiveActions = await _managerService.CorrectiveActionManager().GetAllAsync();
-
-                //Get the DeviceDiscovered DTOs with that DeviceId (previous 10)
-                var deviceDiscoveredFilter = new FilterGenerator<DeviceDiscovered>().GetFilterWherePropertyEqualsValue("DeviceId", deviceVm.Id);
-                var devicesDiscoveredResponse = await _managerService.DeviceDiscoveredManager().GetAsync(deviceDiscoveredFilter);
-                var devicesDiscovered = devicesDiscoveredResponse.Data;
-
-                var issueIds = devicesDiscovered?.Select(i => i.IssueId.ToString()).ToList();
-
-                var issueFilter = new FilterGenerator<Issue>().GetFilterForPropertyByListOfIds("Id", issueIds);
-                var issueResponse = await _managerService.IssueManager().GetAsync(issueFilter);
-                var issues = issueResponse.Data;
-
-
-                //get the Maintenance Issues
-                var maintIssueFilter = new FilterGenerator<MaintIssue>().GetFilterForPropertyByListOfIds("Id", issueIds);
-                var maintIssuesResponse = await _managerService.MaintIssueManager().GetAsync(maintIssueFilter);
-                var maintIssues = maintIssuesResponse.Data;
-
-
-                var maintIssueVms = issues.Select(i => new MaintenanceIssueVm
-                {
-                    IssueId = i.Id,
-                    IssueDate = i.IssueDate,
-                    DrType = i.DrTypeId == 1 ? "GOV" : "CNT",
-                    SimStatus = i.SimStatusId == 12 ? "Deferred" : "Closed",
-                    Description = i.Description,
-                    ActionTaken = maintIssues.Where(m => m.IssueId == i.Id).FirstOrDefault().ActionTaken,
-                    EnteredBy = i.EnteredBy,
-                    Device = deviceVm.Device,
-                    CorrectiveAction = correctiveActions
-                        .Where(ca => ca.Id == maintIssues
-                        .Where(m => m.IssueId == i.Id).FirstOrDefault().CorrectiveActionId).FirstOrDefault().Name,
-                    Pid = maintIssues.Where(m => m.IssueId == i.Id).FirstOrDefault().Pid
-                });
-
-                if (maintIssueVms is not null)
-                    return maintIssueVms;
-
-                return new List<MaintenanceIssueVm>();
-            }
-            catch (Exception)
-            {
-                return new List<MaintenanceIssueVm>();
-                throw;
-            }
+                Url = "adhoc/listofvms",
+                Query = $"SELECT TOP 5 i.Id[IssueId], dt.Name[DrType], ss.Name[SimStatus], i.Description, i.IssueDate, mi.Pid[PID], ca.Name[CorrectiveAction], mi.ActionTaken " +
+                        $"FROM Issues i " +
+                        $"INNER JOIN DrTypes dt ON dt.Id = i.DrTypeId " +
+                        $"INNER JOIN SimStatuses ss ON ss.Id = i.SimStatusId " +
+                        $"INNER JOIN MaintIssues mi ON mi.IssueId = i.Id " +
+                        $"INNER JOIN CorrectiveActions ca ON ca.Id = mi.CorrectiveActionId " +
+                        $"INNER JOIN DeviceDiscovered dd ON dd.IssueId = i.Id " +
+                        $"WHERE dd.DeviceId = @deviceId " +
+                        $"ORDER BY i.Id DESC ",
+                Parameters = new Dictionary<string, int> { { "deviceId", _appState.DeviceVm.Id } }
+            };
+            return await _managerService.MaintIssueVmManager().Get(adhocRequest);
         }
     }
 }

@@ -9,5 +9,4 @@ public interface IIssueService
     Task<int> InsertDeviceDiscoveredAsync(int deviceId, int issueId);
     Task<IEnumerable<CorrectiveActionVm>> GetCorrectiveActionVmsAsync();
     Task<IEnumerable<MaintenanceIssueVm>> GetMaintenanceIssueVmsForEntryTableAsync();
-
 }

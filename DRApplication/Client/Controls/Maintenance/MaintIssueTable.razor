@@ -22,7 +22,7 @@
             <MudTd DataLabel="Type">@context.DrType</MudTd>
             <MudTd DataLabel="Status">@context.SimStatus</MudTd>
             <MudTd DataLabel="Description">@context.Description</MudTd>
-            <MudTd DataLabel="Date">@context.IssueDate</MudTd>
+            <MudTd DataLabel="Date">@context.IssueDate.ToShortDateString()</MudTd>
             <MudTd DataLabel="PID">@context.Pid</MudTd>
             <MudTd DataLabel="Corrective Action">@context.CorrectiveAction</MudTd>
             <MudTd DataLabel="Action Taken">@context.ActionTaken</MudTd>
