@@ -23,7 +23,6 @@ public class SoftwareService : ISoftwareService
 
     #endregion
 
-    #region ---Single Object Methods---
     public async Task<SoftwareSystemVm> GetSoftwareSystemVmById(int id)
     {
         AdhocRequest adhocRequest = new AdhocRequest
@@ -49,11 +48,6 @@ public class SoftwareService : ISoftwareService
         };
         return await _managerService.SoftwareVersionVmManager().GetByIdAsync(id, adhocRequest);
     }
-
-    #endregion
-
-    #region ---Collection Methods---
-
     public async Task<IEnumerable<SoftwareSystemVm>> GetSoftwareSystemVmsByHardwareConfigId(int id)
     {
         AdhocRequest adhocRequest = new AdhocRequest
@@ -79,7 +73,5 @@ public class SoftwareService : ISoftwareService
         };
         return await _managerService.SoftwareVersionVmManager().Get(adhocRequest);
     }
-
-    #endregion
 
 }
