@@ -10,5 +10,4 @@ public interface IHardwareService
     Task<IEnumerable<HardwareSystemVm>> GetHardwareSystemVms();
     Task<IEnumerable<HardwareVersionVm>> GetHardwareVersionVmsByHardwareSystemId(int id);
     Task<IEnumerable<HardwareConfigVm>> GetHardwareConfigVmsByDeviceTypeIdAsync(int i);
-    Task<int> InsertHardwareSystemFromHardwareSystemInsertVm(HardwareSystemInsertVm hardwareSystemInsertVm);
 }

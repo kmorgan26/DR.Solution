@@ -4,6 +4,7 @@
 @inject ISnackbar Snackbar
 @inject AppState AppState
 @inject IHardwareService HardwareService
+@inject IManagerService ManagerService
 
 @if (_hardwareSystemInsertVm != null)
 {
@@ -31,9 +32,10 @@
 
     private async Task InsertHardwareSystem()
     {
-        var result = await HardwareService.InsertHardwareSystemFromHardwareSystemInsertVm(_hardwareSystemInsertVm);
+        var hardwareSystem = MapperService.HardwareSystemFromHardwareSystemInsertVm(_hardwareSystemInsertVm);
+        var result = await ManagerService.HardwareSystemManager().InsertAsync(hardwareSystem);
 
-        if (result > 0)
+        if (result.Id > 0)
             Snackbar.Add($"The new Hardware System has been added!", Severity.Success);
 
         navigation.NavigateTo("/hardwaresystem");

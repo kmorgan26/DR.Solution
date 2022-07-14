@@ -98,23 +98,6 @@ public class HardwareService : IHardwareService
         };
         return await _managerService.HardwareConfigVmManager().Get(adhocRequest);
     }
-    public async Task<int> InsertHardwareSystemFromHardwareSystemInsertVm(HardwareSystemInsertVm hardwareSystemInsertVm)
-    {
-        var hardwareSystem = _mapperService.HardwareSystemFromHardwareSystemInsertVm(hardwareSystemInsertVm);
-
-        try
-        {
-            var result = await _managerService.HardwareSystemManager().InsertAsync(hardwareSystem);
-            if (result.Id > 0)
-                return result.Id;
-            else
-                return 0;
-        }
-        catch
-        {
-            return 0;
-        }
-    }
 
     #endregion
 
