@@ -69,14 +69,15 @@ public class SoftwareService : ISoftwareService
     }
     public async Task<IEnumerable<SoftwareVersionVm>> GetSoftwareVersionVmsBySoftwareSystemId(int id)
     {
-        var softwareSystemFilter = new FilterGenerator<SoftwareVersion>().GetFilterWherePropertyEqualsValue("SoftwareSystemId", id);
-        var softwareVersionResponse = await _managerService.SoftwareVersionManager().GetAsync(softwareSystemFilter);
-        var softwareVersionVms = softwareVersionResponse.Data;
-
-        if (softwareVersionResponse.Data is not null)
-            return _mapperService.SoftwareVersionVmsFromSoftwareVersionsAsync(softwareVersionVms);
-
-        return new List<SoftwareVersionVm>();
+        AdhocRequest adhocRequest = new AdhocRequest
+        {
+            Url = "adhoc/listofvms",
+            Query = $"SELECT s.Id, s.Name, s.SoftwareSystemId, s.VersionDate " +
+                        $"FROM SoftwareVersions s " +
+                        $"WHERE s.SoftwareSystemId = @softwareSystemId ",
+            Parameters = new Dictionary<string, int> { { "softwareSystemId", id } }
+        };
+        return await _managerService.SoftwareVersionVmManager().Get(adhocRequest);
     }
     public async Task<IEnumerable<SoftwareVersionVm>> GetSoftwareVersionVmsByLoadId(int id)
     {
