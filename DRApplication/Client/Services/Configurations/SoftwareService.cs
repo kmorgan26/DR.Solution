@@ -1,6 +1,7 @@
 ﻿using DRApplication.Client.Interfaces;
 using DRApplication.Client.ViewModels;
 using DRApplication.Shared.Models;
+using DRApplication.Shared.Requests;
 
 namespace DRApplication.Client.Services;
 
@@ -23,14 +24,18 @@ public class SoftwareService : ISoftwareService
     #endregion
 
     #region ---Single Object Methods---
-
     public async Task<SoftwareSystemVm> GetSoftwareSystemVmById(int id)
     {
-        var softwareSystem = await _managerService.SoftwareSystemManager().GetByIdAsync(id);
-        if (softwareSystem is not null)
-            return await _mapperService.SoftwareSystemVmFromSoftwareSystemAsync(softwareSystem);
-
-        return new SoftwareSystemVm();
+        AdhocRequest adhocRequest = new AdhocRequest
+        {
+            Url = "adhoc",
+            Query = $"SELECT s.Id, s.Name, s.HardwareConfigId, h.Name[HardwareConfig] " +
+                    $"FROM SoftwareSystems s " +
+                    $"INNER JOIN HardwareConfigs h ON h.Id = s.HardwareConfigId " +
+                    $"WHERE s.Id = @softwareSystemId",
+            Parameters = new Dictionary<string, int> { { "softwareSystemId", id } }
+        };
+        return await _managerService.SoftwareSystemVmManager().GetByIdAsync(id, adhocRequest);
     }
     public async Task<SoftwareVersionVm> GetSoftwareVersionVmById(int id)
     {

@@ -83,3 +83,23 @@ public class HardwareConfigVmManager : AdHocRepository<HardwareConfigVm>
         _http = http;
     }
 }
+
+
+public class SoftwareSystemVmManager : AdHocRepository<SoftwareSystemVm>
+{
+    private readonly HttpClient _http;
+
+    public SoftwareSystemVmManager(HttpClient http) : base(http)
+    {
+        _http = http;
+    }
+}
+public class SoftwareVersionVmManager : AdHocRepository<SoftwareVersionVm>
+{
+    private readonly HttpClient _http;
+
+    public SoftwareVersionVmManager(HttpClient http) : base(http)
+    {
+        _http = http;
+    }
+}

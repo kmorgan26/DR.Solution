@@ -93,9 +93,17 @@ namespace DRApplication.Client.Services
         {
             return new SoftwareSystemManager(_httpClient);
         }
+        public SoftwareSystemVmManager SoftwareSystemVmManager()
+        {
+            return new SoftwareSystemVmManager(_httpClient);
+        }
         public SoftwareVersionManager SoftwareVersionManager()
         {
             return new SoftwareVersionManager(_httpClient);
+        }
+        public SoftwareVersionVmManager SoftwareVersionVmManager()
+        {
+            return new SoftwareVersionVmManager(_httpClient);
         }
         public SpecificLoadManager SpecificLoadManager()
         {
@@ -113,6 +121,6 @@ namespace DRApplication.Client.Services
         {
             return new VersionsLoadVmManager(_httpClient);
         }
-
+        
     }
 }
