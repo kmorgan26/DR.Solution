@@ -5,7 +5,7 @@
 
 <NewButton Url="/softwareversion/create" />
 
-@if (!_isBusy)
+@if (!_isBusy && @AppState.HardwareConfigVm.Id > 0)
 {
     <MudTable Items="@AppState.SoftwareVersionVms" Class="my-4" Hover="true" Striped="true" Dense="true">
         <HeaderContent>

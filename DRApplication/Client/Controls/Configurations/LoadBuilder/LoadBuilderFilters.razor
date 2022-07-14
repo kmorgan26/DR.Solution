@@ -16,13 +16,19 @@
 
     async Task SetHardwareConfigId(int id)
     {
-        var vm = await HardwareService.GetHardwareConfigVmById(id);
-        AppState.UpdateHardwareConfigVm(this, vm);
+        if (id > 0)
+        {
+            var vm = await HardwareService.GetHardwareConfigVmById(id);
+            AppState.UpdateHardwareConfigVm(this, vm);
+        }
     }
 
     async Task SetSoftwareSystemId(int id)
     {
-        var vm = await SoftwareService.GetSoftwareSystemVmById(id);
-        AppState.UpdateSoftwareSystemVm(this, vm);
+        if (id > 0)
+        {
+            var vm = await SoftwareService.GetSoftwareSystemVmById(id);
+            AppState.UpdateSoftwareSystemVm(this, vm);
+        }
     }
 }

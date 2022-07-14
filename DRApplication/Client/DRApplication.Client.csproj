@@ -8,6 +8,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Controls\Configurations\SoftwareSystems\SoftwareSystemLabel.razor.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Remove="Controls\Configurations\SoftwareSystems\SoftwareSystemLabel.razor" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Include="Controls\Configurations\VersionsLoads\VersionsLoadList.razor" />
 	</ItemGroup>
 
