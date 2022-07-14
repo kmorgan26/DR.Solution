@@ -226,16 +226,6 @@ public class MapperService : IMapperService
         };
         return hardwareConfigEditVm;
     }
-    public HardwareSystem HardwareSystemFromHardwareSystemVm(HardwareSystemVm hardwareSystemVm)
-    {
-        var hardwareSystem = new HardwareSystem
-        {
-            Id = hardwareSystemVm.Id,
-            Name = hardwareSystemVm.Name
-        };
-
-        return hardwareSystem;
-    }
     public HardwareSystem HardwareSystemFromHardwareSystemInsertVm(HardwareSystemInsertVm hardwareSystemInsertVm)
     {
         var hardwareSystem = new HardwareSystem
@@ -255,16 +245,6 @@ public class MapperService : IMapperService
 
         return hardwareSystem;
     }
-    public HardwareSystemVm HardwareSystemVmFromHardwareSystem(HardwareSystem hardwareSystem)
-    {
-        var hardwareSystemVm = new HardwareSystemVm
-        {
-            Id = hardwareSystem.Id,
-            Name = hardwareSystem.Name
-        };
-
-        return hardwareSystemVm;
-    }
     public HardwareSystemEditVm HardwareSystemEditVmFromHardwareSystem(HardwareSystem hardwareSystem)
     {
         var hardwareSystemEditVm = new HardwareSystemEditVm
@@ -274,18 +254,6 @@ public class MapperService : IMapperService
         };
 
         return hardwareSystemEditVm;
-    }
-    public HardwareVersion HardwareVersionFromHardwareVersionVm(HardwareVersionVm hardwareVersionVm)
-    {
-        var hardwareVersion = new HardwareVersion
-        {
-            Id = hardwareVersionVm.Id,
-            Name = hardwareVersionVm.Name,
-            VersionDate = (DateTime)hardwareVersionVm.VersionDate,
-            HardwareSystemId = hardwareVersionVm.HardwareSystemId
-        };
-
-        return hardwareVersion;
     }
     public HardwareVersion HardwareVersionFromHardwareVersionInsertVm(HardwareVersionInsertVm hardwareVersionInsertVm)
     {
@@ -310,18 +278,6 @@ public class MapperService : IMapperService
 
         return hardwareVersion;
     }
-    public HardwareVersionVm HardwareVersionVmFromHardwareVersion(HardwareVersion hardwareVersion)
-    {
-        var hardwareVersionVm = new HardwareVersionVm
-        {
-            Id = hardwareVersion.Id,
-            Name = hardwareVersion.Name,
-            HardwareSystemId = hardwareVersion.HardwareSystemId,
-            VersionDate = hardwareVersion.VersionDate,
-        };
-
-        return hardwareVersionVm;
-    }
     public HardwareVersionInsertVm HardwareVersionInsertVmFromHardwareVersionVm(HardwareVersionVm hardwareVersionVm)
     {
         var hardwareVersionInsertVm = new HardwareVersionInsertVm
@@ -332,18 +288,6 @@ public class MapperService : IMapperService
         };
 
         return hardwareVersionInsertVm;
-    }
-    public HardwareVersionEditVm HardwareVersionEditVmFromHardwareVersion(HardwareVersion hardwareVersion)
-    {
-        var hardwareVersionEditVm = new HardwareVersionEditVm
-        {
-            Id = hardwareVersion.Id,
-            Name = hardwareVersion.Name,
-            HardwareSystemId = hardwareVersion.HardwareSystemId,
-            VersionDate = hardwareVersion.VersionDate                
-        };
-
-        return hardwareVersionEditVm;
     }
     public HardwareVersionEditVm HardwareVersionEditVmFromHardwareVersionVm(HardwareVersionVm hardwareVersionVm)
     {
@@ -356,17 +300,6 @@ public class MapperService : IMapperService
         };
 
         return hardwareVersionEditVm;
-    }
-    public IEnumerable<HardwareConfigVm> HardwareConfigVmsFromHardwareConfigs(IEnumerable<HardwareConfig> hardwareConfigs)
-    {
-        var hardwareConfigVms = hardwareConfigs.Select(hwc => new HardwareConfigVm
-        {
-            Id = hwc.Id,
-            Name = hwc.Name,
-            DeviceTypeId = hwc.DeviceTypeId
-        });
-
-        return hardwareConfigVms;
     }
     public IEnumerable<HardwareSystemVm> HardwareSystemVmsFromHardwareSystems(IEnumerable<HardwareSystem> hardwareSystems)
     {
