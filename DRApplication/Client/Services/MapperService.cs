@@ -35,20 +35,6 @@ public class MapperService : IMapperService
 
         return deviceVm;
     }
-    public async Task<DeviceTypeVm> DeviceTypeVmFromDeviceTypeAsync(DeviceType deviceType)
-    {
-        var maintainer = await _managerService.MaintainerManager().GetByIdAsync(deviceType.MaintainerId);
-
-        var deviceTypeVm = new DeviceTypeVm
-        {
-            Id = deviceType.Id,
-            IsActive = deviceType.IsActive,
-            MaintainerId = deviceType.MaintainerId,
-            Platform = deviceType.Name,
-            Maintainer = maintainer.Name
-        };
-        return deviceTypeVm;
-    }
 
     #endregion
 
@@ -96,18 +82,6 @@ public class MapperService : IMapperService
         };
         return device;
     }
-    public DeviceEditVm DeviceEditVmFromDevice(Device device)
-    {
-        var deviceEditVm = new DeviceEditVm
-        {
-            Id = device.Id,
-            DeviceTypeId = device.DeviceTypeId,
-            IsActive = device.IsActive,
-            Device = device.Name,
-        };
-
-        return deviceEditVm;
-    }
     public DeviceEditVm DeviceEditVmFromDeviceVm(DeviceVm deviceVm)
     {
         var deviceEditVm = new DeviceEditVm
@@ -141,18 +115,6 @@ public class MapperService : IMapperService
         };
 
         return deviceType;
-    }
-    public DeviceTypeEditVm DeviceTypeEditVmFromDeviceType(DeviceType deviceType)
-    {
-        var deviceTypeEditVm = new DeviceTypeEditVm
-        {
-            Id = deviceType.Id,
-            IsActive = deviceType.IsActive,
-            MaintainerId = deviceType.MaintainerId,
-            Platform = deviceType.Name
-        };
-
-        return deviceTypeEditVm;
     }
     public DeviceTypeEditVm DeviceTypeEditVmFromDeviceTypeVm(DeviceTypeVm deviceTypeVm)
     {
@@ -208,21 +170,6 @@ public class MapperService : IMapperService
         }).OrderBy(i => i.Device); ;
 
         return deviceVms;
-    }
-    public async Task<IEnumerable<DeviceTypeVm>> DeviceTypeVmsFromDeviceTypesAsync(IEnumerable<DeviceType> deviceTypes)
-    {
-        var maintainers = await _managerService.MaintainerManager().GetAllAsync();
-
-        var deviceTypeVms = deviceTypes.Select(i => new DeviceTypeVm()
-        {
-            Id = i.Id,
-            IsActive = i.IsActive,
-            MaintainerId = i.MaintainerId,
-            Platform = i.Name,
-            Maintainer = maintainers.Where(m => m.Id == i.MaintainerId).FirstOrDefault().Name
-        }).OrderBy(i => i.Platform);
-
-        return deviceTypeVms;
     }
     public IEnumerable<MaintainerVm> MaintainerVmsFromMaintainers(IEnumerable<Maintainer> maintainers)
     {

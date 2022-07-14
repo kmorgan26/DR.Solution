@@ -7,9 +7,7 @@ public interface IMapperService
 {
 
     #region --- async Platform Maps---
-    
     Task<DeviceVm> DeviceVmFromDeviceAsync(Device device);
-    Task<DeviceTypeVm> DeviceTypeVmFromDeviceTypeAsync(DeviceType deviceType);
 
     #endregion
 
@@ -18,17 +16,14 @@ public interface IMapperService
     CurrentLoad CurrentLoadFromCurrentLoadEditVm(CurrentLoadEditVm currentLoadEditVm);
     Device DeviceFromDeviceInsertVm(DeviceInsertVm deviceInsertVm);
     Device DeviceFromDeviceEditVm(DeviceEditVm deviceEditVm);
-    DeviceEditVm DeviceEditVmFromDevice(Device device);
     DeviceEditVm DeviceEditVmFromDeviceVm(DeviceVm deviceVm);
     DeviceType DeviceTypeFromDeviceTypeEditVm(DeviceTypeEditVm deviceTypeEditVm);
     DeviceType DeviceTypeFromDeviceTypeInsertVm(DeviceTypeInsertVm deviceTypeInsertVm);
-    DeviceTypeEditVm DeviceTypeEditVmFromDeviceType(DeviceType deviceType);
     DeviceTypeEditVm DeviceTypeEditVmFromDeviceTypeVm(DeviceTypeVm deviceTypeVm);
     Maintainer MaintainerFromMaintainerEditVm(MaintainerEditVm maintainerEditVm);
     MaintainerVm MaintainerVmFromMaintainer(Maintainer maintainer);
     MaintainerEditVm MaintainerEditVmFromMaintainer(Maintainer maintainer);
     Task<IEnumerable<DeviceVm>> DeviceVmsFromDevicesAsync(IEnumerable<Device> devices);
-    Task<IEnumerable<DeviceTypeVm>> DeviceTypeVmsFromDeviceTypesAsync(IEnumerable<DeviceType> deviceTypes);
     IEnumerable<MaintainerVm> MaintainerVmsFromMaintainers(IEnumerable<Maintainer> maintainers);
 
     #endregion
