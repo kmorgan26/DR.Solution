@@ -74,7 +74,6 @@ public class HardwareService : IHardwareService
         };
         return await _managerService.HardwareSystemVmManager().Get(adhocRequest);
     }
-
     public async Task<IEnumerable<HardwareVersionVm>> GetHardwareVersionVmsByHardwareSystemId(int id)
     {
         AdhocRequest adhocRequest = new AdhocRequest
@@ -89,15 +88,15 @@ public class HardwareService : IHardwareService
     }
     public async Task<IEnumerable<HardwareConfigVm>> GetHardwareConfigVmsByDeviceTypeIdAsync(int id)
     {
-        //Filter: FROM HardwareConfigs WHERE DeviceTypeId = id
-        var deviceTypeFilter = new FilterGenerator<HardwareConfig>().GetFilterWherePropertyEqualsValue("DeviceTypeId", id);
-        var hardwareConfigResponse = await _managerService.HardwareConfigManager().GetAsync(deviceTypeFilter);
-        var hardwareConfigs = hardwareConfigResponse.Data;
-
-        if (hardwareConfigs is not null)
-            return _mapperService.HardwareConfigVmsFromHardwareConfigs(hardwareConfigs);
-
-        return new List<HardwareConfigVm>();
+        AdhocRequest adhocRequest = new AdhocRequest
+        {
+            Url = "adhoc/listofvms",
+            Query = $"SELECT h.Id, h.Name, h.DeviceTypeId " +
+                        $"FROM HardwareConfigs h " +
+                        $"WHERE h.DeviceTypeId = @deviceTypeId ",
+            Parameters = new Dictionary<string, int> { { "deviceTypeId", id } }
+        };
+        return await _managerService.HardwareConfigVmManager().Get(adhocRequest);
     }
     public async Task<int> InsertHardwareSystemFromHardwareSystemInsertVm(HardwareSystemInsertVm hardwareSystemInsertVm)
     {
