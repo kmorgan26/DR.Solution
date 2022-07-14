@@ -65,6 +65,10 @@ namespace DRApplication.Client.Services
         {
             return new HardwareConfigManager(_httpClient);
         }
+        public HardwareConfigVmManager HardwareConfigVmManager()
+        {
+            return new HardwareConfigVmManager(_httpClient);
+        }
         public IssueManager IssueManager()
         {
             return new IssueManager(_httpClient);

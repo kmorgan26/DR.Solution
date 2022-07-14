@@ -34,21 +34,17 @@ public class HardwareService : IHardwareService
         };
         return await _managerService.HardwareSystemVmManager().GetByIdAsync(id, adhocRequest);
     }
-    public async Task<HardwareSystemEditVm> GetHardwareSystemEditVmById(int id)
-    {
-        var hardwareSystem = await _managerService.HardwareSystemManager().GetByIdAsync(id);
-        if (hardwareSystem is not null)
-            return _mapperService.HardwareSystemEditVmFromHardwareSystem(hardwareSystem);
-
-        return new HardwareSystemEditVm();
-    }
     public async Task<HardwareConfigVm> GetHardwareConfigVmById(int id)
     {
-        var hardwareConfig = await _managerService.HardwareConfigManager().GetByIdAsync(id);
-        if (hardwareConfig is not null)
-            return _mapperService.HardwareConfigVmFromHardwareConfig(hardwareConfig);
-
-        return new HardwareConfigVm();
+        AdhocRequest adhocRequest = new AdhocRequest
+        {
+            Url = "adhoc",
+            Query = $"SELECT h.Id, h.Name, h.DeviceTypeId " +
+                        $"FROM HardwareConfigs h " +
+                        $"WHERE h.Id = @hardwareConfigId ",
+            Parameters = new Dictionary<string, int> { { "hardwareConfigId", id } }
+        };
+        return await _managerService.HardwareConfigVmManager().GetByIdAsync(id, adhocRequest);
     }
     public async Task<HardwareVersionVm> GetHardwareVersionVmById(int id)
     {
