@@ -91,7 +91,8 @@ public class LoadService : ILoadService
                 $"FROM VersionsLoads v " +
                 $"INNER JOIN SoftwareVersions sv ON sv.Id = v.SoftwareVersionId " +
                 $"INNER JOIN SoftwareSystems ss ON ss.Id = sv.SoftwareSystemId " +
-                $"WHERE v.LoadId = @LoadId",
+                $"WHERE v.LoadId = @LoadId " +
+                $"ORDER BY SoftwareSystemName",
             Parameters = new Dictionary<string, int> { { "LoadId", id } }
         };
         return await _managerService.VersionsLoadVmManager().Get(adhocRequest);
