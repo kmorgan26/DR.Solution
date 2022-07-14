@@ -48,11 +48,15 @@ public class HardwareService : IHardwareService
     }
     public async Task<HardwareVersionVm> GetHardwareVersionVmById(int id)
     {
-        var hardwareVersion = await _managerService.HardwareVersionManager().GetByIdAsync(id);
-        if (hardwareVersion is not null)
-            return _mapperService.HardwareVersionVmFromHardwareVersion(hardwareVersion);
-
-        return new HardwareVersionVm();
+        AdhocRequest adhocRequest = new AdhocRequest
+        {
+            Url = "adhoc",
+            Query = $"SELECT h.Id, h.Name, h.HardwareSystemId, h.VersionDate " +
+                        $"FROM HardwareVersions h " +
+                        $"WHERE h.Id = @hardwareVersionId ",
+            Parameters = new Dictionary<string, int> { { "hardwareVersionId", id } }
+        };
+        return await _managerService.HardwareVersionVmManager().GetByIdAsync(id, adhocRequest);
     }
 
     #endregion
