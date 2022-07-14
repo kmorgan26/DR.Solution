@@ -31,8 +31,7 @@ public interface IMapperService
     #region --- Hardware Maps ---
     HardwareConfig HardwareConfigFromHardwareConfigInsertVm(HardwareConfigInsertVm hardwareConfigInsertVm);
     HardwareConfig HardwareConfigFromHardwareConfigEditVm(HardwareConfigEditVm hardwareConfigEditVm);
-    HardwareConfigVm HardwareConfigVmFromHardwareConfig(HardwareConfig hardwareConfig);
-    HardwareConfigEditVm HardwareConfigEditVmFromHardwareConfigVm(HardwareConfigVm hardwareConfigVm);
+    HardwareConfigEditVm HardwareConfigEditVmFromHardwareConfig(HardwareConfig hardwareConfig);
     HardwareSystem HardwareSystemFromHardwareSystemInsertVm(HardwareSystemInsertVm hardwareSystemInsertVm);
     HardwareSystem HardwareSystemFromHardwareSystemEditVm(HardwareSystemEditVm hardwareSystemEditVm);
     HardwareSystemEditVm HardwareSystemEditVmFromHardwareSystem(HardwareSystem hardwareSystem);

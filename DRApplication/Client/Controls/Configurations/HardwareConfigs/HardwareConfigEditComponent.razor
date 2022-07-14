@@ -9,13 +9,17 @@
 @if (!_isBusy)
 {
     <MudItem xs="12" sm="12" md="4" lg="3">
-        <EditForm Model="@AppState.HardwareConfigVm" OnValidSubmit="@UpdateHardwareConfig">
+        <EditForm Model="_hardwareConfigEditVm" OnValidSubmit="@UpdateHardwareConfig">
 
             <FluentValidationValidator DisableAssemblyScanning="true" />
 
-            <DeviceTypeSelect  OnDeviceTypeIdChanged="UpdateDeviceTypeForHardwareConfig"></DeviceTypeSelect>
+            <DeviceTypeSelect OnDeviceTypeIdChanged="UpdateDeviceTypeForHardwareConfig"></DeviceTypeSelect>
 
-            <MudTextField @bind-Value="AppState.HardwareConfigVm.Name" Class="my-6" Label="Hardware Configuration" Variant="Variant.Outlined"></MudTextField>
+            <MudTextField @bind-Value="_hardwareConfigEditVm.Name" 
+                Class="my-6" 
+                For="(() => _hardwareConfigEditVm.Name)"
+                Label="Hardware Configuration" 
+                Variant="Variant.Outlined" />
 
             <SubmitButton ButtonText="Update" />
             <CancelButton Url="hardwareconfig" />
@@ -38,11 +42,8 @@
     {
         if (id > 0)
         {
+            _hardwareConfigEditVm.DeviceTypeId = id;
             var deviceTypeVm = await PlatformService.GetDeviceTypeVmByIdAsync(id);
-
-            var hardwareConfigvm = AppState.HardwareConfigVm;
-            hardwareConfigvm.DeviceTypeId = id;
-            AppState.UpdateHardwareConfigVm(this, hardwareConfigvm);
             AppState.UpdateDeviceTypeVm(this, deviceTypeVm);
 
         }
@@ -50,10 +51,12 @@
 
     protected async Task UpdateHardwareConfig()
     {
-        _hardwareConfigEditVm = MapperService.HardwareConfigEditVmFromHardwareConfigVm(AppState.HardwareConfigVm);
         var hardwareConfig = MapperService.HardwareConfigFromHardwareConfigEditVm(_hardwareConfigEditVm);
-        await HardwareConfigManager.UpdateAsync(hardwareConfig);
-        Snackbar.Add($"Hardware Configuration was updated", Severity.Success);
+        var result = await HardwareConfigManager.UpdateAsync(hardwareConfig);
+
+        if (result is not null)
+            Snackbar.Add($"Hardware Configuration was updated", Severity.Success);
+
         navigation.NavigateTo("/hardwareconfig");
     }
 
@@ -61,8 +64,7 @@
     {
         _isBusy = true;
         var hardwareConfig = await HardwareConfigManager.GetByIdAsync(HardwareConfigId);
-        var hardwareConfigVm = MapperService.HardwareConfigVmFromHardwareConfig(hardwareConfig);
-        AppState.UpdateHardwareConfigVm(this, hardwareConfigVm);
+        _hardwareConfigEditVm = MapperService.HardwareConfigEditVmFromHardwareConfig(hardwareConfig);
         _isBusy = false;
     }
 

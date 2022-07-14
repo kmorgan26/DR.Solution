@@ -206,15 +206,15 @@ public class MapperService : IMapperService
 
         return hardwareConfig;
     }
-    public HardwareConfigVm HardwareConfigVmFromHardwareConfig(HardwareConfig hardwareConfig)
+    public HardwareConfigEditVm HardwareConfigEditVmFromHardwareConfig(HardwareConfig hardwareConfig)
     {
-        var hardwareConfigVm = new HardwareConfigVm
+        var hardwareConfigEditVm = new HardwareConfigEditVm
         {
             Id = hardwareConfig.Id,
             Name = hardwareConfig.Name,
             DeviceTypeId = hardwareConfig.DeviceTypeId
         };
-        return hardwareConfigVm;
+        return hardwareConfigEditVm;
     }
     public HardwareConfigEditVm HardwareConfigEditVmFromHardwareConfigVm(HardwareConfigVm hardwareConfigVm)
     {

@@ -2,12 +2,7 @@
 using FluentValidation;
 
 namespace DRApplication.Client.Validators;
-/// <summary>
-/// The HardwareVersionVm is used on the Insert Form, and converted to 
-/// a HardwareVersionInsertVm prior to insert. The HardwareVersionVm is kept in AppState
-/// so it can be used for Inserts and Edits as well as Reads.
-/// The mapping is a direct 1:1, so no issues
-/// </summary>
+
 public class HardwareVersionEditVmValidator: AbstractValidator<HardwareVersionEditVm>
 {
     public HardwareVersionEditVmValidator()

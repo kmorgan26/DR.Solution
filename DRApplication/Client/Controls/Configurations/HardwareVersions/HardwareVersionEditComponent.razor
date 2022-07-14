@@ -56,7 +56,10 @@
     {
         var hardwareVersion = MapperService.HardwareVersionFromHardwareVersionEditVm(_hardwareVersionEditVm);
         var result = await HardwareVersionManager.UpdateAsync(hardwareVersion);
-        Snackbar.Add($"Hardware Version was updated", Severity.Success);
+
+        if(result is not null)
+            Snackbar.Add($"Hardware Version was updated", Severity.Success);
+
         navigation.NavigateTo("/hardwareversion");
     }
 
