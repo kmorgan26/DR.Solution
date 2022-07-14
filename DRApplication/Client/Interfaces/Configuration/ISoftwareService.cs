@@ -13,8 +13,6 @@ namespace DRApplication.Client.Interfaces
 
         Task<IEnumerable<SoftwareVersionVm>> GetSoftwareVersionVmsBySoftwareSystemId(int id);
 
-        Task<IEnumerable<SoftwareVersionVm>> GetSoftwareVersionVmsByLoadId(int id);
-
         Task<IEnumerable<VersionsLoad>> GetVersionLoadsByLoadId(int id);
 
         Task<IEnumerable<SoftwareSystem>> GetSoftwareSystemsByIds(List<string> ids);

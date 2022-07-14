@@ -79,14 +79,7 @@ public class SoftwareService : ISoftwareService
         };
         return await _managerService.SoftwareVersionVmManager().Get(adhocRequest);
     }
-    public async Task<IEnumerable<SoftwareVersionVm>> GetSoftwareVersionVmsByLoadId(int id)
-    {
-        var versionsLoads = await _loadHelpers.GetVersionsLoadsByLoadIdAsync(id);
-        var sofwareVersions = await _loadHelpers.GetSoftwareVersionsFromVersionsLoads(versionsLoads);
-
-        return _mapperService.SoftwareVersionVmsFromSoftwareVersionsAsync(sofwareVersions);
-
-    }
+    
     public async Task<IEnumerable<VersionsLoad>> GetVersionLoadsByLoadId(int id)
     {
         var versionLoadsFilter = new FilterGenerator<VersionsLoad>().GetFilterWherePropertyEqualsValue("LoadId", id);
