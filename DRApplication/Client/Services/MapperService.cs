@@ -328,20 +328,6 @@ public class MapperService : IMapperService
 
         return softwareSystemVm;
     }
-    public async Task<IEnumerable<SoftwareSystemVm>> SoftwareSystemVmsFromSoftwareSystemsAsync(IEnumerable<SoftwareSystem> softwareSystems)
-    {
-        var hardwareConfigs = await _loadHelpers.GetHardwareConfigsFromSoftwareSystems(softwareSystems);
-
-        var softwareSystemVms = softwareSystems.Select(ss => new SoftwareSystemVm
-        {
-            Id = ss.Id,
-            Name = ss.Name,
-            HardwareConfigId = ss.HardwareConfigId,
-            HardwareConfig = hardwareConfigs.Where(i => i.Id == ss.HardwareConfigId).FirstOrDefault().Name
-        });
-
-        return softwareSystemVms;
-    }
 
     #endregion
 
@@ -402,18 +388,6 @@ public class MapperService : IMapperService
 
         return softwareVersion;
     }
-    public IEnumerable<SoftwareVersionVm> SoftwareVersionVmsFromSoftwareVersionsAsync(IEnumerable<SoftwareVersion> softwareVersions)
-    {
-        var softwareVersionVms = softwareVersions.Select(sv => new SoftwareVersionVm
-        {
-            Id = sv.Id,
-            Name = sv.Name,
-            SoftwareSystemId = sv.SoftwareSystemId,
-            VersionDate = sv.VersionDate
-        });
-
-        return softwareVersionVms;
-    }
 
     #endregion
 
@@ -466,26 +440,5 @@ public class MapperService : IMapperService
     }
 
     #endregion
-
-    public async Task<IEnumerable<VersionsLoadVm>> VersionsLoadVmsFromVersionsLoadAsync(IEnumerable<VersionsLoad> versionsLoads)
-    {
-        var softwareVersions = await _loadHelpers.GetSoftwareVersionsFromVersionLoads(versionsLoads);
-        var softwareSystems = await _loadHelpers.GetSoftwareSystemFromSoftwareVersionAsync(softwareVersions);
-
-        var versionsLoadVms = versionsLoads.Select(vl => new VersionsLoadVm
-        {
-            Id = vl.Id,
-            LoadId = vl.LoadId,
-            SoftwareVersionId = vl.SoftwareVersionId,
-            SoftwareVersionName = softwareVersions.Where(i => i.Id == vl.SoftwareVersionId).FirstOrDefault().Name,
-            SoftwareSystemName = softwareSystems
-                .Where(ss => ss.Id == softwareVersions
-                .Where(sv => sv.Id == vl.SoftwareVersionId)
-                .FirstOrDefault().SoftwareSystemId)
-                .FirstOrDefault().Name
-        });
-
-        return versionsLoadVms;
-    }
 
 }
