@@ -9,10 +9,12 @@
 
 	<ItemGroup>
 	  <Compile Remove="Controls\Configurations\SoftwareSystems\SoftwareSystemLabel.razor.cs" />
+	  <Compile Remove="Interfaces\IGenericListService.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <Content Remove="Controls\Configurations\SoftwareSystems\SoftwareSystemLabel.razor" />
+	  <Content Remove="Controls\Generic\MenuPicker.razor" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -33,10 +35,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Shared\DRApplication.Shared.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Services\ListServices\" />
 	</ItemGroup>
 
 </Project>
