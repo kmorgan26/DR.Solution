@@ -3,7 +3,7 @@
 @inject AppState AppState
 @implements IDisposable
 
-@if (!_isBusy)
+@if (!_isBusy && AppState.HardwareConfigVms is not null)
 {
     <MudSelect Variant="Variant.Outlined" T="int" Label="Hardware Config" Value="@AppState.HardwareConfigVm.Id" ValueChanged="@OnHardwareConfigIdChanged">
         <MudSelectItem Value="0">SELECT Hardware Configuration</MudSelectItem>

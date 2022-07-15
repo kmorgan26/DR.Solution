@@ -1,0 +1,36 @@
+﻿@namespace DRApplication.Client.Controls
+@inject IHardwareService HardwareService
+@inject ILoadService LoadService
+@inject AppState AppState
+
+@if (AppState.HardwareConfigVm.Id > 0)
+{
+    <MudGrid>
+        <MudItem xs="12" sm="9" md="6" lg="3">
+            <HardwareConfigSelect OnHardwareConfigIdChanged="HardwareConfigChanged" />
+        </MudItem>
+        <MudItem xs="12" sm="9" md="6" lg="3">
+            <LoadSelect OnLoadIdChanged="LoadChanged" />
+        </MudItem>
+    </MudGrid>
+}
+
+@code {
+
+    async Task HardwareConfigChanged(int id)
+    {
+        if (id > 0)
+        {
+            var vm = await HardwareService.GetHardwareConfigVmById(id);
+            AppState.UpdateHardwareConfigVm(this, vm);
+        }
+    }
+    async Task LoadChanged(int id)
+    {
+        if (id > 0)
+        {
+            var loadVm = await LoadService.GetLoadVmById(id);
+            AppState.UpdateLoadVm(this, loadVm);
+        }
+    }
+}

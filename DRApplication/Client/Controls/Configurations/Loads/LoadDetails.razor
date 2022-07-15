@@ -3,27 +3,16 @@
 @inject IPlatformService PlatformService
 @inject IHardwareService HardwareService
 @inject AppState AppState
+@implements IDisposable
 
-<MudItem xs="12" sm="9" md="6" lg="3">
-    <HardwareConfigSelect OnHardwareConfigIdChanged="HardwareConfigChanged" />
-</MudItem>
-
+<LoadDetailsFilters />
 
 @if (!_isbusy)
 {
     <MudGrid>
         <MudItem xs="12" sm="9" md="6" lg="3">
             <MudAlert Severity="Severity.Success">Software Versions</MudAlert>
-            <MudTable Items="@AppState.VersionsLoadVms" Hover="true" T="VersionsLoadVm" Dense="true">
-                <HeaderContent>
-                    <MudTh>System</MudTh>
-                    <MudTh>Version</MudTh>
-                </HeaderContent>
-                <RowTemplate>
-                    <MudTd DataLabel="System">@context.SoftwareSystemName</MudTd>
-                    <MudTd DataLabel="Version">@context.SoftwareVersionName</MudTd>
-                </RowTemplate>
-            </MudTable>
+            <SoftwareVersionList />
         </MudItem>
         <MudItem xs="12" sm="9" md="6" lg="3">
             <MudAlert Severity="Severity.Success">Devices with this Software Load</MudAlert>
@@ -45,14 +34,7 @@
     public int LoadId { get; set; }
 
     bool _isbusy;
-    async Task HardwareConfigChanged(int id)
-    {
-        if(id > 0)
-        {
-            var vm = await HardwareService.GetHardwareConfigVmById(id);
-            AppState.UpdateHardwareConfigVm(this, vm);
-        }
-    }
+
     async Task SetVersionLoadVmsForLoad()
     {
         if (AppState.LoadVm.Id > 0)
@@ -70,23 +52,44 @@
     {
         if (AppState.LoadVm.Id > 0)
         {
-            List<string> ids = new();
-            var specificLoadVms = await LoadService.GetSpecificLoadVmsByLoadId(AppState.LoadVm.Id);
-            var currentLoadVms = await LoadService.GetCurrentLoadVmsByLoadId(AppState.LoadVm.Id);
-            ids.AddRange(specificLoadVms.Select(i => i.DeviceId.ToString()).ToList());
-            ids.AddRange(currentLoadVms.Select(i => i.DeviceId.ToString()).ToList());
-            var deviceVms = await PlatformService.GetDeviceVmsByListOfIds(ids);
+            var deviceVms = await PlatformService.GetDeviceVmsByLoadId(AppState.LoadVm.Id);
             AppState.UpdateDeviceVms(this, deviceVms);
         }
+    }
+
+    private async Task AppState_StateChanged(ComponentBase Source, string Property)
+    {
+        if (Source != this)
+        {
+            if (Property == "SoftwareSystemVm")
+            {
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+    }
+    async void OnStateChanged(ComponentBase componentBase, string property)
+    {
+        await AppState_StateChanged(componentBase, property);
     }
 
     protected override async Task OnInitializedAsync()
     {
         _isbusy = true;
+        AppState.StateChanged += OnStateChanged;
+
         var loadVm = await LoadService.GetLoadVmById(LoadId);
         AppState.UpdateLoadVm(this, loadVm);
+
+        var hardwareConfigVm = await HardwareService.GetHardwareConfigVmById(loadVm.HardwareConfigId);
+        AppState.UpdateHardwareConfigVm(this, hardwareConfigVm);
+
         await SetVersionLoadVmsForLoad();
         await GetDeviceVmsForLoad();
+
         _isbusy = false;
+    }
+    void IDisposable.Dispose()
+    {
+        AppState.StateChanged -= OnStateChanged;
     }
 }

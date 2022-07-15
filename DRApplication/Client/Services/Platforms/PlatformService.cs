@@ -79,6 +79,21 @@ public class PlatformService : IPlatformService
 
         return new List<DeviceVm>();
     }
+    public async Task<IEnumerable<DeviceVm>> GetDeviceVmsByLoadId(int id)
+    {
+        AdhocRequest adhocRequest = new AdhocRequest
+        {
+            Url = "adhoc/listofvms",
+            Query = $"SELECT d.Id, d.Name[Device], d.DeviceTypeId, d.IsActive, dt.Name[Platform] " +
+                $"FROM Devices d " +
+                $"INNER JOIN DeviceTypes dt ON dt.Id = d.DeviceTypeId " +
+                $"INNER JOIN CurrentLoads cl ON cl.DeviceId = d.Id " +
+                $"INNER JOIN Loads l ON l.Id = cl.LoadId " +
+                $"WHERE l.Id = @loadId",
+            Parameters = new Dictionary<string, int> { { "loadId", id } }
+        };
+        return await _managerService.DeviceVmManager().Get(adhocRequest);
+    }
 
     #endregion
 
@@ -178,6 +193,7 @@ public class PlatformService : IPlatformService
             return false;
         }
     }
+
 
 
     #endregion
