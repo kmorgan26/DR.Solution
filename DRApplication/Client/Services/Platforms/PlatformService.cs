@@ -112,8 +112,15 @@ public class PlatformService : IPlatformService
     }
     public async Task<MaintainerVm> GetMaintainerVmById(int id)
     {
-        var maintainer = await _managerService.MaintainerManager().GetByIdAsync(id);
-        return _mapperService.MaintainerVmFromMaintainer(maintainer);
+        AdhocRequest adhocRequest = new AdhocRequest
+        {
+            Url = "adhoc",
+            Query = $"SELECT m.Id, m.Name[Maintainer] " +
+                $"FROM Maintainers m " +
+                $"WHERE m.Id = @maintainerId",
+            Parameters = new Dictionary<string, int> { { "maintainerId", id } }
+        };
+        return await _managerService.MaintainerVmManager().GetByIdAsync(id, adhocRequest);
     }
     public async Task<MaintainerEditVm> GetMaintainerEditVmById(int id)
     {

@@ -85,6 +85,10 @@ namespace DRApplication.Client.Services
         {
             return new MaintainerManager(_httpClient);
         }
+        public MaintainerVmManager MaintainerVmManager()
+        {
+            return new MaintainerVmManager(_httpClient);
+        }
         public MaintIssueManager MaintIssueManager()
         {
             return new MaintIssueManager(_httpClient);
@@ -125,7 +129,6 @@ namespace DRApplication.Client.Services
         {
             return new VersionsLoadVmManager(_httpClient);
         }
-
         
     }
 }

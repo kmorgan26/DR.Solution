@@ -23,6 +23,7 @@ public interface IManagerService
     LoadManager LoadManager();
     LoadVmManager LoadVmManager();
     MaintainerManager MaintainerManager();
+    MaintainerVmManager MaintainerVmManager();
     MaintIssueManager MaintIssueManager();
     MaintIssueVmManager MaintIssueVmManager();
     SoftwareSystemManager SoftwareSystemManager();
